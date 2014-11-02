@@ -17,8 +17,9 @@
 #include "Renderer.h"
 #include "Window.h"
 #include "Shader.h"
-#include "FBO.h"
+//#include "FBO.h"
 #include "Node.h"
+#include "Scene.h"
 #include "Scenegraph.h"
 #include "UniformManager.h"
 
