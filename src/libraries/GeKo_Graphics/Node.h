@@ -1,27 +1,20 @@
 #pragma once
 #include <vector>
 #include <glm/ext.hpp>
-#include "Geometry.h"
-#include "Rect.h"
-#include <iostream>
+
 /*A "Node" should be a container for Geometry, Material, Lights and Cameras and provides all the information a shader could need
   like a Modelmatrix for example. It has one parent and can have a lot of children or none. Every Node exists as long as the scenegraph */
 class Node
 {
 public:
-	Node();
 	///The constructor of a Node
 	/*At the beginning a Node just needs a name, the m_modelMatrix will be set to the identity matrix*/
-	Node(std::string nodeName);
+	Node(const char* nodeName);
 	~Node();
 
 	///A getter for the name of a Node
 	/*Returns the name of the Node as const char*/
-	std::string getNodeName();
-
-	///A Setter for the name of the Node
-	/*The m_nodeName will be set*/
-	void setNodeName(std::string nodeName);
+	const char* getNodeName();
 
 	///A getter for the parent of the Node
 	/*Returns a Node Object which represent the Parent Node*/
@@ -32,13 +25,12 @@ public:
 	void setParentNode(Node* parentNode);
 
 	///A add-Method for the list of children 
-	/*A NodeObject is given by the user and the node puts the new node into his m_childrenSet as a new children
-	  The childrenNode m_parentNode will be set automatically*/
+	/*A NodeObject is given by the user and the node puts the new node into his m_childrenSet as a new children*/
 	void addChildrenNode(Node* childrenNode);
 	
 	///A delete Method to delete a child
 	/*The user gives the method a name and the method iterates over the m_childrenSet and deletes the Child with the nodeName*/
-	void deleteChildrenNode(std::string nodeName);
+	void deleteChildrenNode(const char* nodeName);
 
 	///A method to clear the whole set of children
 	/*Every Child Node in m_childrenNode will be deleted*/
@@ -46,7 +38,7 @@ public:
 
 	///A getter Method for a children Node
 	/*This Method iterates over the m_childrenSet and returns the Node with the nodeName*/
-	Node* getChildrenNode(std::string nodeName);
+	Node* getChildrenNode(const char* nodeName);
 
 	///A getter Method for the Modelmatrix
 	/*Returns the Modelmatrix of the current Node as a matrix*/
@@ -103,23 +95,16 @@ public:
 	/*The Modelmatrix m_modelMatrix will be set to the identity matrix, all scales, rotations and translation will be lost*/
 	void setIdentityMatrix_ModelMatrix();
 
-	///We link a Geometry to the node
-	/*A geometry Object will be linked with the node and will be saved as m_geometry*/
-	void addGeometry(Geometry* geometry);
-
-	///A Getter for the Geometry of the Node
-	/*Returns m_geometry as a Geometry object*/
-	Geometry* getGeometry();
-
 	//TODO: Folgende methoden müssten noch hinzugefügt werdenlaut UML-Diagramm (werde ich teilweise am Dienstag zwischen 12 und 18 Uhr dann machen, muss morgen früh raus!)
 	/*
 	void addCamera(Camera* camera);
 	void addLight(Light* light);
+	void setGeometry(Geometry* geometry);
 	void setMaterial(Material* material);
 	*/
 
 protected:
-	std::string m_nodeName;
+	const char* m_nodeName;
 	Node* m_parentNode;
 	std::vector<Node*> m_childrenSet;
 
@@ -128,8 +113,6 @@ protected:
 	glm::mat4 m_rotationMatrix;
 	glm::mat4 m_scaleMatrix;
 	glm::mat4 m_translateMatrix;
-
-	Geometry* m_geometry;
 
 private:
 	///A method which updates the Modelmatrix

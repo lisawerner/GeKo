@@ -1,35 +1,32 @@
 #pragma once
 #include "Node.h"
 
-/**Every scenegraph is connected with one scene.
-The scenegraph is managing all the objects in the scene which are added to the scenegraph by adding them to the scene*/
+/**Every scenegraph is connected with one level.
+The scenegraph is managing all the objects in the level which are added to the scenegraph by adding them to the level*/
 class Scenegraph
 {
 public:
-	Scenegraph();
-	///A scenegraph just gets a Name
-	/*The m_scenegraphName will be set and the m_rootNode will be set automatically too*/
-	Scenegraph(std::string scenegraphName);
+	///The constructor of the scenegraph
+	/**At the beginning the scenegraph just needs a name, which is given by the level. 
+		Also the constructor adds a first Node-Object which will be used as the root-Node from now on*/
+	Scenegraph(const char* scenegraphName);
 	~Scenegraph();
 
-	///A Setter for the name of the scenegraph
-	/*Sets the m_scenegraphName attribute */
-	void setScenegraphName(std::string scenegraphName);
+	///A getter for the Name of the Scenegraph
+	/**Returns the name of the scenegraph as a const char*/
+	const char* getScenegraphName();
 
-	///A getter for the Name of the scenegraph
-	/*Returns a the m_scenegraphName as a string*/
-	std::string* getScenegraphName();
-
-	///A setter for the Root Node of the scenegraph
-	/*The m_rootNode attribute will be set to a Node object*/
-	void setRootNode(Node rootNode);
-
-	/// A getter for the root node
-	/*Returns the m_rootNode as a Node object*/
+	///A getter for the Root Node
+	/**Returns the m_rootNode Node-object of the scenegraph*/
 	Node* getRootNode();
 
 protected:
-	Node m_rootNode;
-	std::string m_scenegraphName;
+	const char* m_scenegraphName;
+	Node* m_rootNode;
+
+private: 
+	///A setter for the Root-Node
+	/**This method will be used by the constructor to create a Node-Object with the Name "Root" and add it to itself as m_rootNode*/
+	void setRootNode(Node* root);
 };
 
