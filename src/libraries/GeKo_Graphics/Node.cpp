@@ -1,13 +1,7 @@
 #include "Node.h"
 
-Node::Node()
-{
-	m_nodeName = "Default";
 
-	setIdentityMatrix_ModelMatrix();
-}
-
-Node::Node(std::string nodeName)
+Node::Node(const char* nodeName)
 {
 	m_nodeName = nodeName;
 
@@ -19,14 +13,9 @@ Node::~Node()
 {
 }
 
-std::string Node::getNodeName()
+const char* Node::getNodeName()
 {
 	return m_nodeName;
-}
-
-void Node::setNodeName(std::string nodeName)
-{
-	m_nodeName = nodeName;
 }
 
 Node* Node::getParentNode()
@@ -42,20 +31,16 @@ void Node::setParentNode(Node* parentNode)
 void Node::addChildrenNode(Node* node)
 {
 	//Darf man hier move benutzen??
-//	m_childrenSet.push_back(std::move(node));
-	m_childrenSet.push_back(node);
-
-	node->setParentNode(this);
+	m_childrenSet.push_back(std::move(node));
 }
 
-void Node::deleteChildrenNode(std::string nodeName)
+void Node::deleteChildrenNode(const char* nodeName)
 {
 	for (int i = 0; i < m_childrenSet.size(); i++)
 	{
-
+		//TODO: bessere vergleichsmethode von const char??
 		if (m_childrenSet.at(i)->getNodeName() == nodeName)
 		{
-			
 			m_childrenSet.erase(m_childrenSet.begin()+i);
 		}
 	}
@@ -66,12 +51,11 @@ void Node::clearChildrenSet()
 	m_childrenSet.clear();
 }
 
-Node* Node::getChildrenNode(std::string nodeName)
+Node* Node::getChildrenNode(const char* nodeName)
 {
 	
 	for (int i = 0; i < m_childrenSet.size(); i++)
 	{
-		std::cout << m_childrenSet.at(i)->getNodeName();
 		if (m_childrenSet.at(i)->getNodeName() == nodeName)
 		{
 			return m_childrenSet.at(i);
@@ -163,14 +147,4 @@ void Node::setIdentityMatrix_Rotation()
 void Node::setIdentityMatrix_ModelMatrix()
 {
 	m_modelMatrix = glm::mat4(1);
-}
-
-void Node::addGeometry(Geometry* geometry)
-{
-	m_geometry = geometry;
-}
-
-Geometry* Node::getGeometry()
-{
-	return m_geometry;
 }
