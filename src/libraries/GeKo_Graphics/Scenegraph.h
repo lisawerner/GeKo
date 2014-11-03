@@ -1,5 +1,5 @@
 #pragma once
-#include <GeKo_Graphics\Node.h>
+#include <GeKo_Graphics/Node.h>
 
 /**Every scenegraph is connected with one scene.
 The scenegraph is managing all the objects in the scene which are added to the scenegraph by adding them to the scene*/
