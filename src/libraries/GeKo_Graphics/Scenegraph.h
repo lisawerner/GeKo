@@ -1,32 +1,30 @@
 #pragma once
-#include "Node.h"
+#include <GeKo_Graphics\Node.h>
 
-/**Every scenegraph is connected with one level.
-The scenegraph is managing all the objects in the level which are added to the scenegraph by adding them to the level*/
+/**Every scenegraph is connected with one scene.
+The scenegraph is managing all the objects in the scene which are added to the scenegraph by adding them to the scene*/
 class Scenegraph
 {
 public:
-	///The constructor of the scenegraph
-	/**At the beginning the scenegraph just needs a name, which is given by the level. 
-		Also the constructor adds a first Node-Object which will be used as the root-Node from now on*/
-	Scenegraph(const char* scenegraphName);
+	Scenegraph();
+	
+	Scenegraph(std::string scenegraphName);
 	~Scenegraph();
 
-	///A getter for the Name of the Scenegraph
-	/**Returns the name of the scenegraph as a const char*/
-	const char* getScenegraphName();
+	
+	void setScenegraphName(std::string scenegraphName);
 
-	///A getter for the Root Node
-	/**Returns the m_rootNode Node-object of the scenegraph*/
+	
+	std::string getScenegraphName();
+
+	
+	void setRootNode(Node rootNode);
+
+	
 	Node* getRootNode();
 
 protected:
-	const char* m_scenegraphName;
-	Node* m_rootNode;
-
-private: 
-	///A setter for the Root-Node
-	/**This method will be used by the constructor to create a Node-Object with the Name "Root" and add it to itself as m_rootNode*/
-	void setRootNode(Node* root);
+	Node m_rootNode;
+	std::string m_scenegraphName;
 };
 
