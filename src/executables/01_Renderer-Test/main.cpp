@@ -1,84 +1,60 @@
-#include <GeKo_Graphics\include.h>
+#include "GeKo_Graphics/Defs.h"
+#include "GeKo_Graphics/Renderer.h"
+#include "GeKo_Graphics/Window.h"
+#include "GeKo_Graphics/Shader.h"
+#include "GeKo_Graphics/Buffer.hpp"
 
 //Example
-std::vector<glm::vec3> m_vertices;
 
 /*
 measure the time for a certain number of loops
 */
-double startTime = glfwGetTime();
-double dTime = 0.0;
-int i = 0;
-void timeMeasuring(int numberOfLoops){
-	float deltaT = glfwGetTime() - startTime;
-	if (i<numberOfLoops){
-		dTime += deltaT;
-		i++;
-	}
-	else{
-		dTime = (int)(dTime * 100) / 100.0;
-		std::cout << dTime << "s per " << numberOfLoops << " loops" << std::endl;
-		dTime = 0;
-		i = 0;
-	}
-	startTime = glfwGetTime();
-}
-
 /*
 first example:
 
-we set a window, 
-initialize the renderer and load an object, 
-set the shaderhandle & give him the path of the shaders 
+we set a window,
+initialize the renderer and load an object,
+set the shaderhandle & give him the path of the shaders
 and renderering the object in the gameloop
 */
-int main() 
+int main()
 {
-	//our example
-	m_vertices.push_back(glm::vec3(0.5, -0.5, 0.0));
-	m_vertices.push_back(glm::vec3(-0.5, -0.5, 0.0));
-	m_vertices.push_back(glm::vec3(0.5, 0.5, 0.0));
-	m_vertices.push_back(glm::vec3(-0.5, 0.5, 0.0));
+    //our example
+    std::vector<glm::vec3> vertices;
+    vertices.push_back(glm::vec3(0.5, -0.5, 0.0));
+    vertices.push_back(glm::vec3(-0.5, -0.5, 0.0));
+    vertices.push_back(glm::vec3(0.5, 0.5, 0.0));
+    vertices.push_back(glm::vec3(-0.5, 0.5, 0.0));
+
 
     glfwInit();
 
-	//our window
-	Window* window = new Window(550,50,800,600, "Renderer Example");
-	
+    //our window
+    Window window(550, 50, 800, 600, "Renderer Example");
+
     glewInit();
-    
-	//our shader
-	Shader* redShader = new Shader("//RedShader//redShader.vert", ""/*geom*/, "" /*tessC*/, ""/*tessE*/, "//RedShader//redShader.frag", ""/*com*/);
 
-	//our renderer
-	Renderer* renderer = new Renderer();
-	renderer->loadObject(&m_vertices);
+    VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.vert")));
+    FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.frag")));
+    ShaderProgram p(vs, fs);
+    //our renderer
+    OpenGL3Context context;
+    Renderer renderer(context);
+    Buffer<glm::vec3> buffer(vertices,STATIC_DRAW);
 
-	int height = 800;
-	//BUG!!!
-	//height = window->getHeight();
-	FBO fbo(height, 600);
-
-	//Gameloop
-    while( !glfwWindowShouldClose(window->getWindow()))
-	{
-		timeMeasuring(2000);
-
-		//FBO
-		fbo.bind();
-		glViewport(0, 0, 800, 600);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		renderer->render(window->getWindow());
-		fbo.unbind();
-
-		//Szene drawen
-		glViewport(0, 0, 800, 600);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		renderer->render(window->getWindow());
-
-		glfwSwapBuffers(window->getWindow());
-		glfwPollEvents();		
+    //Gameloop
+    while (!glfwWindowShouldClose(window.getWindow()))
+    {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        p.bind();
+        //FIXME - need proper shader uniform
+        p.sendVec3("color", glm::vec3(0.5,0.2,0.8));
+        renderer.draw(buffer);
+        p.unbind();
+        glfwSwapBuffers(window.getWindow());
+        glfwPollEvents();
     }
-	window->close();
+
+    window.close();
     return 0;
 }

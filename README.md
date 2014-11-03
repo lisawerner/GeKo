@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/GameEngineKoblenz/GeKo.svg)](https://travis-ci.org/GameEngineKoblenz/GeKo)
+
 BITTE BEACHTEN:
 - Unterstützt werden aktuell Windows (MinGW und MSVC) und Linux
 - Internet-Verbindung muss während es ganzen Build-Vorgangs bestehen
