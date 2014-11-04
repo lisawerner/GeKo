@@ -13,13 +13,14 @@ public:
 	Geometry();
 	~Geometry();
 
-	
 	virtual void loadBufferData();
-
-	
 	virtual void renderGeometry();
 
-protected:
+//protected:
 	std::vector<glm::vec3> m_vertices;
-
+	std::vector<GLuint> m_index;
+	std::vector<glm::vec3> m_normals;
+	std::vector<glm::vec2> m_uvs;
+	int m_points;
+	int m_indices;
 };

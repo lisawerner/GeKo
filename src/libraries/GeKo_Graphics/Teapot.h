@@ -1,12 +1,12 @@
 #pragma once
 #include <GeKo_Graphics/Geometry.h>
 
-class Rect : public Geometry
+class Teapot : public Geometry
 {
 public:
 
-	Rect();
-	~Rect();
+	Teapot();
+	~Teapot();
 
 	void loadBufferData();
 	void renderGeometry();
