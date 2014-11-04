@@ -9,8 +9,5 @@ public:
 	~Rect();
 
 	void loadBufferData();
-
-	
 	void renderGeometry();
-
 };

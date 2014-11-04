@@ -2,15 +2,17 @@
 
 Rect::Rect()
 {
-	m_vertices.push_back(glm::vec3(0.5, -0.5, 0.0));
+	m_points = 4;
+
+	m_vertices.push_back(glm::vec3( 0.5, -0.5, 0.0));
 	m_vertices.push_back(glm::vec3(-0.5, -0.5, 0.0));
-	m_vertices.push_back(glm::vec3(0.5, 0.5, 0.0));
-	m_vertices.push_back(glm::vec3(-0.5, 0.5, 0.0));
+	m_vertices.push_back(glm::vec3( 0.5,  0.5, 0.0));
+	m_vertices.push_back(glm::vec3(-0.5,  0.5, 0.0));
 }
 
 Rect::~Rect()
 {
-
+	m_vertices.clear();
 }
 
 
@@ -36,6 +38,5 @@ void Rect::loadBufferData()
 void Rect::renderGeometry()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, m_points);
 }
