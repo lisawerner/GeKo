@@ -3,7 +3,7 @@
 #include "GeKo_Graphics/Window.h"
 #include "GeKo_Graphics/Shader.h"
 #include "GeKo_Graphics/Buffer.hpp"
-#include "GeKo_Graphics/FBO.h"
+//#include "GeKo_Graphics/FBO.h"
 #include "GeKo_Graphics/Rect.h"
 #include "GeKo_Graphics/Teapot.h"
 
@@ -45,7 +45,7 @@ int main()
     Buffer<glm::vec3> buffer(rect.m_vertices,STATIC_DRAW);
 
 	//our fbo
-	FBO fbo(800, 600, 2, true, false);
+	//FBO fbo(800, 600, 2, true, false);
 
     //Gameloop
     while (!glfwWindowShouldClose(window.getWindow()))
@@ -55,9 +55,9 @@ int main()
         //FIXME - need proper shader uniform
         shaderFbo.sendVec3("color", glm::vec3(0.5,0.2,0.8));
 
-		fbo.bind();
+		//fbo.bind();
 		renderer.draw(buffer);
-		fbo.unbind();
+		//fbo.unbind();
 
         renderer.draw(buffer);
         shaderFbo.unbind();
