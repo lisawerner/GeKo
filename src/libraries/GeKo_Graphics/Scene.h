@@ -1,6 +1,6 @@
 #pragma once
 #include <glm/ext.hpp>
-#include <GeKo_Graphics\Scenegraph.h>
+#include <GeKo_Graphics/Scenegraph.h>
 
 
 /*The Scene class contains a scenegraph and represents a piece of a level or a whole level. 

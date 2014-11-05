@@ -1,29 +1,37 @@
-#include "Rect.h"
+#include "Teapot.h"
+#include "TeapotData.h"
 
-Rect::Rect()
+Teapot::Teapot()
 {
-	m_points = 4;
+	m_points = _points;
+	m_indices = _indices;
 
-	m_vertices.push_back(glm::vec3( 0.5, -0.5, 0.0));
-	m_vertices.push_back(glm::vec3(-0.5, -0.5, 0.0));
-	m_vertices.push_back(glm::vec3( 0.5,  0.5, 0.0));
-	m_vertices.push_back(glm::vec3(-0.5,  0.5, 0.0));
+	for (int i = 0; i<_points; i++)
+	{
+		m_vertices.push_back(glm::vec3(_v[i * 3], _v[i * 3 + 1], _v[i * 3 + 2]));
+		m_normals.push_back(glm::vec3(_n[i * 3], _n[i * 3 + 1], _n[i * 3 + 2]));
+		m_uvs.push_back(glm::vec2(_t[i * 2], 1 - _t[i * 2 + 1]));
+	}
+
+	for (int i = 0; i<_indices; i++)
+	{
+		m_index.push_back(_index[i]);
+	}
 }
 
-Rect::~Rect()
+Teapot::~Teapot()
 {
-	m_vertices.clear();
 }
 
 
 ///A Method to load Buffer
 /*The vertices Data from m_vertices will be loaded into Buffers, so the Shader can use this information for the position of the object*/
-void Rect::loadBufferData()
+void Teapot::loadBufferData()
 {
 	GLuint vertexBuffer;
 	glGenBuffers(1, &vertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, m_vertices.size()*sizeof(glm::vec3), &m_vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, m_vertices.size()*sizeof(glm::vec4), &m_vertices[0], GL_STATIC_DRAW);
 
 	GLuint vertexArray;
 	glGenVertexArrays(1, &vertexArray);
@@ -35,8 +43,9 @@ void Rect::loadBufferData()
 
 ///A method to render the Object 
 /*In the while-Loop of the main-programm (Renderer or else) this method will be called to draw the array*/
-void Rect::renderGeometry()
+void Teapot::renderGeometry()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
+
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, m_points);
 }

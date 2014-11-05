@@ -2,8 +2,8 @@
 #include <vector>
 #include <glm/ext.hpp>
 #include <iostream>
-#include <GeKo_Graphics\Geometry.h>
-#include <GeKo_Graphics\Rect.h>
+#include <GeKo_Graphics/Geometry.h>
+#include <GeKo_Graphics/Rect.h>
 
 /*A "Node" should be a container for Geometry, Material, Lights and Cameras and provides all the information a shader could need
   like a Modelmatrix for example. It has one parent and can have a lot of children or none. Every Node exists as long as the scenegraph */

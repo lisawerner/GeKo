@@ -3,6 +3,9 @@
 #include "GeKo_Graphics/Window.h"
 #include "GeKo_Graphics/Shader.h"
 #include "GeKo_Graphics/Buffer.hpp"
+//#include "GeKo_Graphics/FBO.h"
+#include "GeKo_Graphics/Rect.h"
+#include "GeKo_Graphics/Teapot.h"
 
 /*
 first example:
@@ -17,13 +20,6 @@ first example:
 */
 int main()
 {
-    //our example
-    std::vector<glm::vec3> vertices;
-    vertices.push_back(glm::vec3(0.5, -0.5, 0.0));
-    vertices.push_back(glm::vec3(-0.5, -0.5, 0.0));
-    vertices.push_back(glm::vec3(0.5, 0.5, 0.0));
-    vertices.push_back(glm::vec3(-0.5, 0.5, 0.0));
-
     glfwInit();
 
     //our window
@@ -34,22 +30,37 @@ int main()
 	//our shader
     VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.vert")));
     FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.frag")));
-    ShaderProgram shader(vs, fs);
+	VertexShader vsfbo(loadShaderSource(SHADERS_PATH + std::string("/FBO/fbo.vert")));
+	FragmentShader fsfbo(loadShaderSource(SHADERS_PATH + std::string("/FBO/fbo.frag")));
+	ShaderProgram shader(vs, fs);
+    ShaderProgram shaderFbo(vsfbo, fsfbo);
     
 	//our renderer
     OpenGL3Context context;
     Renderer renderer(context);
-    Buffer<glm::vec3> buffer(vertices,STATIC_DRAW);
+
+	//our object
+	Rect rect;
+	Teapot teapot; //buggy
+    Buffer<glm::vec3> buffer(rect.m_vertices,STATIC_DRAW);
+
+	//our fbo
+	//FBO fbo(800, 600, 2, true, false);
 
     //Gameloop
     while (!glfwWindowShouldClose(window.getWindow()))
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        shader.bind();
+        shaderFbo.bind();
         //FIXME - need proper shader uniform
-        shader.sendVec3("color", glm::vec3(0.5,0.2,0.8));
+        shaderFbo.sendVec3("color", glm::vec3(0.5,0.2,0.8));
+
+		//fbo.bind();
+		renderer.draw(buffer);
+		//fbo.unbind();
+
         renderer.draw(buffer);
-        shader.unbind();
+        shaderFbo.unbind();
 
         glfwSwapBuffers(window.getWindow());
         glfwPollEvents();
