@@ -13,7 +13,7 @@ include(${CMAKE_MODULE_PATH}/getOpenGL3.cmake)
 include(${CMAKE_MODULE_PATH}/getGLEW.cmake)
 include(${CMAKE_MODULE_PATH}/getGLFW3.cmake)
 include(${CMAKE_MODULE_PATH}/getGLM.cmake)
-#include(${CMAKE_MODULE_PATH}/getASSIMP.cmake) 
+include(${CMAKE_MODULE_PATH}/getASSIMP.cmake) 
 include(${CMAKE_MODULE_PATH}/getSTB.cmake)
 
 if("${CMAKE_SYSTEM}" MATCHES "Linux")

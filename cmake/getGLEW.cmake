@@ -18,7 +18,7 @@ IF (MINGW)
 	set(GLEW_LIB "${DEPENDENCIES_PATH}/glew/src/glew-build/lib/liblibglew_shared.dll.a")
 	
 ELSEIF (MSVC)
-    	set(GLEW_INCLUDE_PATH "${DEPENDENCIES_PATH}/glew/src/glew/include")
+    set(GLEW_INCLUDE_PATH "${DEPENDENCIES_PATH}/glew/src/glew/include")
 	set(GLEW_LIB "${DEPENDENCIES_PATH}/glew/src/glew-build/lib/$<CONFIGURATION>/libglew_sharedd.lib")
 	
 #ELSEIF(APPLE)

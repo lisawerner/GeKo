@@ -8,7 +8,7 @@ include_directories(
     ${GLEW_INCLUDE_PATH}
     ${GLFW3_INCLUDE_PATH}
     ${GLM_INCLUDE_PATH}
-	#${ASSIMP_INCLUDE_PATH}
+	${ASSIMP_INCLUDE_PATH}
 	${STB_INCLUDE_PATH}
     ${EXTERNAL_LIBRARY_PATHS}
     ${CMAKE_SOURCE_DIR}/src/libraries/
@@ -30,6 +30,7 @@ target_link_libraries(
     ${GLFW3_LIB}
     ${GLEW_LIB}
     ${OpenGL3_LIB}
+	${ASSIMP_LIB}
 )
 
 #used to delay in build order
@@ -38,7 +39,7 @@ add_dependencies(
 	glew
 	glfw
 	glm
-	#assimp
+	assimp
 )
 
 IF (MINGW)
@@ -49,6 +50,13 @@ IF (MINGW)
 			${CMAKE_BINARY_DIR}/dependencies/glew/src/glew-build/bin/libglew.dll      
 			$<TARGET_FILE_DIR:${PROJECT_NAME}>
 		)
+		
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
+			${CMAKE_SOURCE_DIR}/dependencies/assimp/libMinGW/libassimp.dll   
+			$<TARGET_FILE_DIR:${PROJECT_NAME}>
+		)
+		
 
 ELSEIF (MSVC)
 
@@ -56,6 +64,12 @@ ELSEIF (MSVC)
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
 			${CMAKE_BINARY_DIR}/dependencies/glew/src/glew-build/bin/$<CONFIGURATION>/glewd.dll      
+			$<TARGET_FILE_DIR:${PROJECT_NAME}>
+		)
+		
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
+			${CMAKE_SOURCE_DIR}/dependencies/assimp/lib/assimp_release-dll_win32/Assimp32.dll   
 			$<TARGET_FILE_DIR:${PROJECT_NAME}>
 		)
 		
