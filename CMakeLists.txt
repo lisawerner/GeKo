@@ -1,3 +1,12 @@
+if(MSVC)
+  option(USE_MINGW "USE MINGW COMPILER" OFF)
+
+  if(USE_MINGW)
+	SET(CMAKE_CXX_COMPILER C:/MinGW/bin/g++.exe CACHE PATH "If different: Replace this path with your MINGW g++.exe Path")
+  endif()
+
+endif()
+
 cmake_minimum_required(VERSION 2.8)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/ CACHE PATH "Project specific path. Set manually if it was not found.")
