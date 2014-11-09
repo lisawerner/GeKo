@@ -4,6 +4,7 @@
 #include "GL/glew.h"
 #include "glm/vec3.hpp"
 
+/**This class provides one single Buffer-Object which can be filled with Object informations like Normals, Vertices, UVs etc.*/
 enum BufferDraw{
   STATIC_DRAW = GL_STATIC_DRAW,
   DYNAMIC_DRAW = GL_DYNAMIC_DRAW

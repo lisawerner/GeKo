@@ -2,7 +2,7 @@
 #define RENDERER_H
 
 #include "Defs.h"
-#include "Buffer.hpp"
+#include "Buffer.h"
 #include "Shader.h"
 
 /*

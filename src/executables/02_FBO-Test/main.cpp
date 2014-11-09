@@ -2,7 +2,7 @@
 #include "GeKo_Graphics/Renderer.h"
 #include "GeKo_Graphics/Window.h"
 #include "GeKo_Graphics/Shader.h"
-#include "GeKo_Graphics/Buffer.hpp"
+#include "GeKo_Graphics/Buffer.h"
 //#include "GeKo_Graphics/FBO.h"
 #include "GeKo_Graphics/Rect.h"
 #include "GeKo_Graphics/Teapot.h"
