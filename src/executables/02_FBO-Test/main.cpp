@@ -2,7 +2,7 @@
 #include "GeKo_Graphics/Renderer.h"
 #include "GeKo_Graphics/Window.h"
 #include "GeKo_Graphics/Shader.h"
-#include "GeKo_Graphics/Buffer.hpp"
+#include "GeKo_Graphics/Buffer.h"
 //#include "GeKo_Graphics/FBO.h"
 #include "GeKo_Graphics/Rect.h"
 #include "GeKo_Graphics/Teapot.h"
@@ -42,7 +42,7 @@ int main()
 	//our object
 	Rect rect;
 	Teapot teapot; //buggy
-    Buffer<glm::vec3> buffer(rect.m_vertices,STATIC_DRAW);
+    Buffer<glm::vec3> buffer(rect.getVertices(),STATIC_DRAW);
 
 	//our fbo
 	//FBO fbo(800, 600, 2, true, false);

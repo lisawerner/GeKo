@@ -1,25 +1,61 @@
 #include "Geometry.h"
 
-///A standard constructor
-/*Nothing special to say about it*/
+
 Geometry::Geometry()
 {
+	m_wasLoaded = false;
 }
 
 Geometry::~Geometry()
 {
 }
 
-///A Method to load Buffer
-/*The vertices Data from m_vertices will be loaded into Buffers, so the Shader can use this information for the position of the object*/
+
 void Geometry::loadBufferData()
 {
 
 }
 
-///A method to render the Object 
-/*In the while-Loop of the main-programm (Renderer or else) this method will be called to draw the array*/
+
 void Geometry::renderGeometry()
 {
 
+}
+
+
+std::vector<glm::vec3> Geometry::getVertices()
+{
+	return m_vertices;
+}
+
+std::vector<glm::vec3> Geometry::getNormals()
+{
+	return m_normals;
+}
+
+std::vector<glm::vec2> Geometry::getUV()
+{
+	return m_uvs;
+}
+
+std::vector<GLuint> Geometry::getIndexList()
+{
+	return m_index;
+}
+
+void Geometry::setLoaded()
+{
+	m_wasLoaded = true;
+}
+
+
+void Geometry::resetLoaded()
+{
+	m_wasLoaded = false;
+}
+
+
+bool Geometry::isLoaded()
+{
+	return m_wasLoaded;
 }
