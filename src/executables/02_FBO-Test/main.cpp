@@ -42,7 +42,7 @@ int main()
 	//our object
 	Rect rect;
 	Teapot teapot; //buggy
-    Buffer<glm::vec3> buffer(rect.m_vertices,STATIC_DRAW);
+    Buffer<glm::vec3> buffer(rect.getVertices(),STATIC_DRAW);
 
 	//our fbo
 	//FBO fbo(800, 600, 2, true, false);
