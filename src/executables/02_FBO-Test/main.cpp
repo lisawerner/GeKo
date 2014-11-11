@@ -6,7 +6,6 @@
 //#include "GeKo_Graphics/FBO.h"
 #include "GeKo_Graphics/Rect.h"
 #include "GeKo_Graphics/Teapot.h"
-
 /*
 first example:
 

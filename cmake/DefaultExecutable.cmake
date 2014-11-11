@@ -10,6 +10,7 @@ include_directories(
     ${GLM_INCLUDE_PATH}
 	${ASSIMP_INCLUDE_PATH}
 	${STB_INCLUDE_PATH}
+	${TBB_INCLUDE_PATH}
     ${EXTERNAL_LIBRARY_PATHS}
     ${CMAKE_SOURCE_DIR}/src/libraries/
 )
@@ -31,6 +32,7 @@ target_link_libraries(
     ${GLEW_LIB}
     ${OpenGL3_LIB}
 	${ASSIMP_LIB}
+	${TBB_LIB}
 )
 
 #used to delay in build order
@@ -39,7 +41,7 @@ add_dependencies(
 	glew
 	glfw
 	glm
-	assimp
+	TBB
 )
 
 IF (MINGW)
@@ -70,6 +72,19 @@ ELSEIF (MSVC)
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
 			${CMAKE_SOURCE_DIR}/dependencies/assimp/lib/assimp_release-dll_win32/Assimp32.dll   
+			$<TARGET_FILE_DIR:${PROJECT_NAME}>
+		)
+	
+	#copy TBB DLLS
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
+			${TBB_SOURCE_DIR}/bin/ia32/${_TBB_COMPILER}/tbb.dll   
+			$<TARGET_FILE_DIR:${PROJECT_NAME}>
+		)
+		
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
+			${TBB_SOURCE_DIR}/bin/ia32/${_TBB_COMPILER}/tbbmalloc.dll   
 			$<TARGET_FILE_DIR:${PROJECT_NAME}>
 		)
 		

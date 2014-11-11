@@ -15,11 +15,12 @@ include(${CMAKE_MODULE_PATH}/getGLFW3.cmake)
 include(${CMAKE_MODULE_PATH}/getGLM.cmake)
 include(${CMAKE_MODULE_PATH}/getASSIMP.cmake) 
 include(${CMAKE_MODULE_PATH}/getSTB.cmake)
+include(${CMAKE_MODULE_PATH}/getIntelTBB.cmake)
+
 
 if("${CMAKE_SYSTEM}" MATCHES "Linux")
 	find_package(X11)
 	set(ALL_LIBRARIES ${ALL_LIBRARIES} ${X11_LIBRARIES} Xrandr Xxf86vm Xi pthread Xcursor Xinerama)
-	
 endif()
 
 
