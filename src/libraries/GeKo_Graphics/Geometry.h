@@ -65,6 +65,8 @@ protected:
 	int m_indices;
 
 	Buffer<glm::vec3>* m_vertexBuffer;
+	Buffer<glm::vec3>* m_normalBuffer;
+	Buffer<glm::vec2>* m_uvBuffer;
 
 private:
 	bool m_wasLoaded;

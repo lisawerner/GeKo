@@ -46,6 +46,7 @@ public:
     void unbind() const;
     GLuint getLocation(std::string uniform);
     void sendVec3(std::string uniform,glm::vec3 v);
+	void sendSampler2D(std::string uniform, GLuint sampler2Dhandler);
 };
 
 #endif
