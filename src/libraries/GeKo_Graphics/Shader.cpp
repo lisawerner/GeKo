@@ -14,8 +14,8 @@ void attachShaders(GLuint handle, GLuint shaderHandle)
 
 std::string loadShaderSource(std::string path)
 {
-  std::ifstream input(path);
-  std::string source((std::istreambuf_iterator<char>(input)),
+	std::ifstream input(path);
+    std::string source((std::istreambuf_iterator<char>(input)),
     std::istreambuf_iterator<char>());
     std::cout << path << " "<< source << std::endl;
   return source;
@@ -72,4 +72,8 @@ GLuint ShaderProgram::getLocation(std::string uniform) {
 
 void ShaderProgram::sendVec3(std::string uniform, glm::vec3 v) {
     glUniform3f(getLocation(uniform),v.x,v.y,v.z);
+}
+
+void ShaderProgram::sendSampler2D(std::string uniform, GLuint sampler2Dhandler) {
+	glUniform1ui(getLocation(uniform), sampler2Dhandler);
 }
