@@ -21,7 +21,7 @@ public:
 	// creates InputMaps, fills them specifically, and pushes them on the membervector
 	void setAllInputMaps();
 	// Return the first InputMap
-	InputMap* InputHandler::getFirstInputMapInstance();
+	InputMap* getFirstInputMapInstance();
 
 
 	// stores all the InputMaps by using setAllInputMaps
