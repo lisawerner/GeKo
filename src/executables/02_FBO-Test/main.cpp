@@ -2,21 +2,19 @@
 #include "GeKo_Graphics/Renderer.h"
 #include "GeKo_Graphics/Window.h"
 #include "GeKo_Graphics/Shader.h"
-//#include "GeKo_Graphics/Buffer.hpp"
+#include "GeKo_Graphics/Buffer.h"
 #include "GeKo_Graphics/FBO.h"
 #include "GeKo_Graphics/Rect.h"
 #include "GeKo_Graphics/Teapot.h"
 
 /*
-first example:
-
-1. per hand we build a quad
-2. we set a window
-3. set the shader with a fragmentshader & vertexshader
-3.1 fragmentShader get an uniform var 
-4. set a renderer
-5. set a buffer with the quad
-6. gameloop
+1. we set a window
+2. set the shader with a fragmentshader & vertexshader
+3. set a renderer
+4. set 2 buffer for vertices & normals of the quad
+5. gameloop
+5.1 create a colortexture
+5.2 show the colotexture with the screenfillingquad
 */
 int main()
 {
@@ -28,17 +26,12 @@ int main()
     glewInit();
 
 	//our shader
-    VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.vert")));
-    FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.frag")));
-	
 	VertexShader vsFbo(loadShaderSource(SHADERS_PATH + std::string("/FBO/fbo.vert")));
 	FragmentShader fsFbo(loadShaderSource(SHADERS_PATH + std::string("/FBO/fbo.frag")));
-	
+	ShaderProgram shaderFbo(vsFbo, fsFbo);
+
 	VertexShader vsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/screenFillingQuad.vert")));
 	FragmentShader fsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/screenFillingQuad.frag")));
-	
-	ShaderProgram shader(vs, fs);
-    ShaderProgram shaderFbo(vsFbo, fsFbo);
 	ShaderProgram shaderSfq(vsSfq, fsSfq);
     
 	//our renderer
@@ -51,7 +44,6 @@ int main()
     Buffer<glm::vec3> bufferV(rect.getVertices(),STATIC_DRAW);
 	Buffer<glm::vec2> bufferUV(rect.getUV(), STATIC_DRAW);
 
-
 	//our fbo
 	FBO fbo(800, 600, 2, true, false);
 
@@ -63,7 +55,6 @@ int main()
 		//creating color and depth textures
 		shaderFbo.bind();
 		shaderFbo.sendVec3("color", glm::vec3(0.5, 0.2, 0.8));
-
 		fbo.bind();
 		renderer.draw(bufferV);
 		fbo.unbind();
@@ -78,7 +69,6 @@ int main()
         glfwSwapBuffers(window.getWindow());
         glfwPollEvents();
     }
-
     window.close();
     return 0;
 }

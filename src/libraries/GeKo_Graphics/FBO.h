@@ -65,21 +65,21 @@ public:
 	generate a color texture with a certain index (index ist dependet with how much color textures you want)
 	this function calls createTexture()
 	*/
-	void FBO::generateColorTexture(std::vector<GLenum> &drawBuffers, unsigned int index);
+	void generateColorTexture(std::vector<GLenum> &drawBuffers, unsigned int index);
 	/*
 	generate a depth texture - m_depthTexture
 	this function calls createTexture()
 	*/
-	void FBO::generateDepthTexture();
+	void generateDepthTexture();
 	/*
 	generate a stencil texture - m_stencilTexture
 	this function calls createTexture()
 	*/
-	void FBO::generateStencilTexture();
+	void generateStencilTexture();
 	/*
 	generate a texture
 	*/
-	GLuint FBO::createTexture();
+	GLuint createTexture();
 	/*
 	generate the textures with a new size
 	*/
