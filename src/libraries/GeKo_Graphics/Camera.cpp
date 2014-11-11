@@ -1,5 +1,4 @@
 #include "Camera.h"
-#include <iostream>
 
 Camera::Camera()
 {
@@ -7,6 +6,10 @@ Camera::Camera()
 	m_useOrtho = false;
 }
 
+Camera::Camera(std::string cameraName)
+{
+	m_cameraName = cameraName;
+}
 Camera::~Camera()
 {
 }
@@ -80,4 +83,9 @@ void Camera::moveForward(){
 void Camera::moveBackward(){
 	m_cameraPosition -= 0.1f;
 	std::cout << "move bwd" << std::endl;
+}
+
+std::string Camera::getCameraName()
+{
+	return m_cameraName;
 }

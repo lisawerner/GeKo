@@ -2,7 +2,7 @@
 
 InputMap::InputMap()
 {
-	m_active = true;
+	m_active = false;
 }
 
 

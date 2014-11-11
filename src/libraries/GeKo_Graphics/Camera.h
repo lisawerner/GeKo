@@ -3,12 +3,13 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW\glfw3.h>
-
+#include <iostream>
 
 class Camera
 {
 public:
 	Camera();
+	Camera(std::string cameraName);
 	~Camera();
 
 	/// The method stores the view matrix in a local matrix.
@@ -46,8 +47,10 @@ public:
 	void moveForward();
 	void moveBackward();
 
+	std::string getCameraName();
 
 protected:
+	std::string m_cameraName;
 	float m_fov, m_znear, m_zfar;
 	int m_width, m_height;
 	bool m_useOrtho;

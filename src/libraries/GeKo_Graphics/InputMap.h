@@ -1,6 +1,6 @@
 #pragma once
 
-// TODO abfangen andrer gedrückter tasten die nicht definiert sind!!!!!!!!!!!!!!!!!!!!
+// TODO abfangen andrer gedrückter tasten die nicht definiert sind!!!
 
 #include <iostream>
 #include <functional>

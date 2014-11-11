@@ -44,6 +44,23 @@ std::map<int, std::function<void()>> InputHandler::getActiveMap() {
 
 
 
+// If there are is any InputMap:
+// Return the First InputMap
+// If there is no InputMap:
+// Return an error
+
+InputMap* InputHandler::getFirstInputMapInstance() {
+
+	int i = 0;
+	InputMap* temp;
+	if (m_allInputMaps.size() >= 1){
+		temp = m_allInputMaps.at(0);
+	} else {
+		perror("There is no InputMap available.");
+	}
+	return temp;
+}
+
 
 
 // Creates various InputMaps, fills them with their specific mapping and pushes them onto a vector, 
@@ -62,17 +79,6 @@ void InputHandler::setAllInputMaps(){
 
 }
 
-
-
-
-// The key call back method recognizes the pressed key and calls the appropriate method of the active InputMap
-
-//void InputHandler::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
-//
-//	std::map<int, std::function<void()>> activeMap = getActiveMap();
-//	activeMap.at(key)();
-//
-//}
 
 
 

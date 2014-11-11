@@ -20,7 +20,8 @@ public:
 
 	// creates InputMaps, fills them specifically, and pushes them on the membervector
 	void setAllInputMaps();
-	//void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+	// Return the first InputMap
+	InputMap* InputHandler::getFirstInputMapInstance();
 
 
 	// stores all the InputMaps by using setAllInputMaps
