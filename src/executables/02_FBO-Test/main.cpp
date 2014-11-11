@@ -2,8 +2,8 @@
 #include "GeKo_Graphics/Renderer.h"
 #include "GeKo_Graphics/Window.h"
 #include "GeKo_Graphics/Shader.h"
-#include "GeKo_Graphics/Buffer.h"
-//#include "GeKo_Graphics/FBO.h"
+//#include "GeKo_Graphics/Buffer.hpp"
+#include "GeKo_Graphics/FBO.h"
 #include "GeKo_Graphics/Rect.h"
 #include "GeKo_Graphics/Teapot.h"
 
@@ -30,10 +30,16 @@ int main()
 	//our shader
     VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.vert")));
     FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.frag")));
-	VertexShader vsfbo(loadShaderSource(SHADERS_PATH + std::string("/FBO/fbo.vert")));
-	FragmentShader fsfbo(loadShaderSource(SHADERS_PATH + std::string("/FBO/fbo.frag")));
+	
+	VertexShader vsFbo(loadShaderSource(SHADERS_PATH + std::string("/FBO/fbo.vert")));
+	FragmentShader fsFbo(loadShaderSource(SHADERS_PATH + std::string("/FBO/fbo.frag")));
+	
+	VertexShader vsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/screenFillingQuad.vert")));
+	FragmentShader fsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/screenFillingQuad.frag")));
+	
 	ShaderProgram shader(vs, fs);
-    ShaderProgram shaderFbo(vsfbo, fsfbo);
+    ShaderProgram shaderFbo(vsFbo, fsFbo);
+	ShaderProgram shaderSfq(vsSfq, fsSfq);
     
 	//our renderer
     OpenGL3Context context;
@@ -42,26 +48,33 @@ int main()
 	//our object
 	Rect rect;
 	Teapot teapot; //buggy
-    Buffer<glm::vec3> buffer(rect.getVertices(),STATIC_DRAW);
+    Buffer<glm::vec3> bufferV(rect.getVertices(),STATIC_DRAW);
+	Buffer<glm::vec2> bufferUV(rect.getUV(), STATIC_DRAW);
+
 
 	//our fbo
-	//FBO fbo(800, 600, 2, true, false);
+	FBO fbo(800, 600, 2, true, false);
 
     //Gameloop
     while (!glfwWindowShouldClose(window.getWindow()))
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        shaderFbo.bind();
-        //FIXME - need proper shader uniform
-        shaderFbo.sendVec3("color", glm::vec3(0.5,0.2,0.8));
 
-		//fbo.bind();
-		renderer.draw(buffer);
-		//fbo.unbind();
+		//creating color and depth textures
+		shaderFbo.bind();
+		shaderFbo.sendVec3("color", glm::vec3(0.5, 0.2, 0.8));
 
-        renderer.draw(buffer);
-        shaderFbo.unbind();
+		fbo.bind();
+		renderer.draw(bufferV);
+		fbo.unbind();
+		shaderFbo.unbind();
 
+		//take the color texture and show it on the screen
+		shaderSfq.sendSampler2D("colorTexture", fbo.getColorTexture(1));
+		shaderSfq.bind();
+        renderer.draw(bufferV);
+		shaderSfq.unbind();
+		
         glfwSwapBuffers(window.getWindow());
         glfwPollEvents();
     }
