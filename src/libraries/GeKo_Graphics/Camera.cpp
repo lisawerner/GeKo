@@ -9,6 +9,8 @@ Camera::Camera()
 Camera::Camera(std::string cameraName)
 {
 	m_cameraName = cameraName;
+	setOrtho(-1.0f, 1.0f, -1.0f, 1.0f, 0.01f, 1.0f);
+	m_useOrtho = false;
 }
 Camera::~Camera()
 {
