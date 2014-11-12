@@ -26,7 +26,7 @@ public:
 
 	///Returns m_vertices of the Geometry Object
 	/**/
-	std::vector<glm::vec3> getVertices();
+	std::vector<glm::vec4> getVertices();
 
 	///Returns m_normals of the Geometry Object
 	/**/
@@ -52,10 +52,8 @@ public:
 	/**/
 	bool isLoaded();
 
-
-
 protected:
-	std::vector<glm::vec3> m_vertices;
+	std::vector<glm::vec4> m_vertices;
 	std::vector<glm::vec3> m_normals;
 	std::vector<glm::vec2> m_uvs;
 
@@ -64,7 +62,7 @@ protected:
 	int m_points;
 	int m_indices;
 
-	Buffer<glm::vec3>* m_vertexBuffer;
+	Buffer<glm::vec4>* m_vertexBuffer;
 	Buffer<glm::vec3>* m_normalBuffer;
 	Buffer<glm::vec2>* m_uvBuffer;
 

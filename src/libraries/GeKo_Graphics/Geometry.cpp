@@ -23,7 +23,7 @@ void Geometry::renderGeometry()
 }
 
 
-std::vector<glm::vec3> Geometry::getVertices()
+std::vector<glm::vec4> Geometry::getVertices()
 {
 	return m_vertices;
 }
