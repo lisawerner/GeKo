@@ -43,9 +43,7 @@ int main()
 	Rect rect;
 	Cube cube;
 	Teapot teapot; //buggy
-  //  Buffer<glm::vec4> bufferV(rect.getVertices(),STATIC_DRAW);
 	cube.loadBufferData();
-	Buffer<glm::vec2> bufferUV(rect.getUV(), STATIC_DRAW);
 
 	//our fbo
 	FBO fbo(800, 600, 2, true, false);
@@ -56,19 +54,22 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//creating color and depth textures
+		fbo.bind();
 		shaderFbo.bind();
 		shaderFbo.sendVec3("color", glm::vec3(0.5, 0.2, 0.8));
-		fbo.bind();
 		cube.renderGeometry();
-		fbo.unbind();
 		shaderFbo.unbind();
 
+		//?
+		fbo.unbind();
+
 		//take the color texture and show it on the screen
-		shaderSfq.sendSampler2D("colorTexture", fbo.getColorTexture(0));
 		shaderSfq.bind();
+		shaderSfq.sendSampler2D("colorTexture", fbo.getColorTexture(0));
+
 		cube.renderGeometry();
 		shaderSfq.unbind();
-		
+
         glfwSwapBuffers(window.getWindow());
         glfwPollEvents();
     }
