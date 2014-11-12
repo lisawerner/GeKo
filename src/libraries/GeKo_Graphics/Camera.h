@@ -4,6 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <string>
 
 class Camera
 {
@@ -44,13 +45,18 @@ public:
 	///Returns the position of the camera
 	glm::vec4 getPosition();
 
+
+	// changes the value of the z axis in negative direction
 	void moveForward();
+
+	// changes the value of the z axis in positive direction
 	void moveBackward();
 
-	std::string getCameraName();
+	std::string getName();
+	void setName(std::string n);
 
 protected:
-	std::string m_cameraName;
+	std::string m_name;
 	float m_fov, m_znear, m_zfar;
 	int m_width, m_height;
 	bool m_useOrtho;
@@ -59,6 +65,6 @@ protected:
 	glm::mat4 m_perspective;
 	glm::mat4 m_ortho;
 
-	glm::vec4 m_cameraPosition;
+	glm::vec4 m_position;
 };
 

@@ -4,11 +4,12 @@ Camera::Camera()
 {
 	setOrtho(-1.0f, 1.0f, -1.0f, 1.0f, 0.01f, 1.0f);
 	m_useOrtho = false;
+	//m_position = glm::vec4(0.0, 0.0, 10.0, 1.0);
 }
 
 Camera::Camera(std::string cameraName)
 {
-	m_cameraName = cameraName;
+	m_name = cameraName;
 	setOrtho(-1.0f, 1.0f, -1.0f, 1.0f, 0.01f, 1.0f);
 	m_useOrtho = false;
 }
@@ -67,27 +68,31 @@ void Camera::setWidthHeight(int width, int height)
 }
 
 void Camera::setPosition(glm::vec4 position){
-	m_cameraPosition = position;
+	m_position = position;
 }
 
 glm::vec4 Camera::getPosition(){
-	return m_cameraPosition;
+	return m_position;
 }
 
 
 
 void Camera::moveForward(){
-	m_cameraPosition += 0.1f;
-	std::cout << "move fwd" << std::endl;
+	m_position.z -= 0.1f;
+	std::cout << "move fwd " << m_position.z << std::endl;
 }
 
 
 void Camera::moveBackward(){
-	m_cameraPosition -= 0.1f;
-	std::cout << "move bwd" << std::endl;
+	m_position.z += 0.1f;
+	std::cout << "move bwd " << m_position.z << std::endl;
 }
 
-std::string Camera::getCameraName()
+std::string Camera::getName()
 {
-	return m_cameraName;
+	return m_name;
+}
+
+void Camera::setName(std::string n){
+	m_name = n;
 }
