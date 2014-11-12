@@ -53,19 +53,21 @@ public:
 	bool isLoaded();
 
 protected:
+	int m_points;
 	std::vector<glm::vec4> m_vertices;
 	std::vector<glm::vec3> m_normals;
 	std::vector<glm::vec2> m_uvs;
 
 	std::vector<GLuint> m_index;
-
-	int m_points;
 	int m_indices;
 
 	Buffer<glm::vec4>* m_vertexBuffer;
 	Buffer<glm::vec3>* m_normalBuffer;
 	Buffer<glm::vec2>* m_uvBuffer;
+	//Indexbuffer braucht einen speziellen Buffer
+//	Buffer<GLuint>* m_indexBuffer;
 
+	GLuint m_vaoBuffer;
 private:
 	bool m_wasLoaded;
 };
