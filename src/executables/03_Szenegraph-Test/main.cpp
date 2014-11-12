@@ -32,40 +32,34 @@ int main()
     FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.frag")));
     ShaderProgram shader(vs, fs);
 	
-	VertexShader vsPhong(loadShaderSource(SHADERS_PATH + std::string("/PhongShader/phong.vert")));
-	FragmentShader fsPhong(loadShaderSource(SHADERS_PATH + std::string("/PhongShader/phong.frag")));
-	ShaderProgram shaderPhong(vsPhong, fsPhong);
 
 	//our renderer
     OpenGL3Context context;
     Renderer renderer(context);
 
 	//Scenegraph initialisation with all classes we need
-	Rect* rectangle = new Rect(); //Geht nicht ohne new Rect()!!TO FIX
+//	Rect* rectangle = new Rect(); //Geht nicht ohne new Rect()!!TO FIX
 	Cube* cube = new Cube();
-//	std::cout << "Vertice Test" << cube->getVertices().size() << std::endl;
-//	Scene* testScene = new Scene("TestScene"); //do not do this!
 	Scene testScene("TestScene");
-//	Node* testNode = new Node("testNode"); //do not do this!
 	Node testNode("testNode");
+
 	//Bufferloading will be done at this point, when the geometry is set
 	testNode.addGeometry(cube);
 	//adding the node to the scenegraph
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(testNode);
 
-	//Camera camera("testcam");
     //Gameloop
     while (!glfwWindowShouldClose(window.getWindow()))
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        shaderPhong.bind();
+        shader.bind();
         //FIXME - need proper shader uniform
-        shaderPhong.sendVec3("color", glm::vec3(0.5,0.2,0.8));
+        shader.sendVec3("color", glm::vec3(0.5,0.2,0.8));
 
 		//The array will be drawed by the rect-class with its buffer which will be bind
 		testScene.getScenegraph()->getRootNode()->getChildrenNode("testNode")->render();
 
-        shaderPhong.unbind();
+        shader.unbind();
 
         glfwSwapBuffers(window.getWindow());
         glfwPollEvents();
