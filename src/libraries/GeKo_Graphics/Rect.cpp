@@ -80,14 +80,26 @@ void Rect::loadBufferData()
 	m_vertexBuffer = new Buffer<glm::vec4>(m_vertices, STATIC_DRAW);
 	m_normalBuffer = new Buffer<glm::vec3>(m_normals, STATIC_DRAW);
 	m_uvBuffer = new Buffer<glm::vec2>(m_uvs, STATIC_DRAW);
+
+	glGenVertexArrays(1, &m_vaoBuffer);
+	glBindVertexArray(m_vaoBuffer);
+	m_vertexBuffer->bind();
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+	m_normalBuffer->bind();
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	m_uvBuffer->bind();
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
+
+	glBindVertexArray(0);
 }
 
 void Rect::renderGeometry()
 {
-	m_vertexBuffer->bind();
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glBindVertexArray(m_vaoBuffer);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, m_vertexBuffer->size);
-	glDisableVertexAttribArray(0);
-	m_vertexBuffer->unbind();
 }
