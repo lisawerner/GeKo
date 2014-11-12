@@ -6,11 +6,11 @@ class Rect : public Geometry
 public:
 
 	Rect();
-	Rect(glm::vec3 a, glm::vec3 b, glm::vec3 c, glm::vec3 d, glm::vec2 tca, glm::vec2 tcb, glm::vec2 tcc, glm::vec2 tcd);
+	Rect(glm::vec4 a, glm::vec4 b, glm::vec4 c, glm::vec4 d, glm::vec2 tca, glm::vec2 tcb, glm::vec2 tcc, glm::vec2 tcd);
 	~Rect();
 
-	void create(glm::vec3 a, glm::vec3 b, glm::vec3 c, glm::vec3 d, glm::vec2 tca, glm::vec2 tcb, glm::vec2 tcc, glm::vec2 tcd);
-	void setPoints(glm::vec3 a, glm::vec3 b, glm::vec3 c, glm::vec3 d);
+	void create(glm::vec4 a, glm::vec4 b, glm::vec4 c, glm::vec4 d, glm::vec2 tca, glm::vec2 tcb, glm::vec2 tcc, glm::vec2 tcd);
+	void setPoints(glm::vec4 a, glm::vec4 b, glm::vec4 c, glm::vec4 d);
 	void setTcoords(glm::vec2 tca, glm::vec2 tcb, glm::vec2 tcc, glm::vec2 tcd);
 
 	///A Method to load Buffer

@@ -6,6 +6,7 @@
 #include "GeKo_Graphics/FBO.h"
 #include "GeKo_Graphics/Rect.h"
 #include "GeKo_Graphics/Teapot.h"
+#include "GeKo_Graphics/Cube.h"
 
 /*
 1. we set a window
@@ -40,8 +41,10 @@ int main()
 
 	//our object
 	Rect rect;
+	Cube cube;
 	Teapot teapot; //buggy
-    Buffer<glm::vec3> bufferV(rect.getVertices(),STATIC_DRAW);
+  //  Buffer<glm::vec4> bufferV(rect.getVertices(),STATIC_DRAW);
+	cube.loadBufferData();
 	Buffer<glm::vec2> bufferUV(rect.getUV(), STATIC_DRAW);
 
 	//our fbo
@@ -56,14 +59,14 @@ int main()
 		shaderFbo.bind();
 		shaderFbo.sendVec3("color", glm::vec3(0.5, 0.2, 0.8));
 		fbo.bind();
-		renderer.draw(bufferV);
+		cube.renderGeometry();
 		fbo.unbind();
 		shaderFbo.unbind();
 
 		//take the color texture and show it on the screen
-		shaderSfq.sendSampler2D("colorTexture", fbo.getColorTexture(1));
+		shaderSfq.sendSampler2D("colorTexture", fbo.getColorTexture(0));
 		shaderSfq.bind();
-        renderer.draw(bufferV);
+		cube.renderGeometry();
 		shaderSfq.unbind();
 		
         glfwSwapBuffers(window.getWindow());
