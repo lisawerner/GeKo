@@ -2,7 +2,9 @@
 
 Cube::Cube()
 {
+	m_vaoBuffer = 0;
 	m_points = 36;
+	m_indices = 36;
 
 	GLfloat vertices[] = {
 		1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0,
@@ -37,6 +39,11 @@ Cube::Cube()
 		m_normals.push_back(glm::vec3(normals[i * 3], normals[i * 3 + 1], normals[i * 3 + 2]));
 		m_uvs.push_back(glm::vec2(texCoords[i * 2], texCoords[i * 2 + 1]));
 	}
+
+	for (int i = 0; i < m_indices; i++)
+	{
+		m_index.push_back(i);
+	}
 }
 
 Cube::~Cube()
@@ -44,33 +51,50 @@ Cube::~Cube()
 	m_vertices.clear();
 	m_normals.clear();
 	m_uvs.clear();
+	m_index.clear();
 }
 
 void Cube::loadBufferData()
 {
 	m_vertexBuffer = new Buffer<glm::vec4>(m_vertices, STATIC_DRAW);
 	m_normalBuffer = new Buffer<glm::vec3>(m_normals, STATIC_DRAW);
-	m_uvBuffer = new Buffer<glm::vec2>(m_uvs, STATIC_DRAW);
+	m_uvBuffer = new Buffer<glm::vec2>(m_uvs, STATIC_DRAW);	
+	//m_indexBuffer = new Buffer<GLuint>(m_index, STATIC_DRAW);
+
+	glGenVertexArrays(1, &m_vaoBuffer);
+	glBindVertexArray(m_vaoBuffer);
+	m_vertexBuffer->bind();
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+	m_normalBuffer->bind();
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	m_uvBuffer->bind();
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
+
+	glBindVertexArray(0);
+
 }
 
 void Cube::renderGeometry()
 {
-	m_vertexBuffer->bind();
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glBindVertexArray(m_vaoBuffer);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, m_vertexBuffer->size);
-	glDisableVertexAttribArray(0);
-	m_vertexBuffer->unbind();
+
 
 	/*m_normalBuffer->bind();
-	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDisableVertexAttribArray(0);
-	m_normalBuffer->unbind();*/
+	glDisableVertexAttribArray(1);
+	m_normalBuffer->unbind();
 
 	m_uvBuffer->bind();
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
-	glDisableVertexAttribArray(1);
-	m_uvBuffer->unbind();
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glDisableVertexAttribArray(2);
+	m_uvBuffer->unbind();*/
 }
