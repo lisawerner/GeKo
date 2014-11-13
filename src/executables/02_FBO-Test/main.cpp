@@ -43,6 +43,7 @@ int main()
 	Rect rect;
 	Cube cube;
 	Teapot teapot; //buggy
+	rect.loadBufferData();
 	cube.loadBufferData();
 
 	//our fbo
@@ -59,15 +60,12 @@ int main()
 		shaderFbo.sendVec3("color", glm::vec3(0.5, 0.2, 0.8));
 		cube.renderGeometry();
 		shaderFbo.unbind();
-
-		//?
 		fbo.unbind();
 
 		//take the color texture and show it on the screen
 		shaderSfq.bind();
-		shaderSfq.sendSampler2D("colorTexture", fbo.getColorTexture(0));
-
-		cube.renderGeometry();
+		shaderSfq.sendSampler2D("colorTexture", fbo.getColorTexture(1));
+		rect.renderGeometry();
 		shaderSfq.unbind();
 
         glfwSwapBuffers(window.getWindow());

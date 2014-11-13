@@ -75,5 +75,7 @@ void ShaderProgram::sendVec3(std::string uniform, glm::vec3 v) {
 }
 
 void ShaderProgram::sendSampler2D(std::string uniform, GLuint sampler2Dhandler) {
-	glUniform1ui(getLocation(uniform), sampler2Dhandler);
+	glUniform1i(getLocation(uniform), 0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, sampler2Dhandler);
 }
