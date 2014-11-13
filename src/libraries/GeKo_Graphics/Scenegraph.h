@@ -31,11 +31,11 @@ public:
 	Camera* getActiveCamera();
 	void setActiveCamera(std::string cameraName);
 
-	///Returns a Camera-Objectn
+	///Returns a Camera-Object
 	/**The Camera Name must be known for finding the Camera Object. If there is no such Camera with this name
 		an error will be placed and NULL returns*/
 	Camera* getCamera(std::string cameraName);
-	void addCamera(Camera* camera);
+	void addCamera(Camera camera);
 
 protected:
 
@@ -43,7 +43,7 @@ protected:
 	Node m_rootNode;
 	
 	Camera* m_activeCamera;
-	std::vector<Camera*> m_cameraSet;
+	std::vector<Camera> m_cameraSet;
 };
 
 /*Questions and TODOS:
@@ -54,5 +54,4 @@ protected:
 		- then the camera would be add to the scenegraph list when adding to a Node as well
 		- CONS: Why should the Node know the scenegraph? Just one case did not qualify this method!
 	3. TODO: Light class
-	4. TODO: Maybe I should reconsider the Pointer in the vector class and the m_activeCamera Pointer!
 	*/

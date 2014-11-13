@@ -71,7 +71,7 @@ Camera* Scenegraph::getCamera(std::string cameraName)
 	return NULL;
 }
 
-void Scenegraph::addCamera(Camera* camera)
+void Scenegraph::addCamera(Camera camera)
 {
 	m_cameraSet.push_back(camera);
 }

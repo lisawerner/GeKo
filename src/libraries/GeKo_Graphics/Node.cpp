@@ -91,6 +91,16 @@ void Node::addGeometry(Geometry* geometry)
 		m_geometry->loadBufferData();
 }
 
+Texture* Node::getTexture()
+{
+	return m_texture;
+}
+
+void Node::addTexture(Texture* texture)
+{
+	m_texture = texture;
+}
+
 Camera* Node::getCamera()
 {
 	return m_camera;
@@ -184,6 +194,7 @@ void Node::setIdentityMatrix_ModelMatrix()
 void Node::render()
 {
 	m_geometry->renderGeometry();
+	//TODO: An dieser stelle sollte der textur gesagt werden, dass sie sich an den shader bindet
 }
 
 void Node::updateModelMatrix(glm::mat4 updateMatrix)
