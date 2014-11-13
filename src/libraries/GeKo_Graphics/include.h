@@ -20,7 +20,6 @@
 #include "FBO.h"
 #include "Node.h"
 #include "Scenegraph.h"
-#include "UniformManager.h"
 
 
 #define VERTICES 0

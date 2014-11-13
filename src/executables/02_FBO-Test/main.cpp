@@ -27,9 +27,13 @@ int main()
     glewInit();
 
 	//our shader
-	VertexShader vsFbo(loadShaderSource(SHADERS_PATH + std::string("/FBO/fbo.vert")));
-	FragmentShader fsFbo(loadShaderSource(SHADERS_PATH + std::string("/FBO/fbo.frag")));
-	ShaderProgram shaderFbo(vsFbo, fsFbo);
+	VertexShader vsColor(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.vert")));
+	FragmentShader fsColor(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.frag")));
+	ShaderProgram shaderColor(vsColor, fsColor);
+
+	VertexShader vsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.vert")));
+	FragmentShader fsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.frag")));
+	ShaderProgram shaderGBuffer(vsGBuffer, fsGBuffer);
 
 	VertexShader vsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/screenFillingQuad.vert")));
 	FragmentShader fsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/screenFillingQuad.frag")));
@@ -47,25 +51,24 @@ int main()
 	cube.loadBufferData();
 
 	//our fbo
-	FBO fbo(800, 600, 2, true, false);
+	FBO fbo(800, 600, 3, true, false);
 
     //Gameloop
     while (!glfwWindowShouldClose(window.getWindow()))
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//creating color and depth textures
-		fbo.bind();
-		shaderFbo.bind();
-		shaderFbo.sendVec3("color", glm::vec3(0.5, 0.2, 0.8));
+		//GBuffer
+		fbo.bind(); //TODO: Stencil- und Depth Textures gehen noch nicht, weitere Funktionen der FBO Klasse ausprobieren
+		shaderGBuffer.bind();
 		cube.renderGeometry();
-		shaderFbo.unbind();
+		shaderGBuffer.unbind();
 		fbo.unbind();
 
-		//take the color texture and show it on the screen
+		//ScreenFillingQuad
 		shaderSfq.bind();
-		shaderSfq.sendSampler2D("colorTexture", fbo.getColorTexture(1));
-		rect.renderGeometry();
+		shaderSfq.sendSampler2D("texture", fbo.getDepthTexture());
+		rect.renderGeometry(); //Normalen sind kaputt??
 		shaderSfq.unbind();
 
         glfwSwapBuffers(window.getWindow());
