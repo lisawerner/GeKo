@@ -1,6 +1,7 @@
 #pragma once
 #include <GeKo_Graphics/Geometry.h>
 
+/**A Cube with vertices, normals and uv-coordinates*/
 class Cube : public Geometry{
 
 public:

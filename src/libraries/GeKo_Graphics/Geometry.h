@@ -64,7 +64,7 @@ protected:
 	Buffer<glm::vec4>* m_vertexBuffer;
 	Buffer<glm::vec3>* m_normalBuffer;
 	Buffer<glm::vec2>* m_uvBuffer;
-	//Indexbuffer braucht einen speziellen Buffer
+	//TODO:Indexbuffer braucht einen speziellen Buffer
 //	Buffer<GLuint>* m_indexBuffer;
 
 	GLuint m_vaoBuffer;

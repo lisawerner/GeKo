@@ -5,6 +5,7 @@
 #include <GeKo_Graphics/Geometry.h>
 #include <GeKo_Graphics/Rect.h>
 #include <GeKo_Graphics/Camera.h>
+#include <GeKo_Graphics/Texture.h>
 
 /*A "Node" should be a container for Geometry, Material, Lights and Cameras and provides all the information a shader could need
   like a Modelmatrix for example. It has one parent and can have a lot of children or none. Every Node exists as long as the scenegraph */
@@ -49,6 +50,11 @@ public:
 	///A Geometry Object will be linked with the node
 	/**A geometry Object will be linked with the node and will be saved as m_geometry*/
 	void addGeometry(Geometry* geometry);
+
+	///Returns m_texture as a Texture object
+	/**/
+	Texture* getTexture();
+	void addTexture(Texture* texture);
 
 	///Returns m_Camera as a Camera Object
 	/**/
@@ -96,7 +102,9 @@ public:
 	///The same as setIdentityMatrix_Translate() just for m_modelMatrix
 	/**/
 	void setIdentityMatrix_ModelMatrix();
-
+	
+	///A method to tell the Node to draw itself
+	/**The Node will take this call and forward it to the geometry, so the geometry will be drawed*/
 	void render();
 
 protected:
@@ -106,6 +114,7 @@ protected:
 	std::vector<Node> m_childrenSet;
 
 	Geometry* m_geometry;
+	Texture* m_texture;
 	Camera* m_camera;
 
 	glm::mat4 m_modelMatrix;
@@ -123,9 +132,9 @@ private:
 /* Questions and TODOS:
 	1. Will the matrix-Functions work? They are not testes yet!
 	2. TODO: addLight(Light* light)
-	3. TODO: setMaterial(Material* material)
+	3. A Node should contain more than one Texture (normal, color etc.)
 	4. Can a camera object linked directly to a node or does it have to be linked with the rootNode first?
 	5. TODO: The Node should have more than one Camera Object at a time
 	6. I should reconsider the Pointer to the camera and the geometry (Geometry will be a failure without pointer at the moment!)
-
+		- I do not think it would be good without the pointer
 */
