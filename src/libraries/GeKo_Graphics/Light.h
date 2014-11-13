@@ -5,6 +5,7 @@
 class Light
 {
 public:
+	Light();
 	Light(glm::vec4 position, glm::vec3 color, bool isActive);
 	~Light();
 	void sendUniform();
