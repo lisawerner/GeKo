@@ -1,5 +1,4 @@
-#ifndef __TEAPOTDATA_H
-#define __TEAPOTDATA_H
+#pragma once
 
 int _points = 3872;
 int _indices = 19200;
@@ -14836,5 +14835,3 @@ GLuint _index[] =
 	3858, 3859, 3869, 3869, 3859, 3870, 
 	3859, 3860, 3870, 3870, 3860, 3871, 
 	};
-
-#endif /* __TEAPOT_H */

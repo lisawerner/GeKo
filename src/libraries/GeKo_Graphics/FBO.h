@@ -1,5 +1,4 @@
-#ifndef FBO_H
-#define FBO_H
+#pragma once
 
 #include "Defs.h"
 #include "include.h"
@@ -119,4 +118,3 @@ private:
 	GLuint m_depthTexture, m_stencilTexture;
 	GLuint m_frameBufferHandle;
 };
-#endif
