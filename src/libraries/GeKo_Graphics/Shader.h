@@ -1,5 +1,4 @@
-#ifndef SHADER_H
-#define SHADER_H
+#pragma once
 
 #include "Defs.h"
 #include <string>
@@ -51,5 +50,3 @@ public:
 	void sendVec4(std::string uniform, glm::vec4 v);
 	void sendSampler2D(std::string uniform, GLuint sampler2Dhandler);
 };
-
-#endif

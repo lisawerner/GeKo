@@ -1,5 +1,4 @@
-#ifndef SHADERMANAGER_H
-#define SHADERMANAGER_H
+#pragma once
 
 #include "Defs.h"
 
@@ -10,4 +9,3 @@ public:
 	~ShaderManager();
 private:
 };
-#endif

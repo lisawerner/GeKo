@@ -1,5 +1,4 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#pragma once
 
 #include "Defs.h"
 #include "Buffer.h"
@@ -35,4 +34,3 @@ public:
   }
   void printInfo();
 };
-#endif 
