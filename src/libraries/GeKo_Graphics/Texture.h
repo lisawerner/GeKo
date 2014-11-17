@@ -2,14 +2,16 @@
 
 #include "Defs.h"
 
+///This Class is to create Texture Objects by loading an image from the Ressources Folder
+
 /*
-TODO: Information
+To create a Texture use Texture(char* fileName). The file must be in the Ressources Folder.
 */
 
 class Texture
 {
 public:
-	Texture(char* Filename);
+	Texture(char* fileName);	///The file must be in the Ressources folder
 	Texture(GLuint texture);
 	~Texture();
 
