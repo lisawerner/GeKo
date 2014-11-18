@@ -51,7 +51,7 @@ public:
 	void sendVec4(std::string uniform, glm::vec4 v);
 	void sendSampler2D(std::string uniform, GLuint sampler2Dhandler);
 	void sendMat4(std::string uniform, glm::mat4 m);
-	void sendVec4(std::string uniform, glm::vec4 v);
+
 
 	
 	
