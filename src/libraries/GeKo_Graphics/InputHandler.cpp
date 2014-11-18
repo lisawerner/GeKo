@@ -75,11 +75,16 @@ void InputHandler::setAllInputMaps(Camera &activeCam){
 	InputMap* contextTrackball = new InputMap();
 	contextTrackball->setName("Trackball");
 
+	InputMap* contextPilotview = new InputMap();
+	contextPilotview->setName("Pilotview");
+
 	// The Maps are filled context specific
 	contextTrackball->fillTrackball(activeCam);
+	contextPilotview->fillPilotview(activeCam);
 
 	// The Maps are stored in a vector
 	m_allInputMaps.push_back(contextTrackball);
+	m_allInputMaps.push_back(contextPilotview);
 }
 
 

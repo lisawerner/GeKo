@@ -75,16 +75,16 @@ void Camera::moveBackward(){
 }
 
 
-void Camera::moveAroundLeft(){
-	std::cout << "Cam move rndL x " << m_position.x << " z " << m_position.z << std::endl;
+void Camera::moveLeft(){
+	std::cout << "Cam move left x " << m_position.x << " z " << m_position.z << std::endl;
 }
 
-void Camera::moveAroundRight(){
-	std::cout << "Cam move rndR x " << m_position.x << " z " << m_position.z << std::endl;
+void Camera::moveRight(){
+	std::cout << "Cam move right x " << m_position.x << " z " << m_position.z << std::endl;
 }
-void Camera::moveOverForward(){
-	std::cout << "Cam move oFwd y " << m_position.y << " z " << m_position.z << std::endl;
+void Camera::moveUp(){
+	std::cout << "Cam move up y " << m_position.y << " z " << m_position.z << std::endl;
 }
-void Camera::moveOverBackward(){
-	std::cout << "Cam move oBwd y " << m_position.y << " z " << m_position.z << std::endl;
+void Camera::moveDown(){
+	std::cout << "Cam move down y " << m_position.y << " z " << m_position.z << std::endl;
 }

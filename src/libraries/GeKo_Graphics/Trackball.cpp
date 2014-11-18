@@ -47,7 +47,7 @@ void Trackball::moveBackward(){
 }
 
 
-void Trackball::moveAroundLeft(){
+void Trackball::moveLeft(){
 	
 	m_oldX = - 0.01f + m_oldX;
 	m_phi -= 0.01;
@@ -63,7 +63,7 @@ void Trackball::moveAroundLeft(){
 	std::cout << "TBall move rndL x " << m_position.x << " z " << m_position.z << std::endl;
 }
 
-void Trackball::moveAroundRight(){
+void Trackball::moveRight(){
 	m_oldX = 0.01f + m_oldX;
 	m_phi += 0.01;
 	if (m_phi < 0) m_phi += 2 * glm::pi<float>();
@@ -78,7 +78,7 @@ void Trackball::moveAroundRight(){
 	std::cout << "TBall move rndR x " << m_position.x << " z " << m_position.z << std::endl;
 }
 
-void Trackball::moveOverForward(){
+void Trackball::moveUp(){
 	m_oldY = -0.01f + m_oldX;
 	m_theta -= 0.01;
 	if (m_theta < 0.01f) m_theta = 0.01f;
@@ -93,7 +93,7 @@ void Trackball::moveOverForward(){
 	std::cout << "TBall move oFwd y " << m_position.y << " z " << m_position.z << std::endl;
 }
 
-void Trackball::moveOverBackward(){
+void Trackball::moveDown(){
 	m_oldY = 0.01f + m_oldX;
 	m_theta += 0.01;
 	if (m_theta < 0.01f) m_theta = 0.01f;

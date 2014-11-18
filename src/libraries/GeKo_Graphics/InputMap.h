@@ -14,8 +14,9 @@ public:
 	InputMap();
 	~InputMap();
 
-	// The method fills the InputMap for the trackball
+	// The methods fill the specific InputMaps
 	void fillTrackball(Camera &activeCam);
+	void fillPilotview(Camera &activeCam);
 
 	// Enables / Disables the Map
 	/* DO NEVER EVER EVER EVER USE THIS!!

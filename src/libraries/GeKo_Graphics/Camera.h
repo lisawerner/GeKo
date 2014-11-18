@@ -30,11 +30,11 @@ public:
 	virtual void moveForward();
 	virtual void moveBackward();
 
-	// Implemented in Trackball
-	virtual void moveAroundRight();
-	virtual void moveAroundLeft();
-	virtual void moveOverForward();
-	virtual void moveOverBackward();
+	// Implemented in the specific cameras
+	virtual void moveLeft();
+	virtual void moveRight();
+	virtual void moveUp();
+	virtual void moveDown();
 
 	
 
