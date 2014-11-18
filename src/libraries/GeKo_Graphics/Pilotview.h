@@ -25,7 +25,6 @@ protected:
 	glm::vec4 m_direction;
 
 	double m_oldX, m_oldY;
-	double m_step, m_sensitivity;
 	double m_theta, m_phi;
 };
 
