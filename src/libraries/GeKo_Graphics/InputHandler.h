@@ -1,14 +1,9 @@
 #pragma once
 
 // To use the InputHandler create an instance in the main.cpp and call setAllInputMaps() to fill all the InputMaps
-// set the key callback (glfwSetKeyCallback(window, key_callback);) in the main.cpp
+// set the key and callback (glfwSetKeyCallback(window, key_callback);) in the main.cpp
 
-#include <iostream>
-#include <string>
-#include <GLFW/glfw3.h>
-#include <stdio.h>
-#include <vector>
-
+#include "GeKo_Graphics/Defs.h"
 #include "InputMap.h"
 
 

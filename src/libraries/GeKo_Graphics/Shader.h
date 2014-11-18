@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SHADER_H
+#define SHADER_H
 
 #include "Defs.h"
 #include <string>
@@ -44,9 +45,10 @@ public:
     void bind() const;
     void unbind() const;
     GLuint getLocation(std::string uniform);
-	void sendInt(std::string uniform, int i);
-	void sendDouble(std::string uniform, double d);
     void sendVec3(std::string uniform,glm::vec3 v);
-	void sendVec4(std::string uniform, glm::vec4 v);
 	void sendSampler2D(std::string uniform, GLuint sampler2Dhandler);
+	void ShaderProgram::sendMat4(std::string uniform, glm::mat4 m);
+	void ShaderProgram::sendVec4(std::string uniform, glm::vec4 v);
 };
+
+#endif

@@ -2,12 +2,11 @@
 
 // TODO catch keys that are not defined
 
-#include <iostream>
-#include <functional>
-#include <map>
-
+#include "GeKo_Graphics/Defs.h"
 #include "Camera.h"
-//#include "Trackball.h"
+#include "Trackball.h"
+#include <map>
+#include <functional>
 
 class InputMap
 {

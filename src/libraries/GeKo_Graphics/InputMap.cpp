@@ -23,12 +23,28 @@ void InputMap::fillTrackball(Camera &activeCam){
 	auto cameraMoveBwd = [&](){
 		activeCam.moveBackward();
 	};
+	auto cameraMoveRndL = [&](){
+		activeCam.moveAroundLeft();
+	};
+	auto cameraMoveRndR = [&](){
+		activeCam.moveAroundRight();
+	};
+	auto cameraMoveOverF = [&](){
+		activeCam.moveOverForward();
+	};
+	auto cameraMoveOverB = [&](){
+		activeCam.moveOverBackward();
+	};
 
 
 	// Mapping the keys to the methods context specific
 	auto trackball = [&](std::map<int, std::function<void()>> &m){
 		m[GLFW_KEY_W] = cameraMoveFwd;
 		m[GLFW_KEY_S] = cameraMoveBwd;
+		m[GLFW_KEY_A] = cameraMoveRndL;
+		m[GLFW_KEY_D] = cameraMoveRndR;
+		m[GLFW_KEY_E] = cameraMoveOverF;
+		m[GLFW_KEY_Q] = cameraMoveOverB;
 	};
 
 	trackball(m_map);
