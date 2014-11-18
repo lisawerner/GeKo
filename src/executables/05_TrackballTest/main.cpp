@@ -32,14 +32,11 @@ int main()
 	window = glfwCreateWindow(800, 600, "Camera Test", NULL, NULL);
 	glfwMakeContextCurrent(window);
 
-	//Set Scene
-	//Scene scene("TestScene");
 
 	//Set Camera to another position
 	cam.setPosition(glm::vec4(0.0,0.0,10.0,1.0));
 	cam.setName("TrackballCam");
 	
-
 
 	//Set all InputMaps and set one InputMap active
 	iH.setAllInputMaps(cam);
@@ -47,7 +44,6 @@ int main()
 
 	//Callback
 	glfwSetKeyCallback(window, key_callback);
-
 
     glewInit();
 
@@ -65,7 +61,6 @@ int main()
 	teapot.loadBufferData();
 
 	
-
     //Renderloop
     while (!glfwWindowShouldClose(window))
     {
