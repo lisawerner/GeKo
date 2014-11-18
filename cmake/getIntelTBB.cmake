@@ -56,7 +56,9 @@ if(MSVC)
 	
 elseif(MINGW)
 	set(TBB_URL "https://www.threadingbuildingblocks.org/sites/default/files/software_releases/source/${TBB_VERSION}_src.tgz")
-	set(TBB_BUILD_COMMAND mingw32-make -Wall "${TBB_SOURCE_DIR}/Makefile")
+	#set(TBB_BUILD_COMMAND mingw32-make.exe -compiler=gcc Makefile)
+	set(TBB_BUILD_COMMAND mingw32-make.exe compiler=gcc)
+	#set(TBB_BUILD_COMMAND mingw32-make.exe tbb_root=${TBB_PREFIX} tbb_build_dir=${TBB_BINARY_DIR}/lib tbb_build_prefix=gcc Makefile)
 	
 	ExternalProject_Add( TBB
 		#--Download step--------------
@@ -78,8 +80,8 @@ elseif(MINGW)
 		CMAKE_ARGS ${glew_CMAKE_ARGS}
 		DEPENDS ${TBB_DEPENDENCIES}
 	)
-	#set(TBB_INCLUDE_PATH "${TBB_SOURCE_DIR}/include")
-	#set(TBB_LIB "${TBB_SOURCE_DIR}/lib/ia32/${_TBB_COMPILER}/tbb.lib")
+	set(TBB_INCLUDE_PATH "${TBB_SOURCE_DIR}/include")
+	#set(TBB_LIB "${TBB_BINARY_DIR}/windows_intel64_gcc_mingw4.9.0_debug/tbb.lib")
 	
 	set_property(DIRECTORY PROPERTY EP_BASE ${TBB_PREFIX})
 
@@ -107,6 +109,8 @@ elseif("${CMAKE_SYSTEM}" MATCHES "Linux")
 		CMAKE_ARGS ${glew_CMAKE_ARGS}
 		DEPENDS ${TBB_DEPENDENCIES}
 	)
+	set(TBB_INCLUDE_PATH "${TBB_SOURCE_DIR}/include")
+	set(TBB_LIB "${TBB_SOURCE_DIR}/lib/ia32/gcc4.4/libtbb.so")
 	
 endif()
 

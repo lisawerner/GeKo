@@ -15,7 +15,7 @@ include(${CMAKE_MODULE_PATH}/getGLFW3.cmake)
 include(${CMAKE_MODULE_PATH}/getGLM.cmake)
 include(${CMAKE_MODULE_PATH}/getASSIMP.cmake) 
 include(${CMAKE_MODULE_PATH}/getSTB.cmake)
-include(${CMAKE_MODULE_PATH}/getIntelTBB.cmake)
+#include(${CMAKE_MODULE_PATH}/getIntelTBB.cmake)
 
 
 if("${CMAKE_SYSTEM}" MATCHES "Linux")
