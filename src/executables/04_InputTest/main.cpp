@@ -1,7 +1,4 @@
-#include <iostream>
-#include <GLFW/glfw3.h>
-#include <string>
-
+#include "GL/glew.h"
 #include "GeKo_Graphics/Camera.h"
 #include "GeKo_Graphics/InputHandler.h"
 #include "GeKo_Graphics/InputMap.h"

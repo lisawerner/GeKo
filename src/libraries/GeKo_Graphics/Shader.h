@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SHADER_H
+#define SHADER_H
 
 #include "Defs.h"
 #include <string>
@@ -49,4 +50,11 @@ public:
     void sendVec3(std::string uniform,glm::vec3 v);
 	void sendVec4(std::string uniform, glm::vec4 v);
 	void sendSampler2D(std::string uniform, GLuint sampler2Dhandler);
+	void sendMat4(std::string uniform, glm::mat4 m);
+
+
+	
+	
 };
+
+#endif

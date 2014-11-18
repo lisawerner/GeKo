@@ -91,3 +91,10 @@ void ShaderProgram::sendSampler2D(std::string uniform, GLuint sampler2Dhandler) 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, sampler2Dhandler);
 }
+
+void ShaderProgram::sendMat4(std::string uniform, glm::mat4 m) {
+	glUniformMatrix4fv(getLocation(uniform), 1, GL_FALSE, glm::value_ptr(m));
+}
+
+
+

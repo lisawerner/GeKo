@@ -2,12 +2,11 @@
 
 // TODO catch keys that are not defined
 
-#include <iostream>
-#include <functional>
-#include <map>
-
+#include "GeKo_Graphics/Defs.h"
 #include "Camera.h"
-//#include "Trackball.h"
+#include "Trackball.h"
+#include <map>
+#include <functional>
 
 class InputMap
 {
@@ -15,8 +14,9 @@ public:
 	InputMap();
 	~InputMap();
 
-	// The method fills the InputMap for the trackball
+	// The methods fill the specific InputMaps
 	void fillTrackball(Camera &activeCam);
+	void fillPilotview(Camera &activeCam);
 
 	// Enables / Disables the Map
 	/* DO NEVER EVER EVER EVER USE THIS!!
