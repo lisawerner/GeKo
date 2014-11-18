@@ -7,6 +7,8 @@
 #include <GeKo_Graphics/Node.h>
 #include <GeKo_Graphics/Scenegraph.h>
 #include <GeKo_Graphics/Cube.h>
+#include <GeKo_Graphics/Teapot.h>
+
 /*
 first example:
 
@@ -39,12 +41,13 @@ int main()
 
 	//Scenegraph initialisation with all classes we need
 //	Rect* rectangle = new Rect(); //Geht nicht ohne new Rect()!!TO FIX
-	Cube* cube = new Cube();
+	Cube cube;
+	Teapot tea;
 	Scene testScene("TestScene");
 	Node testNode("testNode");
 
 	//Bufferloading will be done at this point, when the geometry is set
-	testNode.addGeometry(cube);
+	testNode.addGeometry(&tea);
 	//adding the node to the scenegraph
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(testNode);
 
