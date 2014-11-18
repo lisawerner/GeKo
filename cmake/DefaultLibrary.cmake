@@ -11,6 +11,7 @@ include_directories(
     ${GLM_INCLUDE_PATH}
 	${ASSIMP_INCLUDE_PATH}
 	${STB_INCLUDE_PATH}
+	#${TBB_INCLUDE_PATH}
     ${EXTERNAL_LIBRARY_PATHS}
     ${CMAKE_SOURCE_DIR}/src/libraries/
 )
@@ -33,6 +34,7 @@ target_link_libraries(
     ${GLEW_LIB}
     ${OpenGL3_LIB}
 	${ASSIMP_LIB}
+	#${TBB_LIB}
 )
 
 #Used to delay in build order
@@ -41,5 +43,5 @@ add_dependencies(
 	glew
 	glfw
 	glm
-	assimp
+	#TBB
 )
