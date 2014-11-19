@@ -19,11 +19,11 @@ public:
 
 	///A Method to load Buffer
 	/**The vertices Data from m_vertices will be loaded into Buffers, so the Shader can use this information for the position of the object*/
-	virtual void loadBufferData();
+	 void loadBufferData();
 
 	///A method to render the Object 
 	/**In the while-Loop of the main-programm (Renderer or else) this method will be called to draw the array*/
-	virtual void renderGeometry();
+    void renderGeometry();
 
 	///Returns m_vertices of the Geometry Object
 	/**/
@@ -52,6 +52,18 @@ public:
 	///Returns the boolean of m_wasLoaded
 	/**/
 	bool isLoaded();
+	
+	///If the object uses an index-List, this method has to be used 
+	/**Set m_hasIndex to true*/
+	void setIndexTrue();
+	
+	///If the object does not an index-List, this method has to be used 
+	/**Set m_hasIndex to false*/
+	void setIndexFalse();
+
+	///Returns m_hasIndex
+	/**/
+	bool hasIndex();
 
 protected:
 	int m_points;
@@ -62,15 +74,16 @@ protected:
 	std::vector<GLuint> m_index;
 	int m_indices;
 
+	GLuint m_vaoBuffer;
 	Buffer<glm::vec4>* m_vertexBuffer;
 	Buffer<glm::vec3>* m_normalBuffer;
 	Buffer<glm::vec2>* m_uvBuffer;
-	//TODO:Indexbuffer braucht einen speziellen Buffer
 	BufferIndex<GLuint>* m_indexBuffer;
 
-	GLuint m_vaoBuffer;
+
 private:
 	bool m_wasLoaded;
+	bool m_hasIndex;
 };
 /*Questions and TODOS:
 	1. virtual methods shouldnt be used, maybe theres another way to do it?
