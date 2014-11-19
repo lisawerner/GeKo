@@ -19,7 +19,6 @@ Node::~Node()
 {
 }
 
-
 std::string Node::getNodeName()
 {
 	return m_nodeName;
@@ -39,6 +38,7 @@ Node* Node::getParentNode()
 void Node::setParentNode(Node* parentNode)
 {
 	m_parentNode = parentNode;
+	//m_modelMatrix = parentNode->getModelMatrix() * m_modelMatrix;
 }
 
 Node* Node::getChildrenNode(std::string nodeName)
@@ -57,8 +57,12 @@ Node* Node::getChildrenNode(std::string nodeName)
 
 void Node::addChildrenNode(Node node)
 {
-	m_childrenSet.push_back(node);
+	//TODO: Funktioniert nicht, wir können dann nicht mit getParentNode()->getNodeName() arbeiten!!!
 	node.setParentNode(this);
+	m_childrenSet.push_back(node);
+	
+	
+	
 }
 
 void Node::deleteChildrenNode(std::string nodeName)
@@ -88,7 +92,10 @@ void Node::addGeometry(Geometry* geometry)
 {
 	m_geometry = geometry;
 	if (!m_geometry->isLoaded())
+	{
 		m_geometry->loadBufferData();
+		m_geometry->setLoaded();
+	}
 }
 
 Texture* Node::getTexture()
@@ -193,6 +200,7 @@ void Node::setIdentityMatrix_ModelMatrix()
 
 void Node::render()
 {
+
 	m_geometry->renderGeometry();
 	//TODO: An dieser stelle sollte der textur gesagt werden, dass sie sich an den shader bindet
 }
