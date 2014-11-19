@@ -18,7 +18,7 @@ InputHandler::~InputHandler()
 // if there is more than one active InputMap the last one in the list, which is active,
 // is returned with an message saying it's not the only map being active
 
-//TODO catch exception
+// TODO exception instead of empty input map
 
 InputMap* InputHandler::getActiveInputMap() {
 
@@ -47,7 +47,7 @@ InputMap* InputHandler::getActiveInputMap() {
 // If there is any InputMap named like the parameter, the InputMap is returned,
 // else an empty InputMap is returned with an error message
 
-// TODO catch exception
+// TODO exception instead of empty input map
 
 InputMap* InputHandler::getInputMap(std::string name) {
 

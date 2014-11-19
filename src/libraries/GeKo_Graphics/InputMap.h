@@ -1,7 +1,5 @@
 #pragma once
 
-// TODO catch keys that are not defined
-
 #include "GeKo_Graphics/Defs.h"
 #include "Camera.h"
 #include "Trackball.h"
