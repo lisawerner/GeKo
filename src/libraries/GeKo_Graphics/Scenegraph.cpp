@@ -2,18 +2,17 @@
 
 Scenegraph::Scenegraph()
 {
-	Node root("Root");
-	setRootNode(root);
+	//Node root("Root");
+	setRootNode(Node("Root"));
 }
 
-///A scenegraph just gets a Name
-/*The m_scenegraphName will be set and the m_rootNode will be set automatically too*/
+
 Scenegraph::Scenegraph(std::string scenegraphName)
 {
 	m_scenegraphName = scenegraphName;
 
-	Node root("Root");
-	setRootNode(root);
+	//Node root("Root");
+	setRootNode(Node("Root"));
 }
 
 Scenegraph::~Scenegraph()
@@ -21,30 +20,58 @@ Scenegraph::~Scenegraph()
 
 }
 
-///A getter for the Name of the scenegraph
-/*Returns a the m_scenegraphName as a string*/
+
 std::string Scenegraph::getScenegraphName()
 {
 	return m_scenegraphName;
 }
 
-///A Setter for the name of the scenegraph
-/*Sets the m_scenegraphName attribute */
 void Scenegraph::setScenegraphName(std::string scenegraphName)
 {
 	m_scenegraphName = scenegraphName;
 }
 
-/// A getter for the root node
-/*Returns the m_rootNode as a Node object*/
+
 Node* Scenegraph::getRootNode()
 {
 	return &m_rootNode;
 }
 
-///A setter for the Root Node of the scenegraph
-/*The m_rootNode attribute will be set to a Node object*/
 void Scenegraph::setRootNode(Node rootNode)
 {
 	m_rootNode = rootNode;
+}
+
+Camera* Scenegraph::getActiveCamera()
+{
+	return m_activeCamera;
+}
+
+void Scenegraph::setActiveCamera(std::string cameraName)
+{
+	for (int i = 0; i < m_cameraSet.size(); i++)
+	{
+		/*if (m_cameraSet.at(i)->getName() == cameraName)
+			m_activeCamera = m_cameraSet.at(i);*/
+	}
+}
+
+
+
+
+Camera* Scenegraph::getCamera(std::string cameraName)
+{
+	for (int i = 0; i < m_cameraSet.size(); i++)
+	{
+		/*if (m_cameraSet.at(i)->getName() == cameraName)
+			return m_cameraSet.at(i);*/
+	}
+
+	std::cout << "Failure: Camera does not exist!" << std::endl;
+	return NULL;
+}
+
+void Scenegraph::addCamera(Camera camera)
+{
+	m_cameraSet.push_back(camera);
 }

@@ -1,25 +1,109 @@
 #include "Geometry.h"
 
-///A standard constructor
-/*Nothing special to say about it*/
+
 Geometry::Geometry()
 {
+	m_wasLoaded = false;
 }
 
 Geometry::~Geometry()
 {
 }
 
-///A Method to load Buffer
-/*The vertices Data from m_vertices will be loaded into Buffers, so the Shader can use this information for the position of the object*/
+
 void Geometry::loadBufferData()
 {
+	m_vertexBuffer = new Buffer<glm::vec4>(m_vertices, STATIC_DRAW);
+	m_normalBuffer = new Buffer<glm::vec3>(m_normals, STATIC_DRAW);
+	m_uvBuffer = new Buffer<glm::vec2>(m_uvs, STATIC_DRAW);
+	m_indexBuffer = new BufferIndex<GLuint>(m_index, STATIC_DRAW_INDEX);
+
+	glGenVertexArrays(1, &m_vaoBuffer);
+	glBindVertexArray(m_vaoBuffer);
+
+	m_vertexBuffer->bind();
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+	m_normalBuffer->bind();
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	m_uvBuffer->bind();
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+	m_indexBuffer->bind();
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
+
+	glBindVertexArray(0);
+}
+
+
+void Geometry::renderGeometry()
+{
+	glBindVertexArray(m_vaoBuffer);
+
+	if (m_hasIndex)
+	{
+		glDrawElements(GL_TRIANGLES, m_index.size(), GL_UNSIGNED_INT, 0);
+	}
+	else
+	{
+		glDrawArrays(GL_TRIANGLES, 0, m_indices);
+	}
 
 }
 
-///A method to render the Object 
-/*In the while-Loop of the main-programm (Renderer or else) this method will be called to draw the array*/
-void Geometry::renderGeometry()
-{
 
+std::vector<glm::vec4> Geometry::getVertices()
+{
+	return m_vertices;
+}
+
+std::vector<glm::vec3> Geometry::getNormals()
+{
+	return m_normals;
+}
+
+std::vector<glm::vec2> Geometry::getUV()
+{
+	return m_uvs;
+}
+
+std::vector<GLuint> Geometry::getIndexList()
+{
+	return m_index;
+}
+
+void Geometry::setLoaded()
+{
+	m_wasLoaded = true;
+}
+
+
+void Geometry::resetLoaded()
+{
+	m_wasLoaded = false;
+}
+
+
+bool Geometry::isLoaded()
+{
+	return m_wasLoaded;
+}
+
+void Geometry::setIndexTrue()
+{
+	m_hasIndex = true;
+}
+
+void Geometry::setIndexFalse()
+{
+	m_hasIndex = false;
+}
+
+bool Geometry::hasIndex()
+{
+	return m_hasIndex;
 }

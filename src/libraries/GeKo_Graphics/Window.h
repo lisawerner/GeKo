@@ -1,5 +1,4 @@
-#ifndef WINDOW_H
-#define WINDOW_H
+#pragma once
 
 #include "Defs.h"
 
@@ -33,4 +32,3 @@ private:
 	int m_xpos;
 	int m_ypos;
 };
-#endif

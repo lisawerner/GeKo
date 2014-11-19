@@ -2,7 +2,7 @@
 #include "GeKo_Graphics/Renderer.h"
 #include "GeKo_Graphics/Window.h"
 #include "GeKo_Graphics/Shader.h"
-#include "GeKo_Graphics/Buffer.hpp"
+#include "GeKo_Graphics/Buffer.h"
 
 /*
 first example:

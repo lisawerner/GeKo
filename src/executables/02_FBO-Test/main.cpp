@@ -2,21 +2,20 @@
 #include "GeKo_Graphics/Renderer.h"
 #include "GeKo_Graphics/Window.h"
 #include "GeKo_Graphics/Shader.h"
-#include "GeKo_Graphics/Buffer.hpp"
-//#include "GeKo_Graphics/FBO.h"
+#include "GeKo_Graphics/Buffer.h"
+#include "GeKo_Graphics/FBO.h"
 #include "GeKo_Graphics/Rect.h"
 #include "GeKo_Graphics/Teapot.h"
+#include "GeKo_Graphics/Cube.h"
 
 /*
-first example:
-
-1. per hand we build a quad
-2. we set a window
-3. set the shader with a fragmentshader & vertexshader
-3.1 fragmentShader get an uniform var 
-4. set a renderer
-5. set a buffer with the quad
-6. gameloop
+1. we set a window
+2. set the shader with a fragmentshader & vertexshader
+3. set a renderer
+4. set 2 buffer for vertices & normals of the quad
+5. gameloop
+5.1 create a colortexture
+5.2 show the colotexture with the screenfillingquad
 */
 int main()
 {
@@ -28,12 +27,17 @@ int main()
     glewInit();
 
 	//our shader
-    VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.vert")));
-    FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.frag")));
-	VertexShader vsfbo(loadShaderSource(SHADERS_PATH + std::string("/FBO/fbo.vert")));
-	FragmentShader fsfbo(loadShaderSource(SHADERS_PATH + std::string("/FBO/fbo.frag")));
-	ShaderProgram shader(vs, fs);
-    ShaderProgram shaderFbo(vsfbo, fsfbo);
+	VertexShader vsColor(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.vert")));
+	FragmentShader fsColor(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.frag")));
+	ShaderProgram shaderColor(vsColor, fsColor);
+
+	VertexShader vsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.vert")));
+	FragmentShader fsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.frag")));
+	ShaderProgram shaderGBuffer(vsGBuffer, fsGBuffer);
+
+	VertexShader vsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/screenFillingQuad.vert")));
+	FragmentShader fsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/screenFillingQuad.frag")));
+	ShaderProgram shaderSfq(vsSfq, fsSfq);
     
 	//our renderer
     OpenGL3Context context;
@@ -41,31 +45,35 @@ int main()
 
 	//our object
 	Rect rect;
+	Cube cube;
 	Teapot teapot; //buggy
-    Buffer<glm::vec3> buffer(rect.m_vertices,STATIC_DRAW);
+	rect.loadBufferData();
+	cube.loadBufferData();
 
 	//our fbo
-	//FBO fbo(800, 600, 2, true, false);
+	FBO fbo(800, 600, 3, true, false);
 
     //Gameloop
     while (!glfwWindowShouldClose(window.getWindow()))
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        shaderFbo.bind();
-        //FIXME - need proper shader uniform
-        shaderFbo.sendVec3("color", glm::vec3(0.5,0.2,0.8));
 
-		//fbo.bind();
-		renderer.draw(buffer);
-		//fbo.unbind();
+		//GBuffer
+		fbo.bind(); //TODO: Stencil- und Depth Textures gehen noch nicht, weitere Funktionen der FBO Klasse ausprobieren
+		shaderGBuffer.bind();
+		cube.renderGeometry();
+		shaderGBuffer.unbind();
+		fbo.unbind();
 
-        renderer.draw(buffer);
-        shaderFbo.unbind();
+		//ScreenFillingQuad
+		shaderSfq.bind();
+		shaderSfq.sendSampler2D("texture", fbo.getDepthTexture());
+		rect.renderGeometry(); //Normalen sind kaputt??
+		shaderSfq.unbind();
 
         glfwSwapBuffers(window.getWindow());
         glfwPollEvents();
     }
-
     window.close();
     return 0;
 }

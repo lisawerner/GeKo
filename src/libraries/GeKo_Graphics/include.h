@@ -1,5 +1,4 @@
-#ifndef __DEFS_H
-#define __DEFS_H
+#pragma once
 
 #include <vector>
 #include <iostream>
@@ -20,7 +19,6 @@
 #include "FBO.h"
 #include "Node.h"
 #include "Scenegraph.h"
-#include "UniformManager.h"
 
 
 #define VERTICES 0
@@ -64,5 +62,3 @@
 
 //FBO
 #define INVALID_OGL_VALUE 0xFFFFFFFF
-
-#endif

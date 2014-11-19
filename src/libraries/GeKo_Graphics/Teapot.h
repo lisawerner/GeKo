@@ -8,6 +8,6 @@ public:
 	Teapot();
 	~Teapot();
 
-	void loadBufferData();
-	void renderGeometry();
+	//void loadBufferData();
+	//void renderGeometry();
 };
