@@ -13,10 +13,8 @@ Pilotview::Pilotview(int width, int height)
 	m_near = 0.001f;
 	m_far = 10.0f;
 
-	m_step = 0.0f;
-	m_sensitivity = 0.01f;
 	m_theta = glm::pi<float>() / 2.0f;
-	m_phi = -glm::pi<float>() / 2.0f;
+	m_phi = glm::pi<float>() / 2.0f;
 
 	m_viewMatrix = glm::lookAt(glm::vec3(m_position), glm::vec3(m_position) + glm::vec3(m_direction), glm::vec3(m_up));
 	m_projectionMatrix = glm::perspective(m_fov, m_width / (float)m_height, m_near, m_far);

@@ -26,11 +26,9 @@ public:
 	std::string getName();
 	void setName(std::string n);
 
-	// changes the positon in direction of the z axis
+	// Implemented in the specific cameras
 	virtual void moveForward();
 	virtual void moveBackward();
-
-	// Implemented in the specific cameras
 	virtual void moveLeft();
 	virtual void moveRight();
 	virtual void moveUp();

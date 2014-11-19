@@ -8,8 +8,9 @@ Camera::Camera()
 Camera::Camera(std::string cameraName)
 {
 	m_name = cameraName;
-	//m_position = glm::vec4(0.0, 0.0, 10.0, 1.0);
+	m_position = glm::vec4(0.0, 0.0, 10.0, 1.0);
 }
+
 Camera::~Camera()
 {
 }
@@ -61,30 +62,9 @@ void Camera::setName(std::string n){
 	m_name = n;
 }
 
-void Camera::moveForward(){
-	m_position.z -= 0.1f;
-	std::cout << "Cam move fwd z " << m_position.z << std::endl;
-	//fehlt aktualisierung der viewmatrix
-}
-
-
-void Camera::moveBackward(){
-	m_position.z += 0.1f;
-	std::cout << "Cam move bwd z " << m_position.z << std::endl;
-	//fehlt aktualisierung der viewmatrix
-}
-
-
-void Camera::moveLeft(){
-	std::cout << "Cam move left x " << m_position.x << " z " << m_position.z << std::endl;
-}
-
-void Camera::moveRight(){
-	std::cout << "Cam move right x " << m_position.x << " z " << m_position.z << std::endl;
-}
-void Camera::moveUp(){
-	std::cout << "Cam move up y " << m_position.y << " z " << m_position.z << std::endl;
-}
-void Camera::moveDown(){
-	std::cout << "Cam move down y " << m_position.y << " z " << m_position.z << std::endl;
-}
+void Camera::moveForward(){}
+void Camera::moveBackward(){}
+void Camera::moveLeft(){}
+void Camera::moveRight(){}
+void Camera::moveUp(){}
+void Camera::moveDown(){}

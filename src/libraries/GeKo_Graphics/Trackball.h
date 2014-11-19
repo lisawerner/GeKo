@@ -14,11 +14,11 @@ public:
 	void moveForward();
 	void moveBackward();
 
-	// moves the positon in a circle around the object
+	// changes the positon in a circle around the object
 	void moveLeft();
 	void moveRight();
 
-	// moves the positon in a half-circle over the object
+	// changes the positon in a half-circle over the object
 	void moveUp();
 	void moveDown();
 

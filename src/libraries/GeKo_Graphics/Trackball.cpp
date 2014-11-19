@@ -60,7 +60,7 @@ void Trackball::moveLeft(){
 
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
 	
-	std::cout << "TBall move rndL x " << m_position.x << " z " << m_position.z << std::endl;
+	std::cout << "TBall move left x " << m_position.x << " z " << m_position.z << std::endl;
 }
 
 void Trackball::moveRight(){
@@ -75,7 +75,7 @@ void Trackball::moveRight(){
 
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
 
-	std::cout << "TBall move rndR x " << m_position.x << " z " << m_position.z << std::endl;
+	std::cout << "TBall move right x " << m_position.x << " z " << m_position.z << std::endl;
 }
 
 void Trackball::moveUp(){
@@ -90,7 +90,7 @@ void Trackball::moveUp(){
 
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
 
-	std::cout << "TBall move oFwd y " << m_position.y << " z " << m_position.z << std::endl;
+	std::cout << "TBall move up (fwd) y " << m_position.y << " z " << m_position.z << std::endl;
 }
 
 void Trackball::moveDown(){
@@ -105,5 +105,5 @@ void Trackball::moveDown(){
 
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
 
-	std::cout << "TBall move oBwd y " << m_position.y << " z " << m_position.z << std::endl;
+	std::cout << "TBall move down (bwd) y " << m_position.y << " z " << m_position.z << std::endl;
 }

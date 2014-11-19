@@ -1,5 +1,3 @@
-//Test of Camera and Cube
-
 #include "GeKo_Graphics/Defs.h"
 #include "GeKo_Graphics/Renderer.h"
 #include "GeKo_Graphics/Shader.h"
@@ -18,9 +16,14 @@ Trackball cam(800, 800);
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
 	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
-	activeMap.at(key)();
-}
 
+	for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
+		if (it->first == key)
+			activeMap.at(key)();
+		if (it == activeMap.end())
+			std::cout << "Key is not mapped to an action" << std::endl;
+	}
+}
 
 
 int main()

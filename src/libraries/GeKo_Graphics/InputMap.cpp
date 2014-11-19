@@ -20,6 +20,7 @@ void InputMap::fillTrackball(Camera &activeCam){
 	auto cameraMoveFwd = [&](){
 		activeCam.moveForward();
 	};
+
 	auto cameraMoveBwd = [&](){
 		activeCam.moveBackward();
 	};
@@ -27,12 +28,15 @@ void InputMap::fillTrackball(Camera &activeCam){
 	auto cameraMoveLeft = [&](){
 		activeCam.moveLeft();
 	};
+
 	auto cameraMoveRight = [&](){
 		activeCam.moveRight();
 	};
+
 	auto cameraMoveUp = [&](){
 		activeCam.moveUp();
 	};
+
 	auto cameraMoveDown = [&](){
 		activeCam.moveDown();
 	};
@@ -52,9 +56,11 @@ void InputMap::fillTrackball(Camera &activeCam){
 
 void InputMap::fillPilotview(Camera &activeCam){
 
+	// Setting all methods
 	auto cameraMoveFwd = [&](){
 		activeCam.moveForward();
 	};
+
 	auto cameraMoveBwd = [&](){
 		activeCam.moveBackward();
 	};
@@ -62,17 +68,20 @@ void InputMap::fillPilotview(Camera &activeCam){
 	auto cameraMoveLeft = [&](){
 		activeCam.moveLeft();
 	};
+
 	auto cameraMoveRight = [&](){
 		activeCam.moveRight();
 	};
+
 	auto cameraMoveUp = [&](){
 		activeCam.moveUp();
 	};
+
 	auto cameraMoveDown = [&](){
 		activeCam.moveDown();
 	};
 	
-	
+	// Mapping the keys to the methods context specific
 	auto pilotview = [&](std::map<int, std::function<void()>> &m){
 		m[GLFW_KEY_W] = cameraMoveFwd;
 		m[GLFW_KEY_S] = cameraMoveBwd;
