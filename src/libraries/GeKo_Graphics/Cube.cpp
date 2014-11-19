@@ -101,7 +101,7 @@ void Cube::renderGeometry()
 {
 
 	glBindVertexArray(m_vaoBuffer);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, m_vertexBuffer->size);
+	glDrawArrays(GL_TRIANGLES, 0, m_vertexBuffer->size);
 
 
 	/*m_normalBuffer->bind();

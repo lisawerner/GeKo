@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <GeKo_Graphics/Buffer.h>
+#include <GeKo_Graphics/BufferIndex.h>
 
 /*This class should be used as a interface class. It provides two Methods to load Data and to render the Vertice Data. 
   Every Geometry Object which will inherit this class should use this methods. A vector for the vertices is provided as well.*/
@@ -65,7 +66,7 @@ protected:
 	Buffer<glm::vec3>* m_normalBuffer;
 	Buffer<glm::vec2>* m_uvBuffer;
 	//TODO:Indexbuffer braucht einen speziellen Buffer
-//	Buffer<GLuint>* m_indexBuffer;
+	BufferIndex<GLuint>* m_indexBuffer;
 
 	GLuint m_vaoBuffer;
 private:
