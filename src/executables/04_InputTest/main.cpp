@@ -1,7 +1,7 @@
 #include "GL/glew.h"
-#include "GeKo_Graphics/Camera.h"
-#include "GeKo_Graphics/InputHandler.h"
-#include "GeKo_Graphics/InputMap.h"
+#include "GeKo_Graphics/Camera/Camera.h"
+#include "GeKo_Gameplay/Input/InputHandler.h"
+#include "GeKo_Gameplay/Input/InputMap.h"
 
 InputHandler iH;
 

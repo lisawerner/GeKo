@@ -1,11 +1,11 @@
 #include "GeKo_Graphics/Defs.h"
-#include "GeKo_Graphics/Renderer.h"
-#include "GeKo_Graphics/Shader.h"
-#include "GeKo_Graphics/Teapot.h"
-#include "GeKo_Graphics/Camera.h"
-#include "GeKo_Graphics/Trackball.h"
-#include "GeKo_Graphics/InputHandler.h"
-#include "GeKo_Graphics/InputMap.h"
+#include "GeKo_Graphics/Renderer/Renderer.h"
+#include "GeKo_Graphics/Shader/Shader.h"
+#include "GeKo_Graphics/Object/Teapot.h"
+#include "GeKo_Graphics/Camera/Camera.h"
+#include "GeKo_Graphics/Camera/Trackball.h"
+#include "GeKo_Gameplay/Input/InputHandler.h"
+#include "GeKo_Gameplay/Input/InputMap.h"
 
 
 
