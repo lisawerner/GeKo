@@ -1,8 +1,8 @@
 #pragma once
 
 #include "GeKo_Graphics/Defs.h"
-#include "Camera.h"
-#include "Trackball.h"
+#include "GeKo_Graphics/Camera/Camera.h"
+#include "GeKo_Graphics/Camera/Trackball.h"
 #include <map>
 #include <functional>
 
@@ -12,9 +12,9 @@ public:
 	InputMap();
 	~InputMap();
 
-	// The methods fill the specific InputMaps
-	void fillTrackball(Camera &activeCam);
-	void fillPilotview(Camera &activeCam);
+	// The methods updates the specific InputMaps
+	// in the future you can add your own keys on runtime with this methods
+//	virtual void InputMap::update(Camera &activeCam){}
 
 	// Enables / Disables the Map
 	/* DO NEVER EVER EVER EVER USE THIS!!
