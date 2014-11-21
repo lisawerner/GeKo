@@ -72,15 +72,8 @@ InputMap* InputHandler::getInputMap(std::string name) {
 void InputHandler::setAllInputMaps(Camera &activeCam){
 	
 	// Instances of the Maps, which are named depending on their context
-	InputMap* contextTrackball = new InputMap();
-	contextTrackball->setName("Trackball");
-
-	InputMap* contextPilotview = new InputMap();
-	contextPilotview->setName("Pilotview");
-
-	// The Maps are filled context specific
-	contextTrackball->fillTrackball(activeCam);
-	contextPilotview->fillPilotview(activeCam);
+	IMTrackball* contextTrackball = new IMTrackball(activeCam);
+	IMPilotview* contextPilotview = new IMPilotview(activeCam);
 
 	// The Maps are stored in a vector
 	m_allInputMaps.push_back(contextTrackball);

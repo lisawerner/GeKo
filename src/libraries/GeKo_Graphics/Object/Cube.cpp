@@ -1,4 +1,4 @@
-#include <GeKo_Graphics/Cube.h>
+#include <GeKo_Graphics/Object/Cube.h>
 
 Cube::Cube()
 {

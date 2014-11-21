@@ -5,7 +5,8 @@
 
 #include "GeKo_Graphics/Defs.h"
 #include "InputMap.h"
-
+#include "MapTrackball.h"
+#include "MapPilotview.h"
 
 
 class InputHandler

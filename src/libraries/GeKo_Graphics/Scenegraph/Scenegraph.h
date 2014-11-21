@@ -1,6 +1,6 @@
 #pragma once
-#include <GeKo_Graphics/Node.h>
-#include <GeKo_Graphics/Camera.h>
+#include <GeKo_Graphics/Scenegraph/Node.h>
+#include <GeKo_Graphics/Camera/Camera.h>
 
 
 /**Every scenegraph is connected with one scene.

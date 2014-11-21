@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Defs.h"
-#include "include.h"
+#include <GeKo_Graphics/Defs.h>
+#include <GeKo_Graphics/include.h>
 
 /*
 * @brief Class for OpenGL frame buffer objects (FBOs).

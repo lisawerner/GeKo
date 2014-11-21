@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Defs.h"
-#include "Buffer.h"
-#include "Shader.h"
+#include <GeKo_Graphics/Defs.h>
+#include <GeKo_Graphics/Buffer.h>
+#include <GeKo_Graphics/Shader/Shader.h>
 
 /*
 Need Information
