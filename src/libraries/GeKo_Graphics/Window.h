@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Defs.h"
+#include <GeKo_Graphics/Defs.h>
 
 /*
 Need more Information

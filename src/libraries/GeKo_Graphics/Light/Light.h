@@ -1,6 +1,6 @@
 #pragma once
-#include "include.h"
-#include "Shader.h"
+#include <GeKo_Graphics/Defs.h>
+#include <GeKo_Graphics/Shader/Shader.h>
 
 class Light
 {

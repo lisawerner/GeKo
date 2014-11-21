@@ -1,7 +1,7 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include "Defs.h"
+#include <GeKo_Graphics/Defs.h>
 #include <string>
 
 // Do I really need to do this? Better use something different than GLEW

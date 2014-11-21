@@ -1,5 +1,5 @@
 #pragma once
-#include <GeKo_Graphics/Geometry.h>
+#include <GeKo_Graphics/Object/Geometry.h>
 #include <iostream>
 class Rect : public Geometry
 {

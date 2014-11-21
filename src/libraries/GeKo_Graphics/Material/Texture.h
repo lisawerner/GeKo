@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Defs.h"
+#include <GeKo_Graphics/Defs.h>
 
 ///This Class is to create Texture Objects by loading an image from the Ressources Folder
 
