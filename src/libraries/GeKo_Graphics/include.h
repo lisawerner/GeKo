@@ -13,12 +13,12 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
 
-#include "Renderer.h"
-#include "Window.h"
-#include "Shader.h"
-#include "FBO.h"
-#include "Node.h"
-#include "Scenegraph.h"
+#include <GeKo_Graphics/Renderer/Renderer.h>
+#include <GeKo_Graphics/Window.h>
+#include <GeKo_Graphics/Shader/Shader.h>
+#include <GeKo_Graphics/Shader/FBO.h>
+#include <GeKo_Graphics/Scenegraph/Node.h>
+#include <GeKo_Graphics/Scenegraph/Scenegraph.h>
 
 
 #define VERTICES 0

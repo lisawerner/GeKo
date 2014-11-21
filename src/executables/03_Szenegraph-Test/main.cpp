@@ -1,16 +1,18 @@
 //Test of Camera and Cube
 
-#include "GeKo_Graphics/Defs.h"
-#include "GeKo_Graphics/Renderer.h"
-#include "GeKo_Graphics/Shader.h"
-#include "GeKo_Graphics/Cube.h"
-#include "GeKo_Graphics/Camera.h"
-#include "GeKo_Graphics/Trackball.h"
-#include "GeKo_Graphics/InputHandler.h"
-#include "GeKo_Graphics/InputMap.h"
-#include <GeKo_Graphics/Teapot.h>
-#include <GeKo_Graphics/Scene.h>
-#include <GeKo_Graphics/Texture.h>
+
+#include <GeKo_Graphics/Renderer/Renderer.h>
+#include <GeKo_Graphics/Shader/Shader.h>
+#include <GeKo_Graphics/Object/Cube.h>
+#include <GeKo_Graphics/Camera/Camera.h>
+#include <GeKo_Graphics/Camera/Trackball.h>
+#include <GeKo_Gameplay/Input/InputHandler.h>
+#include <GeKo_Gameplay/Input/InputMap.h>
+#include <GeKo_Graphics/Object/Teapot.h>
+#include <GeKo_Graphics/Material/Texture.h>
+#include <GeKo_Graphics/Scenegraph/Scene.h>
+#include <GeKo_Graphics/Scenegraph/Node.h>
+
 
 
 

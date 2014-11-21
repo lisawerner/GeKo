@@ -1,5 +1,5 @@
 #pragma once
-#include "Scenegraph.h"
+#include <GeKo_Graphics/Scenegraph/Scenegraph.h>
 #include <iostream>
 /**
 The class "Level" has a unique name and can be identified with this name. 

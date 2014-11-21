@@ -1,4 +1,4 @@
-#include "IMTrackball.h"
+#include <GeKo_Gameplay/Input/MapTrackball.h>
 
 IMTrackball::IMTrackball(Camera &activeCam)
 {
