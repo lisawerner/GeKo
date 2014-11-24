@@ -1,20 +1,20 @@
-#version 330
+#version 330 core
 
-layout (location = 0) in vec3 position;
-layout (location = 1) in vec2 texCoord;
-layout (location = 2) in vec3 normal;
+layout (location = 0) in vec4 position;
+layout (location = 1) in vec3 normal;
+layout (location = 2) in vec2 uv;
 
-out vec2 texCoord0;
-out vec3 normal0;
-out vec3 worldPos0;
+uniform mat4 modelMatrix;
+uniform mat4 viewMatrix;
+uniform mat4 projectionMatrix;
 
-uniform mat4 transform;
-uniform mat4 transformProjected;
+out vec4 passPosition;
+out vec3 passNormal;
 
-void main()
-{
-    gl_Position = transformProjected * vec4(position, 1.0);
-    texCoord0 = texCoord;
-    normal0 = (transform * vec4(normal, 0.0)).xyz;
-    worldPos0 = (transform * vec4(position, 1.0)).xyz;
+void main(){
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * position;
+	passPosition = viewMatrix * modelMatrix * position;
+
+	mat3 normalMatrix = mat3(transpose(inverse(viewMatrix * modelMatrix)));
+	passNormal = normalize(normalMatrix * normal);
 }
