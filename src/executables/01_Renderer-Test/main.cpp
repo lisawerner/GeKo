@@ -53,7 +53,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         shader.bind();
         //FIXME - need proper shader uniform
-        shader.sendVec3("color", glm::vec3(0.5,0.2,0.8));
+        shader.sendVec4("color", glm::vec4(0.5,0.2,0.8,1.0));
         renderer.draw(buffer);
         shader.unbind();
 
