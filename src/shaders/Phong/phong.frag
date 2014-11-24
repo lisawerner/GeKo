@@ -1,143 +1,37 @@
-#version 330
+#version 330 core
 
-const int MAX_POINT_LIGHTS = 4;
-const int MAX_SPOT_LIGHTS = 4;
+in vec4 passPosition;
+in vec3 passNormal;
 
-in vec2 texCoord0;
-in vec3 normal0;
-in vec3 worldPos0;
+uniform mat4 viewMatrix;
 
-out vec4 fragColor;
+uniform vec3 l_col;
+uniform vec4 l_pos;
+uniform float shininess;
 
-struct BaseLight
-{
-    vec3 color;
-    float intensity;
-};
+out vec4 fragmentColor;
 
-struct DirectionalLight
-{
-    BaseLight base;
-    vec3 direction;
-};
+vec3 lightVector;
 
-struct Attenuation
-{
-    float constant;
-    float linear;
-    float exponent;
-};
+void main(){
 
-struct PointLight
-{
-    BaseLight base;
-    Attenuation atten;
-    vec3 position;
-    float range;
-};
+	//ambient
+	vec3 ambient = vec3(0.2,0.2,0.2);
+	vec3 diffuse = vec3(1.0, 0.0, 0.0);
+	vec3 specular = vec3(1.0, 1.0, 1.0);
 
-struct SpotLight
-{
-    PointLight pointLight;
-    vec3 direction;
-    float cutoff;
-};
+	//diffuse
+	lightVector = normalize(l_pos.xyz - passPosition.xyz);
+    float cos_phi = max(dot(passNormal, lightVector), 0.0f);
+	diffuse = diffuse * cos_phi * l_col;
 
-uniform vec3 baseColor;
-uniform vec3 eyePos;
-uniform vec3 ambientLight;
-uniform sampler2D sampler;
+	//specular
+	vec3 eye = normalize(-passPosition.xyz);
+	vec3 reflection = normalize(reflect(-lightVector, normalize(passNormal)));
+    float cos_psi = pow(max(dot(reflection, eye), 0.0), shininess); //BUG!! specular is always null
+	specular = specular * l_col * cos_psi;
 
-uniform float specularIntensity;
-uniform float specularPower;
-
-uniform DirectionalLight directionalLight;
-uniform PointLight pointLights[MAX_POINT_LIGHTS];
-uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
-
-vec4 calcLight(BaseLight base, vec3 direction, vec3 normal)
-{
-    float diffuseFactor = dot(normal, -direction);
-    
-    vec4 diffuseColor = vec4(0,0,0,0);
-    vec4 specularColor = vec4(0,0,0,0);
-    
-    if(diffuseFactor > 0)
-    {
-        diffuseColor = vec4(base.color, 1.0) * base.intensity * diffuseFactor;
-        
-        vec3 directionToEye = normalize(eyePos - worldPos0);
-        vec3 reflectDirection = normalize(reflect(direction, normal));
-        
-        float specularFactor = dot(directionToEye, reflectDirection);
-        specularFactor = pow(specularFactor, specularPower);
-        
-        if(specularFactor > 0)
-        {
-            specularColor = vec4(base.color, 1.0) * specularIntensity * specularFactor;
-        }
-    }
-    
-    return diffuseColor + specularColor;
-}
-
-vec4 calcDirectionalLight(DirectionalLight directionalLight, vec3 normal)
-{
-    return calcLight(directionalLight.base, -directionalLight.direction, normal);
-}
-
-vec4 calcPointLight(PointLight pointLight, vec3 normal)
-{
-    vec3 lightDirection = worldPos0 - pointLight.position;
-    float distanceToPoint = length(lightDirection);
-    
-    if(distanceToPoint > pointLight.range)
-        return vec4(0,0,0,0);
-    
-    lightDirection = normalize(lightDirection);
-    
-    vec4 color = calcLight(pointLight.base, lightDirection, normal);
-    
-    float attenuation = pointLight.atten.constant +
-                        pointLight.atten.linear * distanceToPoint +
-                        pointLight.atten.exponent * distanceToPoint * distanceToPoint +
-                        0.0001;
-                         
-    return color / attenuation;
-}
-
-vec4 calcSpotLight(SpotLight spotLight, vec3 normal)
-{
-    vec3 lightDirection = normalize(worldPos0 - spotLight.pointLight.position);
-    float spotFactor = dot(lightDirection, spotLight.direction);
-    
-    vec4 color = vec4(0,0,0,0);
-    
-    if(spotFactor > spotLight.cutoff)
-    {
-        color = calcPointLight(spotLight.pointLight, normal) *
-                (1.0 - (1.0 - spotFactor)/(1.0 - spotLight.cutoff));
-    }
-    
-    return color;
-}
-
-void main()
-{ 
-    vec4 color = vec4(baseColor, 1) * texture(sampler, texCoord0.xy);
-
-    vec4 totalLight = vec4(ambientLight,1);
-    vec3 normal = normalize(normal0);
-    
-    totalLight += calcDirectionalLight(directionalLight, normal);
-    
-    for(int i = 0; i < MAX_POINT_LIGHTS; i++)
-        if(pointLights[i].base.intensity > 0)
-            totalLight += calcPointLight(pointLights[i], normal);
-    
-    for(int i = 0; i < MAX_SPOT_LIGHTS; i++)
-        if(spotLights[i].pointLight.base.intensity > 0)
-            totalLight += calcSpotLight(spotLights[i], normal);
-    
-    fragColor = color * totalLight;
+	//color
+	fragmentColor = vec4(ambient+diffuse+specular, 1.0);
+	//fragmentColor = vec4(specular, 1.0);
 }

@@ -1,8 +1,16 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <GeKo_Graphics/Defs.h>
+#pragma once
+#include "GeKo_Graphics/Defs.h"
 #include <string>
+#include "GeKo_Graphics/Light/PointLight.h"
+#include "GeKo_Graphics/Light/DirectionLight.h"
+#include "GeKo_Graphics/Light/ConeLight.h"
+
+class PointLight;
+class DirectionLight;
+class ConeLight;
 
 // Do I really need to do this? Better use something different than GLEW
 enum ShaderType{
@@ -47,14 +55,16 @@ public:
     GLuint getLocation(std::string uniform);
 	void sendInt(std::string uniform, int i);
 	void sendDouble(std::string uniform, double d);
+	void sendFloat(std::string uniform, float f);
     void sendVec3(std::string uniform,glm::vec3 v);
 	void sendVec4(std::string uniform, glm::vec4 v);
-	void sendSampler2D(std::string uniform, GLuint sampler2Dhandler);
 	void sendMat4(std::string uniform, glm::mat4 m);
+	void sendSampler2D(std::string uniform, GLuint sampler2Dhandler);
+	void sendLightData(std::string uniformPosition, std::string uniformColor, std::string uniformDirection, std::string uniformExponent, std::string uniformAngle, std::string uniformRadius, PointLight light);
+	void sendLightData(std::string uniformPosition, std::string uniformColor, std::string uniformDirection, std::string uniformExponent, std::string uniformAngle, std::string uniformRadius, DirectionLight light);
+	void sendLightData(std::string uniformPosition, std::string uniformColor, std::string uniformDirection, std::string uniformExponent, std::string uniformAngle, std::string uniformRadius, ConeLight light);
+	//add sendLight general
 
-
-	
-	
 };
 
 #endif

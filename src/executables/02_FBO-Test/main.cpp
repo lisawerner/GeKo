@@ -1,16 +1,12 @@
 #include "GeKo_Graphics/Defs.h"
+#include "GeKo_Graphics/Renderer/Renderer.h"
+#include "GeKo_Graphics/Window.h"
+#include "GeKo_Graphics/Shader/Shader.h"
+#include "GeKo_Graphics/Buffer.h"
 #include "GeKo_Graphics/Shader/FBO.h"
-#include <GeKo_Graphics/Renderer/Renderer.h>
-#include <GeKo_Graphics/Shader/Shader.h>
-#include <GeKo_Graphics/Object/Cube.h>
-#include <GeKo_Graphics/Camera/Camera.h>
-#include <GeKo_Graphics/Camera/Trackball.h>
-#include <GeKo_Gameplay/Input/InputHandler.h>
-#include <GeKo_Gameplay/Input/InputMap.h>
-#include <GeKo_Graphics/Object/Teapot.h>
-#include <GeKo_Graphics/Material/Texture.h>
-#include <GeKo_Graphics/Scenegraph/Scene.h>
-#include <GeKo_Graphics/Scenegraph/Node.h>
+#include "GeKo_Graphics/Object/Rect.h"
+#include "GeKo_Graphics/Object/Teapot.h"
+#include "GeKo_Graphics/Object/Cube.h"
 
 /*
 1. we set a window
@@ -64,6 +60,7 @@ int main()
 
 		//GBuffer
 		fbo.bind(); //TODO: Stencil- und Depth Textures gehen noch nicht, weitere Funktionen der FBO Klasse ausprobieren
+		glEnable(GL_DEPTH);
 		shaderGBuffer.bind();
 		cube.renderGeometry();
 		shaderGBuffer.unbind();

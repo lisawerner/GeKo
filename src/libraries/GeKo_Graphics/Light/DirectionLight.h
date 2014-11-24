@@ -1,12 +1,20 @@
 #pragma once
-#include "Light.h"
+#include "GeKo_Graphics/include.h"
 
-class DirectionLight : public Light
+class DirectionLight
 {
 public:
-	DirectionLight(glm::vec4 direction);
+	DirectionLight();
+	DirectionLight(glm::vec4 position, glm::vec3 color, bool isActive, glm::vec3 direction, double radius);
 	~DirectionLight();
 
-	glm::vec4 m_direction;
+	glm::vec3 m_color;
+	glm::vec4 m_position;
+	bool m_isActive;
+	glm::vec3 m_direction;
+	float m_radius;
+
+	float m_exponent = 0;
+	int m_angle = 0;
 };
 
