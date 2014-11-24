@@ -80,18 +80,18 @@ int main()
 //	Texture texBrick((char*)RESOURCES_PATH "/brick.bmp");
 
 	//our fbos
-	FBO fbo1(800, 600, 3, true, false);
+	FBO fbo1(800, 600, 1, true, false);
 	FBO fbo2(800, 600, 3, true, false);
 
 	//our scene
 	Scene scene;
 
-	Node teaNode("TeaNode");
+	Node teaNode("teaNode");
 	teaNode.addGeometry(&tea);
 //	teaNode.addTexture(&texCV);
 	teaNode.setModelMatrix(glm::translate(teaNode.getModelMatrix(), glm::vec3(0.0, 0.0, 0.0)));
 
-	Node brickNode("BrickNode");
+	Node brickNode("brickNode");
 	brickNode.addGeometry(&cube);
 //	brickNode.addTexture(&texBrick);
 	brickNode.setModelMatrix(glm::translate(brickNode.getModelMatrix(), glm::vec3(3.0, 0.0, 0.0)));
@@ -121,21 +121,18 @@ int main()
 		shaderSfq.unbind();*/
 
 		//color Output wieso bekommt redShader die uniform Variablen???
-//		fbo1.bind();
+		fbo1.bind();
 		shaderRedShader.bind();
 		teaNode.setModelMatrix(glm::rotate(teaNode.getModelMatrix(), 0.02f, glm::vec3(0.0, 1.0, 0.0)));
-		shaderTexture.sendMat4("modelMatrix", teaNode.getModelMatrix());
-		shaderTexture.sendMat4("viewMatrix", cam.getViewMatrix());
-		shaderTexture.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+		shaderRedShader.sendMat4("modelMatrix", teaNode.getModelMatrix());
+		shaderRedShader.sendMat4("viewMatrix", cam.getViewMatrix());
+		shaderRedShader.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 
-//		shaderTexture.sendSampler2D("texture", teaNode.getTexture()->getTexture());
-		scene.getScenegraph()->getRootNode()->getChildrenNode("TeaNode")->render();
-
-//		shaderTexture.sendSampler2D("texture", brickNode.getTexture()->getTexture());
-		shaderTexture.sendMat4("modelMatrix", teaNode.getModelMatrix() * brickNode.getModelMatrix());
+		teaNode.render();
+		shaderRedShader.sendMat4("modelMatrix", teaNode.getModelMatrix() * brickNode.getModelMatrix());
 		brickNode.render();
 		shaderRedShader.unbind();
-//		fbo1.unbind();
+		fbo1.unbind();
 
 		//color Output with texture
 /*		fbo.bind();
@@ -157,11 +154,11 @@ int main()
 		fbo.unbind();*/
 	
 		//ScreenFillingQuad
-/*		shaderSfq.bind();
-		shaderSfq.sendSampler2D("texture", fbo1.getColorTexture(0));
+		shaderSfq.bind();
+		shaderSfq.sendSampler2D("texture", fbo1.getDepthTexture());
 		teaNode.render();
 		brickNode.render();
-		shaderSfq.unbind();	*/
+		shaderSfq.unbind();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
