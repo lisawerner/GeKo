@@ -1,6 +1,3 @@
-//Test of Camera and Cube
-
-
 #include <GeKo_Graphics/Renderer/Renderer.h>
 #include <GeKo_Graphics/Shader/Shader.h>
 #include <GeKo_Graphics/Object/Cube.h>
@@ -12,22 +9,21 @@
 #include <GeKo_Graphics/Material/Texture.h>
 #include <GeKo_Graphics/Scenegraph/Scene.h>
 #include <GeKo_Graphics/Scenegraph/Node.h>
-
-
-
-
-
+#include "GeKo_Graphics/Shader/FBO.h"
 
 InputHandler iH;
 Trackball cam(800, 800);
 
-
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
 	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
-	activeMap.at(key)();
+
+	for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
+		if (it->first == key)
+			activeMap.at(key)();
+		if (it == activeMap.end())
+			std::cout << "Key is not mapped to an action" << std::endl;
+	}
 }
-
-
 
 int main()
 {
@@ -65,7 +61,15 @@ int main()
     VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/TextureShader3D/TextureShader3D.vert")));
     FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/TextureShader3D/TextureShader3D.frag")));
 	ShaderProgram shader(vs, fs);
-    
+
+	//VertexShader vsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/screenFillingQuad.vert")));
+	//FragmentShader fsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/screenFillingQuad.frag")));
+	//ShaderProgram shaderSfq(vsSfq, fsSfq);
+
+	//VertexShader vsColor(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.vert")));
+	//FragmentShader fsColor(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.frag")));
+	//ShaderProgram shaderColor(vsColor, fsColor);
+
 	//our renderer
     OpenGL3Context context;
     Renderer renderer(context);
@@ -75,6 +79,8 @@ int main()
 	//our object
 	 Cube cube;
 	 Teapot tea;
+	 Rect rect;
+	 rect.loadBufferData();
 
 	 //our textures
 	 Texture texCV((char*)RESOURCES_PATH "/cv_logo.bmp");
@@ -103,15 +109,16 @@ int main()
 
 	//testNodeChild.getParentNode()->getNodeName();
 
+
+	 FBO fbo(800, 600, 3, true, false);
+
     //Renderloop
     while (!glfwWindowShouldClose(window))
     {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
 
-
 		shader.bind();
-
 		shader.sendMat4("viewMatrix", cam.getViewMatrix());
 		shader.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 		
@@ -123,10 +130,8 @@ int main()
 		shader.sendSampler2D("testTexture", testNodeChild.getTexture()->getTexture());
 		shader.sendMat4("modelMatrix", testNode.getModelMatrix() * testNodeChild.getModelMatrix());
 		testNodeChild.render();
-
 		shader.unbind();
        
-
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
