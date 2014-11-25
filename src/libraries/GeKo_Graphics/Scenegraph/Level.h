@@ -31,8 +31,11 @@ public:
 	/**Need a Scenename to find a Scene. Returns NULL if the Scene does not exist*/
 	Scene* getScene(std::string sceneName);
 
+	void changeScene(std::string sceneName);
+
 protected:
 	const char* m_levelName;
 	std::vector<Scene> m_sceneSet;
+	Scene m_activeScene;
 };
 

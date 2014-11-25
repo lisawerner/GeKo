@@ -9,7 +9,8 @@
 #include <GeKo_Graphics/Material/Texture.h>
 #include <GeKo_Graphics/Scenegraph/Scene.h>
 #include <GeKo_Graphics/Scenegraph/Node.h>
-#include "GeKo_Graphics/Shader/FBO.h"
+#include <GeKo_Graphics/Shader/FBO.h>
+#include <GeKo_Graphics/Scenegraph/Level.h>
 
 InputHandler iH;
 Trackball cam(800, 800);
@@ -34,19 +35,11 @@ int main()
 	window = glfwCreateWindow(800, 600, "Camera Test", NULL, NULL);
 	glfwMakeContextCurrent(window);
 
-	//Set Scene
-	//Scene scene("TestScene");
 
 	//Set Camera to another position
 	cam.setPosition(glm::vec4(0.0,0.0,10.0,1.0));
 	cam.setName("TrackballCam");
 	
-
-	//Add Camera to Scene
-	//scene.getScenegraph()->addCamera(cam);
-	//scene.getScenegraph()->setActiveCamera("Trackball");
-	//Camera* activeCam = scene.getScenegraph()->getActiveCamera();
-
 	//Set all InputMaps and set one InputMap active
 	iH.setAllInputMaps(cam);
 	iH.changeActiveInputMap("Trackball");
@@ -62,20 +55,10 @@ int main()
     FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/TextureShader3D/TextureShader3D.frag")));
 	ShaderProgram shader(vs, fs);
 
-	//VertexShader vsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/screenFillingQuad.vert")));
-	//FragmentShader fsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/screenFillingQuad.frag")));
-	//ShaderProgram shaderSfq(vsSfq, fsSfq);
-
-	//VertexShader vsColor(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.vert")));
-	//FragmentShader fsColor(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.frag")));
-	//ShaderProgram shaderColor(vsColor, fsColor);
-
 	//our renderer
     OpenGL3Context context;
     Renderer renderer(context);
 
-
-	
 	//our object
 	 Cube cube;
 	 Teapot tea;
@@ -86,7 +69,11 @@ int main()
 	 Texture texCV((char*)RESOURCES_PATH "/cv_logo.bmp");
 	 Texture tex((char*)RESOURCES_PATH "/brick.bmp");
 
-	 Scene testScene;
+	 //Scenegraph creation 
+	 Level testLevel("testLevel");
+	 Scene testScene("testScene");
+	 testLevel.addScene(testScene);
+	 testLevel.changeScene("testScene");
 
 	 Node testNode("testNode");
 	 testNode.addGeometry(&tea);

@@ -42,3 +42,14 @@ Scene* Level::getScene(std::string sceneName )
 		}
 	}
 }
+
+void Level::changeScene(std::string sceneName)
+{
+	for (int i = 0; i < m_sceneSet.size(); i++)
+	{
+		if (m_sceneSet.at(i).getSceneName() == sceneName)
+		{
+			m_activeScene = m_sceneSet.at(i);
+		}
+	}
+}
