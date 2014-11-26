@@ -1,22 +1,19 @@
-#include <GeKo_Gameplay/Input/MapTrackball.h>
+#include <GeKo_Gameplay/Input/MapPlayerview.h>
 
-MapTrackball::MapTrackball(Camera &activeCam)
+MapPlayerview::MapPlayerview(Camera &activeCam)
 {
-	m_name = "Trackball";
 	m_active = false;
+	m_name = "Playerview";
 	update(activeCam);
 }
 
 
-MapTrackball::~MapTrackball()
+MapPlayerview::~MapPlayerview()
 {
 }
 
 
-
-// Fills the InputMaps specifically
-
-void MapTrackball::update(Camera &activeCam){
+void MapPlayerview::update(Camera &activeCam){
 
 	// Setting all methods
 	auto cameraMoveFwd = [&](){
@@ -35,23 +32,22 @@ void MapTrackball::update(Camera &activeCam){
 		activeCam.moveRight();
 	};
 
-	auto cameraMoveUp = [&](){
-		activeCam.moveUp();
-	};
-
-	auto cameraMoveDown = [&](){
-		activeCam.moveDown();
+	auto cameraTurn = [&](){
+		activeCam.turn();
 	};
 
 	// Mapping the keys to the methods context specific
-	auto trackball = [&](std::map<int, std::function<void()>> &m){
+	auto playerview = [&](std::map<int, std::function<void()>> &m){
 		m[GLFW_KEY_W] = cameraMoveFwd;
 		m[GLFW_KEY_S] = cameraMoveBwd;
 		m[GLFW_KEY_A] = cameraMoveLeft;
 		m[GLFW_KEY_D] = cameraMoveRight;
-		m[GLFW_KEY_E] = cameraMoveUp;
-		m[GLFW_KEY_Q] = cameraMoveDown;
+		m[GLFW_MOUSE_BUTTON_LEFT] = cameraTurn;
+		
 	};
 
-	trackball(m_map);
+	playerview(m_map);
 }
+
+
+

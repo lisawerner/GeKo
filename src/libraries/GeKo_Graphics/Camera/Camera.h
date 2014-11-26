@@ -20,7 +20,6 @@ public:
 	void setWidthHeight(int width, int height);
 
 	void setPosition(glm::vec4 position);
-
 	glm::vec4 getPosition();
 
 	std::string getName();
@@ -33,6 +32,13 @@ public:
 	virtual void moveRight();
 	virtual void moveUp();
 	virtual void moveDown();
+	virtual void moveDiagonalFwdL();
+	virtual void moveDiagonalFwdR();
+	virtual void moveDiagonalBwdL();
+	virtual void moveDiagonalBwdR();
+	virtual void turnLeft();
+	virtual void turnRight();
+	virtual void turn();
 
 	
 
@@ -43,7 +49,6 @@ protected:
 
 	glm::mat4 m_viewMatrix;
 	glm::mat4 m_projectionMatrix;
-
 
 	glm::vec4 m_position, m_center, m_up;
 	
