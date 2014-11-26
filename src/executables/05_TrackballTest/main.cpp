@@ -7,16 +7,21 @@
 #include "GeKo_Gameplay/Input/InputHandler.h"
 #include "GeKo_Gameplay/Input/InputMap.h"
 
-
+/* To use the Trackball camera, which is based on the input system, you need an InputHandler, the Trackball camera and the key callback
+InputHandler: has to set all InputMaps and activate one of them
+Uniform matrices: have to be send to the shader in the render loop
+Key Callback: has to be set
+*/
 
 
 InputHandler iH;
 Trackball cam(800, 800);
 
-
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
+	// The active InputMap is fetched
 	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
 
+	// You go over the active InputMap, if it's the key that is pressed, the mapped action is executed else the key is ignored
 	for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
 		if (it->first == key)
 			activeMap.at(key)();
@@ -30,47 +35,46 @@ int main()
 {
 	glfwInit();
 
-	//our window
 	GLFWwindow* window;
-	window = glfwCreateWindow(800, 600, "Camera Test", NULL, NULL);
+	window = glfwCreateWindow(800, 600, "TrackballTest", NULL, NULL);
 	glfwMakeContextCurrent(window);
 
 
-	//Set Camera to another position
+	// You can set the Trackball camera to another position and give it a name
 	cam.setPosition(glm::vec4(0.0,0.0,10.0,1.0));
 	cam.setName("TrackballCam");
 	
 
-	//Set all InputMaps and set one InputMap active
+	// Set all InputMaps and set one InputMap active
 	iH.setAllInputMaps(cam);
 	iH.changeActiveInputMap("Trackball");
 
-	//Callback
+	// Callback
 	glfwSetKeyCallback(window, key_callback);
 
     glewInit();
 
-	//our shader
+	// Shader
     VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader3D/ColorShader3D.vert")));
     FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader3D/colorShader3D.frag")));
 	ShaderProgram shader(vs, fs);
     
-	//our renderer
+	// Renderer
     OpenGL3Context context;
     Renderer renderer(context);
 	
-	//our object
+	// Object
 	Teapot teapot;
 	teapot.loadBufferData();
 
 	
-    //Renderloop
     while (!glfwWindowShouldClose(window))
     {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shader.bind();
 
+		// You have to send the uniform matrices of the Trackball camera to the shader
 		shader.sendMat4("viewMatrix", cam.getViewMatrix());
 		shader.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 	
