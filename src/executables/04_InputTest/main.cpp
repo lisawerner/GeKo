@@ -10,6 +10,8 @@ Key Callback: has to be set
 */
 
 InputHandler iH;
+// alibiCam, because here we have just output on the console
+Trackball alibiCam(800, 800);
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
 	// The active InputMap is fetched
@@ -32,8 +34,6 @@ int main(void)
 	window = glfwCreateWindow(640, 480, "InputTest", NULL, NULL);
 	glfwMakeContextCurrent(window);
 
-	// alibiCam, because here we have just output on the console
-	Trackball alibiCam(800, 800);
 	iH.setAllInputMaps(alibiCam);
 	// Setting an InputMap active so that action can be performed
 	iH.changeActiveInputMap("Trackball");
