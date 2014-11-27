@@ -25,9 +25,9 @@ static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos){
 	if (iH.getActiveInputMap()->getName() == "Playerview"){
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
 
-			double changeX = (xpos - cam.getOldX()) * cam.getSensitivity()* cam.getSpeed();
-			double changeY = (ypos - cam.getOldY()) * cam.getSensitivity()* cam.getSpeed();
-			cam.turn(changeX, changeY);
+			cam.setChangeX((xpos - cam.getOldX()) * cam.getSensitivity()* cam.getSpeed());
+			cam.setChangeY((ypos - cam.getOldY()) * cam.getSensitivity()* cam.getSpeed());
+			iH.getActiveInputMap()->checkMultipleMappedKeys(GLFW_MOUSE_BUTTON_LEFT, *window);
 			cam.setOldX(xpos);
 			cam.setOldY(ypos);
 		}
@@ -46,8 +46,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	// You go over the active InputMap, if it's the key that is pressed, a method is called and the mapped action is executed else the key is ignored
 	for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
 		if (it->first == key)
-		
-			activeMap.at(key)();
+			iH.getActiveInputMap()->checkMultipleMappedKeys(key, *window);
+			//activeMap.at(key)();
 		if (it == activeMap.end())
 			std::cout << "Key is not mapped to an action" << std::endl;
 	}
@@ -65,6 +65,7 @@ int main()
 	// You can set the Pilotview camera to another position and give it a name
 	cam.setPosition(glm::vec4(1.0, 0.0, 5.0, 1.0));
 	cam.setName("Playerview");
+	cam.setSpeed(0.05);
 	
 	// Set all InputMaps and set one InputMap active
 	iH.setAllInputMaps(cam);

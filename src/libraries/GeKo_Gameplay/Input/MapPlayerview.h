@@ -10,5 +10,9 @@ public:
 
 	// updates the active camera
 	void update(Camera &activeCam);
+
+	void checkMultipleMappedKeys(int key, GLFWwindow &window);
+
+
 };
 

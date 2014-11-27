@@ -67,6 +67,14 @@ void Playerview::setOldY(double y){
 	m_oldY = y;
 }
 
+void Playerview::setChangeX(double x){
+	m_changeX = x;
+}
+
+void Playerview::setChangeY(double y){
+	m_changeY = y;
+}
+
 void Playerview::moveForward(){
 	m_position += (m_speed* m_direction);
 	m_viewMatrix = glm::lookAt(glm::vec3(m_position), glm::vec3(m_position) + glm::vec3(m_direction), glm::vec3(m_up));
@@ -84,7 +92,7 @@ void Playerview::moveBackward(){
 void Playerview::moveLeft(){
 	// Rotates a copy of m_direction about 270 degrees
 	glm::vec4 directionCopy = m_direction;
-	glm::mat4 rotateLeft = glm::rotate(glm::mat4(1), 270.0f, glm::vec3(0, 1, 0));
+	glm::mat4 rotateLeft = glm::rotate(glm::mat4(1), 90.0f, glm::vec3(0, 1, 0));
 	directionCopy = rotateLeft*directionCopy;
 	// Moves left on the axis, which is orthogonal to the direction
 	m_position += (m_speed * directionCopy);
@@ -96,7 +104,7 @@ void Playerview::moveLeft(){
 void Playerview::moveRight(){
 	// Rotates a copy of m_direction about 90 degrees
 	glm::vec4 directionCopy = m_direction;
-	glm::mat4 rotateLeft = glm::rotate(glm::mat4(1), 90.0f, glm::vec3(0, 1, 0));
+	glm::mat4 rotateLeft = glm::rotate(glm::mat4(1), 270.0f, glm::vec3(0, 1, 0));
 	directionCopy = rotateLeft*directionCopy;
 	// Moves right on the axis, which is orthogonal to the direction
 	m_position += (m_speed * directionCopy);
@@ -105,14 +113,14 @@ void Playerview::moveRight(){
 	std::cout << "moveRight()" << std::endl;
 }
 
-void Playerview::turn(double &changeX, double &changeY){
+void Playerview::turn(){
 	
-		m_theta -= changeY;
+		m_theta -= m_changeY;
 
 		if (m_theta < 0.01f) m_theta = 0.01f;
 		else if (m_theta > glm::pi<float>() - 0.01f) m_theta = glm::pi<float>() - 0.01f;
 
-		m_phi -= changeX;
+		m_phi -= m_changeX;
 
 		if (m_phi < 0) m_phi += 2 * glm::pi<float>();
 		else if (m_phi > 2 * glm::pi<float>()) m_phi -= 2 * glm::pi<float>();

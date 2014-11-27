@@ -49,5 +49,30 @@ void MapPlayerview::update(Camera &activeCam){
 	playerview(m_map);
 }
 
+void MapPlayerview::checkMultipleMappedKeys(int key, GLFWwindow &window){
+	if (key == GLFW_MOUSE_BUTTON_LEFT){
+		if (glfwGetKey(&window, GLFW_KEY_W) == GLFW_PRESS){
+			m_map.at(GLFW_KEY_W )();
+			m_map.at(GLFW_MOUSE_BUTTON_LEFT)();
+		}
+		else if (glfwGetKey(&window, GLFW_KEY_S) == GLFW_PRESS){
+			m_map.at(GLFW_KEY_S)();
+			m_map.at(GLFW_MOUSE_BUTTON_LEFT)();
+		}
+		else if (glfwGetKey(&window, GLFW_KEY_A) == GLFW_PRESS){
+			m_map.at(GLFW_KEY_A)();
+			m_map.at(GLFW_MOUSE_BUTTON_LEFT)();
+		}
+		else if (glfwGetKey(&window, GLFW_KEY_D) == GLFW_PRESS){
+			m_map.at(GLFW_KEY_D)();
+			m_map.at(GLFW_MOUSE_BUTTON_LEFT)();
+		}
+		else {
+			m_map.at(key)();
+		}
+	}
+	else{
+		m_map.at(key)();
+	}
 
-
+}

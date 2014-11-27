@@ -19,6 +19,8 @@ public:
 	void setOldX(double x);
 	double getOldY();
 	void setOldY(double y);
+	void setChangeX(double x);
+	void setChangeY(double y);
 
 	// changes the positon in direction of the z axis
 	void moveForward();
@@ -29,7 +31,7 @@ public:
 	void moveRight();
 
 	// changes direction with the aid of the mouse position callback
-	void turn(double &changeX, double &changeY);
+	void turn();
 
 protected:
 
@@ -41,5 +43,8 @@ protected:
 	// Speed of movement
 	float m_speed;
 	float m_sensitivity;
+
+	double m_changeX;
+	double m_changeY;
 };
 
