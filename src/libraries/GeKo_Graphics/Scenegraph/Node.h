@@ -6,6 +6,7 @@
 #include <GeKo_Graphics/Object/Rect.h>
 #include <GeKo_Graphics/Camera/Camera.h>
 #include <GeKo_Graphics/Material/Texture.h>
+#include <GeKo_Graphics/Shader/Shader.h>
 
 /*A "Node" should be a container for Geometry, Material, Lights and Cameras and provides all the information a shader could need
   like a Modelmatrix for example. It has one parent and can have a lot of children or none. Every Node exists as long as the scenegraph */
@@ -33,7 +34,7 @@ public:
 	Node* getChildrenNode(std::string nodeName);
 	///A Node-Object will be add to m_childrenSet
 	/**The Parent Node will be set automatically*/
-	void addChildrenNode(Node childrenNode);
+	void addChildrenNode(Node* childrenNode);
 	
 	///This method deletes a Node-Object in m_childrenSet
 	/**The user gives the method a name and the method iterates over the m_childrenSet 
@@ -107,11 +108,21 @@ public:
 	/**The Node will take this call and forward it to the geometry, so the geometry will be drawed*/
 	void render();
 
+	void render(ShaderProgram &shader);
+
+	glm::mat4 updateModelMatrix();
+
+	std::vector<Node*>* getChildrenSet();
+
+	bool hasTexture();
+	bool hasCamera();
+	bool hasGeometry();
+
 protected:
 	std::string m_nodeName;
 
 	Node* m_parentNode;
-	std::vector<Node> m_childrenSet;
+	std::vector<Node*> m_childrenSet;
 
 	Geometry* m_geometry;
 	Texture* m_texture;
@@ -122,11 +133,17 @@ protected:
 	glm::mat4 m_scaleMatrix;
 	glm::mat4 m_translateMatrix;
 
+	bool m_hasTexture;
+	bool m_hasCamera;
+	bool m_hasGeometry;
+
 private:
 	///A method which updates the Modelmatrix
 	/**When a new rotation, scale or translation is added to the object, then the modelMatrix needs an update.
 	This update will be done by this method, the matrix which will be added to the modelMatrix is the updatedMatrix*/
 	void updateModelMatrix(glm::mat4 updateMatrix);
+	
+
 };
 
 /* Questions and TODOS:

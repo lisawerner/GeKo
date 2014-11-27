@@ -1,5 +1,10 @@
 #pragma once
-#include "GeKo_Graphics/include.h"
+//#include "GeKo_Graphics/include.h"
+#include <vector>
+#include <string>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 class ConeLight
 {

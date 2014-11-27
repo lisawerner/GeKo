@@ -1,16 +1,9 @@
-#include "Level.h"
+#include <GeKo_Graphics/Scenegraph/Level.h>
 
 
 Level::Level(const char* levelName)
 {
 	m_levelName = levelName;
-	
-	//TODO:
-	//An dieser stelle besser einen unique_ptr verwenden
-	//vielleicht auch move verwenden, weiﬂ nicht ob das Sinnvoll ist oder hier anwendbar
-	//Vielleicht noch einen Zusatz an den levelNamen h‰ngen, damit die Namen nicht exakt gleich sind
-	Scenegraph scenegraph(levelName);
-	addScenegraph(&scenegraph);
 }
 
 
@@ -23,12 +16,42 @@ const char* Level::getLevelName()
 	return m_levelName;
 }
 
-void Level::addScenegraph(Scenegraph* scenegraph)
+void Level::addScene(Scene scene)
 {
-	m_scenegraph = scenegraph;
+	m_sceneSet.push_back(scene);
 }
 
-Scenegraph* Level::getScenegraph()
+void Level::removeScene(std::string sceneName)
 {
-	return m_scenegraph;
+	for (int i = 0; i < m_sceneSet.size(); i++)
+	{
+		if (m_sceneSet.at(i).getSceneName() == sceneName)
+		{
+			m_sceneSet.erase(m_sceneSet.begin() + i);
+		}
+	}
+}
+
+Scene* Level::getScene(std::string sceneName )
+{
+	for (int i = 0; i < m_sceneSet.size(); i++)
+	{
+		if (m_sceneSet.at(i).getSceneName() == sceneName)
+		{
+			return &m_sceneSet.at(i);
+		}
+	}
+	std::cout << "ERROR: The Scene with the name " << sceneName << " does not exist!" << std::endl;
+	return NULL;
+}
+
+void Level::changeScene(std::string sceneName)
+{
+	for (int i = 0; i < m_sceneSet.size(); i++)
+	{
+		if (m_sceneSet.at(i).getSceneName() == sceneName)
+		{
+			m_activeScene = m_sceneSet.at(i);
+		}
+	}
 }
