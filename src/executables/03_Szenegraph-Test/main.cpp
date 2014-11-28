@@ -59,7 +59,7 @@ int main()
 	 //our textures
 	 Texture texCV((char*)RESOURCES_PATH "/cv_logo.bmp");
 	 Texture tex((char*)RESOURCES_PATH "/brick.bmp");
-	// Texture skyboxTex((char*)RESOURCES_PATH "/skybox.png");
+	// Texture skyboxTex((char*)RESOURCES_PATH "/himmel.jpg");
 
 	 //Scene creation 
 	 Level testLevel("testLevel");
@@ -83,14 +83,17 @@ int main()
 	 testNodeChild.addTexture(&tex);
 	 testNodeChild.setModelMatrix(glm::translate(testNodeChild.getModelMatrix(), glm::vec3(3.0, 0.0, 0.0)));
 	
-	 /*Node skyboxNode("skybox");
+	/* Node skyboxNode("skybox");
 	 skyboxNode.addGeometry(&skybox);
-	 skyboxNode.addTexture(&skyboxTex);
-*/
+	 skyboxNode.addTexture(&skyboxTex);*/
+
 
 	 //Creating a scenegraph
+	 /*testScene.getScenegraph()->getRootNode()->addChildrenNode(&skyboxNode);
+	 skyboxNode.addChildrenNode(&testNode);
+	 testNode.addChildrenNode(&testNodeChild);
+*/
 	 testScene.getScenegraph()->getRootNode()->addChildrenNode(&testNode);
-	// skyboxNode.addChildrenNode(&testNode);
 	 testNode.addChildrenNode(&testNodeChild);
 
     //Renderloop
