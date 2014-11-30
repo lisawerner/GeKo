@@ -3,28 +3,51 @@
 #include "GeKo_Graphics/Shader/Shader.h"
 #include "GeKo_Graphics/Object/Teapot.h"
 #include "GeKo_Graphics/Camera/Camera.h"
-#include "GeKo_Graphics/Camera/Trackball.h"
+#include "GeKo_Graphics/Camera/Playerview.h"
 #include "GeKo_Gameplay/Input/InputHandler.h"
 #include "GeKo_Gameplay/Input/InputMap.h"
+#include "GeKo_Gameplay/Input/MapPilotview.h"
 
-/* To use the Trackball camera, which is based on the input system, you need an InputHandler, the Trackball camera and the key callback
+
+
+/* To use the Playerview camera which is based on the input system you need an InputHandler, the Playerview camera and the mouse position callback and the key callback
 InputHandler: has to set all InputMaps and activate one of them
 Uniform matrices: have to be send to the shader in the render loop
+Mouse Position Callback: has to be set
 Key Callback: has to be set
 */
 
-
 InputHandler iH;
-Trackball cam(800, 800);
+Playerview cam(800, 800);
+
+// just needed in the player mode
+static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos){
+	if (iH.getActiveInputMap()->getName() == "Playerview"){
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
+
+			cam.setChangeX((xpos - cam.getOldX()) * cam.getSensitivity()* cam.getSpeed());
+			cam.setChangeY((ypos - cam.getOldY()) * cam.getSensitivity()* cam.getSpeed());
+			iH.getActiveInputMap()->checkMultipleMappedKeys(GLFW_MOUSE_BUTTON_LEFT, *window);
+			cam.setOldX(xpos);
+			cam.setOldY(ypos);
+		}
+		else{
+			cam.setOldX(xpos);
+			cam.setOldY(ypos);
+		}
+	}
+	else{}
+}
+
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
 	// The active InputMap is fetched
 	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
-
-	// You go over the active InputMap, if it's the key that is pressed, the mapped action is executed else the key is ignored
+	// You go over the active InputMap, if it's the key that is pressed, a method is called and the mapped action is executed else the key is ignored
 	for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
 		if (it->first == key)
-			activeMap.at(key)();
+			iH.getActiveInputMap()->checkMultipleMappedKeys(key, *window);
+			//activeMap.at(key)();
 		if (it == activeMap.end())
 			std::cout << "Key is not mapped to an action" << std::endl;
 	}
@@ -36,23 +59,23 @@ int main()
 	glfwInit();
 
 	GLFWwindow* window;
-	window = glfwCreateWindow(800, 600, "TrackballTest", NULL, NULL);
+	window = glfwCreateWindow(800, 600, "PlayerviewMouseTest", NULL, NULL);
 	glfwMakeContextCurrent(window);
 
-
-	// You can set the Trackball camera to another position and give it a name
-	cam.setPosition(glm::vec4(0.0,0.0,10.0,1.0));
-	cam.setName("TrackballCam");
+	// You can set the Pilotview camera to another position and give it a name
+	cam.setPosition(glm::vec4(1.0, 0.0, 5.0, 1.0));
+	cam.setName("Playerview");
+	cam.setSpeed(0.05);
 	
-
 	// Set all InputMaps and set one InputMap active
 	iH.setAllInputMaps(cam);
-	iH.changeActiveInputMap("Trackball");
+	iH.changeActiveInputMap("Playerview");
 
 	// Callback
 	glfwSetKeyCallback(window, key_callback);
+	glfwSetCursorPosCallback(window, cursor_pos_callback);
 
-    glewInit();
+	glewInit();
 
 	// Shader
     VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader3D/ColorShader3D.vert")));
@@ -67,21 +90,19 @@ int main()
 	Teapot teapot;
 	teapot.loadBufferData();
 
-	
     while (!glfwWindowShouldClose(window))
     {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shader.bind();
 
-		// You have to send the uniform matrices of the Trackball camera to the shader
+		// You have to send the uniform matrices of the Pilotview camera to the shader
 		shader.sendMat4("viewMatrix", cam.getViewMatrix());
 		shader.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 	
 		teapot.renderGeometry();
 		shader.unbind();
        
-
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

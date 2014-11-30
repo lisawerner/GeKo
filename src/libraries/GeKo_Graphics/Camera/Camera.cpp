@@ -2,13 +2,25 @@
 
 Camera::Camera()
 {
-	m_position = glm::vec4(0.0, 0.0, 10.0, 1.0);
+	m_position = glm::vec4(0.0f, 0.0f, 5.0f, 1.0f);
+	m_center = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	m_up = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
+
+	m_fov = 60.0f;
+	m_near = 0.001f;
+	m_far = 100.0f;
+
+	m_width = 800;
+	m_height = 600;
+
+	m_viewMatrix = glm::lookAt(glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
+	m_projectionMatrix = glm::perspective(m_fov, m_width / (float)m_height, m_near, m_far);
 }
 
 Camera::Camera(std::string cameraName)
 {
 	m_name = cameraName;
-	m_position = glm::vec4(0.0, 0.0, 10.0, 1.0);
+	Camera();
 }
 
 Camera::~Camera()
@@ -32,10 +44,13 @@ void Camera::setNearFar(float near, float far)
 	m_projectionMatrix = glm::perspective(m_fov, m_width / (float)m_height, m_near, m_far);
 }
 
-float Camera::getNear(){
+float Camera::getNear()
+{
 	return m_near;
 }
-float Camera::getFar(){
+
+float Camera::getFar()
+{
 	return m_far;
 }
 
@@ -45,11 +60,8 @@ void Camera::setWidthHeight(int width, int height)
 	m_height = height;
 }
 
-void Camera::setPosition(glm::vec4 position){
-	m_position = position;
-}
-
-glm::vec4 Camera::getPosition(){
+glm::vec4 Camera::getPosition()
+{
 	return m_position;
 }
 
@@ -68,3 +80,10 @@ void Camera::moveLeft(){}
 void Camera::moveRight(){}
 void Camera::moveUp(){}
 void Camera::moveDown(){}
+void Camera::moveDiagonalFwdL(){}
+void Camera::moveDiagonalFwdR(){}
+void Camera::moveDiagonalBwdL(){}
+void Camera::moveDiagonalBwdR(){}
+void Camera::turnLeft(){}
+void Camera::turnRight(){}
+void Camera::turn(){}

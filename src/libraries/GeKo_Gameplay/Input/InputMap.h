@@ -14,7 +14,7 @@ public:
 
 	// The methods updates the specific InputMaps
 	// in the future you can add your own keys on runtime with this methods
-//	virtual void InputMap::update(Camera &activeCam){}
+	//virtual void InputMap::update(Camera &activeCam){}
 
 	// Enables / Disables the Map
 	/* DO NEVER EVER EVER EVER USE THIS!!
@@ -27,8 +27,10 @@ public:
 
 	void setName(std::string name);
 	std::string getName();
-
-
+	
+	// The method checks whether multiple keys are pressed, to ensure performing the right action
+	// It's implemented in the specific Maps
+	virtual void checkMultipleMappedKeys(int key, GLFWwindow &window);
 
 protected:
 

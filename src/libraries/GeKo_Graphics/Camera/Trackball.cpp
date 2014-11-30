@@ -22,35 +22,50 @@ Trackball::Trackball(int width, int height)
 	m_oldY = height / 2;
 	m_theta = glm::pi<float>() / 2.0f;
 	m_phi = -glm::pi<float>() / 2.0f;
+
+	m_speed = 0.1;
+	m_sensitivity = 0.01;
 }
 
 Trackball::~Trackball()
 {
 }
 
+void Trackball::setPosition(glm::vec4 position){
+	m_position = position;
+	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
+}
+
+void Trackball::setSpeed(float speed){
+	m_speed = speed;
+}
+
+void Trackball::setSensitivity(float sensitivity){
+	m_sensitivity = sensitivity;
+}
+
 void Trackball::moveForward(){
-	m_position.z -= 0.1f;
-	m_radius -= 0.1;
+	m_position.z -= m_speed;
+	m_radius -= m_speed;
 
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
 
-	std::cout << "TBall move fwd z " << m_position.z << std::endl;
+	std::cout << "moveForward() " << std::endl;
 }
 
 void Trackball::moveBackward(){
-	m_position.z += 0.1f;
-	m_radius += 0.1;
+	m_position.z += m_speed;
+	m_radius += m_speed;
 
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
 
-	std::cout << "TBall move bwd z " << m_position.z << std::endl;
+	std::cout << "moveBackward() " << std::endl;
 }
-
 
 void Trackball::moveLeft(){
 	
-	m_oldX = - 0.01f + m_oldX;
-	m_phi -= 0.01;
+	m_oldX = (-m_speed + m_oldX)*m_sensitivity;
+	m_phi -= m_speed;
 	if (m_phi < 0) m_phi += 2 * glm::pi<float>();
 	else if (m_phi > 2 * glm::pi<float>()) m_phi -= 2 * glm::pi<float>();
 
@@ -60,12 +75,12 @@ void Trackball::moveLeft(){
 
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
 	
-	std::cout << "TBall move left x " << m_position.x << " z " << m_position.z << std::endl;
+	std::cout << "moveLeft()" << std::endl;
 }
 
 void Trackball::moveRight(){
-	m_oldX = 0.01f + m_oldX;
-	m_phi += 0.01;
+	m_oldX = (m_speed + m_oldX)*m_sensitivity;
+	m_phi += m_speed;
 	if (m_phi < 0) m_phi += 2 * glm::pi<float>();
 	else if (m_phi > 2 * glm::pi<float>()) m_phi -= 2 * glm::pi<float>();
 
@@ -75,12 +90,12 @@ void Trackball::moveRight(){
 
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
 
-	std::cout << "TBall move right x " << m_position.x << " z " << m_position.z << std::endl;
+	std::cout << "moveRight()" << std::endl;
 }
 
 void Trackball::moveUp(){
-	m_oldY = -0.01f + m_oldX;
-	m_theta -= 0.01;
+	m_oldY = (-m_speed + m_oldX)*m_sensitivity;
+	m_theta -= m_speed;
 	if (m_theta < 0.01f) m_theta = 0.01f;
 	else if (m_theta > glm::pi<float>() - 0.01f) m_theta = glm::pi<float>() - 0.01f;
 
@@ -90,12 +105,12 @@ void Trackball::moveUp(){
 
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
 
-	std::cout << "TBall move up (fwd) y " << m_position.y << " z " << m_position.z << std::endl;
+	std::cout << "moveUp()" << std::endl;
 }
 
 void Trackball::moveDown(){
-	m_oldY = 0.01f + m_oldX;
-	m_theta += 0.01;
+	m_oldY = (m_speed + m_oldX)*m_sensitivity;
+	m_theta += m_speed;
 	if (m_theta < 0.01f) m_theta = 0.01f;
 	else if (m_theta > glm::pi<float>() - 0.01f) m_theta = glm::pi<float>() - 0.01f;
 
@@ -105,5 +120,5 @@ void Trackball::moveDown(){
 
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
 
-	std::cout << "TBall move down (bwd) y " << m_position.y << " z " << m_position.z << std::endl;
+	std::cout << "moveDown()" << std::endl;
 }

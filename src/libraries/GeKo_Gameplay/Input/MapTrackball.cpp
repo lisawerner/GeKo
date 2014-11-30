@@ -1,6 +1,6 @@
 #include <GeKo_Gameplay/Input/MapTrackball.h>
 
-IMTrackball::IMTrackball(Camera &activeCam)
+MapTrackball::MapTrackball(Camera &activeCam)
 {
 	m_name = "Trackball";
 	m_active = false;
@@ -8,7 +8,7 @@ IMTrackball::IMTrackball(Camera &activeCam)
 }
 
 
-IMTrackball::~IMTrackball()
+MapTrackball::~MapTrackball()
 {
 }
 
@@ -16,7 +16,7 @@ IMTrackball::~IMTrackball()
 
 // Fills the InputMaps specifically
 
-void IMTrackball::update(Camera &activeCam){
+void MapTrackball::update(Camera &activeCam){
 
 	// Setting all methods
 	auto cameraMoveFwd = [&](){

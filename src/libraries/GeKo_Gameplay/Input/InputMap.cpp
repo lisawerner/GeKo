@@ -10,8 +10,6 @@ InputMap::~InputMap()
 {
 }
 
-//void InputMap::update(Camera &activeCam){}
-
 std::map<int, std::function<void()>> InputMap::getMap(){
 	return m_map;
 }
@@ -32,6 +30,4 @@ std::string InputMap::getName(){
 	return m_name;
 }
 
-
-
-
+void InputMap::checkMultipleMappedKeys(int key, GLFWwindow &window){}

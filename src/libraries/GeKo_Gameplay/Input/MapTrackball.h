@@ -2,11 +2,11 @@
 
 #include "InputMap.h"
 
-class IMTrackball : public InputMap
+class MapTrackball : public InputMap
 {
 public:
-	IMTrackball(Camera &activeCam);
-	~IMTrackball();
+	MapTrackball(Camera &activeCam);
+	~MapTrackball();
 
 	// updates the active camera
 	void update(Camera &activeCam);

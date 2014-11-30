@@ -10,6 +10,10 @@ public:
 	Trackball(int width, int height);
 	~Trackball();
 
+	void setPosition(glm::vec4 position);
+	void setSpeed(float speed);
+	void setSensitivity(float sensitivity);
+
 	// changes the positon in direction of the z axis
 	void moveForward();
 	void moveBackward();
@@ -32,6 +36,8 @@ protected:
 	double m_phi;
 	// Angle in y direction
 	double m_theta;
-
+	// Speed of movement
+	float m_speed;
+	float m_sensitivity;
 };
 
