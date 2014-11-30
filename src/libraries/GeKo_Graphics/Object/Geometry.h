@@ -70,6 +70,7 @@ protected:
 	std::vector<glm::vec4> m_vertices;
 	std::vector<glm::vec3> m_normals;
 	std::vector<glm::vec2> m_uvs;
+	std::vector<glm::vec3> m_tangents;
 
 	std::vector<GLuint> m_index;
 	int m_indices;
@@ -78,6 +79,7 @@ protected:
 	Buffer<glm::vec4>* m_vertexBuffer;
 	Buffer<glm::vec3>* m_normalBuffer;
 	Buffer<glm::vec2>* m_uvBuffer;
+	Buffer<glm::vec3>* m_tangentBuffer;
 	BufferIndex<GLuint>* m_indexBuffer;
 
 

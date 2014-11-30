@@ -28,7 +28,7 @@ public:
 
 	///Returns the m_activeCamera Camera-Object
 	/**/
-	Camera* getActiveCamera();
+	Camera getActiveCamera();
 	void setActiveCamera(std::string cameraName);
 
 	///Returns a Camera-Object
@@ -42,7 +42,7 @@ protected:
 	std::string m_scenegraphName;
 	Node m_rootNode;
 	
-	Camera* m_activeCamera;
+	Camera m_activeCamera;
 	std::vector<Camera> m_cameraSet;
 };
 

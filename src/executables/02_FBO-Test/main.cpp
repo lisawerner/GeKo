@@ -96,8 +96,8 @@ int main()
 //	brickNode.addTexture(&texBrick);
 	brickNode.setModelMatrix(glm::translate(brickNode.getModelMatrix(), glm::vec3(3.0, 0.0, 0.0)));
 
-	scene.getScenegraph()->getRootNode()->addChildrenNode(teaNode);
-	teaNode.addChildrenNode(brickNode);
+	scene.getScenegraph()->getRootNode()->addChildrenNode(&teaNode);
+	teaNode.addChildrenNode(&brickNode);
 	brickNode.setParentNode(&teaNode);
 
     //Gameloop

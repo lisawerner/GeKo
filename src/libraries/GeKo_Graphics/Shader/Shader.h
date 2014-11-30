@@ -2,11 +2,17 @@
 #define SHADER_H
 
 #pragma once
-#include "GeKo_Graphics/Defs.h"
+//#include "GeKo_Graphics/Defs.h"
 #include <string>
 #include "GeKo_Graphics/Light/PointLight.h"
 #include "GeKo_Graphics/Light/DirectionLight.h"
 #include "GeKo_Graphics/Light/ConeLight.h"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <fstream>
+#include <iostream>
+#include <glm/gtc/type_ptr.hpp>
 
 class PointLight;
 class DirectionLight;
