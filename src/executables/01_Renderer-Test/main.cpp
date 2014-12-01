@@ -11,19 +11,21 @@
 #include <GeKo_Graphics/Scenegraph/Node.h>
 
 /*
-first example:
+Renderer example:
 
 1. per hand we build a quad
 2. we set a window
 3. set the shader with a fragmentshader & vertexshader
-3.1 fragmentShader get an uniform var 
-4. set a renderer
-5. set a buffer with the quad
+4. set a renderer and give him the context
+5. set a vec3 buffer with the quad
 6. gameloop
+6.1 shader binding
+6.2 fragmentShader get an uniform var
+6.3 rendering & unbinding the shader
 */
 int main()
 {
-    //our example
+    //our example quad
     std::vector<glm::vec3> vertices;
     vertices.push_back(glm::vec3(0.5, -0.5, 0.0));
     vertices.push_back(glm::vec3(-0.5, -0.5, 0.0));
@@ -38,8 +40,8 @@ int main()
     glewInit();
 
 	//our shader
-    VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.vert")));
-    FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/colorShader.frag")));
+    VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/ColorShader.vert")));
+    FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader/ColorShader.frag")));
     ShaderProgram shader(vs, fs);
     
 	//our renderer
@@ -51,8 +53,9 @@ int main()
     while (!glfwWindowShouldClose(window.getWindow()))
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		//shading & rendering
         shader.bind();
-        //FIXME - need proper shader uniform
         shader.sendVec4("color", glm::vec4(0.5,0.2,0.8,1.0));
         renderer.draw(buffer);
         shader.unbind();
