@@ -44,7 +44,7 @@ int main()
 	rect->loadBufferData();
 
 	//our light
-	PointLight plight(glm::vec4(0.0, 0.0, 0.1, 1.0), glm::vec3(1.0, 1.0, 1.0), true, 0); //TODO radius & mehrere Lichter uebergeben
+	PointLight plight(glm::vec4(0.0, 0.0, 0.1, 1.0), glm::vec4(1.0, 1.0, 1.0, 1.0), true, 0); //TODO radius & mehrere Lichter uebergeben
 
     //Gameloop
     while (!glfwWindowShouldClose(window.getWindow()))
@@ -62,9 +62,9 @@ int main()
 		shaderPhong.sendMat4("projectionMatrix", m);
 		shaderPhong.sendFloat("shininess", 2.0f);
 
-		shaderPhong.sendVec3("ambient", glm::vec3(0.2,0.2,0.2));
-		shaderPhong.sendVec3("diffuse", glm::vec3(1.0, 0.0, 0.0));
-		shaderPhong.sendVec3("specular", glm::vec3(1.0, 1.0, 1.0));
+		shaderPhong.sendVec4("ambient", glm::vec4(0.2,0.2,0.2, 1.0));
+		shaderPhong.sendVec4("diffuse", glm::vec4(1.0, 0.0, 0.0, 1.0));
+		shaderPhong.sendVec4("specular", glm::vec4(1.0, 1.0, 1.0,1.0));
 
 		rect->renderGeometry();
 		shaderPhong.unbind();
