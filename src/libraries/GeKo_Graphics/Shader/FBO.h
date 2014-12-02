@@ -1,5 +1,4 @@
 #pragma once
-
 #include <GeKo_Graphics/Defs.h>
 #include <GeKo_Graphics/include.h>
 
@@ -17,7 +16,7 @@
 * textures and the use of depth or stencil buffer can be assigned.
 * An example creation of a fbo with 1 color buffer and a depth
 * buffer is:
-* CVK::FBO fbo( 400, 300, 1, true);
+* CVK::FBO fbo( 400, 300, 1, true, true);
 *
 * To use a fbo, it has to be bound to OpenGL. If the standard
 * OpenGL frame buffer should be used, the fbo has to be unbound.
