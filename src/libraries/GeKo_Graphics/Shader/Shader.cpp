@@ -101,7 +101,7 @@ void ShaderProgram::sendSampler2D(std::string uniform, GLuint sampler2Dhandler) 
 
 void ShaderProgram::sendLightData(std::string uniformPosition, std::string uniformColor, std::string uniformDirection, std::string uniformExponent, std::string uniformAngle, std::string uniformRadius, PointLight light) {
 	sendVec4(uniformPosition, light.m_position);
-	sendVec3(uniformColor, light.m_color);
+	sendVec4(uniformColor, light.m_color);
 	sendVec3(uniformDirection, light.m_direction);
 	sendFloat(uniformExponent, light.m_exponent);
 	sendFloat(uniformAngle, light.m_angle);
@@ -109,7 +109,7 @@ void ShaderProgram::sendLightData(std::string uniformPosition, std::string unifo
 
 void ShaderProgram::sendLightData(std::string uniformPosition, std::string uniformColor, std::string uniformDirection, std::string uniformExponent, std::string uniformAngle, std::string uniformRadius, DirectionLight light){
 	sendVec4(uniformPosition, light.m_position);
-	sendVec3(uniformColor, light.m_color);
+	sendVec4(uniformColor, light.m_color);
 	sendVec3(uniformDirection, light.m_direction);
 	sendFloat(uniformExponent, light.m_exponent);
 	sendFloat(uniformAngle, light.m_angle);
@@ -117,7 +117,7 @@ void ShaderProgram::sendLightData(std::string uniformPosition, std::string unifo
 
 void ShaderProgram::sendLightData(std::string uniformPosition, std::string uniformColor, std::string uniformDirection, std::string uniformExponent, std::string uniformAngle, std::string uniformRadius, ConeLight light){
 	sendVec4(uniformPosition, light.m_position);
-	sendVec3(uniformColor, light.m_color);
+	sendVec4(uniformColor, light.m_color);
 	sendVec3(uniformDirection, light.m_direction);
 	sendFloat(uniformExponent, light.m_exponent);
 	sendFloat(uniformAngle, light.m_angle);

@@ -1,5 +1,4 @@
 #pragma once
-
 #include <GeKo_Graphics/Defs.h>
 #include <GeKo_Graphics/Buffer.h>
 #include <GeKo_Graphics/Shader/Shader.h>
@@ -15,6 +14,9 @@ struct RenderContext{
   virtual void bindContext() const = 0;
 };
 struct OpenGL3Context : RenderContext {
+  /*
+  by initializing, the renderer check, if the OS support OpenGL
+  */
   virtual void bindContext() const override;
 };
 class Renderer{
@@ -32,5 +34,8 @@ public:
     glDisableVertexAttribArray(0);
     buffer.unbind();
   }
+  /*
+  print Information about the supported OpenGL & GLSL version, Vendor and Renderer
+  */
   void printInfo();
 };
