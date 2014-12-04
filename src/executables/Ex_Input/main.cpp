@@ -1,17 +1,19 @@
 #include "GL/glew.h"
 #include "GeKo_Graphics/Camera/Trackball.h"
 #include "GeKo_Gameplay/Input/InputHandler.h"
-#include "GeKo_Gameplay/Input/InputMap.h"
 
-/* To use the input system, you need an InputHandler, a camera and the key callback
-InputHandler: has to set all InputMaps and activate one of them
-Camera: just because the InputHandler needs to know which camera is active
-Key Callback: has to be set
+/* This main is an example to test/implement the Input (of keys).
+The output is shown on the console only.
+
+To use the input system, you need one InputHandler, at least one camera and the key callback.
+The InputHandler sets all InputMaps and you need to enable one InputMap.
+In this example you just have to use the camera because the InputHandler needs always to know which camera is active
+You also have to insert the key callback and set it before the renderloop
 */
 
 InputHandler iH;
 // alibiCam, because here we have just output on the console
-Trackball alibiCam(800, 800);
+Trackball alibiCam("Trackball");
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
 	// The active InputMap is fetched
@@ -48,5 +50,4 @@ int main(void)
 	}
 	glfwDestroyWindow(window);
 	glfwTerminate();
-
 }

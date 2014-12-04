@@ -5,7 +5,6 @@ InputMap::InputMap()
 	m_active = false;
 }
 
-
 InputMap::~InputMap()
 {
 }

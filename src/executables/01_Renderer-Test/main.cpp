@@ -9,6 +9,7 @@
 #include <GeKo_Graphics/Material/Texture.h>
 #include <GeKo_Graphics/Scenegraph/Scene.h>
 #include <GeKo_Graphics/Scenegraph/Node.h>
+#include <GeKo_Graphics/Window.h>
 
 /*
 Renderer example:

@@ -1,44 +1,31 @@
-#include "GeKo_Graphics/Defs.h"
 #include "GeKo_Graphics/Renderer/Renderer.h"
 #include "GeKo_Graphics/Shader/Shader.h"
 #include "GeKo_Graphics/Object/Teapot.h"
-#include "GeKo_Graphics/Camera/Camera.h"
 #include "GeKo_Graphics/Camera/Playerview.h"
 #include "GeKo_Gameplay/Input/InputHandler.h"
-#include "GeKo_Gameplay/Input/InputMap.h"
-#include "GeKo_Gameplay/Input/MapPilotview.h"
 
+/* This main is an example to test/implement the Playerview combined with key and mouse input.
+The output is shown on the console and the window.
 
-
-/* To use the Playerview camera which is based on the input system you need an InputHandler, the Playerview camera and the mouse position callback and the key callback
-InputHandler: has to set all InputMaps and activate one of them
-Uniform matrices: have to be send to the shader in the render loop
-Mouse Position Callback: has to be set
-Key Callback: has to be set
+To use the Playerview camera combined with the input system, you need an InputHandler, the Trackball camera and the key and cursor position callback.
+Furthermore you should compute delta time because of the frame rate and uniform variables because of the matrices of the camera.
+The InputHandler sets all InputMaps and you need to enable one InputMap.
+You have to set the start time and compute the delta time and set the sensitivity.
+You also have to insert the key and the cursor position callback and set them before the renderloop.
+The uniform matrices of the camera have to be send to the shader in the render loop.
 */
 
 InputHandler iH;
-Playerview cam(800, 800);
+Playerview cam("Playerview");
 
+// As we do not use the Node class, we can't set the teapot into the middle of the window, therefore is the change of the direction improperly limited
 // just needed in the player mode
 static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos){
 	if (iH.getActiveInputMap()->getName() == "Playerview"){
-		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
-
-			cam.setChangeX((xpos - cam.getOldX()) * cam.getSensitivity()* cam.getSpeed());
-			cam.setChangeY((ypos - cam.getOldY()) * cam.getSensitivity()* cam.getSpeed());
-			iH.getActiveInputMap()->checkMultipleMappedKeys(GLFW_MOUSE_BUTTON_LEFT, *window);
-			cam.setOldX(xpos);
-			cam.setOldY(ypos);
-		}
-		else{
-			cam.setOldX(xpos);
-			cam.setOldY(ypos);
-		}
+		cam.turn(xpos, ypos);
 	}
 	else{}
 }
-
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
 	// The active InputMap is fetched
@@ -46,13 +33,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	// You go over the active InputMap, if it's the key that is pressed, a method is called and the mapped action is executed else the key is ignored
 	for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
 		if (it->first == key)
-			iH.getActiveInputMap()->checkMultipleMappedKeys(key, *window);
-			//activeMap.at(key)();
+			activeMap.at(key)();
 		if (it == activeMap.end())
 			std::cout << "Key is not mapped to an action" << std::endl;
 	}
 }
-
 
 int main()
 {
@@ -62,10 +47,9 @@ int main()
 	window = glfwCreateWindow(800, 600, "PlayerviewMouseTest", NULL, NULL);
 	glfwMakeContextCurrent(window);
 
-	// You can set the Pilotview camera to another position and give it a name
 	cam.setPosition(glm::vec4(1.0, 0.0, 5.0, 1.0));
+	// You have to give the camera a name
 	cam.setName("Playerview");
-	cam.setSpeed(0.05);
 	
 	// Set all InputMaps and set one InputMap active
 	iH.setAllInputMaps(cam);
@@ -90,9 +74,16 @@ int main()
 	Teapot teapot;
 	teapot.loadBufferData();
 
+	// getting the start time
+	double startTime = glfwGetTime();
+	
     while (!glfwWindowShouldClose(window))
     {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// You have to compute the delta time
+		cam.setSensitivity(glfwGetTime() - startTime);
+		startTime = cam.getSensitivity();
 
 		shader.bind();
 
