@@ -7,11 +7,9 @@ MapPilotview::MapPilotview(Camera &activeCam)
 	update(activeCam);
 }
 
-
 MapPilotview::~MapPilotview()
 {
 }
-
 
 void MapPilotview::update(Camera &activeCam){
 
@@ -40,20 +38,20 @@ void MapPilotview::update(Camera &activeCam){
 		activeCam.moveDown();
 	};
 
-	auto cameraMoveDiagonalFwdL = [&](){
-		activeCam.moveDiagonalFwdL();
+	auto cameraTurnLeft = [&](){
+		activeCam.turnLeft();
 	};
 
-	auto cameraMoveDiagonalFwdR = [&](){
-		activeCam.moveDiagonalFwdR();
+	auto cameraTurnRight = [&](){
+		activeCam.turnRight();
 	};
 
-	auto cameraMoveDiagonalBwdL = [&](){
-		activeCam.moveDiagonalBwdL();
+	auto cameraTurnUp = [&](){
+		activeCam.turnUp();
 	};
 
-	auto cameraMoveDiagonalBwdR = [&](){
-		activeCam.moveDiagonalBwdR();
+	auto cameraTurnDown = [&](){
+		activeCam.turnDown();
 	};
 
 	// Mapping the keys to the methods context specific
@@ -64,46 +62,30 @@ void MapPilotview::update(Camera &activeCam){
 		m[GLFW_KEY_D] = cameraMoveRight;
 		m[GLFW_KEY_E] = cameraMoveUp;
 		m[GLFW_KEY_Q] = cameraMoveDown;
-		m[GLFW_KEY_W + GLFW_KEY_A] = cameraMoveDiagonalFwdL;
-		m[GLFW_KEY_W + GLFW_KEY_D] = cameraMoveDiagonalFwdR;
-		m[GLFW_KEY_S + GLFW_KEY_A] = cameraMoveDiagonalBwdL;
-		m[GLFW_KEY_S + GLFW_KEY_D] = cameraMoveDiagonalBwdR;
+		m[GLFW_KEY_LEFT] = cameraTurnLeft;
+		m[GLFW_KEY_RIGHT] = cameraTurnRight;
+		m[GLFW_KEY_UP] = cameraTurnUp;
+		m[GLFW_KEY_DOWN] = cameraTurnDown;
 	};
 
 	pilotview(m_map);
 }
 
-
 void MapPilotview::checkMultipleMappedKeys(int key, GLFWwindow &window){
-	if (key == GLFW_KEY_W){
-		if (glfwGetKey(&window, GLFW_KEY_A) == GLFW_PRESS){
-			m_map.at(GLFW_KEY_W + GLFW_KEY_A)(); 
-		}
-		else if (glfwGetKey(&window, GLFW_KEY_D) == GLFW_PRESS){
-			m_map.at(GLFW_KEY_W + GLFW_KEY_D)(); 
-		}
-		else {
-			m_map.at(key)(); 
-		}
-	}
-		
-	if (key == GLFW_KEY_S){
-		if (glfwGetKey(&window, GLFW_KEY_A) == GLFW_PRESS){
-			m_map.at(GLFW_KEY_S + GLFW_KEY_A)(); 
-		}
-		else if (glfwGetKey(&window, GLFW_KEY_D) == GLFW_PRESS){
-			m_map.at(GLFW_KEY_S + GLFW_KEY_D)(); 
-		}
-		else{
-			m_map.at(key)();
-		}
-	}
 
-	else{
+	if (glfwGetKey(&window, GLFW_KEY_W) == GLFW_PRESS){
+		m_map.at(GLFW_KEY_W)();
+	}
+	if (glfwGetKey(&window, GLFW_KEY_A) == GLFW_PRESS){
+		m_map.at(GLFW_KEY_A)();
+	}
+	if (glfwGetKey(&window, GLFW_KEY_S) == GLFW_PRESS){
+		m_map.at(GLFW_KEY_S)();
+	}
+	if (glfwGetKey(&window, GLFW_KEY_D) == GLFW_PRESS){
+		m_map.at(GLFW_KEY_D)();
+	}
+	if (key != GLFW_KEY_W && key != GLFW_KEY_A && key != GLFW_KEY_S && key != GLFW_KEY_D){
 		m_map.at(key)();
-	}
-			
+	}		
 }
-
-
-

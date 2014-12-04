@@ -1,7 +1,7 @@
 #include <GeKo_Graphics/include.h>
 
 InputHandler iH;
-Trackball cam(800, 800);
+Trackball cam("Trackball");
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
 	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();

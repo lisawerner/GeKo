@@ -1,13 +1,15 @@
 #include "Trackball.h"
 
-Trackball::Trackball(int width, int height)
-{
+Trackball::Trackball(std::string name){
+
+	m_name = name;
+
 	m_position = glm::vec4(0.0f, 0.0f, 10.0f, 1.0f);
 	m_center = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
 	m_up = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
 
-	m_width = width;
-	m_height = height;
+	m_width = 800;
+	m_height = 600;
 
 	m_fov = 60.0f;
 	m_near = 0.001f;
@@ -18,12 +20,10 @@ Trackball::Trackball(int width, int height)
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
 	m_projectionMatrix = glm::perspective(m_fov, m_width / (float)m_height, m_near, m_far);
 
-	m_oldX = width / 2;
-	m_oldY = height / 2;
 	m_theta = glm::pi<float>() / 2.0f;
 	m_phi = -glm::pi<float>() / 2.0f;
 
-	m_speed = 0.1;
+	m_keySpeed = 0.01;
 	m_sensitivity = 0.01;
 }
 
@@ -36,26 +36,25 @@ void Trackball::setPosition(glm::vec4 position){
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
 }
 
-void Trackball::setSpeed(float speed){
-	m_speed = speed;
-}
-
-void Trackball::setSensitivity(float sensitivity){
-	m_sensitivity = sensitivity;
-}
-
 void Trackball::moveForward(){
-	m_position.z -= m_speed;
-	m_radius -= m_speed;
 
-	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
+	if (m_radius <= 1){
+		m_radius = 1;
+	}
+	else {
+		m_position.z -= m_keySpeed*m_sensitivity;
+		m_radius -= m_keySpeed*m_sensitivity;
 
-	std::cout << "moveForward() " << std::endl;
+		m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
+	
+		std::cout << "moveForward() " << std::endl;
+	}
 }
 
 void Trackball::moveBackward(){
-	m_position.z += m_speed;
-	m_radius += m_speed;
+
+	m_position.z += m_keySpeed*m_sensitivity;
+	m_radius += m_keySpeed*m_sensitivity;
 
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
 
@@ -63,9 +62,7 @@ void Trackball::moveBackward(){
 }
 
 void Trackball::moveLeft(){
-	
-	m_oldX = (-m_speed + m_oldX)*m_sensitivity;
-	m_phi -= m_speed;
+	m_phi -= m_keySpeed* m_sensitivity;
 	if (m_phi < 0) m_phi += 2 * glm::pi<float>();
 	else if (m_phi > 2 * glm::pi<float>()) m_phi -= 2 * glm::pi<float>();
 
@@ -79,8 +76,7 @@ void Trackball::moveLeft(){
 }
 
 void Trackball::moveRight(){
-	m_oldX = (m_speed + m_oldX)*m_sensitivity;
-	m_phi += m_speed;
+	m_phi += m_keySpeed* m_sensitivity;
 	if (m_phi < 0) m_phi += 2 * glm::pi<float>();
 	else if (m_phi > 2 * glm::pi<float>()) m_phi -= 2 * glm::pi<float>();
 
@@ -94,8 +90,7 @@ void Trackball::moveRight(){
 }
 
 void Trackball::moveUp(){
-	m_oldY = (-m_speed + m_oldX)*m_sensitivity;
-	m_theta -= m_speed;
+	m_theta -= m_keySpeed* m_sensitivity;
 	if (m_theta < 0.01f) m_theta = 0.01f;
 	else if (m_theta > glm::pi<float>() - 0.01f) m_theta = glm::pi<float>() - 0.01f;
 
@@ -109,8 +104,7 @@ void Trackball::moveUp(){
 }
 
 void Trackball::moveDown(){
-	m_oldY = (m_speed + m_oldX)*m_sensitivity;
-	m_theta += m_speed;
+	m_theta += m_keySpeed* m_sensitivity;
 	if (m_theta < 0.01f) m_theta = 0.01f;
 	else if (m_theta > glm::pi<float>() - 0.01f) m_theta = glm::pi<float>() - 0.01f;
 

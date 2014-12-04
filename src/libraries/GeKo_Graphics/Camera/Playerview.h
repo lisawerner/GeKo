@@ -1,50 +1,42 @@
 #pragma once
 
-#include "GeKo_Graphics/Defs.h"
 #include "Camera.h"
 
+/** Playerview is a derived class of Camera.
+It is able to change the position and turn the direction in all ways.
+The class supports key input to change position and mouse input to turn directions.*/
 
 class Playerview : public Camera
 {
 public:
-	Playerview(int width, int height);
+	Playerview(std::string name);
 	~Playerview();
 
+	/// The method sets the position and updates the view matrix
 	void setPosition(glm::vec4 position);
-	void setSpeed(float speed);
-	double getSpeed();
-	void setSensitivity(float sensitivity);
-	double getSensitivity();
-	double getOldX();
-	void setOldX(double x);
-	double getOldY();
-	void setOldY(double y);
-	void setChangeX(double x);
-	void setChangeY(double y);
 
-	// changes the positon in direction of the z axis
+	/// The method changes the position in the way of m_direction
 	void moveForward();
+
+	/// The method changes the position in opposition to the way of m_direction
 	void moveBackward();
 	
-	// changes the positon on the x axis
+	/// The method changes the position to the left on the axis, which is orthogonal to the direction
 	void moveLeft();
+
+	/// The method changes the position to the right on the axis, which is orthogonal to the direction
 	void moveRight();
 
-	// changes direction with the aid of the mouse position callback
-	void turn();
+	/// The method changes direction with the help of the mouse position callback
+	void turn(double xpos, double ypos);
 
 protected:
-
+	// m_direction defines the viewing direction
 	glm::vec4 m_direction;
-	// Remember the last x and y position
+
+	// m_oldX and m_oldY remember the last x and y value of the mouse position
 	double m_oldX, m_oldY;
+
 	// Angles in x and y direction
 	double m_phi, m_theta;
-	// Speed of movement
-	float m_speed;
-	float m_sensitivity;
-
-	double m_changeX;
-	double m_changeY;
 };
-

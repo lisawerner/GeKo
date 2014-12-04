@@ -1,52 +1,55 @@
 #pragma once
 
-#include "GeKo_Graphics/Defs.h"
 #include "Camera.h"
 
+/** Pilotview is a derived class of Camera.
+It is able to change the position and turn the direction in all ways.
+Every single movement is implemented per method which support key input as an input only*/
 
 class Pilotview : public Camera
 {
 public:
-	Pilotview(int width, int height);
+	Pilotview(std::string name);
 	~Pilotview();
 
+	/// The method sets the position and updates the view matrix
 	void setPosition(glm::vec4 position);
-	void setSpeed(float speed);
-	void setSensitivity(float sensitivity);
 
-	// changes the positon in direction of the z axis
+	/// The method changes the position in the way of m_direction
 	void moveForward();
+
+	/// The method changes the position in opposition to the way of m_direction
 	void moveBackward();
 	
-	// changes the positon on the x axis
+	/// The method changes the position to the left on the axis, which is orthogonal to the direction
 	void moveLeft();
+
+	/// The method changes the position to the right on the axis, which is orthogonal to the direction
 	void moveRight();
 
-	// changes the positon on the y axis
+	/// The method changes the position upward on the axis, which is orthogonal to the direction
 	void moveUp();
+
+	/// The method changes the position downward on the axis, which is orthogonal to the direction
 	void moveDown();
 
-	// change the positons diagonal
-	void moveDiagonalFwdL();
-	void moveDiagonalFwdR();
-	void moveDiagonalBwdL();
-	void moveDiagonalBwdR();
-
-	// changes viewing direction
+	/// The method changes viewing direction by turning left
 	void turnLeft();
+
+	/// The method changes viewing direction by turning right
 	void turnRight();
 
+	/// The method changes viewing direction by turning up
+	void turnUp();
 
+	/// The method changes viewing direction by turning down
+	void turnDown();
 
 protected:
-
+	// m_direction defines the viewing direction
 	glm::vec4 m_direction;
-	// Remember the last x and y position
-	double m_oldX, m_oldY;
+
 	// Angles in x and y direction
 	double m_phi, m_theta;
-	// Speed of movement
-	float m_speed;
-	float m_sensitivity;
 };
 
