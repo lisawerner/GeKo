@@ -3,7 +3,7 @@
 #include "GeKo_Graphics/Camera/Camera.h"
 #include <map>
 #include <functional>
-#include <GLFW\glfw3.h>
+#include <GLFW/glfw3.h>
 
 /** InputMap is a superclass of the specific map classes*/
 
