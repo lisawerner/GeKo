@@ -2,6 +2,9 @@
 
 Rect::Rect()
 {
+	setNormalsTrue();
+	setIndexTrue();
+	setUVTrue();
 	
 		create(glm::vec4(1.0, -1.0, 0, 1.0), glm::vec4(-1.0, -1.0, 0, 1.0), glm::vec4(1.0, 1.0, 0, 1.0), glm::vec4(-1.0, 1.0, 0, 1.0),
 		glm::vec2(1.0, 0.0), glm::vec2(0.0, 0.0), glm::vec2(1.0, 1.0), glm::vec2(0.0, 1.0));

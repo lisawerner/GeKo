@@ -6,6 +6,8 @@ Cube::Cube()
 	m_points = 36;
 	m_indices = 36;
 	setIndexFalse();
+	setNormalsTrue();
+	setUVTrue();
 
 	GLfloat vertices[] = {
 		// Front face

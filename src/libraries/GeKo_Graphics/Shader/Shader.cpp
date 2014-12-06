@@ -99,6 +99,13 @@ void ShaderProgram::sendSampler2D(std::string uniform, GLuint sampler2Dhandler) 
 	glBindTexture(GL_TEXTURE_2D, sampler2Dhandler);
 }
 
+void ShaderProgram::sendSkyboxTexture(std::string uniform, GLuint sampler2Dhandler)
+{
+	glUniform1i(getLocation(uniform), 0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, sampler2Dhandler);
+}
+
 void ShaderProgram::sendLightData(std::string uniformPosition, std::string uniformColor, std::string uniformDirection, std::string uniformExponent, std::string uniformAngle, std::string uniformRadius, PointLight light) {
 	sendVec4(uniformPosition, light.m_position);
 	sendVec4(uniformColor, light.m_color);

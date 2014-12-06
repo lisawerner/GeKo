@@ -4,6 +4,9 @@
 Geometry::Geometry()
 {
 	m_wasLoaded = false;
+	m_hasNormals = false;
+	m_hasIndex = false;
+	m_hasUV = false;
 }
 
 Geometry::~Geometry()
@@ -14,27 +17,44 @@ Geometry::~Geometry()
 void Geometry::loadBufferData()
 {
 	m_vertexBuffer = new Buffer<glm::vec4>(m_vertices, STATIC_DRAW);
-	m_normalBuffer = new Buffer<glm::vec3>(m_normals, STATIC_DRAW);
-	m_uvBuffer = new Buffer<glm::vec2>(m_uvs, STATIC_DRAW);
-	m_indexBuffer = new BufferIndex<GLuint>(m_index, STATIC_DRAW_INDEX);
+	if (m_hasNormals){
+		m_normalBuffer = new Buffer<glm::vec3>(m_normals, STATIC_DRAW);
+	}
+	if (m_hasUV){
+		m_uvBuffer = new Buffer<glm::vec2>(m_uvs, STATIC_DRAW);
+	}
+	if (m_hasIndex)
+	{
+		m_indexBuffer = new BufferIndex<GLuint>(m_index, STATIC_DRAW_INDEX);
+	}
+	
 
 	glGenVertexArrays(1, &m_vaoBuffer);
 	glBindVertexArray(m_vaoBuffer);
 
 	m_vertexBuffer->bind();
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
-	m_normalBuffer->bind();
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-	m_uvBuffer->bind();
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-	m_indexBuffer->bind();
-
 	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
+
+	if (m_hasNormals){
+		m_normalBuffer->bind();
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(1);
+	}
+
+	if (m_hasUV){
+		m_uvBuffer->bind();
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(2);
+	}
+
+	if (m_hasIndex){
+		m_indexBuffer->bind();
+	}
+
+
+	
+
 
 	glBindVertexArray(0);
 }
@@ -106,4 +126,14 @@ void Geometry::setIndexFalse()
 bool Geometry::hasIndex()
 {
 	return m_hasIndex;
+}
+
+void Geometry::setNormalsTrue()
+{
+	m_hasNormals = true;
+}
+
+void Geometry::setUVTrue()
+{
+	m_hasUV = true;
 }
