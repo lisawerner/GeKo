@@ -2,6 +2,8 @@
 #include <GeKo_Graphics/Scenegraph/Scenegraph.h>
 #include <GeKo_Graphics/Scenegraph/Scene.h>
 #include <iostream>
+
+///A Level is the necessary unit to create a game
 /**
 The class "Level" has a unique name and can be identified with this name. 
 A level manages his scenes, can change them, add and remove them

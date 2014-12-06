@@ -6,6 +6,8 @@ Teapot::Teapot()
 	m_points = _points;
 	m_indices = _indices;
 	setIndexTrue();
+	setUVTrue();
+	setNormalsTrue();
 
 	for (int i = 0; i<_points; i++)
 	{

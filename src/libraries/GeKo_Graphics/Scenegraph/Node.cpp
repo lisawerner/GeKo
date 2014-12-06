@@ -216,8 +216,7 @@ void Node::render(ShaderProgram &shader)
 		glm::mat4 modelMatrix = getParentNode()->getModelMatrix() * m_modelMatrix;
 		shader.sendMat4("modelMatrix", modelMatrix);
 	}
-
-	if (hasTexture())
+	if (m_hasTexture)
 	{
 		shader.sendSampler2D("testTexture", getTexture()->getTexture());
 	}

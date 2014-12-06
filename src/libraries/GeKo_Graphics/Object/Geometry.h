@@ -65,6 +65,10 @@ public:
 	/**/
 	bool hasIndex();
 
+	void setNormalsTrue();
+
+	void setUVTrue();
+
 protected:
 	int m_points;
 	std::vector<glm::vec4> m_vertices;
@@ -86,7 +90,10 @@ protected:
 private:
 	bool m_wasLoaded;
 	bool m_hasIndex;
+	bool m_hasNormals;
+	bool m_hasUV;
 };
+
 /*Questions and TODOS:
 	1. virtual methods shouldnt be used, maybe theres another way to do it?
 	2. Should reconsider to have the Buffer as a Pointer
