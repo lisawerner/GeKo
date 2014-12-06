@@ -4,7 +4,6 @@
 #include <GeKo_Graphics/ObjectInclude.h>
 #include <GeKo_Graphics/ShaderInclude.h>
 #include <GeKo_Graphics/ScenegraphInclude.h>
-//#include <GeKo_Graphics/include.h>
 
 InputHandler iH;
 Trackball cam("Trackball");
@@ -54,13 +53,14 @@ int main()
 	Cube cube;
 	Teapot tea;
 
-	const char *textureNames[6] = { (char*)RESOURCES_PATH "/PereaBeach1/posx.jpg",
+	//At this point you should load your own cubeMap-Jpg-Files until we have a online account for ressources
+	/*const char *textureNames[6] = { (char*)RESOURCES_PATH "/PereaBeach1/posx.jpg",
 		(char*)RESOURCES_PATH "/PereaBeach1/negx.jpg",
 		(char*)RESOURCES_PATH "/PereaBeach1/posy.jpg",
 		(char*)RESOURCES_PATH "/PereaBeach1/negy.jpg",
 		(char*)RESOURCES_PATH "/PereaBeach1/posz.jpg",
 		(char*)RESOURCES_PATH "/PereaBeach1/negz.jpg" };
-	Skybox skybox(textureNames);
+	Skybox skybox(textureNames);*/
 
 	//our textures
 	Texture texCV((char*)RESOURCES_PATH "/cv_logo.bmp");
@@ -78,7 +78,7 @@ int main()
 	testScene.getScenegraph()->setActiveCamera("TrackballCam");
 
 	//Set all InputMaps and set one InputMap active
-	//	iH.setAllInputMaps(cam);
+	//iH.setAllInputMaps(cam);
 	iH.setAllInputMaps(*(testScene.getScenegraph()->getActiveCamera()));
 	iH.changeActiveInputMap("Trackball");
 
@@ -94,8 +94,8 @@ int main()
 	testNodeChild.addTexture(&tex);
 	testNodeChild.setModelMatrix(glm::translate(testNodeChild.getModelMatrix(), glm::vec3(3.0, 0.0, 0.0)));
 
-	Node skyboxNode("skybox");
-	skyboxNode.addGeometry(&cube);
+	/*Node skyboxNode("skybox");
+	skyboxNode.addGeometry(&cube);*/
 
 	//Creating a scenegraph
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&testNode);
@@ -109,13 +109,13 @@ int main()
 
 
 		//Skybox rendering
-		shaderSkybox.bind();
+		/*shaderSkybox.bind();
 		glDisable(GL_DEPTH_TEST);
 		shaderSkybox.sendMat4("viewMatrix", cam.getViewMatrix());
 		shaderSkybox.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 		shaderSkybox.sendSkyboxTexture("testTexture", skybox.getSkyboxTexture());
 		skyboxNode.render();
-		shaderSkybox.unbind();
+		shaderSkybox.unbind();*/
 
 		glEnable(GL_DEPTH_TEST);
 		//Scene Rendering
