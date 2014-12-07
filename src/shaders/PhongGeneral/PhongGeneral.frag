@@ -3,17 +3,17 @@
 in vec4 passPosition;
 in vec3 passNormal;
 
-uniform vec3 ambient;
-uniform vec3 diffuse;
-uniform vec3 specular;
+uniform vec4 l_ambient;
+uniform vec4 l_diffuse;
+uniform vec4 l_specular;
 uniform float shininess;
 
 uniform mat4 viewMatrix;
 
-uniform vec3 l_col;
+uniform vec4 l_col;
 uniform vec4 l_pos;
 uniform vec3 l_dir;
-uniform int l_ang;
+uniform float l_ang;
 uniform float l_exp;
 uniform float l_rad;
 
@@ -24,7 +24,7 @@ vec3 lightVector;
 void main(){
 
 	//ambient
-	vec3 f_ambient = ambient;
+	vec4 ambient = l_ambient;
 
 	//diffuse 
 	vec3 lightCamCoord = mat3(viewMatrix) * l_pos.xyz;
@@ -35,13 +35,13 @@ void main(){
 		lightVector = normalize(lightCamCoord);
 		} 
     float cos_phi = max(dot(passNormal, lightVector), 0.0f);
-	vec3 f_diffuse = diffuse * cos_phi * l_col;
+	vec4 diffuse = l_diffuse * cos_phi * l_col;
 
 	//specular
 	vec3 eye = normalize(-passPosition.xyz);
 	vec3 reflection = normalize(reflect(-lightVector, passNormal));
-    float cos_psi = pow(max(dot(reflection, eye), 0.0), shininess);
-	vec3 f_specular = specular * cos_psi * l_col;
+    float cos_psi = pow(max(dot(reflection, eye)+1.0, 0.0), shininess); //BUG!! specular is always null. "+1.0" is an uncorrect Bugfix
+	vec4 specular = l_specular * cos_psi * l_col;
 
 	//spotLight
 	float spot = 0.0;
@@ -55,5 +55,5 @@ void main(){
 		}
 
 	//color
-    fragmentColor = vec4(f_ambient + f_diffuse*spot + f_specular*spot, 1.0);
+   fragmentColor = vec4(ambient + diffuse*spot + specular*spot);
 }
