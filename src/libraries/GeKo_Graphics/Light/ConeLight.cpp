@@ -12,7 +12,7 @@ ConeLight::ConeLight()
 	m_radius = 0;
 }
 
-ConeLight::ConeLight(glm::vec4 position, glm::vec4 color, bool isActive, glm::vec3 direction, int angle, double exponent, double radius)
+ConeLight::ConeLight(glm::vec4 position, glm::vec4 color, bool isActive, glm::vec3 direction, float angle, float exponent, float radius)
 {
 	m_position = position;
 	m_color = color;

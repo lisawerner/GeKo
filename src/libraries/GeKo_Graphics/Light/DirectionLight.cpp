@@ -10,7 +10,7 @@ DirectionLight::DirectionLight()
 	m_radius = 0;
 }
 
-DirectionLight::DirectionLight(glm::vec4 position, glm::vec4 color, bool isActive, glm::vec3 direction, double radius)
+DirectionLight::DirectionLight(glm::vec4 position, glm::vec4 color, bool isActive, glm::vec3 direction, float radius)
 {
 	m_position = position;
 	m_color = color;

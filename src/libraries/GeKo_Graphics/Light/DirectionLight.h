@@ -21,7 +21,7 @@ public:
 	Standard constructor - set an active light with position (0,0,0,1), color (1,1,1,1), direction (0,-1,0) and radius 0/infinite
 	*/
 	DirectionLight();
-	DirectionLight(glm::vec4 position, glm::vec4 color, bool isActive, glm::vec3 direction, double radius);
+	DirectionLight(glm::vec4 position, glm::vec4 color, bool isActive, glm::vec3 direction, float radius);
 	~DirectionLight();
 
 	glm::vec4 m_color;
@@ -31,6 +31,6 @@ public:
 	float m_radius;
 
 	float m_exponent = 0;
-	int m_angle = 0;
+	float m_angle = 0;
 };
 
