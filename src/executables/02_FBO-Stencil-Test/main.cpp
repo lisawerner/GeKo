@@ -68,7 +68,7 @@ int main()
 	level.changeScene("scene");
 
 	//Add Camera to scenegraph
-	scene.getScenegraph()->addCamera(cam);
+	scene.getScenegraph()->addCamera(&cam);
 	scene.getScenegraph()->getCamera("TrackballCam");
 	scene.getScenegraph()->setActiveCamera("TrackballCam");
 
