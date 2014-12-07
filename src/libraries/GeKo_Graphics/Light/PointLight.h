@@ -19,7 +19,7 @@ public:
 	Standard constructor - set an active light with position (0,0,0,1), color (1,1,1,1), radius 0/infinite
 	*/
 	PointLight();
-	PointLight(glm::vec4 position, glm::vec4 color, bool isActive, double radius);
+	PointLight(glm::vec4 position, glm::vec4 color, bool isActive, float radius);
 	~PointLight();
 
 	glm::vec4 m_color;
@@ -29,5 +29,5 @@ public:
 
 	glm::vec3 m_direction = glm::vec3(0.0, 0.0, 0.0);
 	float m_exponent = 0;
-	int m_angle = 0;
+	float m_angle = 0;
 };

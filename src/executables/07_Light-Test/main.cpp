@@ -14,7 +14,9 @@
 #include "GeKo_Graphics/Object/Cube.h"
 
 /*
-Description
+if you want to use lights, you just must create them with PointLight, DirectionLight or ConeLight class
+and send all needed information to the shader.
+You can also set them to the shader.
 */
 int main()
 {
@@ -26,13 +28,13 @@ int main()
     glewInit();
 
 	//our shader
-	VertexShader vsColor(loadShaderSource(SHADERS_PATH + std::string("/PhongShader/phong.vert"))); //TODO umbennen & bugfix
-	FragmentShader fsColor(loadShaderSource(SHADERS_PATH + std::string("/PhongShader/phong.frag")));
+	VertexShader vsColor(loadShaderSource(SHADERS_PATH + std::string("/PhongPointLight/PhongPointLight.vert"))); //Specular Bug!!
+	FragmentShader fsColor(loadShaderSource(SHADERS_PATH + std::string("/PhongPointLight/PhongPointLight.frag")));
 	ShaderProgram shaderPhong(vsColor, fsColor);
 
-	/*VertexShader vsColorPhong(loadShaderSource(SHADERS_PATH + std::string("/Phong/Phong.vert"))); //TODO umbennen & bugfix
-	FragmentShader fsColorPhong(loadShaderSource(SHADERS_PATH + std::string("/Phong/Phong.frag")));
-	ShaderProgram shaderPhong2(vsColorPhong, fsColorPhong);*/
+	VertexShader vsColorPhong(loadShaderSource(SHADERS_PATH + std::string("/PhongGeneral/PhongGeneral.vert"))); //Specular Bug!!
+	FragmentShader fsColorPhong(loadShaderSource(SHADERS_PATH + std::string("/PhongGeneral/PhongGeneral.frag")));
+	ShaderProgram shaderPhongGeneral(vsColorPhong, fsColorPhong);
     
 	//our renderer
     OpenGL3Context context;
@@ -51,23 +53,21 @@ int main()
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		shaderPhong.bind();
+		shaderPhongGeneral.bind();
 		
-		//Uniform TODO?
-		//TODO color vec3
-		shaderPhong.sendLightData("l_pos", "l_col", "l_dir", "l_exp", "l_ang", "l_rad", plight);
+		shaderPhongGeneral.sendLightData("l_pos", "l_col", "l_dir", "l_exp", "l_ang", "l_rad", plight);
 		glm::mat4 m(1.0);
-		shaderPhong.sendMat4("modelMatrix", m);
-		shaderPhong.sendMat4("viewMatrix", m);
-		shaderPhong.sendMat4("projectionMatrix", m);
-		shaderPhong.sendFloat("shininess", 2.0f);
+		shaderPhongGeneral.sendMat4("modelMatrix", m);
+		shaderPhongGeneral.sendMat4("viewMatrix", m);
+		shaderPhongGeneral.sendMat4("projectionMatrix", m);
+		shaderPhongGeneral.sendFloat("shininess", 2.0f);
 
-		shaderPhong.sendVec4("ambient", glm::vec4(0.2,0.2,0.2, 1.0));
-		shaderPhong.sendVec4("diffuse", glm::vec4(1.0, 0.0, 0.0, 1.0));
-		shaderPhong.sendVec4("specular", glm::vec4(1.0, 1.0, 1.0,1.0));
+		shaderPhongGeneral.sendVec4("l_ambient", glm::vec4(0.1, 0.1, 0.1, 1.0));
+		shaderPhongGeneral.sendVec4("l_diffuse", glm::vec4(1.0, 0.0, 0.0, 1.0));
+		shaderPhongGeneral.sendVec4("l_specular", glm::vec4(1.0, 1.0, 1.0, 1.0));
 
 		rect->renderGeometry();
-		shaderPhong.unbind();
+		shaderPhongGeneral.unbind();
 
         glfwSwapBuffers(window.getWindow());
         glfwPollEvents();

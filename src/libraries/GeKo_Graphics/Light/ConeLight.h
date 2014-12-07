@@ -19,7 +19,7 @@ public:
 	Standard constructor - set an active light with position (0,0,0,1), color (1,1,1,1), direction (1,0,0), angle 90, exponent 1 and radius 0/infinite
 	*/
 	ConeLight();
-	ConeLight(glm::vec4 position, glm::vec4 color, bool isActive, glm::vec3 direction, int angle, double exponent, double radius);
+	ConeLight(glm::vec4 position, glm::vec4 color, bool isActive, glm::vec3 direction, float angle, float exponent, float radius);
 	~ConeLight();
 
 	glm::vec4 m_color;
@@ -27,6 +27,6 @@ public:
 	bool m_isActive;
 	glm::vec3 m_direction;
 	float m_exponent;
-	int m_angle;
+	float m_angle;
 	float m_radius;
 };
