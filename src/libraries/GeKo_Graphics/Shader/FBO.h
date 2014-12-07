@@ -87,18 +87,6 @@ public:
 	*/
 	void reset();
 	/*
-	switch the depth texture on or off
-	*/
-	void setStatusDepthTexture(bool isActive);
-	/*
-	switch the stencil texture on or off
-	*/
-	void setStatusStencilTexture(bool isActive);
-	/*
-	delete a certain color texture
-	*/
-	void deleteColorTexture(unsigned int index);
-	/*
 	give the color texture, if index is allowed
 	*/
 	GLuint getColorTexture(unsigned int index);

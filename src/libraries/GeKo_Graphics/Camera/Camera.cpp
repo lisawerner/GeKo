@@ -8,7 +8,7 @@ Camera::Camera(){
 	m_up = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
 
 	m_fov = 60.0f;
-	m_near = 0.001f;
+	m_near = 0.8f;
 	m_far = 100.0f;
 
 	m_width = 800;
