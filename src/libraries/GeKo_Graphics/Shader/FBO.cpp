@@ -7,6 +7,11 @@ FBO::FBO(int width, int height)
 
 FBO::FBO(int width, int height, int numColorTextures, bool depthTexture, bool stencilTexture)
 {
+	if (depthTexture)
+		glEnable(GL_DEPTH_TEST);
+	if (stencilTexture)
+		glEnable(GL_STENCIL_TEST);
+
 	generateTextures(width, height, numColorTextures, depthTexture, stencilTexture);
 }
 
@@ -130,39 +135,6 @@ void FBO::reset(){
 	m_depthTexture = INVALID_OGL_VALUE;
 	m_stencilTexture = INVALID_OGL_VALUE;
 	m_frameBufferHandle = INVALID_OGL_VALUE;
-}
-
-//TODO
-void FBO::setStatusDepthTexture(bool isActive)
-{
-	if (isActive = true && m_depthTexture == INVALID_OGL_VALUE)
-	{
-		//todo
-	}
-	else{
-		glDeleteTextures(1, &m_depthTexture);
-		m_depthTexture = INVALID_OGL_VALUE;
-	}
-}
-
-//TODO
-void FBO::setStatusStencilTexture(bool isActive)
-{
-
-	if (isActive = true && m_stencilTexture == INVALID_OGL_VALUE)
-	{
-		//todo
-	}
-	else{
-		glDeleteTextures(1, &m_stencilTexture);
-		m_stencilTexture = INVALID_OGL_VALUE;
-	}
-}
-
-//TODO
-void FBO::deleteColorTexture(unsigned int index)
-{
-	//todo
 }
 
 GLuint FBO::getColorTexture(unsigned int index)
