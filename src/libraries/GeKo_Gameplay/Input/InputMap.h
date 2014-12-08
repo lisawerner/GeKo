@@ -5,7 +5,11 @@
 #include <functional>
 #include <GLFW/glfw3.h>
 
-/** InputMap is a superclass of the specific map classes*/
+/** InputMap is a superclass of the specific map classes.
+To insert an own specific InputMap, you have to add a class containing an update function, which allocates keys or buttons to a method in the map. 
+Make sure that your new specific InputMap has a name(m_name) and a boolean variable (m_active = false)
+and the filled map(m_map) in its contructor.
+In addition you have to adjust the InputHandler by adding the new class instance to the method 'void InputHandler::setAllInputMaps(Camera &activeCam)'.*/
 
 class InputMap
 {
