@@ -58,6 +58,11 @@ public:
 	Texture* getTexture();
 	void addTexture(Texture* texture);
 
+	///Returns m_normalmap as a Texture object
+	/**/
+	Texture* getNormalMap();
+	void addNormalMap(Texture* normalmap);
+
 	///Returns m_Camera as a Camera Object
 	/**/
 	Camera* getCamera();
@@ -116,6 +121,7 @@ public:
 	std::vector<Node*>* getChildrenSet();
 
 	bool hasTexture();
+	bool hasNormalMap();
 	bool hasCamera();
 	bool hasGeometry();
 
@@ -127,6 +133,7 @@ protected:
 
 	Geometry* m_geometry;
 	Texture* m_texture;
+	Texture* m_normalmap;
 	Camera* m_camera;
 
 	glm::mat4 m_modelMatrix;
@@ -135,6 +142,7 @@ protected:
 	glm::mat4 m_translateMatrix;
 
 	bool m_hasTexture;
+	bool m_hasNormalMap;
 	bool m_hasCamera;
 	bool m_hasGeometry;
 

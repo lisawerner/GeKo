@@ -111,6 +111,17 @@ void Node::addTexture(Texture* texture)
 	m_hasTexture = true;
 }
 
+Texture* Node::getNormalMap()
+{
+	return m_normalmap;
+}
+
+void Node::addNormalMap(Texture* normalmap)
+{
+	m_normalmap = normalmap;
+	m_hasNormalMap = true;
+}
+
 Camera* Node::getCamera()
 {
 	return m_camera;
@@ -253,6 +264,11 @@ std::vector<Node*>* Node::getChildrenSet()
 bool Node::hasTexture()
 {
 	return m_hasTexture;
+}
+
+bool Node::hasNormalMap()
+{
+	return m_hasNormalMap;
 }
 
 bool Node::hasCamera()
