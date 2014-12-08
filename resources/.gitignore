@@ -1,3 +1,10 @@
 *.png
 *.bmp
 *.jpg
+*.obj
+*.max
+*.mtl
+*.lwo
+*.3DS
+Thumbs.db
+cubeMap/readme.txt

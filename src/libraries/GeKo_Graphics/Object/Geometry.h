@@ -25,6 +25,10 @@ public:
 	/**In the while-Loop of the main-programm (Renderer or else) this method will be called to draw the array*/
     void renderGeometry();
 
+	///A method to compute the tangents for each triangle
+	/**Here we compute the tangens of each triangle to use them in a normalMapping Shader. This isn't a performance optimized solution but it works.*/
+	void computeTangents();
+
 	///Returns m_vertices of the Geometry Object
 	/**/
 	std::vector<glm::vec4> getVertices();
@@ -36,6 +40,10 @@ public:
 	///Returns m_uvs of the Geometry Object
 	/**/
 	std::vector<glm::vec2> getUV();
+
+	///Returns m_tangents of the Geometry Object
+	/**/
+	std::vector<glm::vec3> getTangents();
 
 	///Returns m_index of the Geometry Object
 	/**/

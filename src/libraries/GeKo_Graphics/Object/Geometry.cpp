@@ -16,6 +16,14 @@ Geometry::~Geometry()
 
 void Geometry::loadBufferData()
 {
+	//temporary solution
+	if (m_tangents.empty())
+	{
+		computeTangents();
+	}
+	m_tangentBuffer = new Buffer<glm::vec3>(m_tangents, STATIC_DRAW);
+
+
 	m_vertexBuffer = new Buffer<glm::vec4>(m_vertices, STATIC_DRAW);
 	if (m_hasNormals){
 		m_normalBuffer = new Buffer<glm::vec3>(m_normals, STATIC_DRAW);
@@ -48,14 +56,17 @@ void Geometry::loadBufferData()
 		glEnableVertexAttribArray(2);
 	}
 
+	//temporary solution
+	m_tangentBuffer->bind();
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(3);
+
+
 	if (m_hasIndex){
 		m_indexBuffer->bind();
 	}
 
-
 	
-
-
 	glBindVertexArray(0);
 }
 
@@ -76,6 +87,36 @@ void Geometry::renderGeometry()
 }
 
 
+void Geometry::computeTangents()
+{
+	m_tangents.resize(m_vertices.size());
+
+	for (int i = 0; i <m_indices; i += 3)
+	{
+		// Edges of the triangle : postion delta
+		int index_v0 = m_index[i];
+		int index_v1 = m_index[i + 1];
+		int index_v2 = m_index[i + 2];
+
+		glm::vec4 deltaPos1 = m_vertices[index_v1] - m_vertices[index_v0];
+		glm::vec4 deltaPos2 = m_vertices[index_v2] - m_vertices[index_v0];
+
+		// UV delta
+		glm::vec2 deltaUV1 = m_uvs[index_v1] - m_uvs[index_v0];
+		glm::vec2 deltaUV2 = m_uvs[index_v2] - m_uvs[index_v0];
+
+		float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+		glm::vec4 tmp = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y)*r;
+		glm::vec3 tangent = glm::vec3(tmp.x, tmp.y, tmp.z);
+
+		// Set the same tangent for all three vertices of the triangle
+		m_tangents[index_v0] = tangent;
+		m_tangents[index_v1] = tangent;
+		m_tangents[index_v2] = tangent;
+	}
+}
+
+
 std::vector<glm::vec4> Geometry::getVertices()
 {
 	return m_vertices;
@@ -89,6 +130,11 @@ std::vector<glm::vec3> Geometry::getNormals()
 std::vector<glm::vec2> Geometry::getUV()
 {
 	return m_uvs;
+}
+
+std::vector<glm::vec3> Geometry::getTangents()
+{
+	return m_tangents;
 }
 
 std::vector<GLuint> Geometry::getIndexList()
