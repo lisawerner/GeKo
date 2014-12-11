@@ -1,5 +1,6 @@
 #include "Debugger.h"
-///Output-Stream for error-messages
+///output-stream for error-messages
+/***/
 std::ofstream debugLog;
 
 Debugger::Debugger(){
@@ -22,6 +23,8 @@ Debugger::Debugger(){
 
 Debugger::~Debugger() { }
 
+/// Default-callback function 
+/** The fuction writes the message, type, source, id and severity of the debug-message to the output-stream */
 void APIENTRY defaultDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
   debugLog << "message: " << message << "\n";
   debugLog << "type: ";
@@ -73,8 +76,7 @@ void APIENTRY defaultDebugCallback(GLenum source, GLenum type, GLuint id, GLenum
 	debugLog << "\n";
 	debugLog << "id: " << id << "\n";
 	debugLog << "severity: ";
-
-	switch (severity) {
+  switch (severity) {
 	case GL_DEBUG_SEVERITY_LOW:
 		debugLog << "LOW";
 		break;
@@ -99,23 +101,4 @@ void Debugger::setDebugCallback() {
 void Debugger::setDebugCallback(GLDEBUGPROC debugCallback) {
 	glDebugMessageCallback(debugCallback, NULL);
 	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-}
-
-void Debugger::checkDebugMode() {
-	std::cout << "---------------------------------------------" << std::endl;
-	std::cout << "Checking Debug Mode:" << std::endl;
-	const GLubyte *extensions;
-	GLint debugAvailable = 0;
-	GLint flags = 0;
-	extensions = glGetString(GL_EXTENSIONS);
-
-	/*debugAvailable = (strstr((const char *) extensions, "GL_KHR_debug") != NULL);
-	if (debugAvailable)
-	std::cout << "KHR_debug supported" << std::endl;
-	*/
-	glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
-	std::cout << "Flags: " << flags << std::endl;
-	if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
-		std::cout << "OpenGL debug context present" << std::endl;
-	std::cout << "---------------------------------------------" << std::endl;
 }
