@@ -42,6 +42,7 @@ int main()
 	// You can set the Trackball camera to another position and give it a name
 	cam.setPosition(glm::vec4(0.0,0.0,10.0,1.0));
 	cam.setName("TrackballCam");
+	cam.setNearFar(0.01f, 100.0f);
 
 	// Set all InputMaps and set one InputMap active
 	iH.setAllInputMaps(cam);
