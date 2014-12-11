@@ -1,16 +1,10 @@
-#include <GeKo_Graphics/Renderer/Renderer.h>
-#include <GeKo_Graphics/Shader/Shader.h>
-#include <GeKo_Graphics/Object/Cube.h>
-#include <GeKo_Graphics/Camera/Camera.h>
-#include <GeKo_Graphics/Camera/Trackball.h>
-#include <GeKo_Gameplay/Input/InputHandler.h>
-#include <GeKo_Gameplay/Input/InputMap.h>
-#include <GeKo_Graphics/Object/Teapot.h>
-#include <GeKo_Graphics/Material/Texture.h>
-#include <GeKo_Graphics/Scenegraph/Scene.h>
-#include <GeKo_Graphics/Scenegraph/Node.h>
-#include <GeKo_Graphics/Window.h>
-#include <GeKo_Graphics/Debugger.h>
+#include <GL/glew.h>
+#include <GeKo_Graphics/InputInclude.h>
+#include <GeKo_Graphics/MaterialInclude.h>
+#include <GeKo_Graphics/ObjectInclude.h>
+#include <GeKo_Graphics/ShaderInclude.h>
+#include <GeKo_Graphics/ScenegraphInclude.h>
+#include <GeKo_Debugger/Debugger.h>
 
 /*
 Renderer example:

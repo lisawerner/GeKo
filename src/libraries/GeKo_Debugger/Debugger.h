@@ -18,6 +18,4 @@ public:
   /// A method to set a non-default debug-callback 
   /***/
   void setDebugCallback(GLDEBUGPROC debugCallback);
-protected:
-  void checkDebugMode();
 };
