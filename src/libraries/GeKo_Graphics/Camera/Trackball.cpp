@@ -8,6 +8,13 @@ Trackball::Trackball(std::string name){
 	m_center = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
 	m_up = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
 
+	m_width = 800;
+	m_height = 600;
+
+	m_fov = 60.0f;
+	m_near = 0.001f;
+	m_far = 100.0f;
+
 	m_radius = 10;
 
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
