@@ -39,9 +39,10 @@ int main()
 	window = glfwCreateWindow(800, 600, "PilotviewTest", NULL, NULL);
 	glfwMakeContextCurrent(window);
 
-	// You can set the Pilotview camera to another position and give it a name
-	cam.setPosition(glm::vec4(1.0, 0.0, 5.0, 1.0));
+	// You have to set a camera name
 	cam.setName("PilotviewCam");
+	cam.setPosition(glm::vec4(1.0, 0.0, 5.0, 1.0));
+	cam.setNearFar(0.01f, 100.0f);
 	
 	// Set all InputMaps and set one InputMap active
 	iH.setAllInputMaps(cam);
