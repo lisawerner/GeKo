@@ -7,7 +7,6 @@ Texture::Texture(char* fileName)
 {
 	m_textureID = INVALID_OGL_VALUE;
 
-	createTexture();
 	load(fileName);
 }
 
@@ -21,18 +20,28 @@ Texture::~Texture()
 	if (m_textureID != INVALID_OGL_VALUE) glDeleteTextures(1, &m_textureID);
 }
 
-void Texture::createTexture()
+void Texture::use(GLenum texturePosition)
 {
-	glGenTextures(1, &m_textureID);
+	glActiveTexture(texturePosition);
 	glBindTexture(GL_TEXTURE_2D, m_textureID);
+
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 }
 
+void Texture::unUse()
+{
+	glBindTexture(GL_TEXTURE_2D, m_textureID);
+}
+
 bool Texture::load(char* fileName)
 {
+	glActiveTexture(GL_TEXTURE1);
+	glGenTextures(1, &m_textureID);
+	glBindTexture(GL_TEXTURE_2D, m_textureID);
+
 	int bytesPerPixel = 0;
 
 	unsigned char* data = stbi_load(fileName, &m_width, &m_heigth, &bytesPerPixel, 0);
@@ -76,12 +85,10 @@ bool Texture::load(char* fileName)
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	printf("SUCCESS: Texture image %s loaded\n", fileName);
-	return true;
-}
 
-void Texture::bind()
-{
-	if (m_textureID != INVALID_OGL_VALUE)  glBindTexture(GL_TEXTURE_2D, m_textureID);
+	unUse();
+
+	return true;
 }
 
 void Texture::setTexture(GLuint texture)
