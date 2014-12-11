@@ -1,6 +1,5 @@
 #include "Shader.h"
 
-
 template<typename ... Args>
 void attachShaders(GLuint handle, GLuint shaderHandle, Args ...args)
 {
@@ -70,12 +69,16 @@ GLuint ShaderProgram::getLocation(std::string uniform) {
     return  glGetUniformLocation(handle,uniform.c_str());
 }
 
+void ShaderProgram::sendInt(std::string uniform, int i) {
+	glUniform1i(getLocation(uniform), i);
+}
+
 void ShaderProgram::sendDouble(std::string uniform, double d) {
 	glUniform1d(getLocation(uniform), d);
 }
 
-void ShaderProgram::sendInt(std::string uniform, int i) {
-	glUniform1i(getLocation(uniform), i);
+void ShaderProgram::sendFloat(std::string uniform, float f) {
+	glUniform1f(getLocation(uniform), f);
 }
 
 void ShaderProgram::sendVec3(std::string uniform, glm::vec3 v) {
@@ -86,15 +89,43 @@ void ShaderProgram::sendVec4(std::string uniform, glm::vec4 v) {
 	glUniform4f(getLocation(uniform), v.x, v.y, v.z, v.w);
 }
 
+void ShaderProgram::sendMat4(std::string uniform, glm::mat4 m) {
+	glUniformMatrix4fv(getLocation(uniform), 1, false, glm::value_ptr(m));
+}
+
 void ShaderProgram::sendSampler2D(std::string uniform, GLuint sampler2Dhandler) {
 	glUniform1i(getLocation(uniform), 0);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, sampler2Dhandler);
 }
 
-void ShaderProgram::sendMat4(std::string uniform, glm::mat4 m) {
-	glUniformMatrix4fv(getLocation(uniform), 1, GL_FALSE, glm::value_ptr(m));
+void ShaderProgram::sendSkyboxTexture(std::string uniform, GLuint sampler2Dhandler)
+{
+	glUniform1i(getLocation(uniform), 0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, sampler2Dhandler);
 }
 
+void ShaderProgram::sendLightData(std::string uniformPosition, std::string uniformColor, std::string uniformDirection, std::string uniformExponent, std::string uniformAngle, std::string uniformRadius, PointLight light) {
+	sendVec4(uniformPosition, light.m_position);
+	sendVec4(uniformColor, light.m_color);
+	sendVec3(uniformDirection, light.m_direction);
+	sendFloat(uniformExponent, light.m_exponent);
+	sendFloat(uniformAngle, light.m_angle);
+}
 
+void ShaderProgram::sendLightData(std::string uniformPosition, std::string uniformColor, std::string uniformDirection, std::string uniformExponent, std::string uniformAngle, std::string uniformRadius, DirectionLight light){
+	sendVec4(uniformPosition, light.m_position);
+	sendVec4(uniformColor, light.m_color);
+	sendVec3(uniformDirection, light.m_direction);
+	sendFloat(uniformExponent, light.m_exponent);
+	sendFloat(uniformAngle, light.m_angle);
+}
 
+void ShaderProgram::sendLightData(std::string uniformPosition, std::string uniformColor, std::string uniformDirection, std::string uniformExponent, std::string uniformAngle, std::string uniformRadius, ConeLight light){
+	sendVec4(uniformPosition, light.m_position);
+	sendVec4(uniformColor, light.m_color);
+	sendVec3(uniformDirection, light.m_direction);
+	sendFloat(uniformExponent, light.m_exponent);
+	sendFloat(uniformAngle, light.m_angle);
+}

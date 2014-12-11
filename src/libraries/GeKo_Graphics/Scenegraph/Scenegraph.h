@@ -2,7 +2,7 @@
 #include <GeKo_Graphics/Scenegraph/Node.h>
 #include <GeKo_Graphics/Camera/Camera.h>
 
-
+///Scenegraph contains Node
 /**Every scenegraph is connected with one scene.
 The scenegraph is managing all the objects in the scene which are added to the scenegraph by adding them to the scene*/
 class Scenegraph
@@ -35,7 +35,7 @@ public:
 	/**The Camera Name must be known for finding the Camera Object. If there is no such Camera with this name
 		an error will be placed and NULL returns*/
 	Camera* getCamera(std::string cameraName);
-	void addCamera(Camera camera);
+	void addCamera(Camera* camera);
 
 protected:
 
@@ -43,7 +43,7 @@ protected:
 	Node m_rootNode;
 	
 	Camera* m_activeCamera;
-	std::vector<Camera> m_cameraSet;
+	std::vector<Camera*> m_cameraSet;
 };
 
 /*Questions and TODOS:

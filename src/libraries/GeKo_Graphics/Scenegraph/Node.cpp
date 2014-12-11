@@ -3,15 +3,20 @@
 Node::Node()
 {
 	m_nodeName = "Default";
-
 	setIdentityMatrix_ModelMatrix();
+	
+	m_hasTexture = false;
+	m_hasCamera = false;
+	m_hasGeometry = false;
 }
 
 Node::Node(std::string nodeName)
 {
 	m_nodeName = nodeName;
-
 	setIdentityMatrix_ModelMatrix();
+	m_hasTexture = false;
+	m_hasCamera = false;
+	m_hasGeometry = false;
 }
 
 
@@ -38,7 +43,6 @@ Node* Node::getParentNode()
 void Node::setParentNode(Node* parentNode)
 {
 	m_parentNode = parentNode;
-	//m_modelMatrix = parentNode->getModelMatrix() * m_modelMatrix;
 }
 
 Node* Node::getChildrenNode(std::string nodeName)
@@ -46,32 +50,29 @@ Node* Node::getChildrenNode(std::string nodeName)
 
 	for (int i = 0; i < m_childrenSet.size(); i++)
 	{
-		if (m_childrenSet.at(i).getNodeName() == nodeName)
+		if (m_childrenSet.at(i)->getNodeName() == nodeName)
 		{
-			return &m_childrenSet.at(i);
+			return m_childrenSet.at(i);
 		}
 	}
-	std::cout << "ERROR: The Node with the name" << nodeName << "does not exist!" << std::endl;
+	std::cout << "ERROR: The Node with the name " << nodeName << " does not exist!" << std::endl;
 	return NULL;
 }
 
-void Node::addChildrenNode(Node node)
+void Node::addChildrenNode(Node* node)
 {
-	//TODO: Funktioniert nicht, wir können dann nicht mit getParentNode()->getNodeName() arbeiten!!!
-	node.setParentNode(this);
 	m_childrenSet.push_back(node);
-	
-	
-	
+	getChildrenNode(node->getNodeName())->setParentNode(this);
 }
 
 void Node::deleteChildrenNode(std::string nodeName)
 {
 	for (int i = 0; i < m_childrenSet.size(); i++)
 	{
-		if (m_childrenSet.at(i).getNodeName() == nodeName)
+		if (m_childrenSet.at(i)->getNodeName() == nodeName)
 		{
 			m_childrenSet.erase(m_childrenSet.begin()+i);
+			std::cout << "SUCESS: The Node with the name " << nodeName << " was deleted!" << std::endl;
 		}
 	}
 }
@@ -91,6 +92,7 @@ Geometry* Node::getGeometry()
 void Node::addGeometry(Geometry* geometry)
 {
 	m_geometry = geometry;
+	m_hasGeometry = true;
 	if (!m_geometry->isLoaded())
 	{
 		m_geometry->loadBufferData();
@@ -106,6 +108,18 @@ Texture* Node::getTexture()
 void Node::addTexture(Texture* texture)
 {
 	m_texture = texture;
+	m_hasTexture = true;
+}
+
+Texture* Node::getNormalMap()
+{
+	return m_normalmap;
+}
+
+void Node::addNormalMap(Texture* normalmap)
+{
+	m_normalmap = normalmap;
+	m_hasNormalMap = true;
 }
 
 Camera* Node::getCamera()
@@ -116,6 +130,7 @@ Camera* Node::getCamera()
 void Node::setCamera(Camera* camera)
 {
 	m_camera = camera;
+	m_hasCamera = true;
 }
 
 
@@ -200,12 +215,68 @@ void Node::setIdentityMatrix_ModelMatrix()
 
 void Node::render()
 {
-
 	m_geometry->renderGeometry();
-	//TODO: An dieser stelle sollte der textur gesagt werden, dass sie sich an den shader bindet
+
+}
+
+void Node::render(ShaderProgram &shader)
+{
+	if (!(m_nodeName == "Root"))
+	{
+
+		glm::mat4 modelMatrix = getParentNode()->getModelMatrix() * m_modelMatrix;
+		shader.sendMat4("modelMatrix", modelMatrix);
+	}
+	if (m_hasTexture)
+	{
+		shader.sendSampler2D("testTexture", getTexture()->getTexture());
+	}
+
+	if (hasGeometry())
+	{
+		m_geometry->renderGeometry();
+	}
+
+	for (int i = 0; i < m_childrenSet.size(); i++)
+	{
+		m_childrenSet.at(i)->render(shader);
+	}
+
 }
 
 void Node::updateModelMatrix(glm::mat4 updateMatrix)
 {
 	m_modelMatrix = updateMatrix * m_modelMatrix;
+}
+
+glm::mat4 Node::updateModelMatrix()
+{
+	glm::mat4 modelMatrix = getParentNode()->getModelMatrix() * m_modelMatrix;
+	//TODO: An dieser Stelle sollte die Matrix an den Shader gesendet werden als Uniform-Variable
+	return modelMatrix;
+}
+
+std::vector<Node*>* Node::getChildrenSet()
+{
+	return &m_childrenSet;
+}
+
+bool Node::hasTexture()
+{
+	return m_hasTexture;
+}
+
+bool Node::hasNormalMap()
+{
+	return m_hasNormalMap;
+}
+
+bool Node::hasCamera()
+{
+	return m_hasCamera;
+}
+
+bool Node::hasGeometry()
+{
+	return m_hasGeometry;
 }

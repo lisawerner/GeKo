@@ -37,4 +37,10 @@ void Scene::setScenegraph(Scenegraph scenegraph)
 	m_sceneGraph = scenegraph;
 }
 
+void Scene::render(ShaderProgram &shader)
+{
+	m_sceneGraph.getRootNode()->render(shader);
+
+}
+
 

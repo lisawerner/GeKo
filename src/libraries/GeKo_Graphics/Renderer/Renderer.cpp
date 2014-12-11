@@ -1,9 +1,5 @@
 #include "Renderer.h"
 
-/*
-by initializing, the renderer check, if the OS support OpenGL
-*/
-
 void OpenGL3Context::bindContext() const{
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -11,15 +7,13 @@ void OpenGL3Context::bindContext() const{
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glewExperimental = GL_TRUE;
 }
+
 Renderer::Renderer(const RenderContext &context)
 {
   context.bindContext();
   printInfo();
 }
 
-/*
-print Information about the supported OpenGL & GLSL version, Vendor and Renderer
-*/
 void Renderer::printInfo(){
 
   std::cout << "=============================================" << std::endl;
@@ -30,6 +24,3 @@ void Renderer::printInfo(){
   std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
   std::cout << "=============================================" << std::endl;
 }
-
-
-

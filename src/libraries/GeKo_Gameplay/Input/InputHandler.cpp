@@ -1,57 +1,41 @@
 #include "InputHandler.h"
 
-
 InputHandler::InputHandler()
 {
 }
-
 
 InputHandler::~InputHandler()
 {
 }
 
+void InputHandler::setAllInputMaps(Camera &activeCam){
 
-// Iterates over m_allInputMaps, where all the InputMaps are stored and returns the one,
-// whose member variable m_active is set true
+	// Instances of the Maps, which are named depending on their context
+	MapTrackball* contextTrackball = new MapTrackball(activeCam);
+	MapPilotview* contextPilotview = new MapPilotview(activeCam);
+	MapPlayerview* contextPlayerview = new MapPlayerview(activeCam);
 
-// if there is no actve InputMap an empty InputMap is returned
-// if there is more than one active InputMap the last one in the list, which is active,
-// is returned with an message saying it's not the only map being active
-
-// TODO exception instead of empty input map
-
-InputMap* InputHandler::getActiveInputMap() {
-
-	int i = 0;
-	InputMap* temp= new InputMap();
-
-	for (int j = 0; j < m_allInputMaps.size(); j++)
-	{
-		if (m_allInputMaps.at(j)->getActive() == true){
-			temp = m_allInputMaps.at(j);
-			i++;
-		}
-	}
-
-	if (i == 0){
-		perror("No InputMap is active.");
-	}
-	else if (i != 1){
-		perror("Too Many InputMaps are active.");
-	}
-	return temp;
+	// The Maps are stored in a vector
+	m_allInputMaps.push_back(contextTrackball);
+	m_allInputMaps.push_back(contextPilotview);
+	m_allInputMaps.push_back(contextPlayerview);
 }
 
+void InputHandler::changeActiveInputMap(std::string name){
+	// additional loop over all the InputMaps is necessary because the method retrieves always the last active InputMap and for the first time there's no InputMap active
+	for (int j = 0; j < m_allInputMaps.size(); j++)
+	{
+		if (m_allInputMaps.at(j)->getActive() == true)
+			getActiveInputMap()->setActive(false);
+	}
+	getInputMap(name)->setActive(true);
+}
 
-
-// If there is any InputMap named like the parameter, the InputMap is returned,
-// else an empty InputMap is returned with an error message
-
-// TODO exception instead of empty input map
-
+// TODO maybe an exception 
 InputMap* InputHandler::getInputMap(std::string name) {
 
 	InputMap* instance = new InputMap();
+
 	for (int i = 0; i < m_allInputMaps.size(); i++)
 	{
 		if (m_allInputMaps.at(i)->getName() == name){
@@ -59,35 +43,30 @@ InputMap* InputHandler::getInputMap(std::string name) {
 			return instance;
 		}
 	}
-	perror("No Map is named like this");
-	return instance;
+	std::cerr << "No map is named like this" << std::endl;
+
+	return 0;
 }
 
+InputMap* InputHandler::getActiveInputMap() {
 
+	int i = 0;
+	InputMap* activeInputMap = new InputMap();
 
-
-// Creates various InputMaps, fills them with their specific mapping and pushes them onto a vector, 
-// which is the member variable m_allInputMaps
-
-void InputHandler::setAllInputMaps(Camera &activeCam){
-	
-	// Instances of the Maps, which are named depending on their context
-	IMTrackball* contextTrackball = new IMTrackball(activeCam);
-	IMPilotview* contextPilotview = new IMPilotview(activeCam);
-
-	// The Maps are stored in a vector
-	m_allInputMaps.push_back(contextTrackball);
-	m_allInputMaps.push_back(contextPilotview);
+	for (int j = 0; j < m_allInputMaps.size(); j++)
+	{
+		if (m_allInputMaps.at(j)->getActive() == true){
+			activeInputMap = m_allInputMaps.at(j);
+			i++;
+		}
+	}
+	if (i == 0){
+		std::cerr << "No InputMap is active." << std::endl;
+		exit(1);
+	}
+	else if (i != 1){
+		std::cerr << "Too Many InputMaps are active." << std::endl;
+		exit(1);
+	}
+	return activeInputMap;
 }
-
-
-// Sets the InputMap active according to its name and ensures that just this InputMap is active
-void InputHandler::changeActiveInputMap(std::string name){
-	getActiveInputMap()->setActive(false);
-	getInputMap(name)->setActive(true);
-}
-
-
-
-
-
