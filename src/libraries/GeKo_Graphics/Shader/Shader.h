@@ -66,6 +66,7 @@ public:
 	void sendVec4(std::string uniform, glm::vec4 v);
 	void sendMat4(std::string uniform, glm::mat4 m);
 	void sendSampler2D(std::string uniform, GLuint sampler2Dhandler);
+	void sendSampler2D(std::string uniform, GLuint sampler2Dhandler, int textureIndex);
 	void sendSkyboxTexture(std::string uniform, GLuint sampler2Dhandler);
 	void sendLightData(std::string uniformPosition, std::string uniformColor, std::string uniformDirection, std::string uniformExponent, std::string uniformAngle, std::string uniformRadius, PointLight light);
 	void sendLightData(std::string uniformPosition, std::string uniformColor, std::string uniformDirection, std::string uniformExponent, std::string uniformAngle, std::string uniformRadius, DirectionLight light);
