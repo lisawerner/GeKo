@@ -17,13 +17,13 @@ public:
 
 	bool load(char* fileName);
 	void bind();
+	void use(GLenum texturePosition);
+	void unUse();
 
 	void setTexture(GLuint texture);
 	unsigned int getTexture();
 
 private:
-	void createTexture();
-
 	unsigned int m_textureID;
 	int m_width, m_heigth;
 

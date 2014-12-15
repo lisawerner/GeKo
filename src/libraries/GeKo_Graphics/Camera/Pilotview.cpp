@@ -8,13 +8,6 @@ Pilotview::Pilotview(std::string name)
 	m_direction = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
 	m_up = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
 
-	m_width = 800;
-	m_height = 600;
-
-	m_fov = 60.0f;
-	m_near = 0.001f;
-	m_far = 10.0f;
-
 	m_theta = glm::pi<float>() / 2.0f;
 	m_phi = glm::pi<float>() / 2.0f;
 
