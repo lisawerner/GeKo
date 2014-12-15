@@ -33,7 +33,7 @@ int main()
 
 	//our window
 	GLFWwindow* window;
-	window = glfwCreateWindow(800, 600, "NormalMapping Test", NULL, NULL);
+	window = glfwCreateWindow(800, 600, "NormalMapping", NULL, NULL);
 	glfwMakeContextCurrent(window);
 
 	//Set Camera to another position
@@ -106,8 +106,8 @@ int main()
 		shaderBump.sendMat4("viewMatrix", cam.getViewMatrix());
 		shaderBump.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 		shaderBump.sendLightData("pos", "col", "dir", "exp", "ang", "rad", plight);
-		shaderBump.sendSampler2D("colortexture", cubeNode.getTexture()->getTexture());
-		shaderBump.sendSampler2D("normaltexture", cubeNode.getNormalMap()->getTexture());
+		shaderBump.sendSampler2D("colortexture", cubeNode.getTexture()->getTexture(), 0);
+		shaderBump.sendSampler2D("normaltexture", cubeNode.getNormalMap()->getTexture(), 1);
 		cubeNode.render();
 		shaderBump.unbind();
 
