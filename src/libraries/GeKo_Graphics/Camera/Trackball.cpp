@@ -29,6 +29,10 @@ void Trackball::setPosition(glm::vec4 position){
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
 }
 
+void Trackball::setRadius(float radius){
+	m_radius = radius;
+}
+
 void Trackball::moveForward(){
 
 	if (m_radius <= 1){

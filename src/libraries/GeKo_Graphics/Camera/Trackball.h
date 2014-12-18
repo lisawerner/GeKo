@@ -15,6 +15,9 @@ public:
 
 	/// The method sets the position and updates the view matrix
 	void setPosition(glm::vec4 position);
+	
+	/// The method sets the radius and updates the view matrix
+	void setRadius(float radius);
 
 	/// The method changes the position in the way of the object
 	void moveForward();
