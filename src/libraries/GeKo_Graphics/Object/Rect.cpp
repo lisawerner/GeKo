@@ -52,20 +52,27 @@ void Rect::create(glm::vec4 dright, glm::vec4 dleft, glm::vec4 uright, glm::vec4
 	m_index.push_back(1);
 	m_index.push_back(2);
 
-	m_index.push_back(0);
 	m_index.push_back(2);
 	m_index.push_back(3);
+	m_index.push_back(1);
 
 	m_indices = 6;
 }
 
 void Rect::setPoints(glm::vec4 dright, glm::vec4 dleft, glm::vec4 uright, glm::vec4 uleft)
-{
+{	
 	m_vertices.clear();
 	m_vertices.push_back(glm::vec4(dright));
 	m_vertices.push_back(glm::vec4(dleft));
 	m_vertices.push_back(glm::vec4(uright));
 	m_vertices.push_back(glm::vec4(uleft));
+
+	glm::vec3 n = glm::normalize(glm::cross(glm::vec3(dright - dleft), glm::vec3(uleft - dleft)));
+
+	m_normals.push_back(n);
+	m_normals.push_back(n);
+	m_normals.push_back(n);
+	m_normals.push_back(n);
 }
 
 //fixMe?
