@@ -1,5 +1,5 @@
 #pragma once
-#include <GeKo_Gameplay/AI/GraphNode.h>
+#include <GeKo_Gameplay/AI_Pathfinding/GraphNode.h>
 #include <vector>
 
 class Graph 
