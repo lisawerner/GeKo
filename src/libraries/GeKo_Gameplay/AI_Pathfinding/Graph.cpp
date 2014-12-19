@@ -1,4 +1,4 @@
-#include <GeKo_Gameplay/AI/Graph.h>
+#include <GeKo_Gameplay/AI_Pathfinding/Graph.h>
 
 Graph::Graph()
 {
