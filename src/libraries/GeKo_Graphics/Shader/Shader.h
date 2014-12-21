@@ -43,13 +43,13 @@ struct FragmentShader : public BaseShader{
 struct GeometryShader : public BaseShader{
     GeometryShader(const std::string &shaderSource) : BaseShader(shaderSource, GEOMETRY_SHADER){}
 };
-struct TesselationControlShader : public BaseShader{
+struct TesselationControlShader : public BaseShader{	//requires OpenGL Version 4.0
 	TesselationControlShader(const std::string &shaderSource) : BaseShader(shaderSource, TESS_CONTROL_SHADER){}
 };
-struct TesselationEvaluationShader : public BaseShader{
+struct TesselationEvaluationShader : public BaseShader{	//requires OpenGL Version 4.0
 	TesselationEvaluationShader(const std::string &shaderSource) : BaseShader(shaderSource, TESS_EVALUATION_SHADER){}
 };
-struct ComputeShader : public BaseShader{
+struct ComputeShader : public BaseShader{	//requires OpenGL Version 4.3
 	ComputeShader(const std::string &shaderSource) : BaseShader(shaderSource, COMPUTE_SHADER){}
 };
 
