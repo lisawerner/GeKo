@@ -18,8 +18,6 @@ int main() {
 
 	/*Outsourcing*/
 
-	int test = 2;
-
 	GLuint ssbo;
 	glGenBuffers(1, &ssbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
@@ -39,16 +37,16 @@ int main() {
 	//auto buffer_index = glGetProgramResourceIndex(computeShader.handle, GL_SHADER_STORAGE_BLOCK, "Test");
 	//glShaderStorageBlockBinding(computeShader.handle, buffer_index, 0);
 
-	computeShader.bind();
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);
+	computeShader.bind();
 	
-	std::cout << "HIER MUSS 0 STEHEN:   " << points[1].x << points[1].y << points[1].z << std::endl;
+	std::cout << "HIER MUSS 000 STEHEN:   " << points[1].x << points[1].y << points[1].z << std::endl;
 	glDispatchCompute(10 / 2, 1, 1);
-	//glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 
 	computeShader.unbind();
 
-	std::cout << "HIER MUSS 1 STEHEN:   " << points[1].x << points[1].y << points[1].z << std::endl;
+	std::cout << "HIER MUSS 111 STEHEN:   " << points[1].x << points[1].y << points[1].z << std::endl;
 	
 	/*END*/
 
