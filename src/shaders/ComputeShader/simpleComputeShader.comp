@@ -4,10 +4,11 @@
 
 layout(binding=0) buffer Test
 {
-	int test;
-};
+	vec4 test[];
+}dumm;
 
-layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(local_size_x = 2, local_size_y = 1, local_size_z = 1) in;
 void main(){
-	test = 99;
+	vec3 newShit = vec3(1.0, 1.0, 1.0);
+	dumm.test[gl_GlobalInvocationID.x].xyz = newShit;
 }
