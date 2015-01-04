@@ -19,6 +19,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 }
 
+enum
+{
+	PARTICLE_GROUP_SIZE = 128,		//"in" variable in the ComputeShader
+	PARTICLE_GROUP_COUNT = 1000,	//number of Particles in a Compute Group
+	PARTICLE_COUNT = (PARTICLE_GROUP_SIZE * PARTICLE_GROUP_COUNT),
+};
+
 int main() {
 	glfwInit();
 
@@ -28,7 +35,7 @@ int main() {
 	glfwMakeContextCurrent(window);
 
 	cam.setName("PilotviewCam");
-	cam.setPosition(glm::vec4(1.0, 0.0, 5.0, 1.0));
+	cam.setPosition(glm::vec4(0, 0, 2.0, 1.0));
 	cam.setNearFar(0.01f, 10.0f);
 
 	// Set all InputMaps and set one InputMap active
@@ -40,23 +47,7 @@ int main() {
 
 	glewInit();
 	
-	/*OUTSOURCING*/
-
-	//Shader Program
-	/*GLuint shader, program;
-
-	std::ifstream input(SHADERS_PATH + std::string("/ComputeShader/simpleComputeShader2.comp"));
-	std::string shaderSource((std::istreambuf_iterator<char>(input)),
-	std::istreambuf_iterator<char>());
-	std::cout << shaderSource << std::endl;
-	auto source = shaderSource.c_str();
-
-	shader = glCreateShader(GL_COMPUTE_SHADER);
-	glShaderSource(shader, 1, &source, NULL);
-	glCompileShader(shader);
-	program = glCreateProgram();
-	glAttachShader(program, shader);
-	glLinkProgram(program);*/
+	/*THIS IS WHERE THE MAGIC HAPPENS*/
 
 	ComputeShader cs(loadShaderSource(SHADERS_PATH + std::string("/ComputeShader/simpleComputeShader2.comp")));
 	ShaderProgram compute(cs);
@@ -72,20 +63,20 @@ int main() {
 	GLuint position_buffer;
 	glGenBuffers(1, &position_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, position_buffer);
-	glBufferData(GL_ARRAY_BUFFER, 100 * sizeof(glm::vec4), NULL, GL_DYNAMIC_COPY);
+	glBufferData(GL_ARRAY_BUFFER, PARTICLE_COUNT * sizeof(glm::vec4), NULL, GL_DYNAMIC_COPY);
 	// Map the position buffer and fill it with random vectors
 	glm::vec4 * positions = (glm::vec4 *)
 		glMapBufferRange(GL_ARRAY_BUFFER,
 		0,
-		100 * sizeof(glm::vec4),
+		PARTICLE_COUNT * sizeof(glm::vec4),
 		GL_MAP_WRITE_BIT |
 		GL_MAP_INVALIDATE_BUFFER_BIT);
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < PARTICLE_COUNT; i++)
 	{
-		positions[i].x = (rand() % 100) / 100.0f;
-		positions[i].y = (rand() % 100) / 100.0f;
-		positions[i].z = (rand() % 100) / 100.0f;
-		positions[i].w = (rand() % 100) / 100.0f;
+		positions[i].x = ((rand() % 100) / 100.0f) - 0.5;
+		positions[i].y = ((rand() % 100) / 100.0f) - 0.5;
+		positions[i].z = ((rand() % 100) / 100.0f) - 0.5;
+		positions[i].w = ((rand() % 100) / 100.0f) - 0.5;
 	}
 	glUnmapBuffer(GL_ARRAY_BUFFER);
 
@@ -99,26 +90,33 @@ int main() {
 	glBindTexture(GL_TEXTURE_BUFFER, tbo);
 	glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, position_buffer);
 
-	//glUseProgram(program);
-	compute.bind();
-	glBindImageTexture(0, tbo, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
-
-	glDispatchCompute(50, 1, 1);
-	glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
-
 	/*END*/
 
-	glClearColor(1.0, 1.0, 1.0, 0.0);
+	//glClearColor(1.0, 1.0, 1.0, 1.0);
+	float startCamTime = glfwGetTime();
 
 	while (!glfwWindowShouldClose(window))
 	{
+		cam.setSensitivity(glfwGetTime() - startCamTime);
+		startCamTime = cam.getSensitivity();
+
+		compute.bind();
+		compute.sendFloat("time", glfwGetTime());
+		glBindImageTexture(0, tbo, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+		glDispatchCompute(PARTICLE_GROUP_COUNT, 1, 1);
+		glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glDisable(GL_DEPTH_TEST);
+
 		render.bind();
+		render.sendMat4("viewMatrix", cam.getViewMatrix());
+		render.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 		glBindVertexArray(render_vao);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ONE, GL_ONE);
-		glDrawArrays(GL_POINTS, 0, 10);
+		glDrawArrays(GL_POINTS, 0, PARTICLE_COUNT);
+		render.unbind();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
