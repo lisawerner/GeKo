@@ -84,7 +84,7 @@ int main()
 
 		// You have to compute the delta time
 		cam.setSensitivity(glfwGetTime() - startTime);
-		startTime = cam.getSensitivity();
+		startTime = glfwGetTime();
 
 		shader.bind();
 
