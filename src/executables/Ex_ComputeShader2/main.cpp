@@ -76,7 +76,7 @@ int main() {
 		positions[i].x = ((rand() % 100) / 100.0f) - 0.5;
 		positions[i].y = ((rand() % 100) / 100.0f) - 0.5;
 		positions[i].z = ((rand() % 100) / 100.0f) - 0.5;
-		positions[i].w = ((rand() % 100) / 100.0f) - 0.5;
+		positions[i].w = 1;
 	}
 	glUnmapBuffer(GL_ARRAY_BUFFER);
 
@@ -92,7 +92,7 @@ int main() {
 
 	/*END*/
 
-	//glClearColor(1.0, 1.0, 1.0, 1.0);
+	//glClearColor(1.0, 1.0, 1.0, 1.0); //BUUUG
 	float startCamTime = glfwGetTime();
 
 	while (!glfwWindowShouldClose(window))
