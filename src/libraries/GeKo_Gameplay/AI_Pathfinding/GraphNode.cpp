@@ -76,3 +76,17 @@ float GraphNode::getTemporary()
 {
 	return m_temporaryTravelled;
 }
+
+void GraphNode::setPosition(glm::vec3 position)
+{
+	posX = position.x;
+	posY = position.y;
+	posZ = position.z;
+
+	m_position = position;
+}
+
+glm::vec3 GraphNode::getPosition()
+{
+	return m_position;
+}
