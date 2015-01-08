@@ -123,7 +123,7 @@ int main() {
 		render.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 		glVertexPointer(4, GL_FLOAT, 0, (void*)0);
 		glEnableClientState(GL_VERTEX_ARRAY);
-		glPointSize(1.0);
+		//glPointSize(1.0);
 		glDrawArrays(GL_POINTS, 0, PARTICLE_COUNT);
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
