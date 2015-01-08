@@ -26,10 +26,6 @@ enum
 	PARTICLE_COUNT = (PARTICLE_GROUP_SIZE * PARTICLE_GROUP_COUNT),
 };
 
-struct pos{
-	float x, y, z, w;
-};
-
 int main() {
 	glfwInit();
 
@@ -51,26 +47,30 @@ int main() {
 
 	glewInit();
 	
-	/*MAGIC*/
+	/*THIS IS WHERE THE MAGIC HAPPENS*/
 
-	ComputeShader cs(loadShaderSource(SHADERS_PATH + std::string("/ComputeShader/simpleComputeShader.comp")));
+	ComputeShader cs(loadShaderSource(SHADERS_PATH + std::string("/ComputeShader/simpleComputeShader2.comp")));
 	ShaderProgram compute(cs);
 
 	VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/ComputeShader/ExComputeShader.vert")));
 	FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/ComputeShader/ExComputeShader.frag")));
 	ShaderProgram render(vs, fs);
 
-	//GLuint render_vao;
-	//glGenVertexArrays(1, &render_vao);
-	//glBindVertexArray(render_vao);
+	GLuint render_vao;
+	glGenVertexArrays(1, &render_vao);
+	glBindVertexArray(render_vao);
 
-	GLuint position_ssbo;
-	glGenBuffers(1, &position_ssbo);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, position_ssbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, PARTICLE_COUNT * sizeof(struct pos), NULL, GL_STATIC_DRAW);
-
-	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
-	struct pos* positions = (struct pos*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, PARTICLE_COUNT * sizeof(struct pos), bufMask);
+	GLuint position_buffer;
+	glGenBuffers(1, &position_buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, position_buffer);
+	glBufferData(GL_ARRAY_BUFFER, PARTICLE_COUNT * sizeof(glm::vec4), NULL, GL_DYNAMIC_COPY);
+	// Map the position buffer and fill it with random vectors
+	glm::vec4 * positions = (glm::vec4 *)
+		glMapBufferRange(GL_ARRAY_BUFFER,
+		0,
+		PARTICLE_COUNT * sizeof(glm::vec4),
+		GL_MAP_WRITE_BIT |
+		GL_MAP_INVALIDATE_BUFFER_BIT);
 	for (int i = 0; i < PARTICLE_COUNT; i++)
 	{
 		positions[i].x = ((rand() % 100) / 100.0f) - 0.5;
@@ -78,16 +78,23 @@ int main() {
 		positions[i].z = ((rand() % 100) / 100.0f) - 0.5;
 		positions[i].w = 1;
 	}
-	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+	glUnmapBuffer(GL_ARRAY_BUFFER);
 
-	//glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
-	//glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+	glEnableVertexAttribArray(0);
 
-	//std::cout << "HIER MUSS 000 STEHEN:   " << positions[1].x << positions[1].y << positions[1].z << std::endl;
+	//Textur
+	GLuint tbo;
+	glGenTextures(1, &tbo);
+
+	glBindTexture(GL_TEXTURE_BUFFER, tbo);
+	glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, position_buffer);
+
 	/*END*/
 
+	//glClearColor(1.0, 1.0, 1.0, 1.0); //BUUUG
 	float startCamTime = glfwGetTime();
-
+	
 	double lastTime = glfwGetTime();
 	int nbFrames = 0;
 
@@ -107,26 +114,21 @@ int main() {
 		startCamTime = cam.getSensitivity();
 
 		compute.bind();
-		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, position_ssbo);
 		compute.sendFloat("time", glfwGetTime());
+		glBindImageTexture(0, tbo, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
 		glDispatchCompute(PARTICLE_GROUP_COUNT, 1, 1);
-		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 0);
-		glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
-		compute.unbind();
-
+		glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glDisable(GL_DEPTH_TEST);
 
 		render.bind();
-		glBindBuffer(GL_ARRAY_BUFFER, position_ssbo);
 		render.sendMat4("viewMatrix", cam.getViewMatrix());
 		render.sendMat4("projectionMatrix", cam.getProjectionMatrix());
-		glVertexPointer(4, GL_FLOAT, 0, (void*)0);
-		glEnableClientState(GL_VERTEX_ARRAY);
-		//glPointSize(1.0);
+		glBindVertexArray(render_vao);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_ONE, GL_ONE);
 		glDrawArrays(GL_POINTS, 0, PARTICLE_COUNT);
-		glDisableClientState(GL_VERTEX_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		render.unbind();
 
 		glfwSwapBuffers(window);
