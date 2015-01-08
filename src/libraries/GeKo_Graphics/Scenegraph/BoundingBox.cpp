@@ -2,7 +2,7 @@
 
 BoundingBox::BoundingBox(Node* object){
 	for (int i = 0; i < object->getGeometry()->getVertices().size(); i++){
-		vertices.push_back(glm::vec4(object->getGeometry()->getVertices().at[i].x, object->getGeometry()->getVertices().at[i].y, object->getGeometry()->getVertices().at[i].z, 1.0));
+		vertices.push_back(glm::vec4(object->getGeometry()->getVertices().at(i).x, object->getGeometry()->getVertices().at(i).y, object->getGeometry()->getVertices().at(i).z, 1.0));
 	}
 }
 
@@ -11,34 +11,34 @@ BoundingBox::~BoundingBox(){
 }
 
 std::vector<glm::vec4> BoundingBox::boundingBox(Node* object){
-	float maxX = object->getGeometry()->getVertices().at[0].x;
-	float minX = object->getGeometry()->getVertices().at[0].x;
+	float maxX = object->getGeometry()->getVertices().at(0).x;
+	float minX = object->getGeometry()->getVertices().at(0).x;
 	
-	float maxY = object->getGeometry()->getVertices().at[0].y;
-	float minY = object->getGeometry()->getVertices().at[0].y;
+	float maxY = object->getGeometry()->getVertices().at(0).y;
+	float minY = object->getGeometry()->getVertices().at(0).y;
 
-	float maxZ = object->getGeometry()->getVertices().at[0].z;
-	float minZ = object->getGeometry()->getVertices().at[0].z;
+	float maxZ = object->getGeometry()->getVertices().at(0).z;
+	float minZ = object->getGeometry()->getVertices().at(0).z;
 	
 	for(int i = 1; i < vertices.size(); i++){
-		if (object->getGeometry()->getVertices().at[i].x > maxX){
-			maxX = object->getGeometry()->getVertices().at[i].x;
+		if (object->getGeometry()->getVertices().at(i).x > maxX){
+			maxX = object->getGeometry()->getVertices().at(i).x;
 		}
-		if (object->getGeometry()->getVertices().at[i].y > maxY){
-			maxY = object->getGeometry()->getVertices().at[i].y;
+		if (object->getGeometry()->getVertices().at(i).y > maxY){
+			maxY = object->getGeometry()->getVertices().at(i).y;
 		}
-		if (object->getGeometry()->getVertices().at[i].z > maxZ){
-			maxZ = object->getGeometry()->getVertices().at[i].z;
+		if (object->getGeometry()->getVertices().at(i).z > maxZ){
+			maxZ = object->getGeometry()->getVertices().at(i).z;
 		}
 		
-		if (object->getGeometry()->getVertices().at[i].x < minX){
-			minX = object->getGeometry()->getVertices().at[i].x;
+		if (object->getGeometry()->getVertices().at(i).x < minX){
+			minX = object->getGeometry()->getVertices().at(i).x;
 		}
-		if (object->getGeometry()->getVertices().at[i].y < minY){
-			minY = object->getGeometry()->getVertices().at[i].y;
+		if (object->getGeometry()->getVertices().at(i).y < minY){
+			minY = object->getGeometry()->getVertices().at(i).y;
 		}
-		if (object->getGeometry()->getVertices().at[i].z < minZ){
-			minZ = object->getGeometry()->getVertices().at[i].z;
+		if (object->getGeometry()->getVertices().at(i).z < minZ){
+			minZ = object->getGeometry()->getVertices().at(i).z;
 		}
 	}
 	
