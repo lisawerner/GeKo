@@ -55,6 +55,13 @@ ShaderProgram::ShaderProgram(const VertexShader &vs, const FragmentShader &fs)
   glLinkProgram(handle);
 }
 
+ShaderProgram::ShaderProgram(const ComputeShader &cs)
+{
+  handle = glCreateProgram();
+  attachShaders(handle, cs.handle);
+  glLinkProgram(handle);
+}
+
 void ShaderProgram::bind() const
 {
   glUseProgram(handle);
