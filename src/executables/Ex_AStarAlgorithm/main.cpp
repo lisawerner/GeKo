@@ -24,24 +24,24 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 }
 
-GraphNode* AStarAlgorithmReturn(GraphNode* s, GraphNode* g)
+AStarNode* AStarAlgorithmReturn(AStarNode* s, AStarNode* g)
 {
 	std::cout << "A*-ALGORITHM WILL BE STARTED" << std::endl;
 
-	std::vector<GraphNode*> pathList;
+	std::vector<AStarNode*> pathList;
 	std::cout << "S GOES INTO THE PATHLIST" << std::endl;
 	pathList.push_back(s);
 
-	std::vector<GraphNode*> wastedList;
+	std::vector<AStarNode*> wastedList;
 
-	GraphNode* tmp;
+	AStarNode* tmp;
 	bool wasIn = false;
 	bool shorterPathFound = false;
 
 	int distanceTraveled = 0;
 
 	bool secondOut = false;
-	GraphNode* returnNode;
+	AStarNode* returnNode;
 
 	while (pathList.back()->getName() != g->getName() && !pathList.empty())
 	{
@@ -62,7 +62,6 @@ GraphNode* AStarAlgorithmReturn(GraphNode* s, GraphNode* g)
 			secondOut = true;
 		}
 
-		
 		//Neue Pfade hinzufügen
 		for (int i = 0; i < tmp->getPaths()->size(); i++)
 		{
@@ -75,7 +74,7 @@ GraphNode* AStarAlgorithmReturn(GraphNode* s, GraphNode* g)
 
 				//Wir müssen nun schauen, ob ein Knoten mit dem selben Namen schon in unserer Pfadliste ist
 				//Wenn ja, wollen wir eine Kopie erstellen, denn wir wollen mehrere Pfade zu einem Knoten speichern können
-				GraphNode* copyNode = new GraphNode("COPY");
+				AStarNode* copyNode = new AStarNode("COPY");
 				for (int j = 0; j < pathList.size(); j++)
 				{
 
@@ -189,7 +188,7 @@ GraphNode* AStarAlgorithmReturn(GraphNode* s, GraphNode* g)
 		}
 
 		//Pfad-Liste muss neu sortiert werden 
-		GraphNode* save;
+		AStarNode* save;
 		for (int k = 1; k < pathList.size(); k++)
 		{
 			for (int l = 0; l < pathList.size() - k; l++)
@@ -228,17 +227,17 @@ int main()
 	Scene kiScene("ki");
 
 	//Test Cases, see the wiki page for the Link, where you can find the Examples I used here
-	Graph testGraph();
-	GraphNode nodeS("S");
-	GraphNode nodeA("A");
-	GraphNode nodeB("B");
-	GraphNode nodeC("C");
-	GraphNode nodeD("D");
-	GraphNode nodeE("E");
-	GraphNode nodeF("F");
-	GraphNode nodeG("G");
+	Graph<AStarNode> testGraph();
+	AStarNode nodeS("S");
+	AStarNode nodeA("A");
+	AStarNode nodeB("B");
+	AStarNode nodeC("C");
+	AStarNode nodeD("D");
+	AStarNode nodeE("E");
+	AStarNode nodeF("F");
+	AStarNode nodeG("G");
 
-	GraphNode defaultNode("Default");
+	AStarNode defaultNode("Default");
 
 	nodeS.setPosition(glm::vec3(0.0, 0.0, 0.0));
 	nodeA.setPosition(glm::vec3(3.0, 0.0, 0.0));
@@ -267,56 +266,56 @@ int main()
 	nodeF.setVisitor(&defaultNode);
 	nodeG.setVisitor(&defaultNode);
 
-	Path pathSA(3, &nodeS, &nodeA);
-	Path pathSD(4, &nodeS, &nodeD);
+	Path<AStarNode> pathSA(3, &nodeS, &nodeA);
+	Path<AStarNode> pathSD(4, &nodeS, &nodeD);
 	nodeS.addPath(&pathSA);
 	nodeS.addPath(&pathSD);
 
-	Path pathAS(3, &nodeA, &nodeS);
-	Path pathAB(4, &nodeA, &nodeB);
-	Path pathAD(5, &nodeA, &nodeD);
+	Path<AStarNode> pathAS(3, &nodeA, &nodeS);
+	Path<AStarNode> pathAB(4, &nodeA, &nodeB);
+	Path<AStarNode> pathAD(5, &nodeA, &nodeD);
 	nodeA.addPath(&pathAS);
 	nodeA.addPath(&pathAB);
 	nodeA.addPath(&pathAD);
 
-	Path pathBA(4, &nodeB, &nodeA);
-	Path pathBC(4, &nodeB, &nodeC);
-	Path pathBE(5, &nodeB, &nodeE);
+	Path<AStarNode> pathBA(4, &nodeB, &nodeA);
+	Path<AStarNode> pathBC(4, &nodeB, &nodeC);
+	Path<AStarNode> pathBE(5, &nodeB, &nodeE);
 	nodeB.addPath(&pathBA);
 	nodeB.addPath(&pathBC);
 	nodeB.addPath(&pathBE);
 
-	Path pathCB(4, &nodeC, &nodeB);
+	Path<AStarNode> pathCB(4, &nodeC, &nodeB);
 	nodeC.addPath(&pathCB);
 
-	Path pathDS(4, &nodeD, &nodeS);
-	Path pathDA(5, &nodeD, &nodeA);
-	Path pathDE(2, &nodeD, &nodeE);
+	Path<AStarNode> pathDS(4, &nodeD, &nodeS);
+	Path<AStarNode> pathDA(5, &nodeD, &nodeA);
+	Path<AStarNode> pathDE(2, &nodeD, &nodeE);
 	nodeD.addPath(&pathDS);
 	nodeD.addPath(&pathDA);
 	nodeD.addPath(&pathDE);
 
-	Path pathED(2, &nodeE, &nodeD);
-	Path pathEB(5, &nodeE, &nodeB);
-	Path pathEF(4, &nodeE, &nodeF);
+	Path<AStarNode> pathED(2, &nodeE, &nodeD);
+	Path<AStarNode> pathEB(5, &nodeE, &nodeB);
+	Path<AStarNode> pathEF(4, &nodeE, &nodeF);
 	nodeE.addPath(&pathED);
 	nodeE.addPath(&pathEB);
 	nodeE.addPath(&pathEF);
 
-	Path pathFE(4, &nodeF, &nodeE);
-	Path pathFG(3, &nodeF, &nodeG);
+	Path<AStarNode> pathFE(4, &nodeF, &nodeE);
+	Path<AStarNode> pathFG(3, &nodeF, &nodeG);
 	nodeF.addPath(&pathFE);
 	nodeF.addPath(&pathFG);
 
 
-	Path pathGF(3, &nodeG, &nodeF);
+	Path<AStarNode> pathGF(3, &nodeG, &nodeF);
 	nodeG.addPath(&pathGF);
 
 	//Now we have an Object represented by its currentPos on the field
 	//The Object gets the position of the Spawnpoint S and starts to look for a new location
-	//The Object also saves the last visited Graphnode
+	//The Object also saves the last visited AStarNode
 	glm::vec3 currentPos = nodeS.getPosition();
-	GraphNode* lastVisited = &nodeS;
+	AStarNode* lastVisited = &nodeS;
 
 	//We have a Listener which recognize changes on the Path on the field
 	//For demonstration, no changes will happening 
@@ -326,9 +325,9 @@ int main()
 	while (currentPos != nodeG.getPosition())
 	{
 		//std::cout << "CONTROLL CHECK 1" << std::endl;
-		GraphNode* nextPosition = AStarAlgorithmReturn(lastVisited, &nodeG);
+		AStarNode* nextPosition = AStarAlgorithmReturn(lastVisited, &nodeG);
 	//	std::cout << "CONTROLL CHECK NEXT POSITION : " << nextPosition->getName() << std::endl;
-		//We determine the difference between the currentPos of the Object and the Position of the next GraphNode
+		//We determine the difference between the currentPos of the Object and the Position of the next AStarNode
 		glm::vec3 differenceTMP = nextPosition->getPosition() - currentPos;
 		//As long as the Object did not have reached the nextPosition-Node, we want to let it go to the position in steps
 		while (currentPos != nextPosition->getPosition())
@@ -350,7 +349,7 @@ int main()
 	std::cout << "THE AI-UNIT ARRIVED AT IT DESTINATION! " << std::endl;
 	
 	
-
+	
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -4,21 +4,29 @@
 
 /** The Graph-class provides a "bucket" for GraphNodes, which cann be added to the vector-list ot the Graph. A Graph represents one closed path-system on which a AI-Unit can run.
 For example one Graph could represent the search for food or the area, which the AI should protect.*/
+
+template<class T>
 class Graph 
 {
 public: 
-	Graph();
-	~Graph();
+	Graph(){}
+	~Graph(){}
 	
 	///Adds a GraphNode-Object to the vector-list m_nodes
 	/**/
-	 void addGraphNode(GraphNode* node);
+	 void addGraphNode(GraphNode<T>* node)
+	 {
+		 m_nodes.push_back(node);
+	 }
 	 
 	 ///Returns the vector-list m_nodes completely
 	 /**/
-	 std::vector<GraphNode*>* getGraph();
+	 std::vector<GraphNode<T>*>* getGraph()
+	 {
+		 return &m_nodes;
+	 }
 	
 protected:
-	  std::vector<GraphNode*> m_nodes;
+	  std::vector<GraphNode<T>*> m_nodes;
 	 
 };
