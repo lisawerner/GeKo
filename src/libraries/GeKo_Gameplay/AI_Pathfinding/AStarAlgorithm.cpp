@@ -1,36 +1,22 @@
-#include <GL/glew.h>
-#include <GeKo_Graphics/InputInclude.h>
-#include <GeKo_Graphics/MaterialInclude.h>
-#include <GeKo_Graphics/ObjectInclude.h>
-#include <GeKo_Graphics/ShaderInclude.h>
-#include <GeKo_Graphics/ScenegraphInclude.h>
-#include <GeKo_Graphics/AIInclude.h>
-#include <list>
-#include <queue>
-#include <stack>
+# include <GeKo_Gameplay/AI_Pathfinding/AStarAlgorithm.h>
 
+AStarAlgorithm::AStarAlgorithm(std::string name) : Algorithm(name)
+{
 
-InputHandler iH;
-Trackball cam("Trackball");
-
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
-	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
-
-	for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
-		if (it->first == key)
-			activeMap.at(key)();
-		if (it == activeMap.end())
-			std::cout << "Key is not mapped to an action" << std::endl;
-	}
 }
 
-AStarNode* AStarAlgorithmReturn(AStarNode* s, AStarNode* g)
+AStarAlgorithm::~AStarAlgorithm()
+{
+
+}
+
+AStarNode* AStarAlgorithm::startAlgorithm(AStarNode* startNode, AStarNode* endNode)
 {
 	std::cout << "A*-ALGORITHM WILL BE STARTED" << std::endl;
 
 	std::vector<AStarNode*> pathList;
 	std::cout << "S GOES INTO THE PATHLIST" << std::endl;
-	pathList.push_back(s);
+	pathList.push_back(startNode);
 
 	std::vector<AStarNode*> wastedList;
 
@@ -43,7 +29,7 @@ AStarNode* AStarAlgorithmReturn(AStarNode* s, AStarNode* g)
 	bool secondOut = false;
 	AStarNode* returnNode;
 
-	while (pathList.back()->getName() != g->getName() && !pathList.empty())
+	while (pathList.back()->getName() != endNode->getName() && !pathList.empty())
 	{
 		std::cout << "FRONT ELEMENT OF THE LIST GOES OUT: " << pathList.back()->getName() << std::endl;
 		tmp = pathList.back();
@@ -57,7 +43,7 @@ AStarNode* AStarAlgorithmReturn(AStarNode* s, AStarNode* g)
 			secondOut = false;
 		}
 
-		if (tmp->getName() == s->getName())
+		if (tmp->getName() == startNode->getName())
 		{
 			secondOut = true;
 		}
@@ -68,7 +54,7 @@ AStarNode* AStarAlgorithmReturn(AStarNode* s, AStarNode* g)
 
 			std::cout << "NEIGHBOR OF..." << tmp->getName() << "...IS..." << tmp->getPaths()->at(i)->getEndNode()->getName() << std::endl;
 			//Überprüfung, ob der aktuelle Endknoten des Pfades den man hinzufügen will, den Knoten vorher besucht hat, dann wäre dies ein Rückpfad, den wir nicht drin haben wollen
-			if (tmp->getPaths()->at(i)->getEndNode()->getName() != tmp->getVisitor()->getName() && tmp->getPaths()->at(i)->getEndNode()->getName() != s->getName())
+			if (tmp->getPaths()->at(i)->getEndNode()->getName() != tmp->getVisitor()->getName() && tmp->getPaths()->at(i)->getEndNode()->getName() != startNode->getName())
 			{
 
 
@@ -209,172 +195,8 @@ AStarNode* AStarAlgorithmReturn(AStarNode* s, AStarNode* g)
 
 	if (secondOut)
 	{
-		returnNode = g;
+		returnNode = endNode;
 	}
 
 	return returnNode;
-}
-
-
-int main()
-{
-	glfwInit();
-
-	Window testWindow(50, 50, 800, 600, "testWindow");
-	glfwMakeContextCurrent(testWindow.getWindow());
-
-	std::cout << "THE GRAPH WILL BE INITIALIZED!" << std::endl;
-	Scene kiScene("ki");
-
-	//Test Cases, see the wiki page for the Link, where you can find the Examples I used here
-	Graph<AStarNode, AStarAlgorithm> testGraph;
-
-	AStarNode nodeS("S");
-	AStarNode nodeA("A");
-	AStarNode nodeB("B");
-	AStarNode nodeC("C");
-	AStarNode nodeD("D");
-	AStarNode nodeE("E");
-	AStarNode nodeF("F");
-	AStarNode nodeG("G");
-
-	AStarNode defaultNode("Default");
-
-	nodeS.setPosition(glm::vec3(0.0, 0.0, 0.0));
-	nodeA.setPosition(glm::vec3(3.0, 0.0, 0.0));
-	nodeB.setPosition(glm::vec3(5.0, 0.0, 4.0));
-	nodeC.setPosition(glm::vec3(9.0, 0.0, 6.0));
-	nodeD.setPosition(glm::vec3(0.0, 0.0, 4.0));
-	nodeE.setPosition(glm::vec3(0.0, 0.0, 6.0));
-	nodeF.setPosition(glm::vec3(4.0, 0.0, 6.0));
-	nodeG.setPosition(glm::vec3(7.0, 0.0, 6.0));
-
-	nodeS.setDistanceToGoal(11.0);
-	nodeA.setDistanceToGoal(10.4);
-	nodeB.setDistanceToGoal(6.7);
-	nodeC.setDistanceToGoal(4.0);
-	nodeD.setDistanceToGoal(8.9);
-	nodeE.setDistanceToGoal(6.9);
-	nodeF.setDistanceToGoal(3.0);
-	nodeG.setDistanceToGoal(0.0);
-
-	nodeS.setVisitor(&defaultNode);
-	nodeA.setVisitor(&defaultNode);
-	nodeB.setVisitor(&defaultNode);
-	nodeC.setVisitor(&defaultNode);
-	nodeD.setVisitor(&defaultNode);
-	nodeE.setVisitor(&defaultNode);
-	nodeF.setVisitor(&defaultNode);
-	nodeG.setVisitor(&defaultNode);
-
-	Path<AStarNode> pathSA(3, &nodeS, &nodeA);
-	Path<AStarNode> pathSD(4, &nodeS, &nodeD);
-	nodeS.addPath(&pathSA);
-	nodeS.addPath(&pathSD);
-
-	Path<AStarNode> pathAS(3, &nodeA, &nodeS);
-	Path<AStarNode> pathAB(4, &nodeA, &nodeB);
-	Path<AStarNode> pathAD(5, &nodeA, &nodeD);
-	nodeA.addPath(&pathAS);
-	nodeA.addPath(&pathAB);
-	nodeA.addPath(&pathAD);
-
-	Path<AStarNode> pathBA(4, &nodeB, &nodeA);
-	Path<AStarNode> pathBC(4, &nodeB, &nodeC);
-	Path<AStarNode> pathBE(5, &nodeB, &nodeE);
-	nodeB.addPath(&pathBA);
-	nodeB.addPath(&pathBC);
-	nodeB.addPath(&pathBE);
-
-	Path<AStarNode> pathCB(4, &nodeC, &nodeB);
-	nodeC.addPath(&pathCB);
-
-	Path<AStarNode> pathDS(4, &nodeD, &nodeS);
-	Path<AStarNode> pathDA(5, &nodeD, &nodeA);
-	Path<AStarNode> pathDE(2, &nodeD, &nodeE);
-	nodeD.addPath(&pathDS);
-	nodeD.addPath(&pathDA);
-	nodeD.addPath(&pathDE);
-
-	Path<AStarNode> pathED(2, &nodeE, &nodeD);
-	Path<AStarNode> pathEB(5, &nodeE, &nodeB);
-	Path<AStarNode> pathEF(4, &nodeE, &nodeF);
-	nodeE.addPath(&pathED);
-	nodeE.addPath(&pathEB);
-	nodeE.addPath(&pathEF);
-
-	Path<AStarNode> pathFE(4, &nodeF, &nodeE);
-	Path<AStarNode> pathFG(3, &nodeF, &nodeG);
-	nodeF.addPath(&pathFE);
-	nodeF.addPath(&pathFG);
-
-
-	Path<AStarNode> pathGF(3, &nodeG, &nodeF);
-	nodeG.addPath(&pathGF);
-
-	testGraph.addGraphNode(&nodeS);
-	testGraph.addGraphNode(&nodeA);
-	testGraph.addGraphNode(&nodeB);
-	testGraph.addGraphNode(&nodeC);
-	testGraph.addGraphNode(&nodeD);
-	testGraph.addGraphNode(&nodeE);
-	testGraph.addGraphNode(&nodeF);
-	testGraph.addGraphNode(&nodeG);
-
-	/*AStarAlgorithm pathfinding("pathfinding");
-	testGraph.setAlgorithm(&pathfinding);
-	testGraph.getAlgorithm()->startAlgorithm(&nodeS, &nodeG);
-*/
-	//Now we have an Object represented by its currentPos on the field
-	//The Object gets the position of the Spawnpoint S and starts to look for a new location
-	//The Object also saves the last visited AStarNode
-	glm::vec3 currentPos = nodeS.getPosition();
-//	std::cout << "CurrentPos_Start" << currentPos.x << " " << currentPos.y << " " << currentPos.z << std::endl;
-	AStarNode* lastVisited = &nodeS;
-
-	//We have a Listener which recognize changes on the Path on the field
-	//For demonstration, no changes will happening 
-	bool pathChanged = false;
-//	std::cout << nodeG.getPosition().x << " " << nodeG.getPosition().y << " " << nodeG.getPosition().z << std::endl;
-
-	while (currentPos != nodeG.getPosition())
-	{
-		//std::cout << "CONTROLL CHECK 1" << std::endl;
-		AStarNode* nextPosition = AStarAlgorithmReturn(lastVisited, &nodeG);
-		std::cout << "CONTROLL CHECK NEXT POSITION : " << nextPosition->getName() << std::endl;
-		//We determine the difference between the currentPos of the Object and the Position of the next AStarNode
-		glm::vec3 differenceTMP = nextPosition->getPosition() - currentPos;
-		//As long as the Object did not have reached the nextPosition-Node, we want to let it go to the position in steps
-		while (currentPos != nextPosition->getPosition())
-		{
-
-			if (differenceTMP.x != 0)
-				currentPos.x += 0.5;
-			if (differenceTMP.y != 0)
-				currentPos.y += 0.5;
-			if (differenceTMP.z != 0){
-				currentPos.z += 0.5;
-				std::cout << "!!!!! CURRENT POS Z POSITION: " << currentPos.z << "!!!!!!!!" << std::endl;
-			}
-
-		}
-		//when he reached the nextPosition-Node, we change its lastVisited to this node an starting the search again
-		lastVisited = nextPosition;
-	}
-	std::cout << "THE AI-UNIT ARRIVED AT IT DESTINATION! " << std::endl;
-	
-	
-	
-	while (!glfwWindowShouldClose(testWindow.getWindow()))
-	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		glfwSwapBuffers(testWindow.getWindow());
-		glfwPollEvents();
-	}
-
-	glfwDestroyWindow(testWindow.getWindow());
-	glfwTerminate();
-
-	return 0;
 }
