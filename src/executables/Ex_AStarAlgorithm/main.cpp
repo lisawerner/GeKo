@@ -5,6 +5,7 @@
 #include <GeKo_Graphics/ShaderInclude.h>
 #include <GeKo_Graphics/ScenegraphInclude.h>
 #include <GeKo_Graphics/AIInclude.h>
+#include <GeKo_Gameplay/Player/GekoAI.h>
 #include <list>
 #include <queue>
 #include <stack>
@@ -222,6 +223,53 @@ int main()
 
 	Window testWindow(50, 50, 800, 600, "testWindow");
 	glfwMakeContextCurrent(testWindow.getWindow());
+	//Set Camera to another position
+	cam.setPosition(glm::vec4(0.0, 0.0, 5.0, 1.0));
+	cam.setName("TrackballCam");
+	cam.setKeySpeed(2.0);
+	cam.setNearFar(0.0001, 100);
+	//Callback for Camera and Player
+	glfwSetKeyCallback(testWindow.getWindow(), key_callback);
+//	glfwSetCursorPosCallback(testWindow.getWindow(), mouseMoveCallback);
+
+	glewInit();
+
+	//our shader
+	VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/TextureShader3D/TextureShader3D.vert")));
+	FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/TextureShader3D/TextureShader3D.frag")));
+	ShaderProgram shader(vs, fs);
+
+	VertexShader vsSkybox(loadShaderSource(SHADERS_PATH + std::string("/SkyboxShader/SkyboxShader.vert")));
+	FragmentShader fsSkybox(loadShaderSource(SHADERS_PATH + std::string("/SkyboxShader/SkyboxShader.frag")));
+	ShaderProgram shaderSkybox(vsSkybox, fsSkybox);
+
+	//our renderer
+	OpenGL3Context context;
+	Renderer renderer(context);
+
+	//our object
+	Teapot tea;
+	//our textures
+	Texture texCV((char*)RESOURCES_PATH "/cv_logo.bmp");
+
+	//Scene creation 
+	Level testLevel("testLevel");
+	Scene testScene("testScene");
+	testLevel.addScene(testScene);
+	testLevel.changeScene("testScene");
+
+	//Add Camera to scenegraph
+	testScene.getScenegraph()->addCamera(&cam);
+	testScene.getScenegraph()->getCamera("TrackballCam");
+	testScene.getScenegraph()->setActiveCamera("TrackballCam");
+
+	//Set all InputMaps and set one InputMap active
+	iH.setAllInputMaps(*(testScene.getScenegraph()->getActiveCamera()));
+	iH.changeActiveInputMap("Trackball");
+	//Create Nodes with geometry and texture
+	Node testNode("testNode");
+	testNode.addGeometry(&tea);
+	testNode.addTexture(&texCV);
 
 	std::cout << "THE GRAPH WILL BE INITIALIZED!" << std::endl;
 	Scene kiScene("ki");
@@ -241,13 +289,13 @@ int main()
 	AStarNode defaultNode("Default");
 
 	nodeS.setPosition(glm::vec3(0.0, 0.0, 0.0));
-	nodeA.setPosition(glm::vec3(3.0, 0.0, 0.0));
-	nodeB.setPosition(glm::vec3(5.0, 0.0, 4.0));
-	nodeC.setPosition(glm::vec3(9.0, 0.0, 6.0));
-	nodeD.setPosition(glm::vec3(0.0, 0.0, 4.0));
-	nodeE.setPosition(glm::vec3(0.0, 0.0, 6.0));
-	nodeF.setPosition(glm::vec3(4.0, 0.0, 6.0));
-	nodeG.setPosition(glm::vec3(7.0, 0.0, 6.0));
+	nodeA.setPosition(glm::vec3(-1.0, 0.0, -1.0));
+	nodeB.setPosition(glm::vec3(-2.0, 0.0, -2.0));
+	nodeC.setPosition(glm::vec3(-3.0, 0.0, -3.0));
+	nodeD.setPosition(glm::vec3(-4.0, 0.0, -4.0));
+	nodeE.setPosition(glm::vec3(-5.0, 0.0, -5.0));
+	nodeF.setPosition(glm::vec3(-6.0, 0.0, -6.0));
+	nodeG.setPosition(glm::vec3(-7.0, 0.0, -7.0));
 
 	nodeS.setDistanceToGoal(11.0);
 	nodeA.setDistanceToGoal(10.4);
@@ -321,53 +369,109 @@ int main()
 	testGraph.addGraphNode(&nodeF);
 	testGraph.addGraphNode(&nodeG);
 
-	/*AStarAlgorithm pathfinding("pathfinding");
-	testGraph.setAlgorithm(&pathfinding);
-	testGraph.getAlgorithm()->startAlgorithm(&nodeS, &nodeG);
-*/
+	AStarAlgorithm pathfinding("pathfinding");
+//	testGraph.setAlgorithm(&pathfinding);
+//	testGraph.getAlgorithm()->startAlgorithm(&nodeS, &nodeG);
+
+
+
 	//Now we have an Object represented by its currentPos on the field
 	//The Object gets the position of the Spawnpoint S and starts to look for a new location
 	//The Object also saves the last visited AStarNode
-	glm::vec3 currentPos = nodeS.getPosition();
-//	std::cout << "CurrentPos_Start" << currentPos.x << " " << currentPos.y << " " << currentPos.z << std::endl;
-	AStarNode* lastVisited = &nodeS;
 
-	//We have a Listener which recognize changes on the Path on the field
-	//For demonstration, no changes will happening 
-	bool pathChanged = false;
-//	std::cout << nodeG.getPosition().x << " " << nodeG.getPosition().y << " " << nodeG.getPosition().z << std::endl;
-
-	while (currentPos != nodeG.getPosition())
-	{
-		//std::cout << "CONTROLL CHECK 1" << std::endl;
-		AStarNode* nextPosition = AStarAlgorithmReturn(lastVisited, &nodeG);
-		std::cout << "CONTROLL CHECK NEXT POSITION : " << nextPosition->getName() << std::endl;
-		//We determine the difference between the currentPos of the Object and the Position of the next AStarNode
-		glm::vec3 differenceTMP = nextPosition->getPosition() - currentPos;
-		//As long as the Object did not have reached the nextPosition-Node, we want to let it go to the position in steps
-		while (currentPos != nextPosition->getPosition())
-		{
-
-			if (differenceTMP.x != 0)
-				currentPos.x += 0.5;
-			if (differenceTMP.y != 0)
-				currentPos.y += 0.5;
-			if (differenceTMP.z != 0){
-				currentPos.z += 0.5;
-				std::cout << "!!!!! CURRENT POS Z POSITION: " << currentPos.z << "!!!!!!!!" << std::endl;
-			}
-
-		}
-		//when he reached the nextPosition-Node, we change its lastVisited to this node an starting the search again
-		lastVisited = nextPosition;
-	}
-	std::cout << "THE AI-UNIT ARRIVED AT IT DESTINATION! " << std::endl;
+//	glm::vec3 currentPos = nodeS.getPosition();
+////	std::cout << "CurrentPos_Start" << currentPos.x << " " << currentPos.y << " " << currentPos.z << std::endl;
+//	AStarNode* lastVisited = &nodeS;
+//
+//	//We have a Listener which recognize changes on the Path on the field
+//	//For demonstration, no changes will happening 
+//	bool pathChanged = false;
+////	std::cout << nodeG.getPosition().x << " " << nodeG.getPosition().y << " " << nodeG.getPosition().z << std::endl;
+//
+//	while (currentPos != nodeG.getPosition())
+//	{
+//		//std::cout << "CONTROLL CHECK 1" << std::endl;
+//		AStarNode* nextPosition = AStarAlgorithmReturn(lastVisited, &nodeG);
+//		std::cout << "CONTROLL CHECK NEXT POSITION : " << nextPosition->getName() << std::endl;
+//		//We determine the difference between the currentPos of the Object and the Position of the next AStarNode
+//		glm::vec3 differenceTMP = nextPosition->getPosition() - currentPos;
+//		//As long as the Object did not have reached the nextPosition-Node, we want to let it go to the position in steps
+//		while (currentPos != nextPosition->getPosition())
+//		{
+//
+//			if (differenceTMP.x != 0)
+//				currentPos.x += 0.5;
+//			if (differenceTMP.y != 0)
+//				currentPos.y += 0.5;
+//			if (differenceTMP.z != 0){
+//				currentPos.z += 0.5;
+//				std::cout << "!!!!! CURRENT POS Z POSITION: " << currentPos.z << "!!!!!!!!" << std::endl;
+//			}
+//
+//		}
+//		//when he reached the nextPosition-Node, we change its lastVisited to this node an starting the search again
+//		lastVisited = nextPosition;
+//	}
+//	std::cout << "THE AI-UNIT ARRIVED AT IT DESTINATION! " << std::endl;
 	
+	//AI Test with a basic class for movement and geometry!
+
 	
-	
+	//GekoAI gekoAI("gekoAI", glm::vec3(nodeS.getPosition()));
+	//testNode.setModelMatrix(glm::translate(testNode.getModelMatrix(), gekoAI.getCurrentPosition()));
+	////testNode.setModelMatrix(glm::translate(testNode.getModelMatrix(), gekoAI.getCurrentPosition() + glm::vec3(3.0, 0.0, 0.0)));
+
+	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&testNode);
+	//gekoAI.setNode(&testNode);
+
+	//AStarNode* lastVisited = &nodeS;
+
+	//while (gekoAI.getCurrentPosition().x < nodeG.getPosition().x)
+	//{
+
+	//	AStarNode* nextPosition = pathfinding.startAlgorithm(lastVisited, &nodeG);
+	//	std::cout << nextPosition->getName() << std::endl;
+	//	glm::vec3 differenceTMP = nextPosition->getPosition() - gekoAI.getCurrentPosition();
+
+	//	while (gekoAI.getCurrentPosition().x < nextPosition->getPosition().x)
+	//	{
+	//		if (differenceTMP.x != 0){
+	//			gekoAI.changePosition(gekoAI.getCurrentPosition() + glm::vec3(0.1, 0.0, 0.0));
+	//			testNode.setModelMatrix(glm::translate(glm::mat4(1), gekoAI.getCurrentPosition()));
+	//		}
+	//	}
+	//	lastVisited = nextPosition;
+	//}
+	//std::cout << "THE AI-UNIT ARRIVED AT IT DESTINATION! " << std::endl;
+
+
+	GekoAI gekoAI("gekoAI", glm::vec3(nodeS.getPosition()));
+	/*testNode.setModelMatrix(glm::translate(testNode.getModelMatrix(), gekoAI.getCurrentPosition()));*/
+	//testNode.setModelMatrix(glm::translate(testNode.getModelMatrix(), gekoAI.getCurrentPosition() + glm::vec3(3.0, 0.0, 0.0)));
+
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&testNode);
+	gekoAI.setNode(&testNode);
+
+	gekoAI.setStartAndEndNode(&nodeS, &nodeG);
+
+	float lastTime = glfwGetTime();
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		float currentTime = glfwGetTime();
+		float deltaTime = currentTime - lastTime;
+		lastTime = currentTime;
+
+		gekoAI.update(deltaTime);
+		//Render the Player
+		glEnable(GL_DEPTH_TEST);
+
+		shader.bind();
+		shader.sendMat4("viewMatrix", cam.getViewMatrix());
+		shader.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+
+		testScene.render(shader);
+		shader.unbind();
 
 		glfwSwapBuffers(testWindow.getWindow());
 		glfwPollEvents();
