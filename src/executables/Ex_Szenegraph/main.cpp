@@ -101,7 +101,6 @@ int main()
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&testNode);
 	testNode.addChildrenNode(&testNodeChild);
 
-
 	//Renderloop
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
