@@ -1,43 +1,87 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <glm/ext.hpp>
+#include <GeKo_Gameplay/AI_Pathfinding/Path.h>
 
-class Path;
+/** A GraphNode-class provides the possibility to create waypoints, which can be used by AI-Units and Pathfinding algorithms.
+Every Node has a Name and knows its distance to a goal-Waypoint. It knows, which paths are connected with it and will recognize when a AI-Unit passes over it.
+Over all it has a position on the playground.*/
+template<class T>
 
 class GraphNode
 {
 
 public: 
-	GraphNode(std::string name);
-	~GraphNode();
+	///Every GraphNode needs a name
+	/**/
+	GraphNode(std::string name)
+	{
+		m_name = name;
+	}
+	~GraphNode(){}
 	
-	void addPath(Path* path);
-	void setDistanceToGoal(float distance);
-	float getDistanceToGoal();
+	///Adds a Path to the m_paths vector-list
+	/**/
+	void addPath(Path<T>* path)
+	{
+		m_paths.push_back(path);
+	}
 	
-	std::vector<Path*>* getPaths();
-	std::string getName();
+	
+	///Returns all the Paths of m_paths list
+	/**/
+	std::vector<Path<T>*>* getPaths()
+	{
+		return &m_paths;
+	}
 
-	float getDistanceTravelled();
-	void setDistanceTravelled(float distance);
+	///Returns the Name of the Node
+	/**/
+	std::string getName()
+	{
+		return m_name;
+	}
 
-	void setVisitor(GraphNode* visitor);
-	GraphNode* getVisitor();
+	///Sets m_name to name
+	/**/
+	void setName(std::string name)
+	{
+		m_name = name;
+	}
 
-	void setName(std::string name);
-	void setPathList(std::vector<Path*> paths);
+	///Sets m_paths to paths
+	/**/
+	void setPathList(std::vector<Path<T>*> paths)
+	{
+		m_paths = paths;
+	}
 
-	void setTemporary(float temp);
-	float getTemporary();
+	///Sets m_position to position
+	/**/
+	void setPosition(glm::vec3 position)
+	{
+		posX = position.x;
+		posY = position.y;
+		posZ = position.z;
+
+		m_position = position;
+	}
+
+	///Returns the position on the playground
+	/**/
+	glm::vec3 getPosition()
+	{
+		return m_position;
+	}
 	
 protected:
-	std::vector<Path*> m_paths;
-	float m_distanceToGoal;
+	std::vector<Path<T>*> m_paths;
 	std::string m_name;
 
-	float m_distanceTravelled;
-	float m_temporaryTravelled;
-
-	GraphNode* m_wasVisitedBy;
+	glm::vec3 m_position;
+	float posX;
+	float posY;
+	float posZ;
 	
 };

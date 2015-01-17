@@ -17,8 +17,8 @@ Playerview::Playerview(std::string name){
 	m_oldX = m_width / 2;
 	m_oldY = m_height / 2;
 
-	m_mouseSpeed = 0.001f;
-	m_keySpeed = 0.01f;
+	m_mouseSpeed = 0.1f;
+	m_keySpeed = 2.0f;
 	m_sensitivity = 0.01f;
 }
 

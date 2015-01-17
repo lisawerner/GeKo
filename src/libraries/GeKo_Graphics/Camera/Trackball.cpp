@@ -16,7 +16,7 @@ Trackball::Trackball(std::string name){
 	m_theta = glm::pi<float>() / 2.0f;
 	m_phi = -glm::pi<float>() / 2.0f;
 
-	m_keySpeed = 0.01;
+	m_keySpeed = 2.0;
 	m_sensitivity = 0.01;
 }
 

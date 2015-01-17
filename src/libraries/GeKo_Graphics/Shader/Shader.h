@@ -1,6 +1,3 @@
-#ifndef SHADER_H
-#define SHADER_H
-
 #pragma once
 //#include "GeKo_Graphics/Defs.h"
 #include <string>
@@ -20,9 +17,12 @@ class ConeLight;
 
 // Do I really need to do this? Better use something different than GLEW
 enum ShaderType{
-    VERTEX_SHADER = 0x8B31,
-    FRAGMENT_SHADER = 0x8B30,
-    GEOMETRY_SHADER = 0x8DD9,
+	VERTEX_SHADER = GL_VERTEX_SHADER,
+	FRAGMENT_SHADER = GL_FRAGMENT_SHADER,
+	GEOMETRY_SHADER = GL_GEOMETRY_SHADER,
+	TESS_CONTROL_SHADER = GL_TESS_CONTROL_SHADER,
+	TESS_EVALUATION_SHADER = GL_TESS_EVALUATION_SHADER,
+	COMPUTE_SHADER = GL_COMPUTE_SHADER,
 };
 /// Loads the shader source from a location
 std::string loadShaderSource(std::string path);
@@ -43,9 +43,15 @@ struct FragmentShader : public BaseShader{
 struct GeometryShader : public BaseShader{
     GeometryShader(const std::string &shaderSource) : BaseShader(shaderSource, GEOMETRY_SHADER){}
 };
-/**
-TODO: Add additional shader
-*/
+struct TesselationControlShader : public BaseShader{	//requires OpenGL Version 4.0
+	TesselationControlShader(const std::string &shaderSource) : BaseShader(shaderSource, TESS_CONTROL_SHADER){}
+};
+struct TesselationEvaluationShader : public BaseShader{	//requires OpenGL Version 4.0
+	TesselationEvaluationShader(const std::string &shaderSource) : BaseShader(shaderSource, TESS_EVALUATION_SHADER){}
+};
+struct ComputeShader : public BaseShader{	//requires OpenGL Version 4.3
+	ComputeShader(const std::string &shaderSource) : BaseShader(shaderSource, COMPUTE_SHADER){}
+};
 
 template<typename ... Args>
 void attachShaders(GLuint handle, GLuint shaderHandle, Args ...args);
@@ -56,6 +62,7 @@ class ShaderProgram{
 public:
     GLuint handle;
     ShaderProgram(const VertexShader &vs, const FragmentShader &fs);
+	ShaderProgram(const ComputeShader &cs);
     void bind() const;
     void unbind() const;
     GLuint getLocation(std::string uniform);
@@ -74,5 +81,3 @@ public:
 	//add sendLight general
 
 };
-
-#endif

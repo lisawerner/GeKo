@@ -14,7 +14,7 @@ Pilotview::Pilotview(std::string name)
 	m_viewMatrix = glm::lookAt(glm::vec3(m_position), glm::vec3(m_position) + glm::vec3(m_direction), glm::vec3(m_up));
 	m_projectionMatrix = glm::perspective(m_fov, m_width / (float)m_height, m_near, m_far);
 
-	m_keySpeed = 0.01f;
+	m_keySpeed = 2.0f;
 	m_sensitivity = 0.01f;
 }
 
