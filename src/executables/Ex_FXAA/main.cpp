@@ -144,9 +144,9 @@ int main()
 		shaderSFQ.bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		if (USE_FXAA)
-			shaderSFQ.sendSampler2D("texture", fboFXAA.getColorTexture(0));
+			shaderSFQ.sendSampler2D("fboTexture", fboFXAA.getColorTexture(0));
 		else
-			shaderSFQ.sendSampler2D("texture", fboGBuffer.getColorTexture(2));
+			shaderSFQ.sendSampler2D("fboTexture", fboGBuffer.getColorTexture(2));
 
 		screenFillingQuad.renderGeometry();
 		shaderSFQ.unbind();
