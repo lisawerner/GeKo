@@ -1,7 +1,7 @@
 #version 330 core
 
 uniform int useTexture;
-uniform sampler2D texture;
+uniform sampler2D fboTexture;
 
 in vec4 passPosition;
 in vec3 passNormal;
@@ -18,6 +18,6 @@ void main(){
 
 	if (useTexture != 0)
 	{
-		colorOutput = vec4(texture(texture, passUV).rgb, 1.0f);
+		colorOutput = vec4(texture(fboTexture, passUV).rgb, 1.0f);
 	}
 }

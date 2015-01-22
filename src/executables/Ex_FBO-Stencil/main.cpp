@@ -105,7 +105,7 @@ int main()
 		//ScreenFillingQuad Render Pass
 		shaderSFQ.bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shaderSFQ.sendSampler2D("texture", fbo.getColorTexture(2));
+		shaderSFQ.sendSampler2D("fboTexture", fbo.getColorTexture(2));
 		rect.renderGeometry();
 		shaderSFQ.unbind();
 
