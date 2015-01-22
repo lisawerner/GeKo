@@ -52,7 +52,7 @@ GLFWwindow* Window::getWindow(){
 /*
 set the name of the window
 */
-void setName(const char* name)
+void Window::setName(const char* name)
 {
 	m_name = name;
 }
@@ -60,7 +60,7 @@ void setName(const char* name)
 /*
 get the name of the window
 */
-const char* getName()
+const char* Window::getName()
 {
 	return m_name;
 }
@@ -68,7 +68,7 @@ const char* getName()
 /*
 set the width of the window
 */
-void setWidth(int width)
+void Window::setWidth(int width)
 {
 	m_width = width;
 }
@@ -76,7 +76,7 @@ void setWidth(int width)
 /*
 get the width of the window
 */
-int getWidth()
+int Window::getWidth()
 {
 	return m_width;
 }
@@ -84,7 +84,7 @@ int getWidth()
 /*
 set the height of the window
 */
-void setHeight(int height)
+void Window::setHeight(int height)
 {
 	m_height = height;
 }
@@ -92,7 +92,7 @@ void setHeight(int height)
 /*
 get the height of the window
 */
-int getHeight()
+int Window::getHeight()
 {
 	return m_height;
 }
@@ -100,7 +100,7 @@ int getHeight()
 /*
 set the xpos of the window
 */
-void setXpos(int xpos)
+void Window::setXpos(int xpos)
 {
 	m_xpos = xpos;
 }
@@ -108,7 +108,7 @@ void setXpos(int xpos)
 /*
 get the xpos of the window
 */
-int getXpos()
+int Window::getXpos()
 {
 	return m_xpos;
 }
@@ -116,7 +116,7 @@ int getXpos()
 /*
 set the xpos of the window
 */
-void setYpos(int ypos)
+void Window::setYpos(int ypos)
 {
 	m_ypos = ypos;
 }
@@ -124,7 +124,7 @@ void setYpos(int ypos)
 /*
 get the ypos of the window
 */
-int getYpos()
+int Window::getYpos()
 {
 	return m_ypos;
 } 
