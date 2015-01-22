@@ -27,7 +27,7 @@ int main()
 {
 	glfwInit();
 
-	Window testWindow(50, 50, WINDOW_WIDTH, WINDOW_HEIGHT, "Reflections");
+	Window testWindow(50, 50, WINDOW_WIDTH, WINDOW_HEIGHT, "Graphic Showcase");
 	glfwMakeContextCurrent(testWindow.getWindow());
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	
@@ -46,34 +46,15 @@ int main()
 
 	glewInit();
 
-	//our shader
-	VertexShader vsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.vert")));
-	FragmentShader fsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.frag")));
-	ShaderProgram shaderGBuffer(vsGBuffer, fsGBuffer);
-
-	VertexShader vsRLR(loadShaderSource(SHADERS_PATH + std::string("/RealtimeLocalReflections/RealtimeLocalReflections.vert")));
-	FragmentShader fsRLR(loadShaderSource(SHADERS_PATH + std::string("/RealtimeLocalReflections/RealtimeLocalReflections.frag")));
-	ShaderProgram shaderRLR(vsRLR, fsRLR);
-
-	VertexShader vsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.vert")));
-	FragmentShader fsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.frag")));
-	ShaderProgram shaderSFQ(vsSfq, fsSfq);
-
 	//our renderer
 	OpenGL3Context context;
 	Renderer renderer(context);
 
-	FBO fboGBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, 3, true, false);
-	FBO fboSSR(WINDOW_WIDTH, WINDOW_HEIGHT, 3, false, false);
-
-	//our object
+  //our object
 	Cube cube;
 	Teapot teapot;
-	teapot.loadBufferData();
-
+	
 	Rect plane;
-	Rect screenFillingQuad;
-	screenFillingQuad.loadBufferData();
 
 	//our textures
 	Texture bricks((char*)RESOURCES_PATH "/brick.bmp");
@@ -132,6 +113,9 @@ int main()
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube2);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&teaNode);
 
+  renderer.useReflections(true);
+  renderer.useAntiAliasing(true);
+	
 	double startTime = glfwGetTime();
 	//Renderloop
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
@@ -139,52 +123,9 @@ int main()
 		// You have to compute the delta time
 		cam.setSensitivity(glfwGetTime() - startTime);
 		
-		startTime = glfwGetTime();
+    startTime = glfwGetTime();
 
-		fboGBuffer.bind();
-		glClearColor(0, 0, 0, 0);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shaderGBuffer.bind();
-		shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
-		shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
-		shaderGBuffer.sendInt("useTexture", 1);
-		testScene.render(shaderGBuffer);
-		shaderGBuffer.unbind();
-		fboGBuffer.unbind();
-
-		fboSSR.bind();
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		shaderRLR.bind();
-
-		shaderRLR.sendSampler2D("positionTexture", fboGBuffer.getColorTexture(0), 0);
-		shaderRLR.sendSampler2D("normalTexture", fboGBuffer.getColorTexture(1), 1);
-		shaderRLR.sendSampler2D("colorTexture", fboGBuffer.getColorTexture(2), 2);
-		shaderRLR.sendSampler2D("depthBuffer", fboGBuffer.getDepthTexture(), 3);
-
-		shaderRLR.sendMat4("projectionMatrix", cam.getProjectionMatrix());
-		
-		shaderRLR.sendInt("screenWidth", WINDOW_WIDTH);
-		shaderRLR.sendInt("screenHeight", WINDOW_HEIGHT);
-	
-		shaderRLR.sendFloat("zNear", cam.getNear());
-		shaderRLR.sendFloat("zFar", cam.getFar());
-
-		screenFillingQuad.renderGeometry();
-		
-		shaderRLR.unbind();
-		fboSSR.unbind();
-				
-		//ScreenFillingQuad Render Pass
-		shaderSFQ.bind();
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shaderSFQ.sendSampler2D("fboTexture", fboSSR.getColorTexture(2));
-		screenFillingQuad.renderGeometry();
-		shaderSFQ.unbind();
-		
-		
-		glfwSwapBuffers(testWindow.getWindow());
-		glfwPollEvents();
+		renderer.renderScene(testScene,testWindow);
 	}
 
 	glfwDestroyWindow(testWindow.getWindow());

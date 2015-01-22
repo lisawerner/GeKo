@@ -70,7 +70,7 @@ int main()
 	Renderer renderer(context);
 
 	FBO fboGBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, 3, true, false);
-	FBO fboFXAA(WINDOW_WIDTH, WINDOW_HEIGHT, 1, false, false);
+	FBO fboFXAA(WINDOW_WIDTH, WINDOW_HEIGHT, 3, false, false);
 
 	//our object
 	Teapot teapot;
@@ -113,7 +113,7 @@ int main()
 		// You have to compute the delta time
 		cam.setSensitivity(glfwGetTime() - startTime);
 		
-		startTime = cam.getSensitivity();
+    startTime = glfwGetTime();
 
 		fboGBuffer.bind();
 		glClearColor(0, 0, 0, 0);
@@ -144,7 +144,7 @@ int main()
 		shaderSFQ.bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		if (USE_FXAA)
-			shaderSFQ.sendSampler2D("fboTexture", fboFXAA.getColorTexture(0));
+			shaderSFQ.sendSampler2D("fboTexture", fboFXAA.getColorTexture(2));
 		else
 			shaderSFQ.sendSampler2D("fboTexture", fboGBuffer.getColorTexture(2));
 

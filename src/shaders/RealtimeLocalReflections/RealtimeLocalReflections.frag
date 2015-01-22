@@ -15,7 +15,7 @@ uniform int screenHeight;
 uniform float zNear;
 uniform float zFar;
 
-layout(location = 0) out vec4 colorOutput;
+layout(location = 2) out vec4 colorOutput;
 
 float normalizeDepth(float depth)
 {
