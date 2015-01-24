@@ -215,8 +215,15 @@ void Node::setIdentityMatrix_ModelMatrix()
 
 void Node::render()
 {
-	m_geometry->renderGeometry();
+  if (hasGeometry())
+  {
+    m_geometry->renderGeometry();
+  }
 
+  for (int i = 0; i < m_childrenSet.size(); i++)
+  {
+    m_childrenSet.at(i)->render();
+  }
 }
 
 void Node::render(ShaderProgram &shader)

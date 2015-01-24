@@ -7,7 +7,7 @@ uniform sampler2D colorTexture;
 uniform int fboWidth;
 uniform int fboHeight;
 
-layout(location = 0) out vec4 colorOutput;
+layout(location = 2) out vec4 colorOutput;
 
 void main()
 {
