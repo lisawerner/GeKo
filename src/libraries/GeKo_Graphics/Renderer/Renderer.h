@@ -69,8 +69,8 @@ private:
 	FBO *m_ping;
 	FBO *m_pong;
 
-	glm::mat4 *m_currentProjectionMatrix;
-	glm::mat4 *m_currentViewMatrix;
+	glm::mat4 m_currentProjectionMatrix;
+	glm::mat4 m_currentViewMatrix;
 	
 	ShaderProgram *m_shaderGBuffer;
 	ShaderProgram *m_shaderRLR;

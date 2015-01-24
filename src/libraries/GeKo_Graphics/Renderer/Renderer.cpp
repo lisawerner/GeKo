@@ -87,11 +87,11 @@ void Renderer::renderScene(Scene& scene, Window& window)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	m_shaderGBuffer->bind();
 
-	m_currentViewMatrix = &scene.getScenegraph()->getActiveCamera()->getViewMatrix();
-	m_currentProjectionMatrix = &scene.getScenegraph()->getActiveCamera()->getProjectionMatrix();
+	m_currentViewMatrix = scene.getScenegraph()->getActiveCamera()->getViewMatrix();
+	m_currentProjectionMatrix = scene.getScenegraph()->getActiveCamera()->getProjectionMatrix();
 
-	m_shaderGBuffer->sendMat4("viewMatrix", *m_currentViewMatrix);
-	m_shaderGBuffer->sendMat4("projectionMatrix", *m_currentProjectionMatrix);
+	m_shaderGBuffer->sendMat4("viewMatrix", m_currentViewMatrix);
+	m_shaderGBuffer->sendMat4("projectionMatrix", m_currentProjectionMatrix);
 	m_shaderGBuffer->sendInt("useTexture", 1);
 	scene.render(*m_shaderGBuffer);
 	m_shaderGBuffer->unbind();
@@ -182,7 +182,7 @@ void Renderer::renderReflections(int windowWidth, int windowHeight, float camNea
   m_shaderRLR->sendSampler2D("colorTexture", getLastFBO()->getColorTexture(2), 2);
   m_shaderRLR->sendSampler2D("depthBuffer", getLastFBO()->getDepthTexture(), 3);
 
-  m_shaderRLR->sendMat4("projectionMatrix", *m_currentProjectionMatrix);
+  m_shaderRLR->sendMat4("projectionMatrix", m_currentProjectionMatrix);
 
   m_shaderRLR->sendInt("screenWidth", windowWidth);
   m_shaderRLR->sendInt("screenHeight", windowHeight);
