@@ -5,3 +5,4 @@
 #include <GeKo_Graphics/Object/Rect.h>
 #include <GeKo_Graphics/Object/Skybox.h>
 #include <GeKo_Graphics/Object/Plane.h>
+#include <GeKo_Graphics/Object/Sphere.h>
