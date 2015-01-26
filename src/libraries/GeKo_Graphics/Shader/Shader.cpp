@@ -88,6 +88,10 @@ void ShaderProgram::sendFloat(std::string uniform, float f) {
 	glUniform1f(getLocation(uniform), f);
 }
 
+void ShaderProgram::sendVec2(std::string uniform, glm::vec2 v) {
+	glUniform2f(getLocation(uniform), v.x, v.y);
+}
+
 void ShaderProgram::sendVec3(std::string uniform, glm::vec3 v) {
     glUniform3f(getLocation(uniform),v.x,v.y,v.z);
 }
