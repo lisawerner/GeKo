@@ -39,6 +39,20 @@ $ sudo apt-get install libglu1-mesa-dev
 Zwischendurch muss der sudo Befehl einmal mit dem Passwort bestätigt werden.
 Die benötigten Pakete wurden heruntergeladen und installiert.
 
+Weiterhin muss Assimp für Linux per Hand installiert und gebaut werden:
+
+$ git clone git://github.com/assimp/assimp.git assimp 
+
+$ sudo apt-get install libboost-dev 
+$ sudo apt-get install zlib1g-dev 
+
+$ cd assimp 
+$ cmake -G 'Unix Makefiles' 
+$ make 
+$ sudo make install 
+$ sudo ldconfig
+
+
 Hinweis: Sollen für die Dokumentation Graphen erstellt werden muss Graphviz vorher auf dem System installiert sein und die entsprechende Option in CMake ausgewählt werden.
 ($ sudo apt-get graphviz)
 
