@@ -34,22 +34,33 @@ Ordner gibt, die nicht mit dem GIT synchronisiert werden sollen müssen die ents
 
 Voraussetzung - zum compilen von GLFW werden unter Linux einige Standardpakete benötigt.
 Falls nicht vorhanden, öffne das terminal und gebe folgende Befehle ein:
+
+
 $ sudo apt-get install xorg-dev
+
 $ sudo apt-get install libglu1-mesa-dev
+
+
 Zwischendurch muss der sudo Befehl einmal mit dem Passwort bestätigt werden.
 Die benötigten Pakete wurden heruntergeladen und installiert.
 
 Weiterhin muss Assimp für Linux per Hand installiert und gebaut werden:
 
+
 $ git clone git://github.com/assimp/assimp.git assimp 
 
 $ sudo apt-get install libboost-dev 
+
 $ sudo apt-get install zlib1g-dev 
 
 $ cd assimp 
+
 $ cmake -G 'Unix Makefiles' 
+
 $ make 
+
 $ sudo make install 
+
 $ sudo ldconfig
 
 
