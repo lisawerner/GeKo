@@ -21,7 +21,7 @@ include(${CMAKE_MODULE_PATH}/getOpenAL.cmake)
 
 if("${CMAKE_SYSTEM}" MATCHES "Linux")
 	find_package(X11)
-	set(ALL_LIBRARIES ${ALL_LIBRARIES} ${X11_LIBRARIES} Xrandr Xxf86vm Xi pthread Xcursor Xinerama)
+	set(ALL_LIBRARIES ${ALL_LIBRARIES} ${X11_LIBRARIES} Xrandr Xxf86vm Xi pthread Xcursor Xinerama assimp)
 endif()
 
 

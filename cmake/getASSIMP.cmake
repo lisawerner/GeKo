@@ -44,16 +44,13 @@ ELSEIF(APPLE)
 
 ELSEIF("${CMAKE_SYSTEM}" MATCHES "Linux")
 	
-    #set(ASSIMP_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/assimp/src/assimp/include")
+  #set(ASSIMP_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/dependencies/assimp_linux/include")
+  #set(ASSIMP_LIB "${CMAKE_SOURCE_DIR}/dependencies/assimp/libMinGW/libassimp.a")
 
-    #FIND_PATH(ASSIMP_INCLUDE_PATH assimp/defs.h)
-    #FIND_LIBRARY(ASSIMP_LIBRARY
-    #        NAMES assimp
-    #        PATH_SUFFIXES dynamic)
-	#set(ASSIMP_LIB "${ASSIMP_LIBRARY}")
-
- 	set(ASSIMP_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/dependencies/assimp/include/")
-	set(ASSIMP_LIB "${CMAKE_SOURCE_DIR}/dependencies/assimp/libMinGW/libassimp.a")
+  FIND_PATH(ASSIMP_INCLUDE_PATH assimp/defs.h)
+  FIND_LIBRARY(ASSIMP_LIBRARY
+       NAMES assimp
+	)
 
 #ELSE()
 
