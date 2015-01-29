@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-include(${CMAKE_MODULE_PATH}/DefaultLibrary.cmake)
+include(${CMAKE_MODULE_PATH}/DefaultInclude.cmake)
 
 file(GLOB_RECURSE HEADER *.h)
 file(GLOB_RECURSE CPP *.cpp)
