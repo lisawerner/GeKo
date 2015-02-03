@@ -169,7 +169,7 @@ void Renderer::renderReflections(int windowWidth, int windowHeight, float camNea
 {
   if (!m_shaderRLR)
     init(windowWidth, windowHeight);
-
+  
   bindFBO();
   
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
