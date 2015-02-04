@@ -47,7 +47,7 @@ ELSEIF("${CMAKE_SYSTEM}" MATCHES "Linux")
   #set(ASSIMP_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/dependencies/assimp_linux/include")
   #set(ASSIMP_LIB "${CMAKE_SOURCE_DIR}/dependencies/assimp/libMinGW/libassimp.a")
 
-  FIND_PATH(ASSIMP_INCLUDE_PATH assimp/defs.h)
+  set(ASSIMP_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/dependencies/assimp/include/")
   FIND_LIBRARY(ASSIMP_LIBRARY
        NAMES assimp
 	)
