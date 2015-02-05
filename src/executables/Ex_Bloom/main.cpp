@@ -64,7 +64,7 @@ int main()
 	Renderer renderer(context);
 
 	FBO fboGBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, 3, true, false);
-	FBO fboBloom(WINDOW_WIDTH, WINDOW_HEIGHT, 1, false, false);
+	FBO fboBloom(WINDOW_WIDTH, WINDOW_HEIGHT, 3, false, false);
 
 	//our object
 	Cube cube;
@@ -169,7 +169,7 @@ int main()
 		//ScreenFillingQuad Render Pass
 		shaderSFQ.bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shaderSFQ.sendSampler2D("fboTexture", fboBloom.getColorTexture(0));
+		shaderSFQ.sendSampler2D("fboTexture", fboBloom.getColorTexture(2));
 		screenFillingQuad.renderGeometry();
 		shaderSFQ.unbind();
 		

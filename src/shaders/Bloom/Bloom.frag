@@ -4,7 +4,7 @@ in vec2 passUV;
 
 uniform sampler2D bgl_RenderedTexture;
 
-layout(location = 0) out vec4 colorOutput;
+layout(location = 2) out vec4 colorOutput;
 
 void main()
 {

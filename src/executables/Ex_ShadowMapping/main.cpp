@@ -182,10 +182,10 @@ int main()
 
 		//Shadow mapping
 		glm::mat4 lightPerspective, lightView, lightMVPBias;
-		//lightPerspective = cam_shadow.getProjectionMatrix();
-		lightPerspective = glm::perspective(slight.m_angle, (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 1.f, slight.m_radius);
-		//lightView = cam_shadow.getViewMatrix();
-		lightView = glm::lookAt(glm::vec3(slight.m_position), glm::vec3(0), glm::vec3(0, -1, 0));
+		lightPerspective = cam_shadow.getProjectionMatrix();
+		//lightPerspective = glm::perspective(slight.m_angle, (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 1.f, slight.m_radius);
+		lightView = cam_shadow.getViewMatrix();
+		//lightView = glm::lookAt(glm::vec3(slight.m_position), glm::vec3(0), glm::vec3(0, -1, 0));
 
 		glm::mat4 sm_lightViewport(
 			0.5, 0.0, 0.0, 0.0,
