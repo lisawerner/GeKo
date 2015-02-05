@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
+#include <GLFW/glfw3.h>
 
 /** Camera is a superclass of the specific camera classes*/
 
@@ -15,6 +16,14 @@ public:
 	Camera();
 	Camera(std::string name);
 	~Camera();
+
+	void update(GLFWwindow* window);
+
+	/// This method sets the FOV
+	void setFOV(float fov);
+
+	/// This method sets the lookAt-Vector
+	void setLookAt(glm::vec3 lookAt);
 
 	/// This method returns the m_viewMatrix
 	glm::mat4 getViewMatrix();

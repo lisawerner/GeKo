@@ -1,9 +1,13 @@
 #pragma once
+
 #include <GeKo_Graphics/Defs.h>
 #include <GeKo_Graphics/Buffer.h>
 #include <GeKo_Graphics/Shader/Shader.h>
 #include <GeKo_Graphics/Scenegraph/Scene.h>
 #include <GeKo_Graphics/Shader/FBO.h>
+#include <GeKo_Graphics/Scenegraph/Node.h>
+#include <glm/glm.hpp>
+
 
 /*
 Need Information
@@ -26,6 +30,7 @@ class FBO;
 class Scene;
 class Shader;
 class Window;
+class Node;
 
 class Renderer{
 public:
@@ -52,7 +57,9 @@ public:
   void renderScene(Scene& scene, Window& window);
 
   void useReflections(bool useReflections);
-  void useAntiAliasing(bool useAA);
+  void useAntiAliasing(bool useAntiAliasing);
+  void useDeferredShading(bool useDeferredShading, Node *lightRootNode, glm::fvec3 *lightColor = new glm::fvec3(1.0,1.0,1.0));
+  void useBloom(bool useBloom);
 
 private:
   void bindFBO();
@@ -61,11 +68,22 @@ private:
 
   void renderReflections(int windowWidth, int windowHeight, float camNear, float camFar);
   void renderAntiAliasing(int windowWidth, int windowHeight);
+  void renderDeferredShading(int windowWidth, int windowHeight);
+  void renderBloom(int windowWidth, int windowHeight);
    
   bool m_useReflections;
   bool m_useAntiAliasing;
+  bool m_useBloom;
+
+  bool m_useDeferredShading;
+  Node *m_dsLightRootNode;
+  glm::fvec3 *m_dsLightColor;
 
 	bool m_currentFBOIndex;
+
+  bool m_firstRender;
+
+  FBO *m_gBuffer;
 	FBO *m_ping;
 	FBO *m_pong;
 
@@ -76,6 +94,9 @@ private:
 	ShaderProgram *m_shaderRLR;
   ShaderProgram *m_shaderSFQ;
   ShaderProgram *m_shaderFXAA;
+  ShaderProgram *m_shaderDSLighting;
+  ShaderProgram *m_shaderDSCompositing;
+  ShaderProgram *m_shaderBloom;
 
   Rect m_sfq;
 };

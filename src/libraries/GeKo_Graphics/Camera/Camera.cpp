@@ -39,6 +39,22 @@ Camera::Camera(std::string name){
 Camera::~Camera(){
 }
 
+void Camera::update(GLFWwindow* window)
+{
+	m_viewMatrix = glm::lookAt(glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
+}
+
+void Camera::setFOV(float fov){
+	m_fov = fov;
+	m_projectionMatrix = glm::perspective(m_fov, (float)m_width / (float)m_height, m_near, m_far);
+}
+
+void Camera::setLookAt(glm::vec3 lookAt){
+	m_center = glm::vec4(lookAt, 1.0);
+	m_projectionMatrix = glm::perspective(m_fov, (float)m_width / (float)m_height, m_near, m_far);
+}
+
+
 glm::mat4 Camera::getViewMatrix(){
 	return m_viewMatrix;
 }
@@ -50,7 +66,7 @@ glm::mat4 Camera::getProjectionMatrix(){
 void Camera::setNearFar(float near, float far){
 	m_near = near;
 	m_far = far;
-	m_projectionMatrix = glm::perspective(m_fov, m_width / (float)m_height, m_near, m_far);
+	m_projectionMatrix = glm::perspective(m_fov, (float)m_width / (float)m_height, m_near, m_far);
 }
 
 float Camera::getNear(){

@@ -27,7 +27,7 @@ int main()
 {
 	glfwInit();
 
-	Window testWindow(50, 50, WINDOW_WIDTH, WINDOW_HEIGHT, "Graphic Showcase");
+	Window testWindow(50, 50, WINDOW_WIDTH, WINDOW_HEIGHT, "Blur");
 	glfwMakeContextCurrent(testWindow.getWindow());
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	
@@ -46,15 +46,34 @@ int main()
 
 	glewInit();
 
+	//our shader
+	VertexShader vsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.vert")));
+	FragmentShader fsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.frag")));
+	ShaderProgram shaderGBuffer(vsGBuffer, fsGBuffer);
+
+	VertexShader vsBlur(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.vert")));
+	FragmentShader fsBlur(loadShaderSource(SHADERS_PATH + std::string("/Blur/blur1D.frag")));
+	ShaderProgram shaderBlur(vsBlur, fsBlur);
+
+	VertexShader vsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.vert")));
+	FragmentShader fsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.frag")));
+	ShaderProgram shaderSFQ(vsSfq, fsSfq);
+
 	//our renderer
 	OpenGL3Context context;
 	Renderer renderer(context);
 
-  //our object
+	FBO fboGBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, 3, true, false);
+	FBO fboBlurX(WINDOW_WIDTH, WINDOW_HEIGHT, 1, false, false);
+	FBO fboBlurXY(WINDOW_WIDTH, WINDOW_HEIGHT, 1, false, false);
+
+	//our object
 	Cube cube;
 	Teapot teapot;
-	
+
 	Rect plane;
+	Rect screenFillingQuad;
+	screenFillingQuad.loadBufferData();
 
 	//our textures
 	Texture bricks((char*)RESOURCES_PATH "/brick.bmp");
@@ -113,25 +132,6 @@ int main()
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube2);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&teaNode);
 
-  Node lights = Node("Root");
-  Sphere lightSphere = Sphere();
-
-  for (int i = -2; i < 2; i++)
-    for (int j = -2; j < 2; j++)
-    {
-    Node *newLight = new Node(std::string("Node_" + std::to_string(i) + std::to_string(j)));
-    newLight->addGeometry(&lightSphere);
-    newLight->setModelMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(i*1.5, 1.0f, j*1.5)));
-    //newLight.setModelMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(0, 1, 1.0f)));
-    newLight->setModelMatrix(glm::scale(newLight->getModelMatrix(), glm::vec3(2.0, 2.0, 2.0)));
-    lights.addChildrenNode(newLight);
-    }
-
-  renderer.useReflections(true);
-  renderer.useAntiAliasing(true);
-  renderer.useBloom(true);
-  renderer.useDeferredShading(true,&lights,new glm::fvec3(1.0,1.0,1.0));
-	
 	double startTime = glfwGetTime();
 	//Renderloop
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
@@ -139,9 +139,53 @@ int main()
 		// You have to compute the delta time
 		cam.setSensitivity(glfwGetTime() - startTime);
 		
-    startTime = glfwGetTime();
+		startTime = glfwGetTime();
 
-		renderer.renderScene(testScene,testWindow);
+		fboGBuffer.bind();
+		glClearColor(0, 0, 0, 0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		shaderGBuffer.bind();
+		shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
+		shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+		shaderGBuffer.sendInt("useTexture", 1);
+		testScene.render(shaderGBuffer);
+		shaderGBuffer.unbind();
+		fboGBuffer.unbind();
+
+		
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		shaderBlur.bind();
+
+		fboBlurX.bind();
+		shaderBlur.sendSampler2D("colortexture", fboGBuffer.getColorTexture(2));
+		shaderBlur.sendFloat("yAxis", 0.0);
+		screenFillingQuad.renderGeometry();
+		//testScene.render(shaderBlur);
+		fboBlurX.unbind();
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		fboBlurXY.bind();
+
+		shaderBlur.sendSampler2D("colortexture", fboBlurX.getColorTexture(0));
+		shaderBlur.sendFloat("yAxis", 1.0);
+		screenFillingQuad.renderGeometry();
+		//testScene.render(shaderBlur);
+		fboBlurXY.unbind();
+
+		shaderBlur.unbind();
+				
+		//ScreenFillingQuad Render Pass
+		shaderSFQ.bind();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		shaderSFQ.sendSampler2D("fboTexture", fboBlurXY.getColorTexture(0));
+		screenFillingQuad.renderGeometry();
+		shaderSFQ.unbind();
+		
+		
+		glfwSwapBuffers(testWindow.getWindow());
+		glfwPollEvents();
 	}
 
 	glfwDestroyWindow(testWindow.getWindow());
