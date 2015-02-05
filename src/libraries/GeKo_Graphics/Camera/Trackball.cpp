@@ -11,7 +11,7 @@ Trackball::Trackball(std::string name){
 	m_radius = 10;
 
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
-	m_projectionMatrix = glm::perspective(m_fov, m_width / (float)m_height, m_near, m_far);
+	m_projectionMatrix = glm::perspective(m_fov, (float)m_width / (float)m_height, m_near, m_far);
 
 	m_theta = glm::pi<float>() / 2.0f;
 	m_phi = -glm::pi<float>() / 2.0f;
