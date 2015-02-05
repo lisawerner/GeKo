@@ -113,8 +113,24 @@ int main()
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube2);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&teaNode);
 
+  Node lights = Node("Root");
+  Sphere lightSphere = Sphere();
+
+  for (int i = -2; i < 2; i++)
+    for (int j = -2; j < 2; j++)
+    {
+    Node *newLight = new Node(std::string("Node_" + std::to_string(i) + std::to_string(j)));
+    newLight->addGeometry(&lightSphere);
+    newLight->setModelMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(i*1.5, 1.0f, j*1.5)));
+    //newLight.setModelMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(0, 1, 1.0f)));
+    newLight->setModelMatrix(glm::scale(newLight->getModelMatrix(), glm::vec3(2.0, 2.0, 2.0)));
+    lights.addChildrenNode(newLight);
+    }
+
   renderer.useReflections(true);
   renderer.useAntiAliasing(true);
+  renderer.useBloom(true);
+  renderer.useDeferredShading(true,&lights,new glm::fvec3(1.0,1.0,1.0));
 	
 	double startTime = glfwGetTime();
 	//Renderloop
