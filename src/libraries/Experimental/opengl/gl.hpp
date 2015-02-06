@@ -53,7 +53,7 @@ enum class BufferTarget{
 };
 
 namespace gl{
-static constexpr GLenum BUFFER_TARGET = GL_ARRAY_BUFFER;
+static GLenum BUFFER_TARGET = GL_ARRAY_BUFFER;
 struct Buffer{
   GLuint handle;
 };
