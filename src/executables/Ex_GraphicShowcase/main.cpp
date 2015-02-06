@@ -89,7 +89,7 @@ int main()
 	wallNode1.addGeometry(&plane);
 	wallNode1.addTexture(&marble);
 	wallNode1.setModelMatrix(glm::translate(wallNode1.getModelMatrix(), glm::vec3(0.0, 0.1, 0.2)));
-	wallNode1.setModelMatrix(glm::rotate(wallNode1.getModelMatrix(), 90.0f, glm::vec3(1.0, 0.0, 0.0)));
+	wallNode1.setModelMatrix(glm::rotate(wallNode1.getModelMatrix(), -90.0f, glm::vec3(1.0, 0.0, 0.0)));
 	wallNode1.setModelMatrix(glm::scale(wallNode1.getModelMatrix(), glm::vec3(1.5, 1.5, 1.5)));
 
 	Node wallNode2("wall2");
@@ -129,8 +129,9 @@ int main()
 
   renderer.useReflections(true);
   renderer.useAntiAliasing(true);
-  renderer.useBloom(true);
+  //renderer.useBloom(true);
   renderer.useDeferredShading(true,&lights,new glm::fvec3(1.0,1.0,1.0));
+  renderer.useSSAO(true);
 	
 	double startTime = glfwGetTime();
 	//Renderloop

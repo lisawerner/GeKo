@@ -60,27 +60,29 @@ public:
   void useAntiAliasing(bool useAntiAliasing);
   void useDeferredShading(bool useDeferredShading, Node *lightRootNode, glm::fvec3 *lightColor = new glm::fvec3(1.0,1.0,1.0));
   void useBloom(bool useBloom);
+  void useSSAO(bool useSSAO);
 
 private:
   void bindFBO();
   void unbindFBO();
 	FBO* getLastFBO();
 
-  void renderReflections(int windowWidth, int windowHeight, float camNear, float camFar);
-  void renderAntiAliasing(int windowWidth, int windowHeight);
-  void renderDeferredShading(int windowWidth, int windowHeight);
-  void renderBloom(int windowWidth, int windowHeight);
-   
+  void renderReflections(float camNear, float camFar);
+  void renderAntiAliasing();
+  void renderDeferredShading();
+  void renderBloom();
+  void renderSSAO();
+
   bool m_useReflections;
   bool m_useAntiAliasing;
   bool m_useBloom;
-
   bool m_useDeferredShading;
+  bool m_useSSAO;
+
   Node *m_dsLightRootNode;
   glm::fvec3 *m_dsLightColor;
 
 	bool m_currentFBOIndex;
-
   bool m_firstRender;
 
   FBO *m_gBuffer;
@@ -89,6 +91,9 @@ private:
 
 	glm::mat4 m_currentProjectionMatrix;
 	glm::mat4 m_currentViewMatrix;
+
+  int m_windowWidth;
+  int m_windowHeight;
 	
 	ShaderProgram *m_shaderGBuffer;
 	ShaderProgram *m_shaderRLR;
@@ -97,6 +102,9 @@ private:
   ShaderProgram *m_shaderDSLighting;
   ShaderProgram *m_shaderDSCompositing;
   ShaderProgram *m_shaderBloom;
+  ShaderProgram *m_shaderSSAOcalc;
+  ShaderProgram *m_shaderSSAOblur;
+  ShaderProgram *m_shaderSSAOfinal;
 
   Rect m_sfq;
 };
