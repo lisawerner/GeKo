@@ -206,7 +206,7 @@ int main()
 		spotlightShader.sendInt("useColorTexture", 1);
 
 		//Bind and Pass shadow map. Only use SHADOW_TEXTURE_UNIT when Normal Mapping is applied.
-		spotlightShader.sendSampler2D("shadowMap", sm_fbo.getDepthTexture());
+		spotlightShader.sendSampler2D("shadowMap", sm_fbo.getDepthTexture(), 1);
 
 		testScene.render(spotlightShader);
 
@@ -217,7 +217,7 @@ int main()
 		//ScreenFillingQuad Render Pass
 		shaderSFQ.bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shaderSFQ.sendSampler2D("fboTexture", fboGBuffer.getColorTexture(2));
+		shaderSFQ.sendSampler2D("fboTexture", fboGBuffer.getColorTexture(2), 2);
 
 		screenFillingQuad.renderGeometry();
 
