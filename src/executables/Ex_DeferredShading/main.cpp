@@ -84,7 +84,10 @@ int main()
 	screenFillingQuad.loadBufferData();
 
 	//our textures
-	Texture bricks((char*)RESOURCES_PATH "/brick.bmp");
+	Texture bricks((char*)RESOURCES_PATH "/bricks_diffuse.png");
+  Texture bricks_normal((char*)RESOURCES_PATH "/bricks_normal.png");
+  Texture bricks_height((char*)RESOURCES_PATH "/bricks_height.png");
+
 	Texture chrome((char*)RESOURCES_PATH "/chrome.jpg");
   Texture cvLogo((char*)RESOURCES_PATH "/cv_logo.bmp");
 
@@ -99,19 +102,28 @@ int main()
 	testScene.getScenegraph()->getCamera("TrackballCam");
 	testScene.getScenegraph()->setActiveCamera("TrackballCam");
   
+  Rect rect;
 
 	Node cube1("cube1");
 	cube1.addGeometry(&cube);
-	cube1.addTexture(&bricks);
-	cube1.setModelMatrix(glm::translate(cube1.getModelMatrix(), glm::vec3(-0.3, 0.25, 0.2)));
-	cube1.setModelMatrix(glm::scale(cube1.getModelMatrix(), glm::vec3(0.3, 0.3, 0.3)));
+  cube1.addTexture(&bricks);
+  cube1.addNormalMap(&bricks_normal);
+  cube1.addHeightMap(&bricks_height);
+  cube1.setModelMatrix(glm::translate(cube1.getModelMatrix(), glm::vec3(1.0, 0.5, 0.0)));
+	cube1.setModelMatrix(glm::scale(cube1.getModelMatrix(), glm::vec3(0.7, 0.7, 0.7)));
 
 	Node cube2("cube2");
-	cube2.addGeometry(&cube);
+  cube2.addGeometry(&cube);
 	cube2.addTexture(&bricks);
-	cube2.setModelMatrix(glm::translate(cube2.getModelMatrix(), glm::vec3(0.7, 0.25, 0.3)));
-	cube2.setModelMatrix(glm::scale(cube2.getModelMatrix(), glm::vec3(0.3, 0.3, 0.3)));
+  cube2.addNormalMap(&bricks_normal);
+	cube2.setModelMatrix(glm::translate(cube2.getModelMatrix(), glm::vec3(0.0, 0.5, -0.5)));
+  cube2.setModelMatrix(glm::scale(cube2.getModelMatrix(), glm::vec3(0.7, 0.7, 0.7)));
   
+  Node cube3("cube3");
+  cube3.addGeometry(&cube);
+  cube3.addTexture(&bricks);
+  cube3.setModelMatrix(glm::translate(cube3.getModelMatrix(), glm::vec3(-1.0, 0.5, 0.0)));
+  cube3.setModelMatrix(glm::scale(cube3.getModelMatrix(), glm::vec3(0.7, 0.7, 0.7)));
 
 	Node wallNode1("wall1");
 	wallNode1.addGeometry(&plane);
@@ -124,15 +136,16 @@ int main()
 	Node teaNode("teaNode");
 	teaNode.addGeometry(&teapot);
 	teaNode.addTexture(&chrome);
-	teaNode.setModelMatrix(glm::translate(teaNode.getModelMatrix(), glm::vec3(0.2, 0.3, 0.7)));
-	teaNode.setModelMatrix(glm::scale(teaNode.getModelMatrix(), glm::vec3(0.3, 0.3, 0.3)));
+	teaNode.setModelMatrix(glm::translate(teaNode.getModelMatrix(), glm::vec3(0.2, 0.4, 0.7)));
+	teaNode.setModelMatrix(glm::scale(teaNode.getModelMatrix(), glm::vec3(0.5, 0.5, 0.5)));
 
 
 	//Creating a scenegraph
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&wallNode1);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube1);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube2);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&teaNode);
+  testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube2);
+  testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube3);
+	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&teaNode);
 
 	double startTime = glfwGetTime();
 	//Renderloop
@@ -141,8 +154,8 @@ int main()
   Node lights = Node("Root");
   Sphere lightSphere = Sphere();
 
-  for (int i = -2; i < 2; i++)
-     for (int j = -2; j < 2;j++)
+  for (int i = -4; i < 4; i++)
+     for (int j = -4; j < 4;j++)
      {
        Node *newLight = new Node(std::string("Node_"+std::to_string(i)+std::to_string(j)));
        newLight->addGeometry(&lightSphere);
@@ -172,9 +185,11 @@ int main()
 		shaderGBuffer.bind();
 		shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
 		shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
-		shaderGBuffer.sendInt("useTexture", 1);
+
 		testScene.render(shaderGBuffer);
-		shaderGBuffer.unbind();
+
+		
+    shaderGBuffer.unbind();
 		fboGBuffer.unbind();
 
     //DEFERRED SHADING TEIL============================

@@ -57,7 +57,10 @@ int main()
 	Rect plane;
 
 	//our textures
-	Texture bricks((char*)RESOURCES_PATH "/brick.bmp");
+  Texture bricks((char*)RESOURCES_PATH "/bricks_diffuse.png");
+  Texture bricks_normal((char*)RESOURCES_PATH "/bricks_normal.png");
+  Texture bricks_height((char*)RESOURCES_PATH "/bricks_height.png");
+
 	Texture marble((char*)RESOURCES_PATH "/seamless_marble.jpg");
 	Texture chrome((char*)RESOURCES_PATH "/chrome.jpg");
 
@@ -74,15 +77,19 @@ int main()
 
 	Node cube1("cube1");
 	cube1.addGeometry(&cube);
-	cube1.addTexture(&bricks);
-	cube1.setModelMatrix(glm::translate(cube1.getModelMatrix(), glm::vec3(-0.3, 0.25, 0.2)));
-	cube1.setModelMatrix(glm::scale(cube1.getModelMatrix(), glm::vec3(0.3, 0.3, 0.3)));
+  cube1.addTexture(&bricks);
+  cube1.addNormalMap(&bricks_normal);
+  cube1.addHeightMap(&bricks_height);
+	cube1.setModelMatrix(glm::translate(cube1.getModelMatrix(), glm::vec3(-0.7, 0.35, 0.5)));
+  cube1.setModelMatrix(glm::scale(cube1.getModelMatrix(), glm::vec3(0.5, 0.5, 0.5)));
 
 	Node cube2("cube2");
 	cube2.addGeometry(&cube);
 	cube2.addTexture(&bricks);
-	cube2.setModelMatrix(glm::translate(cube2.getModelMatrix(), glm::vec3(0.7, 0.25, 0.3)));
-	cube2.setModelMatrix(glm::scale(cube2.getModelMatrix(), glm::vec3(0.3, 0.3, 0.3)));
+  cube2.addNormalMap(&bricks_normal);
+  cube2.addHeightMap(&bricks_height);
+	cube2.setModelMatrix(glm::translate(cube2.getModelMatrix(), glm::vec3(0.8, 0.35, 0.5)));
+  cube2.setModelMatrix(glm::scale(cube2.getModelMatrix(), glm::vec3(0.5, 0.5, 0.5)));
 
 
 	Node wallNode1("wall1");
@@ -102,7 +109,7 @@ int main()
 	Node teaNode("teaNode");
 	teaNode.addGeometry(&teapot);
 	teaNode.addTexture(&chrome);
-	teaNode.setModelMatrix(glm::translate(teaNode.getModelMatrix(), glm::vec3(0.2, 0.3, 0.7)));
+	teaNode.setModelMatrix(glm::translate(teaNode.getModelMatrix(), glm::vec3(0.2, 0.3, 1.0)));
 	teaNode.setModelMatrix(glm::scale(teaNode.getModelMatrix(), glm::vec3(0.3, 0.3, 0.3)));
 
 
@@ -116,15 +123,15 @@ int main()
   Node lights = Node("Root");
   Sphere lightSphere = Sphere();
 
-  for (int i = -2; i < 2; i++)
-    for (int j = -2; j < 2; j++)
+  for (int i = 0; i < 1; i++)
+    for (int j = 0; j < 3; j++)
     {
-    Node *newLight = new Node(std::string("Node_" + std::to_string(i) + std::to_string(j)));
-    newLight->addGeometry(&lightSphere);
-    newLight->setModelMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(i*1.5, 1.0f, j*1.5)));
-    //newLight.setModelMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(0, 1, 1.0f)));
-    newLight->setModelMatrix(glm::scale(newLight->getModelMatrix(), glm::vec3(2.0, 2.0, 2.0)));
-    lights.addChildrenNode(newLight);
+      Node *newLight = new Node(std::string("Node_" + std::to_string(i) + std::to_string(j)));
+      newLight->addGeometry(&lightSphere);
+      newLight->setModelMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(i*1.5, 1.0f, j*1.5)));
+      //newLight.setModelMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(0, 1, 1.0f)));
+      newLight->setModelMatrix(glm::scale(newLight->getModelMatrix(), glm::vec3(2.0, 2.0, 2.0)));
+      lights.addChildrenNode(newLight);
     }
 
   renderer.useReflections(true);
