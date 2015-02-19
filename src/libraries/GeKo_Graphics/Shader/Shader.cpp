@@ -16,7 +16,7 @@ std::string loadShaderSource(std::string path)
 	std::ifstream input(path);
     std::string source((std::istreambuf_iterator<char>(input)),
     std::istreambuf_iterator<char>());
-    std::cout << path << " "<< source << std::endl;
+    //std::cout << path << " "<< source << std::endl;
   return source;
 }
 

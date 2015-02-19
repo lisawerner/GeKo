@@ -63,6 +63,11 @@ public:
 	Texture* getNormalMap();
 	void addNormalMap(Texture* normalmap);
 
+  ///Returns m_heightmap as a Texture object
+  /**/
+  Texture* getHeightMap();
+  void addHeightMap(Texture* heightmap);
+
 	///Returns m_Camera as a Camera Object
 	/**/
 	Camera* getCamera();
@@ -133,7 +138,8 @@ protected:
 
 	Geometry* m_geometry;
 	Texture* m_texture;
-	Texture* m_normalmap;
+  Texture* m_normalmap;
+  Texture* m_heightmap;
 	Camera* m_camera;
 
 	glm::mat4 m_modelMatrix;
@@ -142,7 +148,8 @@ protected:
 	glm::mat4 m_translateMatrix;
 
 	bool m_hasTexture;
-	bool m_hasNormalMap;
+  bool m_hasNormalMap;
+  bool m_hasHeightMap;
 	bool m_hasCamera;
 	bool m_hasGeometry;
 

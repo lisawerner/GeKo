@@ -12,13 +12,17 @@ out vec4 passPosition;
 out vec3 passNormal;
 out vec2 passUV;
 
+out vec3 passWorldNormal;
+out mat3 normalMatrix;
  
 void main(){
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * position;
 
 	passPosition = viewMatrix * modelMatrix * position;
-	mat3 normalMatrix = mat3(transpose(inverse(viewMatrix * modelMatrix)));
+	normalMatrix = mat3(transpose(inverse(viewMatrix * modelMatrix)));
 	passNormal = normalize(normalMatrix * normal);
 	passUV = uv;
+	
+	passWorldNormal = normal;
 
 }

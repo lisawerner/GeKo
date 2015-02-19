@@ -6,6 +6,8 @@ Node::Node()
 	setIdentityMatrix_ModelMatrix();
 	
 	m_hasTexture = false;
+  m_hasNormalMap = false;
+  m_hasHeightMap = false;
 	m_hasCamera = false;
 	m_hasGeometry = false;
 }
@@ -15,6 +17,8 @@ Node::Node(std::string nodeName)
 	m_nodeName = nodeName;
 	setIdentityMatrix_ModelMatrix();
 	m_hasTexture = false;
+  m_hasNormalMap = false;
+  m_hasHeightMap = false;
 	m_hasCamera = false;
 	m_hasGeometry = false;
 }
@@ -120,6 +124,17 @@ void Node::addNormalMap(Texture* normalmap)
 {
 	m_normalmap = normalmap;
 	m_hasNormalMap = true;
+}
+
+Texture* Node::getHeightMap()
+{
+  return m_heightmap;
+}
+
+void Node::addHeightMap(Texture* heightmap)
+{
+  m_heightmap = heightmap;
+  m_hasHeightMap = true;
 }
 
 Camera* Node::getCamera()
@@ -234,10 +249,34 @@ void Node::render(ShaderProgram &shader)
 		glm::mat4 modelMatrix = getParentNode()->getModelMatrix() * m_modelMatrix;
 		shader.sendMat4("modelMatrix", modelMatrix);
 	}
+
 	if (m_hasTexture)
 	{
-		shader.sendSampler2D("testTexture", getTexture()->getTexture());
-	}
+		shader.sendSampler2D("testTexture", getTexture()->getTexture(),0);
+    shader.sendInt("useTexture", 1);
+  }
+  else
+    shader.sendInt("useTexture", 0);
+
+  if (m_hasNormalMap)
+  {
+    shader.sendSampler2D("normalMap", getNormalMap()->getTexture(),1);
+    shader.sendInt("useNormalMap", 1);
+  }
+
+  else
+    shader.sendInt("useNormalMap", 0);
+
+  if (m_hasHeightMap)
+  {
+    shader.sendSampler2D("heightMap", getHeightMap()->getTexture(), 2);
+    shader.sendInt("useHeightMap", 1);
+    shader.sendFloat("parallaxScale", 0.07f);
+    shader.sendFloat("parallaxBias", 0.1f);
+  }
+  
+  else
+    shader.sendInt("useHeightMap", 0);
 
 	if (hasGeometry())
 	{

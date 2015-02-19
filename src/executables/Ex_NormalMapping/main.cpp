@@ -55,10 +55,10 @@ int main()
 	ShaderProgram shaderBump(vs, fs);
 	
 	//our Textures
-	Texture normalmap((char*)RESOURCES_PATH "/NormalMapping/normalmap.png");
-	Texture diffusemap((char*)RESOURCES_PATH "/NormalMapping/diffusemap.png");
-	Texture normalmapStone((char*)RESOURCES_PATH "/Stone/normalmap.jpg");
-	Texture diffusemapStone((char*)RESOURCES_PATH "/Stone/diffusemap.jpg");
+	Texture normalmap((char*)RESOURCES_PATH "/NormalMapping/face_normal.png");
+	Texture diffusemap((char*)RESOURCES_PATH "/NormalMapping/face_diffuse.png");
+	//Texture normalmapStone((char*)RESOURCES_PATH "/Stone/normalmap.jpg");
+	//Texture diffusemapStone((char*)RESOURCES_PATH "/Stone/diffusemap.jpg");
 	
 	//our object
 	Cube cube;
