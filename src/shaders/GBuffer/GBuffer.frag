@@ -48,9 +48,9 @@ void main(){
 		
 	if (useNormalMap != 0)
 	{
-		vec3 Normal   = vec3(normalize(gl_NormalMatrix * passWorldNormal));
-		vec3 Tangent  = normalize(gl_NormalMatrix[0]); 
-		vec3 Binormal = normalize(gl_NormalMatrix[1]);
+		vec3 Normal   = vec3(normalize(normalMatrix * passWorldNormal));
+		vec3 Tangent  = normalize(normalMatrix[0]); 
+		vec3 Binormal = normalize(normalMatrix[1]);
 		
 		mat3 tangentToWorldSpace = mat3(Tangent.x, Binormal.x, Normal.x,
 										Tangent.y, Binormal.y, Normal.y,
