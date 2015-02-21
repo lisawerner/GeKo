@@ -66,7 +66,7 @@ public:
   ///Returns m_heightmap as a Texture object
   /**/
   Texture* getHeightMap();
-  void addHeightMap(Texture* heightmap);
+  void addHeightMap(Texture* heightmap, float heightScale = 0.07f, float heightBias = 0.1f);
 
 	///Returns m_Camera as a Camera Object
 	/**/
@@ -140,6 +140,9 @@ protected:
 	Texture* m_texture;
   Texture* m_normalmap;
   Texture* m_heightmap;
+  float m_heightScale;
+  float m_heightBias;
+
 	Camera* m_camera;
 
 	glm::mat4 m_modelMatrix;

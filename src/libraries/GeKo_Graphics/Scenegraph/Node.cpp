@@ -10,6 +10,8 @@ Node::Node()
   m_hasHeightMap = false;
 	m_hasCamera = false;
 	m_hasGeometry = false;
+  m_heightScale = 0.0f;
+  m_heightBias = 0.0f;
 }
 
 Node::Node(std::string nodeName)
@@ -21,6 +23,8 @@ Node::Node(std::string nodeName)
   m_hasHeightMap = false;
 	m_hasCamera = false;
 	m_hasGeometry = false;
+  m_heightScale = 0.0f;
+  m_heightBias = 0.0f;
 }
 
 
@@ -131,8 +135,10 @@ Texture* Node::getHeightMap()
   return m_heightmap;
 }
 
-void Node::addHeightMap(Texture* heightmap)
+void Node::addHeightMap(Texture* heightmap, float heightScale, float heightBias)
 {
+  m_heightScale = heightScale;
+  m_heightBias = heightBias;
   m_heightmap = heightmap;
   m_hasHeightMap = true;
 }
@@ -271,8 +277,8 @@ void Node::render(ShaderProgram &shader)
   {
     shader.sendSampler2D("heightMap", getHeightMap()->getTexture(), 2);
     shader.sendInt("useHeightMap", 1);
-    shader.sendFloat("parallaxScale", 0.07f);
-    shader.sendFloat("parallaxBias", 0.1f);
+    shader.sendFloat("parallaxScale", m_heightScale);
+    shader.sendFloat("parallaxBias", m_heightBias);
   }
   
   else
