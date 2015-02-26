@@ -3,6 +3,7 @@
 uniform int useTexture;
 uniform int useNormalMap;
 uniform int useHeightMap;
+uniform int useHeightMapShadows;
 
 uniform sampler2D fboTexture;
 uniform sampler2D normalMap;
@@ -29,20 +30,25 @@ void main(){
 	colorOutput = vec4(1.0,1.0,1.0,1.0);
 	
 	vec2 finalUV = passUV;
+	vec4 heightMapShadowValue = vec4(1,1,1,1);
 	
 	if(useHeightMap != 0)
 	{
 		vec3 eyeVector = normalize(-passPosition).xyz;	
 		
-		//float height = texture(heightMap,passUV).r * parallaxScale + parallaxBias;
 		float height = texture(heightMap,passUV).r * parallaxScale + ((-parallaxScale/2.0f) + (parallaxScale/2.0f) * parallaxBias);
 
 		finalUV = passUV.xy + (height * eyeVector.xy);
+		
+		if(useHeightMapShadows != 0)
+		{		
+			heightMapShadowValue = vec4(texture(heightMap,passUV).rgb,1.0) + vec4(0.2,0.2,0.2,1.0);
+		}
 	}
 
 	if (useTexture != 0)
 	{
-		colorOutput = vec4(texture(fboTexture, finalUV).rgb, 1.0f);
+		colorOutput = vec4(texture(fboTexture, finalUV).rgb, 1.0f) * heightMapShadowValue;
 	}
 	
 		

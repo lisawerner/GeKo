@@ -32,7 +32,9 @@ void main() {
 		color = vec4(lightColor,1.0);
 	}
 	
-    passPosition = viewMatrix * modelMatrix * position;
-    midPosition = viewMatrix * modelMatrix * vec4(0,0,0,1);
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * position;
+	mat4 MV = viewMatrix * modelMatrix;
+	
+    passPosition = MV * position;
+    midPosition = MV * vec4(0,0,0,1);
+    gl_Position = projectionMatrix * MV * position;
 }

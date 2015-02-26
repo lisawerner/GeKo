@@ -10,7 +10,7 @@ const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
 
 InputHandler iH;
-Trackball cam("Trackball");
+Pilotview cam("Pilotview");
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
 	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
@@ -31,15 +31,14 @@ int main()
 	glfwMakeContextCurrent(testWindow.getWindow());
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	
+  // You have to set a camera name
+  cam.setName("PilotviewCam");
+  cam.setPosition(glm::vec4(0.0, 0.5, 3.0, 1.0));
+  cam.setNearFar(0.01f, 100.0f);
 
-	cam.setRadius(2.0);
-	cam.setPosition(glm::vec4(0.0, 1.0, 1.0, 1.0));
-	cam.setName("TrackballCam");
-	cam.setNearFar(0.1f, 50.0f);
-	cam.moveDown();
-
-	iH.setAllInputMaps(cam);
-	iH.changeActiveInputMap("Trackball");
+  // Set all InputMaps and set one InputMap active
+  iH.setAllInputMaps(cam);
+  iH.changeActiveInputMap("Pilotview");
 
 	//Callback
 	glfwSetKeyCallback(testWindow.getWindow(), key_callback);
@@ -54,12 +53,22 @@ int main()
 	Cube cube;
 	Teapot teapot;
 	
-	Rect plane;
+  Rect plane;
+  plane.setTcoords(
+    glm::vec2(0, 0),
+    glm::vec2(4, 0),
+    glm::vec2(0, 4),
+    glm::vec2(4, 4)
+  );
 
 	//our textures
   Texture bricks((char*)RESOURCES_PATH "/bricks_diffuse.png");
   Texture bricks_normal((char*)RESOURCES_PATH "/bricks_normal.png");
   Texture bricks_height((char*)RESOURCES_PATH "/bricks_height.png");
+
+  Texture stone((char*)RESOURCES_PATH "/diffusemap_stone.png");
+  Texture stone_normal((char*)RESOURCES_PATH "/normalmap_stone.png");
+  Texture stone_height((char*)RESOURCES_PATH "/heightmap_stone.png");
 
 	Texture marble((char*)RESOURCES_PATH "/seamless_marble.jpg");
 	Texture chrome((char*)RESOURCES_PATH "/chrome.jpg");
@@ -72,14 +81,14 @@ int main()
 
 	//Add Camera to scenegraph
 	testScene.getScenegraph()->addCamera(&cam);
-	testScene.getScenegraph()->getCamera("TrackballCam");
-	testScene.getScenegraph()->setActiveCamera("TrackballCam");
+	testScene.getScenegraph()->getCamera("PilotviewCam");
+  testScene.getScenegraph()->setActiveCamera("PilotviewCam");
 
 	Node cube1("cube1");
 	cube1.addGeometry(&cube);
   cube1.addTexture(&bricks);
   cube1.addNormalMap(&bricks_normal);
-  cube1.addHeightMap(&bricks_height);
+  cube1.addHeightMap(&bricks_height,0.07,0.1,true);
 	cube1.setModelMatrix(glm::translate(cube1.getModelMatrix(), glm::vec3(-0.7, 0.35, 0.5)));
   cube1.setModelMatrix(glm::scale(cube1.getModelMatrix(), glm::vec3(0.5, 0.5, 0.5)));
 
@@ -87,21 +96,24 @@ int main()
 	cube2.addGeometry(&cube);
 	cube2.addTexture(&bricks);
   cube2.addNormalMap(&bricks_normal);
-  cube2.addHeightMap(&bricks_height);
+  cube2.addHeightMap(&bricks_height,0.07, 0.1, true);
 	cube2.setModelMatrix(glm::translate(cube2.getModelMatrix(), glm::vec3(0.8, 0.35, 0.5)));
   cube2.setModelMatrix(glm::scale(cube2.getModelMatrix(), glm::vec3(0.5, 0.5, 0.5)));
 
 
 	Node wallNode1("wall1");
 	wallNode1.addGeometry(&plane);
-	wallNode1.addTexture(&marble);
+  wallNode1.addTexture(&marble);
 	wallNode1.setModelMatrix(glm::translate(wallNode1.getModelMatrix(), glm::vec3(0.0, 0.1, 0.2)));
 	wallNode1.setModelMatrix(glm::rotate(wallNode1.getModelMatrix(), -90.0f, glm::vec3(1.0, 0.0, 0.0)));
 	wallNode1.setModelMatrix(glm::scale(wallNode1.getModelMatrix(), glm::vec3(1.5, 1.5, 1.5)));
+  
 
 	Node wallNode2("wall2");
 	wallNode2.addGeometry(&plane);
-	wallNode2.addTexture(&marble);
+  wallNode2.addTexture(&stone);
+  wallNode2.addNormalMap(&stone_normal);
+  wallNode2.addHeightMap(&stone_height, 0.07, 0.1);
 	wallNode2.setModelMatrix(glm::translate(wallNode2.getModelMatrix(), glm::vec3(0.0, 1.0, -0.2)));
 	wallNode2.setModelMatrix(glm::scale(wallNode2.getModelMatrix(), glm::vec3(1.5, 1.5, 1.5)));
 
@@ -115,7 +127,7 @@ int main()
 
 	//Creating a scenegraph
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&wallNode1);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&wallNode2);
+	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&wallNode2);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube1);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube2);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&teaNode);
@@ -134,21 +146,26 @@ int main()
       lights.addChildrenNode(newLight);
     }
 
-  renderer.useReflections(true);
+  renderer.useDeferredShading(true,&lights,new glm::fvec3(1.0,1.0,0.8));
+  renderer.useSSAO(true);        
+  //renderer.useReflections(true); 
+  renderer.useBloom(true);
   renderer.useAntiAliasing(true);
-  //renderer.useBloom(true);
-  renderer.useDeferredShading(true,&lights,new glm::fvec3(1.0,1.0,1.0));
-  renderer.useSSAO(true);
 	
 	double startTime = glfwGetTime();
 	//Renderloop
+  int outputFPS = 0;
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
-		// You have to compute the delta time
-		cam.setSensitivity(glfwGetTime() - startTime);
-		
-    startTime = glfwGetTime();
+    // You have to compute the delta time
+    cam.setSensitivity(glfwGetTime() - startTime);
 
+    if (!(outputFPS % 20))
+      std::cout <<  "FPS: " << static_cast<int> (1 / (glfwGetTime() - startTime)) << std::endl;
+
+    outputFPS++;
+
+    startTime = glfwGetTime();
 		renderer.renderScene(testScene,testWindow);
 	}
 

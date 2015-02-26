@@ -135,11 +135,12 @@ Texture* Node::getHeightMap()
   return m_heightmap;
 }
 
-void Node::addHeightMap(Texture* heightmap, float heightScale, float heightBias)
+void Node::addHeightMap(Texture* heightmap, float heightScale, float heightBias, bool useHeightmapShadows)
 {
   m_heightScale = heightScale;
   m_heightBias = heightBias;
   m_heightmap = heightmap;
+  m_useHeightMapShadows = useHeightmapShadows;
   m_hasHeightMap = true;
 }
 
@@ -279,10 +280,18 @@ void Node::render(ShaderProgram &shader)
     shader.sendInt("useHeightMap", 1);
     shader.sendFloat("parallaxScale", m_heightScale);
     shader.sendFloat("parallaxBias", m_heightBias);
+
+    if (m_useHeightMapShadows)
+      shader.sendInt("useHeightMapShadows", 1);
+    else
+      shader.sendInt("useHeightMapShadows", 0);
   }
   
   else
+  {
     shader.sendInt("useHeightMap", 0);
+    shader.sendInt("useHeightMapShadows", 0);
+  }
 
 	if (hasGeometry())
 	{

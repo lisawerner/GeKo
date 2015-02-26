@@ -150,7 +150,7 @@ void Renderer::renderScene(Scene& scene, Window& window)
 
   m_shaderGBuffer->sendMat4("viewMatrix", m_currentViewMatrix);
   m_shaderGBuffer->sendMat4("projectionMatrix", m_currentProjectionMatrix);
-  m_shaderGBuffer->sendInt("useTexture", 1);
+
   scene.render(*m_shaderGBuffer);
   m_shaderGBuffer->unbind();
   m_gBuffer->unbind();
@@ -169,6 +169,7 @@ void Renderer::renderScene(Scene& scene, Window& window)
 
   if (m_useAntiAliasing)
     renderAntiAliasing();
+
 
   //Render SFQ
   m_shaderSFQ->bind();
