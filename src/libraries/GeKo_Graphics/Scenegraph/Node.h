@@ -77,6 +77,8 @@ public:
 	/**/
 	glm::mat4 getModelMatrix();
 	void setModelMatrix(glm::mat4);
+	glm::mat4 getPrevModelMatrix();
+	void setPrevModelMatrix(glm::mat4);
 
 	///Returns m_rotationMatrix as a mat4
 	/**/
@@ -114,6 +116,7 @@ public:
 	///The same as setIdentityMatrix_Translate() just for m_modelMatrix
 	/**/
 	void setIdentityMatrix_ModelMatrix();
+	void setIdentityMatrix_PrevModelMatrix();
 	
 	///A method to tell the Node to draw itself
 	/**The Node will take this call and forward it to the geometry, so the geometry will be drawed*/
@@ -146,6 +149,7 @@ protected:
 	Camera* m_camera;
 
 	glm::mat4 m_modelMatrix;
+	glm::mat4 m_PrevModelMatrix;
 	glm::mat4 m_rotationMatrix;
 	glm::mat4 m_scaleMatrix;
 	glm::mat4 m_translateMatrix;

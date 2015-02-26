@@ -6,7 +6,7 @@ uniform sampler2D tex;
  
 // some const, tweak for best look
 const float sampleDist = 1.0;
-const float sampleStrength = 2.2; 
+const float sampleStrength = 1.2; 
  
 void main(void)
 {

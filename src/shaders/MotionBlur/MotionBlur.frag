@@ -1,75 +1,61 @@
-#version 330
+#version 330 core
+ 
+// INPUT
+in vec4 v_vCorrectedPosScreenSpace;
+in vec4 v_vCurrentPosScreenSpace;
+in vec4 v_vPreviousPosScreenSpace;
 
-in vec2 passUV;
+// UNIFORMS
+uniform sampler2D u_tColorTex; // In MotionBlurShader
 
-uniform sampler2D colorTexture;
-uniform sampler2D velocityTexture;
+// CONSTANTS
+const int NUM_SAMPLES = 16;
+const vec3 VZERO = vec3(0.0, 0.0, 0.0);
+
+//#define VISUALIZE_VELOCITY
 
 void main()
 {
-   vec4 color, sample;
+    vec2 vWindowPosition = v_vCorrectedPosScreenSpace.xy /
+                           v_vCorrectedPosScreenSpace.w;
+    vWindowPosition *= 0.5;
+    vWindowPosition += 0.5;
 
-   // Read the center sample from the color buffer.
-   color.xyz = texture(colorTexture, gl_FragCoord.xy).xyz;
-   color.w = 1.0;
+    vec3 vScreenSpaceVelocity =
+        ((v_vCurrentPosScreenSpace.xyz/v_vCurrentPosScreenSpace.w) -
+         (v_vPreviousPosScreenSpace.xyz/v_vPreviousPosScreenSpace.w)) * 0.5;
 
-   // Read the velocity buffer at the current pixel.
-   vec4 velo = texture(velocityTexture, gl_FragCoord.xy);
+#ifdef VISUALIZE_VELOCITY
+    // 0.5 is used to scale the screen space velocity of the pixel from [-1,1]
+    // to [0,1]
+    gl_FragColor = vec4(vScreenSpaceVelocity.x,
+                        vScreenSpaceVelocity.y,
+                        vScreenSpaceVelocity.z,
+                        1.0);
+#else
+    float fWeight = 0.0;
+    vec3 vSum = VZERO;
+    float fNumSamples = float(NUM_SAMPLES);
 
-   // Calculate the minimum depth for other color samples.
-   float minDepth = velo.z - max(velo.w, 0.001) * 7.0;
+    for(int k = 0; k < NUM_SAMPLES; ++k) 
+    {
+        float fOffset = float(k) / (fNumSamples - 1.0);
+        vec4 vSample = texture2D(u_tColorTex,
+            vWindowPosition + (vScreenSpaceVelocity.xy * fOffset));
 
-   // Initialize constant sample weight.
-   sample.w = 1.0;
+        // The unblurred geometry is rendered with alpha=1 and the background
+        // with alpha=0.  So samples that hit the geometry have alpha=1. For
+        // accumulation and blur purposes, ignore samples that hit the
+        // background.
+        vSum += (vSample.rgb * vSample.a);
+        fWeight += vSample.a;
+    }
 
-   // Calculate coordinates for first sample on either side.
-   vec4 coord = velo.xyxy * vec4(1.75, 1.75, -1.75, -1.75) +
-          gl_FragCoord.xyxy;
+    if (fWeight > 0.0)
+        vSum /= fWeight;
 
-   // Read a color and depth at the sample location.
-   sample.xyz = texture(colorTexture, coord.xy).xyz;
-   float depth = texture(velocityTexture, coord.xy).z;
+    float fAlpha = fWeight / fNumSamples;
 
-   // Add the sample to the final color if it's depth is great enough.
-   if (depth >= minDepth) color += sample;
-
-   // Grab the sample on the opposite side of the center pixel.
-   sample.xyz = texture(colorTexture, coord.zw).xyz;
-   depth = texture(velocityTexture, coord.zw).z;
-   if (depth >= minDepth) color += sample;
-
-   // Calculate coordinates for second pair of samples.
-   coord = velo.xyxy * vec4(3.5, 3.5, -3.5, -3.5) + gl_FragCoord.xyxy;
-   sample.xyz = texture(colorTexture, coord.xy).xyz;
-   depth = texture(velocityTexture, coord.xy).z;
-   if (depth >= minDepth) color += sample;
-
-   sample.xyz = texture(colorTexture, coord.zw).xyz;
-   depth = texture(velocityTexture, coord.zw).z;
-   if (depth >= minDepth) color += sample;
-
-   // Calculate coordinates for third pair of samples.
-   coord = velo.xyxy * vec4(5.25, 5.25, -5.25, -5.25) +
-          gl_FragCoord.xyxy;
-   sample.xyz = texture(colorTexture, coord.xy).xyz;
-   depth = texture(velocityTexture, coord.xy).z;
-   if (depth >= minDepth) color += sample;
-
-   sample.xyz = texture(colorTexture, coord.zw).xyz;
-   depth = texture(velocityTexture, coord.zw).z;
-   if (depth >= minDepth) color += sample;
-
-   // Calculate coordinates for fourth pair of samples.
-   coord = velo.xyxy * vec4(7.0, 7.0, -7.0, -7.0) + gl_FragCoord.xyxy;
-   sample.xyz = texture(colorTexture, coord.xy).xyz;
-   depth = texture(velocityTexture, coord.xy).z;
-   if (depth >= minDepth) color += sample;
-
-   sample.xyz = texture(colorTexture, coord.zw).xyz;
-   depth = texture(velocityTexture, coord.zw).z;
-   if (depth >= minDepth) color += sample;
-
-   // Total weight of used color samples is in the w-coordinate.
-   // Divide by it to get the final averaged color.
-   gl_FragColor.xyz = color.xyz / color.w;
+    gl_FragColor = vec4(vSum, fAlpha);
+#endif
 }
