@@ -16,6 +16,8 @@ include(${CMAKE_MODULE_PATH}/getGLM.cmake)
 include(${CMAKE_MODULE_PATH}/getASSIMP.cmake) 
 include(${CMAKE_MODULE_PATH}/getSTB.cmake)
 include(${CMAKE_MODULE_PATH}/getOpenAL.cmake)
+include(${CMAKE_MODULE_PATH}/getIMGUI.cmake)
+
 #include(${CMAKE_MODULE_PATH}/getIntelTBB.cmake)
 
 

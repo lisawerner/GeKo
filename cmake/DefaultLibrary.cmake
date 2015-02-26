@@ -12,6 +12,7 @@ include_directories(
 	${ASSIMP_INCLUDE_PATH}
 	${STB_INCLUDE_PATH}
 	${OPENAL_INCLUDE_PATH}
+	${IMGUI_INCLUDE_PATH}
 	#${TBB_INCLUDE_PATH}
     ${EXTERNAL_LIBRARY_PATHS}
     ${CMAKE_SOURCE_DIR}/src/libraries/
@@ -47,5 +48,6 @@ add_dependencies(
 	glfw
 	glm
 	OpenAL
+	imgui
 	#TBB
 )

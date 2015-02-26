@@ -96,7 +96,7 @@ int main()
 	cube2.addGeometry(&cube);
 	cube2.addTexture(&bricks);
   cube2.addNormalMap(&bricks_normal);
-  cube2.addHeightMap(&bricks_height,0.07, 0.1, true);
+  cube2.addHeightMap(&bricks_height,0.07, 0.1, false);
 	cube2.setModelMatrix(glm::translate(cube2.getModelMatrix(), glm::vec3(0.8, 0.35, 0.5)));
   cube2.setModelMatrix(glm::scale(cube2.getModelMatrix(), glm::vec3(0.5, 0.5, 0.5)));
 

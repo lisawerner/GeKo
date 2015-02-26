@@ -34,6 +34,7 @@ target_link_libraries(
     ${OpenGL3_LIB}
 	${ASSIMP_LIB}
 	${OPENAL_LIB}
+	${IMGUI_LIB}
 	#${TBB_LIB}
 )
 
@@ -44,6 +45,7 @@ add_dependencies(
 	glfw
 	glm
 	OpenAL
+	imgui
 	#TBB
 )
 
