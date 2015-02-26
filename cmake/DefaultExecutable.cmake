@@ -11,7 +11,9 @@ include_directories(
 	${ASSIMP_INCLUDE_PATH}
 	${STB_INCLUDE_PATH}
 	${OPENAL_INCLUDE_PATH}
+	${IMGUI_INCLUDE_PATH}
 	#${TBB_INCLUDE_PATH}
+	${TinyXML_INCLUDE_PATH}
     ${EXTERNAL_LIBRARY_PATHS}
     ${CMAKE_SOURCE_DIR}/src/libraries/
 )
@@ -36,6 +38,7 @@ target_link_libraries(
 	${OPENAL_LIB}
 	${IMGUI_LIB}
 	#${TBB_LIB}
+	${TinyXML_LIB}
 )
 
 #used to delay in build order
@@ -46,6 +49,7 @@ add_dependencies(
 	glm
 	OpenAL
 	imgui
+	TinyXML
 	#TBB
 )
 
@@ -64,6 +68,13 @@ IF (MINGW)
 			$<TARGET_FILE_DIR:${PROJECT_NAME}>
 		)
 		
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
+			${CMAKE_BINARY_DIR}/dependencies/TinyXML/src/TinyXML-build/libtinyxml2.dll   
+			$<TARGET_FILE_DIR:${PROJECT_NAME}>
+		)
+	
+		
 
 ELSEIF (MSVC)
 
@@ -77,6 +88,12 @@ ELSEIF (MSVC)
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
 			${CMAKE_SOURCE_DIR}/dependencies/assimp/lib/assimp_release-dll_win32/Assimp32.dll   
+			$<TARGET_FILE_DIR:${PROJECT_NAME}>
+		)
+	
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
+			${CMAKE_BINARY_DIR}/dependencies/TinyXML/src/TinyXML-build/$<CONFIGURATION>/tinyxml2.dll   
 			$<TARGET_FILE_DIR:${PROJECT_NAME}>
 		)
 	
