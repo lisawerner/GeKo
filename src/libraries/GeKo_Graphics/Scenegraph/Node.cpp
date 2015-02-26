@@ -159,6 +159,16 @@ void Node::setModelMatrix(glm::mat4 modelMatrix)
 	m_modelMatrix = modelMatrix;
 }
 
+glm::mat4 Node::getPrevModelMatrix()
+{
+	return m_PrevModelMatrix;
+}
+
+void Node::setPrevModelMatrix(glm::mat4 modelMatrix)
+{
+	m_PrevModelMatrix = modelMatrix;
+}
+
 glm::mat4 Node::getRotationMatrix()
 {
 	return m_rotationMatrix;
@@ -228,6 +238,11 @@ void Node::setIdentityMatrix_ModelMatrix()
 	m_modelMatrix = glm::mat4(1);
 }
 
+void Node::setIdentityMatrix_PrevModelMatrix()
+{
+	m_PrevModelMatrix = glm::mat4(1);
+}
+
 void Node::render()
 {
   if (hasGeometry())
@@ -245,9 +260,10 @@ void Node::render(ShaderProgram &shader)
 {
 	if (!(m_nodeName == "Root"))
 	{
-
 		glm::mat4 modelMatrix = getParentNode()->getModelMatrix() * m_modelMatrix;
 		shader.sendMat4("modelMatrix", modelMatrix);
+		shader.sendMat4("previousModelMatrix", m_PrevModelMatrix);
+		m_PrevModelMatrix = modelMatrix;
 	}
 
 	if (m_hasTexture)

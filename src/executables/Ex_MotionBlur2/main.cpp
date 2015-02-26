@@ -51,8 +51,8 @@ int main()
 	FragmentShader fsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.frag")));
 	ShaderProgram shaderGBuffer(vsGBuffer, fsGBuffer);
 
-	VertexShader vsBlur(loadShaderSource(SHADERS_PATH + std::string("/MotionBlur/MotionBlur.vert")));
-	FragmentShader fsBlur(loadShaderSource(SHADERS_PATH + std::string("/MotionBlur/MotionBlur.frag")));
+	VertexShader vsBlur(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.vert")));
+	FragmentShader fsBlur(loadShaderSource(SHADERS_PATH + std::string("/MotionBlur2/MotionBlur2.frag")));
 	ShaderProgram shaderBlur(vsBlur, fsBlur);
 
 	VertexShader vsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.vert")));
@@ -131,9 +131,8 @@ int main()
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube2);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&teaNode);
 
-	bool second = false;
-
-	glm::mat4 prev = cam.getProjectionMatrix() * cam.getViewMatrix() * (testScene.getScenegraph()->getRootNode()->getModelMatrix());
+	glm::mat4 prevViewMatrix;
+	glm::mat4 prevProjectionMatrix;
 
 	double startTime = glfwGetTime();
 	//Renderloop
@@ -162,11 +161,15 @@ int main()
 
 		fboResult.bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shaderBlur.sendMat4("u_mProjectionMat", cam.getProjectionMatrix());
-		shaderBlur.sendMat4("u_mViewMat", cam.getViewMatrix());
-		shaderBlur.sendFloat("u_fStretchScale", 0.1f);
-		shaderBlur.sendSampler2D("u_tColorTex", fboGBuffer.getColorTexture(2), 2);
-		//screenFillingQuad.renderGeometry();
+		shaderBlur.sendSampler2D("ScreenTexture", fboGBuffer.getColorTexture(2), 2);
+		shaderBlur.sendSampler2D("depthTexture", fboGBuffer.getDepthTexture());
+		shaderBlur.sendMat4("viewMatrix", cam.getViewMatrix());
+		shaderBlur.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+		shaderBlur.sendMat4("previousViewMatrix", prevViewMatrix);
+		shaderBlur.sendMat4("previousProjectionMatrix", prevProjectionMatrix);
+		shaderBlur.sendFloat("thresholdValue", 0.9);
+		shaderBlur.sendFloat("fWindowHeight", WINDOW_HEIGHT);
+		shaderBlur.sendFloat("fWindowWidth", WINDOW_WIDTH);
 		testScene.render(shaderBlur);
 		shaderBlur.unbind();
 		fboResult.unbind();
@@ -174,11 +177,13 @@ int main()
 		//ScreenFillingQuad Render Pass
 		shaderSFQ.bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shaderSFQ.sendSampler2D("fboTexture", fboResult.getColorTexture(0), 0);
+		shaderSFQ.sendSampler2D("fboTexture", fboResult.getColorTexture(2), 2);
 		screenFillingQuad.renderGeometry();
 		shaderSFQ.unbind();
-		
-		
+
+		prevViewMatrix = cam.getViewMatrix();
+		prevProjectionMatrix = cam.getProjectionMatrix();
+				
 		glfwSwapBuffers(testWindow.getWindow());
 		glfwPollEvents();
 	}
