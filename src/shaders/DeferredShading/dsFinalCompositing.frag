@@ -27,7 +27,8 @@ void main() {
 	glow *= glow;
 
 	colorOutput = color * light;
-	if(color.a < 0.5) colorOutput = vec4(0.0,0.0,0.0,0.0);
+	if(color.a < 0.5) 
+		colorOutput = vec4(0.0,0.0,0.0,0.0);
 
 	colorOutput *= (0.3 + glow);
 }

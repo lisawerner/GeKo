@@ -12,7 +12,7 @@ const int WINDOW_HEIGHT = 600;
 bool showlightTexture = false;
 
 InputHandler iH;
-Trackball cam("Trackball");
+Pilotview cam("Pilotview");
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
 	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
@@ -34,14 +34,13 @@ int main()
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	
 
-	cam.setRadius(2.0);
-	cam.setPosition(glm::vec4(0.0, 1.0, 1.0, 1.0));
-	cam.setName("TrackballCam");
-	cam.setNearFar(0.1f, 1000.0f);
-	cam.moveDown();
+  // You have to set a camera name
+  cam.setName("PilotviewCam");
+  cam.setPosition(glm::vec4(0.0, 0.5, 3.0, 1.0));
+  cam.setNearFar(0.01f, 100.0f);
 
 	iH.setAllInputMaps(cam);
-	iH.changeActiveInputMap("Trackball");
+	iH.changeActiveInputMap("Pilotview");
 
 	//Callback
 	glfwSetKeyCallback(testWindow.getWindow(), key_callback);
@@ -97,10 +96,10 @@ int main()
 	testLevel.addScene(testScene);
 	testLevel.changeScene("testScene");
 
-	//Add Camera to scenegraph
-	testScene.getScenegraph()->addCamera(&cam);
-	testScene.getScenegraph()->getCamera("TrackballCam");
-	testScene.getScenegraph()->setActiveCamera("TrackballCam");
+  //Add Camera to scenegraph
+  testScene.getScenegraph()->addCamera(&cam);
+  testScene.getScenegraph()->getCamera("PilotviewCam");
+  testScene.getScenegraph()->setActiveCamera("PilotviewCam");
   
   Rect rect;
 
@@ -109,21 +108,29 @@ int main()
   cube1.addTexture(&bricks);
   cube1.addNormalMap(&bricks_normal);
   cube1.addHeightMap(&bricks_height);
-  cube1.setModelMatrix(glm::translate(cube1.getModelMatrix(), glm::vec3(1.0, 0.5, 0.0)));
+  cube1.setModelMatrix(glm::translate(cube1.getModelMatrix(), glm::vec3(-1.0, 0.5, -0.5)));
 	cube1.setModelMatrix(glm::scale(cube1.getModelMatrix(), glm::vec3(0.7, 0.7, 0.7)));
 
 	Node cube2("cube2");
   cube2.addGeometry(&cube);
 	cube2.addTexture(&bricks);
   cube2.addNormalMap(&bricks_normal);
-	cube2.setModelMatrix(glm::translate(cube2.getModelMatrix(), glm::vec3(0.0, 0.5, -0.5)));
+	cube2.setModelMatrix(glm::translate(cube2.getModelMatrix(), glm::vec3(-1, 0.5, 0.5)));
   cube2.setModelMatrix(glm::scale(cube2.getModelMatrix(), glm::vec3(0.7, 0.7, 0.7)));
   
   Node cube3("cube3");
   cube3.addGeometry(&cube);
   cube3.addTexture(&bricks);
-  cube3.setModelMatrix(glm::translate(cube3.getModelMatrix(), glm::vec3(-1.0, 0.5, 0.0)));
+  cube3.setModelMatrix(glm::translate(cube3.getModelMatrix(), glm::vec3(0, 0.5, -0.5)));
   cube3.setModelMatrix(glm::scale(cube3.getModelMatrix(), glm::vec3(0.7, 0.7, 0.7)));
+
+  Node cube4("cube4");
+  cube4.addGeometry(&cube);
+  cube4.addTexture(&bricks);
+  cube4.addNormalMap(&bricks_normal);
+  cube4.addHeightMap(&bricks_height,0.07,0.1,true);
+  cube4.setModelMatrix(glm::translate(cube4.getModelMatrix(), glm::vec3(0, 0.5, 0.5)));
+  cube4.setModelMatrix(glm::scale(cube4.getModelMatrix(), glm::vec3(0.7, 0.7, 0.7)));
 
 	Node wallNode1("wall1");
 	wallNode1.addGeometry(&plane);
@@ -145,6 +152,7 @@ int main()
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube1);
   testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube2);
   testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube3);
+  testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube4);
 	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&teaNode);
 
 	double startTime = glfwGetTime();
@@ -164,7 +172,8 @@ int main()
        newLight->setModelMatrix(glm::scale(newLight->getModelMatrix(), glm::vec3(2.0, 2.0, 2.0)));
        lights.addChildrenNode(newLight);
      }
-     
+    
+  int outputFPS = 0;
     
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
@@ -173,6 +182,13 @@ int main()
     float deltaTime = glfwGetTime() - startTime;
     cam.setSensitivity(deltaTime);
 		
+    //if (!(outputFPS % 20))
+      //std::cout << "FPS: " << static_cast<int>(1 / (glfwGetTime() - startTime)) << std::endl;
+
+    std::cout << "FPS: " << static_cast<double>(glfwGetTime() - startTime) * 100 << std::endl;
+
+
+    outputFPS++;
 		startTime = glfwGetTime();
 
     //update Model Matrix
@@ -185,7 +201,7 @@ int main()
 		shaderGBuffer.bind();
 		shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
 		shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
-
+   
 		testScene.render(shaderGBuffer);
 
 		
@@ -244,11 +260,12 @@ int main()
 		//ScreenFillingQuad Render Pass
 		shaderSFQ.bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  
-    if (glfwGetKey(testWindow.getWindow(),GLFW_KEY_F1))
+
+    if (glfwGetKey(testWindow.getWindow(), GLFW_KEY_F1))
       shaderSFQ.sendSampler2D("fboTexture", fboDeferredShading.getColorTexture(2));
     else
       shaderSFQ.sendSampler2D("fboTexture", fboCompositing.getColorTexture(2));
+
 		screenFillingQuad.renderGeometry();
 		shaderSFQ.unbind();
 		

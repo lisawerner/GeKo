@@ -66,7 +66,7 @@ public:
   ///Returns m_heightmap as a Texture object
   /**/
   Texture* getHeightMap();
-  void addHeightMap(Texture* heightmap, float heightScale = 0.07f, float heightBias = 0.1f);
+  void addHeightMap(Texture* heightmap, float heightScale = 0.07f, float heightBias = 0.1f, bool useHeightmapShadows = false);
 
 	///Returns m_Camera as a Camera Object
 	/**/
@@ -153,6 +153,7 @@ protected:
 	bool m_hasTexture;
   bool m_hasNormalMap;
   bool m_hasHeightMap;
+  bool m_useHeightMapShadows;
 	bool m_hasCamera;
 	bool m_hasGeometry;
 

@@ -16,10 +16,13 @@ out vec3 passWorldNormal;
 out mat3 normalMatrix;
  
 void main(){
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * position;
+	
+	mat4 MV = viewMatrix * modelMatrix;
 
-	passPosition = viewMatrix * modelMatrix * position;
-	normalMatrix = mat3(transpose(inverse(viewMatrix * modelMatrix)));
+    gl_Position = projectionMatrix * MV * position;
+
+	passPosition = MV * position;
+	normalMatrix = mat3(transpose(inverse(MV)));
 	passNormal = normalize(normalMatrix * normal);
 	passUV = uv;
 	
