@@ -209,6 +209,7 @@ int main()
 		spotlightShader.sendSampler2D("shadowMap", sm_fbo.getDepthTexture(), 1);
 
 		testScene.render(spotlightShader);
+		//screenFillingQuad.renderGeometry();
 
 		spotlightShader.unbind();
 		fboGBuffer.unbind();
