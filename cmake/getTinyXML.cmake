@@ -23,7 +23,7 @@ ELSEIF (MSVC)
 
 ELSEIF("${CMAKE_SYSTEM}" MATCHES "Linux")
 	set(TinyXML_INCLUDE_PATH "${DEPENDENCIES_PATH}/TinyXML/src/TinyXML")
-	set(TinyXML_LIB "${DEPENDENCIES_PATH}/TinyXML/src/TinyXML-build/lib/libtinyxml2.so")
+	set(TinyXML_LIB "${DEPENDENCIES_PATH}/TinyXML/src/TinyXML-build/libtinyxml2.so")
 
 ELSE()
 	set(TinyXML_INCLUDE_PATH "${DEPENDENCIES_PATH}/TinyXML/src/TinyXML")
