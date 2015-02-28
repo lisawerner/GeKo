@@ -13,6 +13,8 @@
 Need Information
 */
 
+class GUI;
+
 struct RenderObject{
 
 };
@@ -55,6 +57,9 @@ public:
 
   void init(int windowWidth, int windowHeight);
   void renderScene(Scene& scene, Window& window);
+
+  ///renders the given GUI
+  void renderGUI(GUI *guiToRender);
 
   void useReflections(bool useReflections);
   void useAntiAliasing(bool useAntiAliasing);

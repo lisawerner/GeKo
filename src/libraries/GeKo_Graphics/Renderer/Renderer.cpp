@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "GeKo_Graphics/GUI/GUI.h"
 
 void OpenGL3Context::bindContext() const{
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -180,6 +181,11 @@ void Renderer::renderScene(Scene& scene, Window& window)
 
   glfwSwapBuffers(window.getWindow());
   glfwPollEvents();
+}
+
+void Renderer::renderGUI(GUI *guiToRender)
+{
+
 }
 
 void Renderer::useReflections(bool useReflections)
