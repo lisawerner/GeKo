@@ -10,7 +10,7 @@ const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
 
 InputHandler iH;
-Trackball cam("Trackball");
+Pilotview cam("Pilotview");
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
 	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
@@ -32,14 +32,12 @@ int main()
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	
 
-	cam.setRadius(2.0);
-	cam.setPosition(glm::vec4(0.0, 1.0, 1.0, 1.0));
-	cam.setName("TrackballCam");
-	cam.setNearFar(0.1f, 50.0f);
-	cam.moveDown();
+	cam.setName("PilotviewCam");
+	cam.setPosition(glm::vec4(1.0, 1.0, 3.0, 1.0));
+	cam.setNearFar(0.01f, 100.0f);
 
 	iH.setAllInputMaps(cam);
-	iH.changeActiveInputMap("Trackball");
+	iH.changeActiveInputMap("Pilotview");
 
 	//Callback
 	glfwSetKeyCallback(testWindow.getWindow(), key_callback);
@@ -51,9 +49,9 @@ int main()
 	FragmentShader fsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.frag")));
 	ShaderProgram shaderGBuffer(vsGBuffer, fsGBuffer);
 
-	VertexShader vsBlur(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.vert")));
-	FragmentShader fsBlur(loadShaderSource(SHADERS_PATH + std::string("/MotionBlur2/MotionBlur2.frag")));
-	ShaderProgram shaderBlur(vsBlur, fsBlur);
+	VertexShader vsSM(loadShaderSource(SHADERS_PATH + std::string("/ShadowMapping/ShadowMap.vert")));
+	FragmentShader fsSM(loadShaderSource(SHADERS_PATH + std::string("/ShadowMapping/ShadowMap.frag")));
+	ShaderProgram shadowmapShader(vsSM, fsSM);
 
 	VertexShader vsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.vert")));
 	FragmentShader fsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.frag")));
@@ -64,7 +62,7 @@ int main()
 	Renderer renderer(context);
 
 	FBO fboGBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, 3, true, false);
-	FBO fboResult(WINDOW_WIDTH, WINDOW_HEIGHT, 3, true, false);
+	FBO fboDepth(WINDOW_WIDTH, WINDOW_HEIGHT, 3, true, false);
 
 	//our object
 	Cube cube;
@@ -87,8 +85,8 @@ int main()
 
 	//Add Camera to scenegraph
 	testScene.getScenegraph()->addCamera(&cam);
-	testScene.getScenegraph()->getCamera("TrackballCam");
-	testScene.getScenegraph()->setActiveCamera("TrackballCam");
+	testScene.getScenegraph()->getCamera("PilotviewCam");
+	testScene.getScenegraph()->setActiveCamera("PilotviewCam");
 
 	Node cube1("cube1");
 	cube1.addGeometry(&cube);
@@ -143,13 +141,42 @@ int main()
 
 		startTime = glfwGetTime();
 
+
+		//Bind Shadow Map FBO
+		fboDepth.bind();
+
+		//Clear Shadow Map
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		//Set the shader for the light pass. This shader is highly optimized because the scene depth is the only thing that matters here!
+		shadowmapShader.bind();
+		shadowmapShader.sendMat4("viewMatrix", cam.getViewMatrix());
+		shadowmapShader.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+
+		//Render the scene
+		testScene.render(shadowmapShader);
+
+		//Restore the default framebuffer
+		shadowmapShader.unbind();
+		fboDepth.unbind();
+
 		fboGBuffer.bind();
 		glClearColor(0, 0, 0, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shaderGBuffer.bind();
+		shaderGBuffer.sendInt("useMotionBlur", 1);
 		shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
 		shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 		shaderGBuffer.sendInt("useTexture", 1);
+		shaderGBuffer.sendInt("useMotionBlur", 1);
+		shaderGBuffer.sendSampler2D("depthTexture", fboGBuffer.getDepthTexture());
+		shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
+		shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+		shaderGBuffer.sendMat4("previousViewMatrix", prevViewMatrix);
+		shaderGBuffer.sendMat4("previousProjectionMatrix", prevProjectionMatrix);
+		shaderGBuffer.sendFloat("thresholdValue", 0.9);
+		shaderGBuffer.sendFloat("fWindowHeight", WINDOW_HEIGHT);
+		shaderGBuffer.sendFloat("fWindowWidth", WINDOW_WIDTH);
 		teaNode.setModelMatrix(glm::rotate(teaNode.getModelMatrix(), 10.0f, glm::vec3(0.0, 1.0, 0.0)));
 		cube1.setModelMatrix(glm::rotate(cube1.getModelMatrix(), 10.0f, glm::vec3(0.0, 1.0, 0.0)));
 		cube2.setModelMatrix(glm::rotate(cube2.getModelMatrix(), 10.0f, glm::vec3(0.0, 1.0, 0.0)));
@@ -157,27 +184,10 @@ int main()
 		shaderGBuffer.unbind();
 		fboGBuffer.unbind();
 
-		shaderBlur.bind();
-
-		fboResult.bind();
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shaderBlur.sendSampler2D("ScreenTexture", fboGBuffer.getColorTexture(2), 2);
-		shaderBlur.sendSampler2D("depthTexture", fboGBuffer.getDepthTexture());
-		shaderBlur.sendMat4("viewMatrix", cam.getViewMatrix());
-		shaderBlur.sendMat4("projectionMatrix", cam.getProjectionMatrix());
-		shaderBlur.sendMat4("previousViewMatrix", prevViewMatrix);
-		shaderBlur.sendMat4("previousProjectionMatrix", prevProjectionMatrix);
-		shaderBlur.sendFloat("thresholdValue", 0.9);
-		shaderBlur.sendFloat("fWindowHeight", WINDOW_HEIGHT);
-		shaderBlur.sendFloat("fWindowWidth", WINDOW_WIDTH);
-		testScene.render(shaderBlur);
-		shaderBlur.unbind();
-		fboResult.unbind();
-
 		//ScreenFillingQuad Render Pass
 		shaderSFQ.bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shaderSFQ.sendSampler2D("fboTexture", fboResult.getColorTexture(2), 2);
+		shaderSFQ.sendSampler2D("fboTexture", fboGBuffer.getColorTexture(2), 2);
 		screenFillingQuad.renderGeometry();
 		shaderSFQ.unbind();
 

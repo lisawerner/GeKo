@@ -151,30 +151,21 @@ int main()
 		shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
 		shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 		shaderGBuffer.sendInt("useTexture", 1);
-		teaNode.setModelMatrix(glm::rotate(teaNode.getModelMatrix(), 10.0f, glm::vec3(0.0, 1.0, 0.0)));
-		cube1.setModelMatrix(glm::rotate(cube1.getModelMatrix(), 10.0f, glm::vec3(0.0, 1.0, 0.0)));
-		cube2.setModelMatrix(glm::rotate(cube2.getModelMatrix(), 10.0f, glm::vec3(0.0, 1.0, 0.0)));
+		shaderBlur.sendMat4("u_mProjectionMat", cam.getProjectionMatrix());
+		shaderBlur.sendMat4("u_mViewMat", cam.getViewMatrix());
+		shaderBlur.sendFloat("u_fStretchScale", 100.1f);
+		shaderBlur.sendInt("useMotionBlur", 1);
+		teaNode.setModelMatrix(glm::rotate(teaNode.getModelMatrix(), 3.0f, glm::vec3(0.0, 1.0, 0.0)));
+		cube1.setModelMatrix(glm::rotate(cube1.getModelMatrix(), 3.0f, glm::vec3(0.0, 1.0, 0.0)));
+		cube2.setModelMatrix(glm::rotate(cube2.getModelMatrix(), 3.0f, glm::vec3(0.0, 1.0, 0.0)));
 		testScene.render(shaderGBuffer);
 		shaderGBuffer.unbind();
 		fboGBuffer.unbind();
 
-		shaderBlur.bind();
-
-		fboResult.bind();
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shaderBlur.sendMat4("u_mProjectionMat", cam.getProjectionMatrix());
-		shaderBlur.sendMat4("u_mViewMat", cam.getViewMatrix());
-		shaderBlur.sendFloat("u_fStretchScale", 0.1f);
-		shaderBlur.sendSampler2D("u_tColorTex", fboGBuffer.getColorTexture(2), 2);
-		//screenFillingQuad.renderGeometry();
-		testScene.render(shaderBlur);
-		shaderBlur.unbind();
-		fboResult.unbind();
-
 		//ScreenFillingQuad Render Pass
 		shaderSFQ.bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shaderSFQ.sendSampler2D("fboTexture", fboResult.getColorTexture(0), 0);
+		shaderSFQ.sendSampler2D("fboTexture", fboGBuffer.getColorTexture(2), 2);
 		screenFillingQuad.renderGeometry();
 		shaderSFQ.unbind();
 		
