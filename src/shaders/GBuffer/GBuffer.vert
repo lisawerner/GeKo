@@ -6,7 +6,10 @@ layout (location = 2) in vec2 uv;
 
 uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
-uniform mat4 projectionMatrix;
+uniform mat4 projectionMatrix;  
+
+uniform int useShadowMap;
+uniform mat4 lightVPBias;
 
 out vec4 passPosition;
 out vec3 passNormal;
@@ -14,9 +17,11 @@ out vec2 passUV;
 
 out vec3 passWorldNormal;
 out mat3 normalMatrix;
+
+out vec4 passShadowCoord;
  
 void main(){
-	
+
 	mat4 MV = viewMatrix * modelMatrix;
 
     gl_Position = projectionMatrix * MV * position;
@@ -28,4 +33,8 @@ void main(){
 	
 	passWorldNormal = normal;
 
+	if(useShadowMap != 0)
+	{
+		passShadowCoord = lightVPBias * modelMatrix * position;
+	}
 }
