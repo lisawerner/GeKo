@@ -54,7 +54,7 @@ public:
   void renderScene(Scene& scene, Window& window);
 
   ///renders the given GUI
-  void renderGUI(GUI const &guiToRender, Window &window);
+  void renderGUI(GUI &guiToRender, Window &window);
 
   void useReflections(bool useReflections);
   void useAntiAliasing(bool useAntiAliasing);
