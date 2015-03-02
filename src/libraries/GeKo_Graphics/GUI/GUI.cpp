@@ -37,3 +37,16 @@ void GUI::setFont(std::string &fileName, float size)
   font->DisplayOffset.y += 1;   // Render 1 pixel down
   */
 }
+
+/*
+ImDrawList GUI::getCommandList()
+{
+  return ImDrawList();
+}
+
+int GUI::getCommandListSize()
+{
+  return 0;
+}
+
+*/
