@@ -6,10 +6,6 @@
 #include <GeKo_Graphics/ScenegraphInclude.h>
 #include <GeKo_Graphics/Camera/Camera.h>
 
-													///////////////////////////////////////////////////////////////////
-													//Actually finished but a Materialclass is missing for usage///////
-													//Only showing the shadowmap///////////////////////////////////////
-													///////////////////////////////////////////////////////////////////
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
@@ -29,11 +25,10 @@ int main()
 	cam_shadow.setRadius(2.0);
 	cam_shadow.setNearFar(1.f, 30.f);
 
-	cam_trackball.setRadius(2.0);
-	cam_trackball.setPosition(glm::vec4(0.0, 1.0, 1.0, 1.0));
+	cam_trackball.setRadius(3.0);
+	cam_trackball.setPosition(glm::vec4(-2.0, 3.0, 1.0, 1.0));
 	cam_trackball.setNearFar(1.f, 30.f);
-	cam_trackball.moveDown();
-	
+	//cam_trackball.moveDown();
 	glewInit();
 	
 	//load, compile and link Shader
@@ -83,7 +78,7 @@ int main()
 	wallNode1.addGeometry(&plane);
 	wallNode1.addTexture(&marble);
 	wallNode1.setModelMatrix(glm::translate(wallNode1.getModelMatrix(), glm::vec3(0.0, 0.1, 0.2)));
-	wallNode1.setModelMatrix(glm::rotate(wallNode1.getModelMatrix(), 90.0f, glm::vec3(1.0, 0.0, 0.0)));
+	wallNode1.setModelMatrix(glm::rotate(wallNode1.getModelMatrix(), -90.0f, glm::vec3(1.0, 0.0, 0.0)));
 	wallNode1.setModelMatrix(glm::scale(wallNode1.getModelMatrix(), glm::vec3(1.5, 1.5, 1.5)));
 
 	Node wallNode2("wall2");
@@ -197,7 +192,7 @@ int main()
 			);
 
 		//Build "shadow matrix"
-		lightMVPBias = lightPerspective * lightView;
+    lightMVPBias = sm_lightViewport * lightPerspective * lightView;
 		shaderGBuffer.sendMat4("lightVPBias", lightMVPBias);
 
 		shaderGBuffer.sendVec3("mat.diffuse", darkgrey);

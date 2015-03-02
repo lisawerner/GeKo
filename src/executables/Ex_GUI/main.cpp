@@ -280,6 +280,8 @@ int main()
     screenFillingQuad.renderGeometry();
     shaderSFQ.unbind();
 
+     //renderer->renderGUI()
+    //should render all guis which have been added to the renderer
 
     glfwSwapBuffers(testWindow.getWindow());
     glfwPollEvents();

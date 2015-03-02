@@ -105,7 +105,7 @@ vec4 motionBlur(vec4 startColor, vec2 startUV)
 	return originalColor / 20.0;  	
 }
 
-vec4 shadowMapping()
+vec4 shadowMapping(vec4 baseColor)
 {
 	vec3 lightVector;
 	float spot;
@@ -135,8 +135,8 @@ vec4 shadowMapping()
 	// Textures 
 	if (useTexture != 0)
 	{
-		diffuse_color = texture( fboTexture, passUV ).rgb;
-		diffuse_alpha = texture( fboTexture, passUV ).a;
+		diffuse_color = baseColor.rgb;
+		diffuse_alpha = baseColor.a;
 	}
 	else
 	{
@@ -153,7 +153,7 @@ vec4 shadowMapping()
 
     //test if the fragment is visible by comparing the z-values of the 
     //lightmap and the projection considering a bias (e.g. 0.0005)
-    if (lightDepth < shadowCoord.z - 0.00005) 
+    if (lightDepth < shadowCoord.z - 0.0005) 
         inShadow = 0.3;   
 		
 	vec4 fragmentColor; 
@@ -173,15 +173,19 @@ void main(){
 
 	positionOutput = passPosition;
 	normalOutput = vec4(normalize(passNormal), 1);
-	colorOutput = vec4(1.0,1.0,1.0,1.0);
 	
+	if (useTexture != 0)
+	{
+		colorOutput = texture(fboTexture,passUV);
+	}
+	
+	else
+	{
+		colorOutput = vec4(1.0f,1.0f,1.0f,1.0f);
+	}
+		
 	vec2 finalUV = passUV;
 	vec4 heightMapShadowValue = vec4(1,1,1,1);
-
-	if (useShadowMap != 0)
-	{
-		colorOutput = shadowMapping();
-	}
 	
 	if(useHeightMap != 0)
 	{
@@ -194,18 +198,18 @@ void main(){
 		if(useHeightMapShadows != 0)
 		{		
 			heightMapShadowValue = vec4(texture(heightMap,passUV).rgb,1.0) + vec4(0.2,0.2,0.2,1.0);
+			colorOutput = vec4(colorOutput.rgb, 1.0f) * heightMapShadowValue;
 		}
 	}
-
-	if (useTexture != 0)
+	
+	if (useShadowMap != 0)
 	{
-		if (useMotionBlur !=0)
-		{
-			colorOutput = motionBlur(vec4(texture(fboTexture, finalUV).rgb, 1.0f), finalUV) * heightMapShadowValue;
-		}else
-		{
-			//colorOutput = vec4(texture(fboTexture, finalUV).rgb, 1.0f) * heightMapShadowValue;
-		}	
+		colorOutput = shadowMapping(colorOutput);
+	}
+
+	if (useMotionBlur !=0)
+	{
+		colorOutput = motionBlur(colorOutput,finalUV);		
 	}
 	
 		
