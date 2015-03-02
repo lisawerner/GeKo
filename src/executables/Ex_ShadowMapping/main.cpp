@@ -37,9 +37,9 @@ int main()
 	glewInit();
 	
 	//load, compile and link Shader
-	VertexShader vsSL(loadShaderSource(SHADERS_PATH + std::string("/ShadowMapping/SpotLightShadows.vert")));
-	FragmentShader fsSL(loadShaderSource(SHADERS_PATH + std::string("/ShadowMapping/SpotLightShadows.frag")));
-	ShaderProgram spotlightShader(vsSL, fsSL);
+	VertexShader vsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.vert")));
+	FragmentShader fsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.frag")));
+	ShaderProgram shaderGBuffer(vsGBuffer, fsGBuffer);
 
 	VertexShader vsSM(loadShaderSource(SHADERS_PATH + std::string("/ShadowMapping/ShadowMap.vert")));
 	FragmentShader fsSM(loadShaderSource(SHADERS_PATH + std::string("/ShadowMapping/ShadowMap.frag")));
@@ -166,19 +166,21 @@ int main()
 		//Update Camera
 		testScene.getScenegraph()->setActiveCamera("cam");
 
-		spotlightShader.bind();
+		shaderGBuffer.bind();
 
-		spotlightShader.sendMat4("viewMatrix", cam_trackball.getViewMatrix());
-		spotlightShader.sendMat4("projectionMatrix", cam_trackball.getProjectionMatrix());
+		shaderGBuffer.sendInt("useShadowMap", 1);
 
-		spotlightShader.sendVec4("light.pos", slight.m_position);
-		spotlightShader.sendVec3("light.col", glm::vec3(slight.m_color));
+		shaderGBuffer.sendMat4("viewMatrix", cam_trackball.getViewMatrix());
+		shaderGBuffer.sendMat4("projectionMatrix", cam_trackball.getProjectionMatrix());
 
-		spotlightShader.sendVec3("light.spot_direction", slight.m_direction);
-		spotlightShader.sendFloat("light.spot_exponent", slight.m_exponent);
-		spotlightShader.sendFloat("light.spot_cutoff", slight.m_radius);
+		shaderGBuffer.sendVec4("light.pos", slight.m_position);
+		shaderGBuffer.sendVec3("light.col", glm::vec3(slight.m_color));
 
-		spotlightShader.sendVec3("lightAmbient", lightAmbient);
+		shaderGBuffer.sendVec3("light.spot_direction", slight.m_direction);
+		shaderGBuffer.sendFloat("light.spot_exponent", slight.m_exponent);
+		shaderGBuffer.sendFloat("light.spot_cutoff", slight.m_radius);
+
+		shaderGBuffer.sendVec3("lightAmbient", lightAmbient);
 
 		//Shadow mapping
 		glm::mat4 lightPerspective, lightView, lightMVPBias;
@@ -196,22 +198,22 @@ int main()
 
 		//Build "shadow matrix"
 		lightMVPBias = lightPerspective * lightView;
-		spotlightShader.sendMat4("lightVPBias", lightMVPBias);
+		shaderGBuffer.sendMat4("lightVPBias", lightMVPBias);
 
-		spotlightShader.sendVec3("mat.diffuse", darkgrey);
-		spotlightShader.sendVec3("mat.specular", grey);
-		spotlightShader.sendFloat("mat.shininess", 100.0f);
-		spotlightShader.sendFloat("mat.alpha", 1.0f);
+		shaderGBuffer.sendVec3("mat.diffuse", darkgrey);
+		shaderGBuffer.sendVec3("mat.specular", grey);
+		shaderGBuffer.sendFloat("mat.shininess", 100.0f);
+		shaderGBuffer.sendFloat("mat.alpha", 1.0f);
 
-		spotlightShader.sendInt("useColorTexture", 1);
+		shaderGBuffer.sendInt("useTexture", 1);
 
 		//Bind and Pass shadow map. Only use SHADOW_TEXTURE_UNIT when Normal Mapping is applied.
-		spotlightShader.sendSampler2D("shadowMap", sm_fbo.getDepthTexture(), 1);
+		shaderGBuffer.sendSampler2D("depthTexture", sm_fbo.getDepthTexture(), 1);
 
-		testScene.render(spotlightShader);
+		testScene.render(shaderGBuffer);
 		//screenFillingQuad.renderGeometry();
 
-		spotlightShader.unbind();
+		shaderGBuffer.unbind();
 		fboGBuffer.unbind();
 
 

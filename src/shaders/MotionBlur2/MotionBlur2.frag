@@ -12,7 +12,6 @@ in vec2 passUV;
 layout(location = 2) out vec4 colorOutput;
  
 uniform sampler2D ScreenTexture, depthTexture;
-uniform mat4 previousModelProjection;
 uniform float fWindowHeight;
 uniform float fWindowWidth;
 uniform float thresholdValue;
