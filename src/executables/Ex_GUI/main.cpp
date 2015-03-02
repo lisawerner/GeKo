@@ -15,7 +15,7 @@ bool showlightTexture = false;
 InputHandler iH;
 Pilotview cam("Pilotview");
 
-GUI *gui = new GUI();
+GUI *gui;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
   std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
@@ -49,7 +49,8 @@ int main()
   glfwSetKeyCallback(testWindow.getWindow(), key_callback);
 
   glewInit();
-
+  gui = new GUI();
+  
   //our shader
   VertexShader vsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.vert")));
   FragmentShader fsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.frag")));
@@ -166,26 +167,31 @@ int main()
   Sphere lightSphere = Sphere();
 
   for (int i = -4; i < 4; i++)
-  for (int j = -4; j < 4; j++)
-  {
-    Node *newLight = new Node(std::string("Node_" + std::to_string(i) + std::to_string(j)));
-    newLight->addGeometry(&lightSphere);
-    newLight->setModelMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(i*1.5, 1.0f, j*1.5)));
-    //newLight.setModelMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(0, 1, 1.0f)));
-    newLight->setModelMatrix(glm::scale(newLight->getModelMatrix(), glm::vec3(2.0, 2.0, 2.0)));
-    lights.addChildrenNode(newLight);
-  }
+    for (int j = -4; j < 4; j++)
+    {
+      Node *newLight = new Node(std::string("Node_" + std::to_string(i) + std::to_string(j)));
+      newLight->addGeometry(&lightSphere);
+      newLight->setModelMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(i*1.5, 1.0f, j*1.5)));
+      //newLight.setModelMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(0, 1, 1.0f)));
+      newLight->setModelMatrix(glm::scale(newLight->getModelMatrix(), glm::vec3(2.0, 2.0, 2.0)));
+      lights.addChildrenNode(newLight);
+    }
 
-  int outputFPS = 0;
+ 
 
   //====================================================
   //SETUP GUI
+  float testFloat = float(0.0f);
 
+  gui->addElement(new GuiElement::Text("testString"));
+  gui->addElement(new GuiElement::SliderFloat("testSlider", &testFloat, 0.0f, 1.0f));
 
+  //TODO
+  //ADD FUNCTION TO ADD GUI TO RENDERER
 
   //====================================================
 
-
+  float previousTestFloat = 0.0f;
   while (!glfwWindowShouldClose(testWindow.getWindow()))
   {
     // You have to compute the delta time
@@ -193,13 +199,12 @@ int main()
     float deltaTime = glfwGetTime() - startTime;
     cam.setSensitivity(deltaTime);
 
-    //if (!(outputFPS % 20))
-    //std::cout << "FPS: " << static_cast<int>(1 / (glfwGetTime() - startTime)) << std::endl;
+    if (testFloat != previousTestFloat)
+    {
+      std::cout << "Changed Test Float to: " << testFloat << std::endl;
+      previousTestFloat = testFloat;
+    }
 
-    std::cout << "FPS: " << static_cast<double>(glfwGetTime() - startTime) * 100 << std::endl;
-
-
-    outputFPS++;
     startTime = glfwGetTime();
 
     //update Model Matrix
@@ -280,8 +285,8 @@ int main()
     screenFillingQuad.renderGeometry();
     shaderSFQ.unbind();
 
-     //renderer->renderGUI()
-    //should render all guis which have been added to the renderer
+    //TODO: render all guis which have been added to the renderer
+    renderer.renderGUI(*gui,testWindow);
 
     glfwSwapBuffers(testWindow.getWindow());
     glfwPollEvents();

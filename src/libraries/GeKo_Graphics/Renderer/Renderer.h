@@ -9,12 +9,6 @@
 #include <glm/glm.hpp>
 
 
-/*
-Need Information
-*/
-
-class GUI;
-
 struct RenderObject{
 
 };
@@ -28,6 +22,7 @@ struct OpenGL3Context : RenderContext {
   virtual void bindContext() const override;
 };
 
+class GUI;
 class FBO;
 class Scene;
 class Shader;
@@ -59,7 +54,7 @@ public:
   void renderScene(Scene& scene, Window& window);
 
   ///renders the given GUI
-  void renderGUI(GUI *guiToRender);
+  void renderGUI(GUI &guiToRender, Window &window);
 
   void useReflections(bool useReflections);
   void useAntiAliasing(bool useAntiAliasing);
