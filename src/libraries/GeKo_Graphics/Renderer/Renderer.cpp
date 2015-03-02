@@ -183,7 +183,7 @@ void Renderer::renderScene(Scene& scene, Window& window)
   glfwPollEvents();
 }
 
-void Renderer::renderGUI(GUI& guiToRender, Window &window)
+void Renderer::renderGUI(GUI const &guiToRender, Window &window)
 {
   guiToRender.render(window);
 }
