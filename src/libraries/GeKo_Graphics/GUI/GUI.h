@@ -1,8 +1,14 @@
 #pragma once
 
+//TODO CHANGE FONT & COLOR OF WINDOW
+//TODO ADD TABS WITH CHILD GUI ELEMENTS
+
 #include <string>
+#include <vector>
 #include <stdio.h>
-#include <imgui.h>
+#include "GUIComponents.hpp"
+
+class Window;
 
 ///This Class sets up a GUI and offers methods to create its elements
 
@@ -14,12 +20,16 @@ class GUI
     ///Destructor
     ~GUI();
  
-    ///set GUI Font - fileName has to be only the fileName "Example.ttf". The Font File needs to be in "./Resources/Fonts"
-    void setFont(std::string &fileName, float size);
-   
-    //ImDrawList getCommandList();
-    //int getCommandListSize();
+    void render(Window& window);
+    void addElement(GuiElement::Element *comp);
 
   private:
+    
+    void init();
+    void loadFonts();
+    void update(Window& window);
+    
 
+    bool m_initialized;
+    std::vector<GuiElement::Element*> *m_guiElements;
 };
