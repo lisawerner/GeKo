@@ -14,7 +14,7 @@ Pilotview::Pilotview(std::string name)
 	m_viewMatrix = glm::lookAt(glm::vec3(m_position), glm::vec3(m_position) + glm::vec3(m_direction), glm::vec3(m_up));
 	m_projectionMatrix = glm::perspective(m_fov, m_width / (float)m_height, m_near, m_far);
 
-	m_keySpeed = 2.0f;
+	m_keySpeed = 50.0f;//2.0f;
 	m_sensitivity = 0.01f;
 }
 
@@ -28,28 +28,42 @@ void Pilotview::setPosition(glm::vec4 position){
 }
 
 void Pilotview::moveForward(){
-	m_position.z -= m_keySpeed* m_sensitivity;
+	m_position.x += m_keySpeed* m_sensitivity*m_direction.x;
+	m_position.y += m_keySpeed* m_sensitivity*m_direction.y;
+	m_position.z += m_keySpeed* m_sensitivity*m_direction.z;
+
 	m_viewMatrix = glm::lookAt(glm::vec3(m_position), glm::vec3(m_position) + glm::vec3(m_direction), glm::vec3(m_up));
 
 	std::cout << "moveForward()" << std::endl;
 }
 
 void Pilotview::moveBackward(){
-	m_position.z += m_keySpeed* m_sensitivity;
+	m_position.x -= m_keySpeed* m_sensitivity*m_direction.x;
+	m_position.y -= m_keySpeed* m_sensitivity*m_direction.y;
+	m_position.z -= m_keySpeed* m_sensitivity*m_direction.z;
+
 	m_viewMatrix = glm::lookAt(glm::vec3(m_position), glm::vec3(m_position) + glm::vec3(m_direction), glm::vec3(m_up));
 
 	std::cout << "moveBackward()" << std::endl;
 }
 
 void Pilotview::moveLeft(){
-	m_position.x -= m_keySpeed* m_sensitivity;
+	glm::vec3 directionOrtho = glm::cross(glm::vec3(m_direction.x, m_direction.y, m_direction.z), glm::vec3(m_up.x, m_up.y, m_up.z));
+	m_position.x -= m_keySpeed* m_sensitivity*directionOrtho.x;
+	m_position.y -= m_keySpeed* m_sensitivity*directionOrtho.y;
+	m_position.z -= m_keySpeed* m_sensitivity*directionOrtho.z;
+
 	m_viewMatrix = glm::lookAt(glm::vec3(m_position), glm::vec3(m_position) + glm::vec3(m_direction), glm::vec3(m_up));
 	
 	std::cout << "moveLeft()" << std::endl;
 }
 	
 void Pilotview::moveRight(){
-	m_position.x += m_keySpeed* m_sensitivity;
+	glm::vec3 directionOrtho = glm::cross(glm::vec3(m_direction.x, m_direction.y, m_direction.z), glm::vec3(m_up.x, m_up.y, m_up.z));
+	m_position.x += m_keySpeed* m_sensitivity*directionOrtho.x;
+	m_position.y += m_keySpeed* m_sensitivity*directionOrtho.y;
+	m_position.z += m_keySpeed* m_sensitivity*directionOrtho.z;
+
 	m_viewMatrix = glm::lookAt(glm::vec3(m_position), glm::vec3(m_position) + glm::vec3(m_direction), glm::vec3(m_up));
 
 	std::cout << "moveRight()" << std::endl;

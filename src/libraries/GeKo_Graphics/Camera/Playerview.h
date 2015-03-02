@@ -31,9 +31,6 @@ public:
 	void turn(double xpos, double ypos);
 
 protected:
-	// m_direction defines the viewing direction
-	glm::vec4 m_direction;
-
 	// m_oldX and m_oldY remember the last x and y value of the mouse position
 	double m_oldX, m_oldY;
 
