@@ -46,9 +46,6 @@ public:
 	void turnDown();
 
 protected:
-	// m_direction defines the viewing direction
-	glm::vec4 m_direction;
-
 	// Angles in x and y direction
 	double m_phi, m_theta;
 };
