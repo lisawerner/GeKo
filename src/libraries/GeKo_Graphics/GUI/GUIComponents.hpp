@@ -13,6 +13,9 @@ namespace GuiElement
     ~Element() {}
 
     virtual void render() = 0;
+    virtual void dispose() = 0;
+
+  private:
   };
 
   class Text : public Element
@@ -21,21 +24,124 @@ namespace GuiElement
   public:
     Text(std::string text) : m_text(text) {}
     inline void render() { ImGui::Text(m_text.c_str()); }
+    inline void dispose() { Text::~Text(); }
 
   private:
+    ~Text() {}
+
     std::string m_text;
+
   };
 
   class SliderFloat : public Element
   {
 
   public:
-    SliderFloat(std::string ID, float *parameter, float min, float max) : m_parameter(parameter), m_min(min), m_max(max) {}
-    inline void render() { ImGui::SliderFloat(ID.c_str(), m_parameter, m_min, m_max); }
+    SliderFloat(std::string ID, float *parameter, float min, float max) : m_ID(ID), m_parameter(parameter), m_min(min), m_max(max) {}
+    inline void render() { ImGui::SliderFloat(m_ID.c_str(), m_parameter, m_min, m_max); }
+    inline void dispose() { SliderFloat::~SliderFloat(); }
 
   private:
-    std::string ID;
+    ~SliderFloat() {}
+
+    std::string m_ID;
     float *m_parameter, m_min, m_max;
+  };
+
+  class Header : public Element
+  {
+  public:
+    Header(std::string ID) : m_ID(ID) { }
+    inline void render()
+    {
+      if (ImGui::CollapsingHeader(m_ID.c_str())) 
+        for (std::vector<Element*>::iterator it = m_childElements.begin(); it != m_childElements.end(); ++it)
+          (*it)->render(); 
+    }
+
+    inline void addElement(Element *child) { m_childElements.push_back(child); }
+    inline void dispose() { Header::~Header(); }
+
+  private:
+    ~Header() 
+    { 
+      for(std::vector<Element*>::iterator it = m_childElements.begin(); it != m_childElements.end(); ++it)
+        (*it)->dispose();
+    }
+
+    std::string m_ID;
+    std::vector<Element*> m_childElements;
+
+  };
+
+  class Spacing : public Element
+  {
+  public:
+    Spacing() {}
+    inline void render() { ImGui::Spacing(); }
+    inline void dispose() { Spacing::~Spacing(); }
+
+  private:
+    ~Spacing() {}
+
+  };
+
+  class Separator : public Element
+  {
+  public:
+    Separator() {}
+    inline void render() { ImGui::Separator(); }
+    inline void dispose() { Separator::~Separator(); }
+
+  private:
+    ~Separator() {}
+
+  };
+
+  class PushButton : public Element
+  {
+  public:
+    PushButton(std::string ID) : m_isPushed(false), m_ID(ID) {}
+    inline void render() { m_isPushed = ImGui::Button(m_ID.c_str()); }
+    inline bool isPushed() { return m_isPushed; }
+    inline void dispose() { PushButton::~PushButton(); };
+
+  private:
+    ~PushButton() {}
+
+    bool m_isPushed;
+    std::string m_ID;
+  };
+
+  class ToggleButton : public Element
+  {
+  public:
+    ToggleButton(bool startValue = false, std::string activeText = "on", std::string inactiveText = "off") : m_isActive(startValue), m_ActiveString(activeText), m_InactiveString(inactiveText)  {}
+    inline void render() 
+    {
+      if (m_isActive)
+      {
+        if (ImGui::Button(m_ActiveString.c_str()))
+          m_isActive = false;
+      }
+
+      else
+      {
+        if (ImGui::Button(m_InactiveString.c_str()))
+          m_isActive = true;
+      }
+    }
+    
+    inline bool isActive() { return m_isActive; }
+    inline void dispose() { ToggleButton::~ToggleButton(); };
+
+  private:
+    ~ToggleButton() {}
+
+    bool m_isActive;
+    std::string m_ActiveString;
+    std::string m_InactiveString;
+
   };
 
 };

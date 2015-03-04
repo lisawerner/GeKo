@@ -17,13 +17,16 @@ static bool mousePressed[2] = { false, false };
 
 #define OFFSETOF(TYPE, ELEMENT) ((size_t)&(((TYPE *)0)->ELEMENT))
 
-GUI::GUI() : m_initialized(false), m_guiElements(new std::vector<GuiElement::Element*>())
+GUI::GUI() : m_initialized(false), m_visible(true), m_guiElements(new std::vector<GuiElement::Element*>())
 {
 
 }
 
 GUI::~GUI()
 {
+  for (std::vector<GuiElement::Element*>::iterator it = m_guiElements->begin(); it != m_guiElements->end(); ++it)
+    (*it)->dispose();
+
   if (vao_handle) glDeleteVertexArrays(1, &vao_handle);
   if (vbo_handle) glDeleteBuffers(1, &vbo_handle);
   glDetachShader(shader_handle, vert_handle);
@@ -33,6 +36,7 @@ GUI::~GUI()
   glDeleteProgram(shader_handle);
 
   ImGui::Shutdown();
+
 }
 
 ImVec4 clear_col = ImColor(114, 144, 154);
@@ -41,6 +45,9 @@ void GUI::render(Window& window)
 {
   if (!m_initialized)
     init();
+
+  if (!m_visible)
+    return;
 
   ImGuiIO& io = ImGui::GetIO();
 
@@ -72,6 +79,16 @@ void GUI::render(Window& window)
 void GUI::addElement(GuiElement::Element *comp)
 {
   m_guiElements->push_back(comp);
+}
+
+void GUI::show()
+{
+  m_visible = true;
+}
+
+void GUI::hide()
+{
+  m_visible = false;
 }
 
 void GUI::update(Window& window)
@@ -290,8 +307,14 @@ void GUI::loadFonts()
 {
   ImGuiIO& io = ImGui::GetIO();
   //ImFont* my_font1 = io.Fonts->AddFontDefault();
-  //ImFont* my_font2 = io.Fonts->AddFontFromFileTTF("extra_fonts/Karla-Regular.ttf", 15.0f);
-  //ImFont* my_font3 = io.Fonts->AddFontFromFileTTF("extra_fonts/ProggyClean.ttf", 13.0f); my_font3->DisplayOffset.y += 1;
+
+  //FONT: http://www.1001fonts.com/aller-font.html
+
+
+  ImFont* my_font2 = io.Fonts->AddFontFromFileTTF(RESOURCES_PATH "\\Fonts\\Aller_Std_Rg.ttf", 15.0f);
+  
+
+  //ImFont* my_font1 = io.Fonts->AddFontFromFileTTF("..\\..\\..\\resources\\Fonts\\Karla-Regular.ttf", 15.0f);
   //ImFont* my_font4 = io.Fonts->AddFontFromFileTTF("extra_fonts/ProggyTiny.ttf", 10.0f); my_font4->DisplayOffset.y += 1;
   //ImFont* my_font5 = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 20.0f, io.Fonts->GetGlyphRangesJapanese());
 

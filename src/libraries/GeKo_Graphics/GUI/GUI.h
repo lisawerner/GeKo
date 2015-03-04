@@ -2,6 +2,8 @@
 
 //TODO CHANGE FONT & COLOR OF WINDOW
 //TODO ADD TABS WITH CHILD GUI ELEMENTS
+//TODO MOUSE SCROLL INPUT
+//TODO DESTRUCTORS
 
 #include <string>
 #include <vector>
@@ -22,6 +24,8 @@ class GUI
  
     void render(Window& window);
     void addElement(GuiElement::Element *comp);
+    void show();
+    void hide();
 
   private:
     
@@ -31,5 +35,6 @@ class GUI
     
 
     bool m_initialized;
+    bool m_visible;
     std::vector<GuiElement::Element*> *m_guiElements;
 };
