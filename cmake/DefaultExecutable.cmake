@@ -93,21 +93,14 @@ ELSEIF (MSVC)
 	
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
-			${CMAKE_BINARY_DIR}/dependencies/TinyXML/src/TinyXML-build/$<CONFIGURATION>/tinyxml2.dll   
+			${CMAKE_BINARY_DIR}/dependencies/OpenAL/src/OpenAL-build/$<CONFIGURATION>/OpenAL32.dll   
 			$<TARGET_FILE_DIR:${PROJECT_NAME}>
 		)
 	
-	#copy TBB DLLS
-	#add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-	#	COMMAND ${CMAKE_COMMAND} -E copy_if_different  
-	#		${TBB_SOURCE_DIR}/bin/ia32/${_TBB_COMPILER}/tbb.dll   
-	#		$<TARGET_FILE_DIR:${PROJECT_NAME}>
-	#	)
-		
-	#add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-	#	COMMAND ${CMAKE_COMMAND} -E copy_if_different  
-	#		${TBB_SOURCE_DIR}/bin/ia32/${_TBB_COMPILER}/tbbmalloc.dll   
-	#		$<TARGET_FILE_DIR:${PROJECT_NAME}>
-	#	)
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
+			${CMAKE_BINARY_DIR}/dependencies/TinyXML/src/TinyXML-build/$<CONFIGURATION>/tinyxml2.dll   
+			$<TARGET_FILE_DIR:${PROJECT_NAME}>
+		)
 		
 ENDIF()
