@@ -115,4 +115,7 @@ protected:
 
 	// Speed of movement by using the mouse
 	float m_mouseSpeed;
+
+	// m_direction defines the viewing direction
+	glm::vec4 m_direction;
 };

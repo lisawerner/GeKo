@@ -12,7 +12,6 @@ include_directories(
 	${STB_INCLUDE_PATH}
 	${OPENAL_INCLUDE_PATH}
 	${IMGUI_INCLUDE_PATH}
-	#${TBB_INCLUDE_PATH}
 	${TinyXML_INCLUDE_PATH}
     ${EXTERNAL_LIBRARY_PATHS}
     ${CMAKE_SOURCE_DIR}/src/libraries/
@@ -37,7 +36,6 @@ target_link_libraries(
 	${ASSIMP_LIB}
 	${OPENAL_LIB}
 	${IMGUI_LIB}
-	#${TBB_LIB}
 	${TinyXML_LIB}
 )
 
@@ -50,7 +48,6 @@ add_dependencies(
 	OpenAL
 	imgui
 	TinyXML
-	#TBB
 )
 
 IF (MINGW)
@@ -65,6 +62,12 @@ IF (MINGW)
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
 			${CMAKE_SOURCE_DIR}/dependencies/assimp/libMinGW/libassimp.dll   
+			$<TARGET_FILE_DIR:${PROJECT_NAME}>
+		)
+		
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
+			${CMAKE_BINARY_DIR}/dependencies/OpenAL/src/OpenAL-build/OpenAL32.dll   
 			$<TARGET_FILE_DIR:${PROJECT_NAME}>
 		)
 		
@@ -93,21 +96,14 @@ ELSEIF (MSVC)
 	
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
-			${CMAKE_BINARY_DIR}/dependencies/TinyXML/src/TinyXML-build/$<CONFIGURATION>/tinyxml2.dll   
+			${CMAKE_BINARY_DIR}/dependencies/OpenAL/src/OpenAL-build/$<CONFIGURATION>/OpenAL32.dll   
 			$<TARGET_FILE_DIR:${PROJECT_NAME}>
 		)
 	
-	#copy TBB DLLS
-	#add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-	#	COMMAND ${CMAKE_COMMAND} -E copy_if_different  
-	#		${TBB_SOURCE_DIR}/bin/ia32/${_TBB_COMPILER}/tbb.dll   
-	#		$<TARGET_FILE_DIR:${PROJECT_NAME}>
-	#	)
-		
-	#add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-	#	COMMAND ${CMAKE_COMMAND} -E copy_if_different  
-	#		${TBB_SOURCE_DIR}/bin/ia32/${_TBB_COMPILER}/tbbmalloc.dll   
-	#		$<TARGET_FILE_DIR:${PROJECT_NAME}>
-	#	)
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
+			${CMAKE_BINARY_DIR}/dependencies/TinyXML/src/TinyXML-build/$<CONFIGURATION>/tinyxml2.dll   
+			$<TARGET_FILE_DIR:${PROJECT_NAME}>
+		)
 		
 ENDIF()

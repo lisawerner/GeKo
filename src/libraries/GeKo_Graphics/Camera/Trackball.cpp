@@ -16,8 +16,10 @@ Trackball::Trackball(std::string name){
 	m_theta = glm::pi<float>() / 2.0f;
 	m_phi = -glm::pi<float>() / 2.0f;
 
-	m_keySpeed = 2.0;
+	m_keySpeed = 20.0;//2.0;
 	m_sensitivity = 0.01;
+
+	m_direction = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
 }
 
 Trackball::~Trackball()
@@ -39,7 +41,11 @@ void Trackball::moveForward(){
 		m_radius = 1;
 	}
 	else {
-		m_position.z -= m_keySpeed*m_sensitivity;
+		m_direction = glm::normalize(m_center - m_position);
+
+		m_position.x += m_keySpeed*m_sensitivity*m_direction.x;
+		m_position.y += m_keySpeed*m_sensitivity*m_direction.y;
+		m_position.z += m_keySpeed*m_sensitivity*m_direction.z;
 		m_radius -= m_keySpeed*m_sensitivity;
 
 		m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
@@ -50,7 +56,11 @@ void Trackball::moveForward(){
 
 void Trackball::moveBackward(){
 
-	m_position.z += m_keySpeed*m_sensitivity;
+	m_direction = glm::normalize(m_center - m_position);
+
+	m_position.x -= m_keySpeed*m_sensitivity*m_direction.x;
+	m_position.y -= m_keySpeed*m_sensitivity*m_direction.y;
+	m_position.z -= m_keySpeed*m_sensitivity*m_direction.z;
 	m_radius += m_keySpeed*m_sensitivity;
 
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
