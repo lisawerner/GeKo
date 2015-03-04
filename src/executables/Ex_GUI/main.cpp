@@ -179,19 +179,47 @@ int main()
 
  
 
-  //====================================================
+  //========================================================================================================
   //SETUP GUI
   float testFloat = float(0.0f);
+  float testFloat2 = float(0.0f);
+ 
+  GuiElement::Header *testHeader = new GuiElement::Header("testHeader");
+    testHeader->addElement(new GuiElement::Text("This String is a Child of TestHeader"));
+    testHeader->addElement(new GuiElement::Text("This String is also a Child of TestHeader"));
+    testHeader->addElement(new GuiElement::SliderFloat("Childslider", &testFloat2, 0.0f, 1.0f));
+  gui->addElement(testHeader);
 
+  gui->addElement(new GuiElement::Spacing);
+  gui->addElement(new GuiElement::Separator);
+  gui->addElement(new GuiElement::Spacing);
+  
   gui->addElement(new GuiElement::Text("testString"));
   gui->addElement(new GuiElement::SliderFloat("testSlider", &testFloat, 0.0f, 1.0f));
+  
+  gui->addElement(new GuiElement::Spacing);
+  gui->addElement(new GuiElement::Separator);
+  gui->addElement(new GuiElement::Spacing);
+
+  GuiElement::PushButton *buttonTest = new GuiElement::PushButton("Try me!");
+  gui->addElement(buttonTest);
+ 
+  gui->addElement(new GuiElement::Spacing);
+  gui->addElement(new GuiElement::Separator);
+  gui->addElement(new GuiElement::Spacing);
+
+  gui->addElement(new GuiElement::Text("Show Deferred Shading Lightmap:"));
+  GuiElement::ToggleButton *toggleButton = new GuiElement::ToggleButton(false,"on","off");
+  gui->addElement(toggleButton);
+
 
   //TODO
   //ADD FUNCTION TO ADD GUI TO RENDERER
 
-  //====================================================
+  //========================================================================================================
 
   float previousTestFloat = 0.0f;
+  float previousTestFloat2 = 0.0f;
   while (!glfwWindowShouldClose(testWindow.getWindow()))
   {
     // You have to compute the delta time
@@ -205,82 +233,95 @@ int main()
       previousTestFloat = testFloat;
     }
 
-    startTime = glfwGetTime();
+    if (testFloat2 != previousTestFloat2)
+    {
+      std::cout << "Changed Child Float to: " << testFloat2 << std::endl;
+      previousTestFloat2 = testFloat2;
+    }
 
-    //update Model Matrix
-    lights.setModelMatrix(glm::rotate(lights.getModelMatrix(), 10.0f * deltaTime, glm::vec3(0.0, 1.0, 0.0)));
+    if (buttonTest->isPushed())
+    {
+      std::cout << "You Pressed the Button!" << std::endl;
+    }
+
+    {
+      startTime = glfwGetTime();
+
+      //update Model Matrix
+      lights.setModelMatrix(glm::rotate(lights.getModelMatrix(), 10.0f * deltaTime, glm::vec3(0.0, 1.0, 0.0)));
 
 
-    fboGBuffer.bind();
-    glClearColor(0, 0, 0, 0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    shaderGBuffer.bind();
-    shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
-    shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+      fboGBuffer.bind();
+      glClearColor(0, 0, 0, 0);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      shaderGBuffer.bind();
+      shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
+      shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 
-    testScene.render(shaderGBuffer);
+      testScene.render(shaderGBuffer);
 
 
-    shaderGBuffer.unbind();
-    fboGBuffer.unbind();
+      shaderGBuffer.unbind();
+      fboGBuffer.unbind();
 
-    //DEFERRED SHADING TEIL============================
+      //DEFERRED SHADING TEIL============================
 
-    fboDeferredShading.bind();
+      fboDeferredShading.bind();
 
-    glCullFace(GL_FRONT);
-    glEnable(GL_CULL_FACE);
-    glDisable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE);
-    glClearColor(0, 0, 0, 0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      glCullFace(GL_FRONT);
+      glEnable(GL_CULL_FACE);
+      glDisable(GL_DEPTH_TEST);
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_ONE, GL_ONE);
+      glClearColor(0, 0, 0, 0);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    shaderDsLightingShader.bind();
+      shaderDsLightingShader.bind();
 
-    shaderDsLightingShader.sendMat4("viewMatrix", cam.getViewMatrix());
-    shaderDsLightingShader.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+      shaderDsLightingShader.sendMat4("viewMatrix", cam.getViewMatrix());
+      shaderDsLightingShader.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 
-    shaderDsLightingShader.sendSampler2D("positionMap", fboGBuffer.getColorTexture(0), 0);
-    shaderDsLightingShader.sendSampler2D("normalMap", fboGBuffer.getColorTexture(1), 1);
+      shaderDsLightingShader.sendSampler2D("positionMap", fboGBuffer.getColorTexture(0), 0);
+      shaderDsLightingShader.sendSampler2D("normalMap", fboGBuffer.getColorTexture(1), 1);
 
-    shaderDsLightingShader.sendInt("windowWidth", testWindow.getWidth());
-    shaderDsLightingShader.sendInt("windowHeight", testWindow.getHeight());
+      shaderDsLightingShader.sendInt("windowWidth", testWindow.getWidth());
+      shaderDsLightingShader.sendInt("windowHeight", testWindow.getHeight());
 
-    shaderDsLightingShader.sendVec3("lightColor", glm::fvec3(0.7f, 0.7f, 0.4f));
+      shaderDsLightingShader.sendVec3("lightColor", glm::fvec3(0.7f, 0.7f, 0.4f));
 
-    lights.render(shaderDsLightingShader);
+      lights.render(shaderDsLightingShader);
 
-    glDisable(GL_CULL_FACE);
-    glEnable(GL_DEPTH_TEST);
-    glDisable(GL_BLEND);
-    glClearColor(1.0, 1.0, 1.0, 0.0);
-    shaderDsLightingShader.unbind();
-    fboDeferredShading.unbind();
+      glDisable(GL_CULL_FACE);
+      glEnable(GL_DEPTH_TEST);
+      glDisable(GL_BLEND);
+      glClearColor(1.0, 1.0, 1.0, 0.0);
+      shaderDsLightingShader.unbind();
+      fboDeferredShading.unbind();
 
-    //COMPOSITING TEIL ===============================
-    fboCompositing.bind();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    shaderDsCompositingShader.bind();
+      //COMPOSITING TEIL ===============================
+      fboCompositing.bind();
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      shaderDsCompositingShader.bind();
 
-    shaderDsCompositingShader.sendSampler2D("colorMap", fboGBuffer.getColorTexture(2), 0);
-    shaderDsCompositingShader.sendSampler2D("lightMap", fboDeferredShading.getColorTexture(2), 1);
+      shaderDsCompositingShader.sendSampler2D("colorMap", fboGBuffer.getColorTexture(2), 0);
+      shaderDsCompositingShader.sendSampler2D("lightMap", fboDeferredShading.getColorTexture(2), 1);
 
-    screenFillingQuad.renderGeometry();
+      screenFillingQuad.renderGeometry();
 
-    shaderDsCompositingShader.unbind();
-    fboCompositing.unbind();
+      shaderDsCompositingShader.unbind();
+      fboCompositing.unbind();
 
-    //================================================
+      //================================================
 
-    //ScreenFillingQuad Render Pass
-    shaderSFQ.bind();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      //ScreenFillingQuad Render Pass
+      shaderSFQ.bind();
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  }
 
-    if (glfwGetKey(testWindow.getWindow(), GLFW_KEY_F1))
-      shaderSFQ.sendSampler2D("fboTexture", fboDeferredShading.getColorTexture(2));
-    else
+    if (!toggleButton->isActive())
       shaderSFQ.sendSampler2D("fboTexture", fboCompositing.getColorTexture(2));
+    else
+      shaderSFQ.sendSampler2D("fboTexture", fboDeferredShading.getColorTexture(2));
 
     screenFillingQuad.renderGeometry();
     shaderSFQ.unbind();
