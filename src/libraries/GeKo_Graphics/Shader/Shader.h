@@ -62,7 +62,8 @@ class ShaderProgram{
 public:
     GLuint handle;
     ShaderProgram(const VertexShader &vs, const FragmentShader &fs);
-	ShaderProgram(const ComputeShader &cs);
+    ShaderProgram(const ComputeShader &cs);
+    ShaderProgram(const VertexShader &vs, const GeometryShader &gs, const FragmentShader &fs);
     void bind() const;
     void unbind() const;
     GLuint getLocation(std::string uniform);
