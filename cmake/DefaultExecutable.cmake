@@ -82,17 +82,40 @@ IF (MINGW)
 ELSEIF (MSVC)
 
 	#Copy needed dll files to current bin folder
+	
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
 			${CMAKE_BINARY_DIR}/dependencies/glew/src/glew-build/bin/$<CONFIGURATION>/glewd.dll      
 			$<TARGET_FILE_DIR:${PROJECT_NAME}>
 		)
-		
-	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+			
+	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+		add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
-			${CMAKE_SOURCE_DIR}/dependencies/assimp/lib/assimp_release-dll_win32/Assimp32.dll   
+			${CMAKE_SOURCE_DIR}/dependencies/assimp/lib/debug/32bit/Assimp32d.dll   
 			$<TARGET_FILE_DIR:${PROJECT_NAME}>
 		)
+		
+		add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
+			${CMAKE_SOURCE_DIR}/dependencies/assimp/lib/release/32bit/Assimp32.dll   
+			$<TARGET_FILE_DIR:${PROJECT_NAME}>
+		)
+		
+	else()
+		add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
+			${CMAKE_SOURCE_DIR}/dependencies/assimp/lib/debug/64bit/Assimp64d.dll   
+			$<TARGET_FILE_DIR:${PROJECT_NAME}>
+		)
+		
+		add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
+			${CMAKE_SOURCE_DIR}/dependencies/assimp/lib/release/64bit/Assimp64.dll   
+			$<TARGET_FILE_DIR:${PROJECT_NAME}>
+		)
+	endif()
+	
 	
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
