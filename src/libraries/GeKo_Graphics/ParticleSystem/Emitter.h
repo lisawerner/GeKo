@@ -3,7 +3,7 @@
 #include "GeKo_Graphics/Camera/Camera.h"
 
 //das Folgende fliegt noch raus
-#include "GeKo_Graphics/Objectinclude.h"
+#include "GeKo_Graphics/ObjectInclude.h"
 //#include "GeKo_Graphics/Object/Geometry.h"
 //#include "GeKo_Graphics/Object/Teapot.h"
 //#include "GeKo_Graphics/Object/Cube.h"
