@@ -11,8 +11,22 @@ const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
 
 //define camera (trackball)
+InputHandler iH;
 Trackball cam_trackball("cam");
 Trackball cam_shadow("shadow");
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
+	// The active InputMap is fetched
+	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
+
+	// You go over the active InputMap, if it's the key that is pressed, the mapped action is executed else the key is ignored
+	for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
+		if (it->first == key)
+			activeMap.at(key)();
+		if (it == activeMap.end())
+			std::cout << "Key is not mapped to an action" << std::endl;
+	}
+}
 
 int main() 
 {
@@ -29,6 +43,14 @@ int main()
 	cam_trackball.setPosition(glm::vec4(-2.0, 3.0, 1.0, 1.0));
 	cam_trackball.setNearFar(1.f, 30.f);
 	//cam_trackball.moveDown();
+
+	// Set all InputMaps and set one InputMap active
+	iH.setAllInputMaps(cam_trackball);
+	iH.changeActiveInputMap("Trackball");
+
+	// Callback
+	glfwSetKeyCallback(testWindow.getWindow(), key_callback);
+
 	glewInit();
 	
 	//load, compile and link Shader
