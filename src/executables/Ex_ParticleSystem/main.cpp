@@ -48,24 +48,44 @@ int main()
 
 	//TEXTURES
 	Texture* fireTex;
+	Texture* flyTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/Fly.png");
 	Texture* smokeTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke.jpg");
 	Texture* rainTex;
 	Texture* snowTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle.bmp");
 	Texture* brick = new Texture((char*)RESOURCES_PATH "/brick.bmp");
 
 	//EMITTER SNOW
-	Emitter* snow = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), false, 0.166, 20, 30.0, glm::vec4(0.0, -1.0, 0.0, 1.0), 0.8f); //Point Sprites is default
-	snow->setVelocity(&Emitter::getVelocityZero);	//We set our Function, which we want to use later in Emitter::pushParticle and define the velocity for the particle
-	snow->setComputeVar(false, false, true, false, 0.0f, 1); //Trajector, DirectToGravity, DirectionGravity, PointGravitation, Range, Function
-	snow->setAreaEmitting(true,false, 5.0, 10000);
+	Emitter* snow = new Emitter(0, glm::vec3(0.0, 2.0, 0.0), false, 0.166, 10, 30.0, true); //Point Sprites is default
+	snow->setVelocity(&Emitter::useVelocityZero);	//We set our Function, which we want to use later in Emitter::pushParticle and define the velocity for the particle
+	snow->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 0.3f);
+	//snow->usePhysicFlotation(false, false, 0.0f);
+	snow->setAreaEmitting(false,true, 3.0, 10000);
 	snow->addTexture(*snowTex, 0.0);
 	snow->setUseTexture(true);
 	snow->active();
 
+	//EMITTER Experiment
+	Emitter* exp = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), false, 0.166, 10, 30.0, true); //Point Sprites is default
+	exp->setVelocity(&Emitter::useVelocityZero);	//We set our Function, which we want to use later in Emitter::pushParticle and define the velocity for the particle
+	exp->usePhysicFlotation(false, false, 0.0f);
+	exp->setAreaEmitting(true, false, 3.0, 10000);
+	exp->addTexture(*snowTex, 0.0);
+	exp->setUseTexture(true);
+	exp->active();
+
+	//EMITTER Flies
+	Emitter* flies = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), false, 0.166, 5, 10.0, true);
+	flies->setVelocity(&Emitter::useVelocityZero);	
+	flies->usePhysicSwarmCircleMotion(true, true, false, 0.0f);
+	flies->setAreaEmitting(true, false, 2.0, 10000);
+	flies->addTexture(*flyTex, 0.0);
+	flies->setUseTexture(true);
+	flies->active();
+
 	//EMITTER SMOKE
-	Emitter* smoke = new Emitter(0, glm::vec3(0, -0.5, 0.0), false, 0.25, 5, 4.0, glm::vec4(0.0, -1.0, 0.0, -0.1), 0.4f);
-	smoke->setVelocity(&Emitter::getVelocitySemiCircle);
-	smoke->setComputeVar(false, false, true, false, 2.0f, 1);
+	Emitter* smoke = new Emitter(0, glm::vec3(0, -0.5, 0.0), false, 0.25, 5, 4.0, true);
+	smoke->setVelocity(&Emitter::useVelocitySemiCircle);
+	smoke->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.1), 0.4f);
 	smoke->addTexture(*smokeTex, 0.0);
 	smoke->setUseTexture(true);
 	smoke->switchToGeometryShader();
@@ -123,9 +143,18 @@ int main()
 
 		//EMITTER
 //		glEnable(GL_DEPTH_TEST);
+
 		snow->generateParticle();
 		snow->update();
-		snow->render(cam);
+		//snow->render(cam);
+
+		exp->generateParticle();
+		exp->update();
+		//exp->render(cam);
+
+		flies->generateParticle();
+		flies->update();
+		flies->render(cam);
 
 		smoke->generateParticle();
 		smoke->update();
