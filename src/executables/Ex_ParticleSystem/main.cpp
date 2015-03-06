@@ -55,13 +55,12 @@ int main()
 	Texture* brick = new Texture((char*)RESOURCES_PATH "/brick.bmp");
 
 	//EMITTER SNOW, needs better texture
-	Emitter* snow = new Emitter(0, glm::vec3(0.0, 2.0, 0.0), 0.0, 0.166, 10, 30.0, true);
-	snow->setVelocity(&Emitter::useVelocityZero);	//We set our Function, which we want to use later in Emitter::pushParticle and define the velocity for the particle
+	Emitter* snow = new Emitter(0, glm::vec3(0.0, 3.0, 0.0), 0.0, 0.166, 10, 30.0, true);
+	snow->setVelocity(&Emitter::useVelocityZero);
 	snow->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 0.5f);
 	snow->setAreaEmitting(false,true, 3.0, 10000);
 	snow->addTexture(*snowTex, 0.0);
 	snow->useTexture(true, 1.0, 3.0);
-	snow->active();
 
 	//EMITTER STRONG SNOW, better with multiple emitter
 	Emitter* snowStrong = new Emitter(0, glm::vec3(-3.5, 4.0, 0.0), 0.0, 0.166, 50, 20.0, true);
@@ -70,7 +69,6 @@ int main()
 	snowStrong->setAreaEmitting(false, true, 5.0, 10000);
 	snowStrong->addTexture(*snowTex, 0.0);
 	snowStrong->useTexture(true, 1.0, 3.0);
-	snowStrong->active();
 
 	//EMITTER RAIN, needs texture
 	Emitter* rain = new Emitter(0, glm::vec3(0.0, 3.0, 0.0), 0.0, 0.166, 20, 5.0, true);
@@ -79,7 +77,6 @@ int main()
 	rain->setAreaEmitting(false, true, 3.0, 10000);
 	rain->addTexture(*snowTex, 0.0);
 	rain->useTexture(true, 1.0, 0.0);
-	rain->active();
 
 	//EMITTER COMIC CLOUD TODO
 	Emitter* cloud = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 0.25, 5, 4.0, true);
@@ -89,7 +86,6 @@ int main()
 	cloud->useTexture(true, 0.0, 0.0);
 	cloud->switchToGeometryShader();
 	cloud->setRotationSpeed(0.5f);
-	cloud->active();
 
 	//EMITTER SMOKE, dont like it
 	Emitter* smoke = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 0.25, 5, 4.0, true);
@@ -99,7 +95,6 @@ int main()
 	smoke->useTexture(true, 2.0, 3.0);
 	smoke->switchToGeometryShader();
 	smoke->setRotationSpeed(0.5f);
-	smoke->active();
 
 	//EMITTER FIRE
 	Emitter* fire = new Emitter(0, glm::vec3(0.0, 2.0, 0.0), 0.0, 0.166, 10, 30.0, true);
@@ -111,7 +106,6 @@ int main()
 	flies->setAreaEmitting(true, false, 2.0, 10000);
 	flies->addTexture(*flyTex, 0.0);
 	flies->useTexture(true, 2.0, 3.0);
-	flies->active();
 
 	//EMITTER SWARM
 	Emitter* swarm = new Emitter(0, glm::vec3(0.0, 2.0, 0.0), 0.0, 0.166, 10, 30.0, true);
@@ -173,11 +167,11 @@ int main()
 
 		snow->generateParticle();
 		snow->update();
-		//snow->render(cam);
+		snow->render(cam);
 
 		snowStrong->generateParticle();
 		snowStrong->update();
-		snowStrong->render(cam);
+		//snowStrong->render(cam);
 
 		rain->generateParticle();
 		rain->update();
