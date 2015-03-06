@@ -1,71 +1,24 @@
 #include "Emitter.h"
 
-//temporary
-/*Emitter::Emitter()
+//TODO: COMMENTS & VAR RENAMING
+
+Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, double emitFrequency,
+	int particlesPerEmit, double particleLifeTime, bool particleMortal)
 {
-	m_output = UNUSED;
-
-	setPosition(glm::vec3(0.0, 0.0, 0.0));
-
-	setMortality(false);
-	setEmitterLifetime(0.0);
-
-	setEmitFrequency(0.0);
-	setParticlesPerEmit(0);
-	setParticleLifetime(0.0);
-
-	setGravity(glm::vec4(0.0, 0.0, 0.0, 0.0));
-	//our used shader for the particle
-	VertexShader vsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystem.vert")));
-	FragmentShader fsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystem.frag")));
-	emitterShader = new ShaderProgram(vsParticle, fsParticle);
-	ComputeShader csParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystem.comp")));
-	compute = new ShaderProgram(csParticle);
-
-	//TODO give the Shader this
-	//our colorList - represent our color flow. Interpolate linear. w Coord is the percentage of lifetime
-	m_useColorFlow = true;
-	setUseTexture(false);
-	colorList = {
-		glm::vec4(255.0, 255.0, 255.0, 0.0),	//white
-		glm::vec4(255.0,   0.0,   0.0, 0.25),	//red
-		glm::vec4(  0.0, 255.0,   0.0, 0.5),	//green
-		glm::vec4(  0.0,   0.0, 255.0, 0.75),	//blue
-		glm::vec4(255.0, 255.0, 255.0, 1.0)		//white
-	};
-	
-	//binden
-	glGenBuffers(1, &color_ubo);
-	glBindBuffer(GL_UNIFORM_BUFFER, color_ubo);
-	glBufferData(GL_UNIFORM_BUFFER, sizeof(colorList), &colorList, GL_STATIC_DRAW);
-	
-	glBindBufferBase(GL_UNIFORM_BUFFER, 2, color_ubo);
-
-	updateSize();
-}*/
-
-Emitter::Emitter(const int OUTPUT, glm::vec3 position, bool mortality, double emitFrequency,
-	int particlesPerEmit, double particleLifeTime, glm::vec4 gravity, float speed)
-{
-	m_output = static_cast<FLOW> (OUTPUT); //set if we generate just once, constant or it is unused
+	m_output = static_cast<FLOW> (OUTPUT); //set if won't generate (-1), constant (0) or just once (1)
 
 	//set Emitter properties
 	setPosition(position);
-	setMortality(mortality);
-	setEmitterLifetime(0.0);
+	setEmitterLifetime(emitterLifetime);
+	setEmitterMortality(emitterLifetime);
 
 	//set properties for the emitting
 	setEmitFrequency(emitFrequency);
 	setParticlesPerEmit(particlesPerEmit);
+
+	//set properties for the particles
 	setParticleLifetime(particleLifeTime);
-
-	//set properties for the physic
-	setGravity(gravity);
-	setSpeed(speed);
-
-	//TEMP
-	m_birthTime = 3.0;
-	m_deathTime = 3.0;
+	setParticleMortality(particleMortal);
 
 	//our default shader (Point Sprites)
 	VertexShader vsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemPointSprites.vert")));
@@ -78,25 +31,29 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, bool mortality, double em
 
 	updateSize(); //?
 }
-
+//TODO: DEAD LOCKS?
 Emitter::~Emitter()
 {
 	deactive();
 	m_textureList.clear();
 }
 
+//??
+
+//TODO: NEED IT?
 void Emitter::active(){
 	updateTime = glfwGetTime();
 	deltaTime = updateTime;
 	generateTime = deltaTime;
 }
-
+//TODO: NEED IT?
 void Emitter::deactive(){
 	updateTime = 0;
 	deltaTime = 0;
 	generateTime = 0;
 }
 
+//TODO: MADELEINE ANGLE TO UBO
 void Emitter::loadBuffer(){
 	//?
 	glGenBuffers(1, &position_ssbo);
@@ -148,7 +105,7 @@ void Emitter::update(){
 	updateTime = glfwGetTime();
 
 	emitLifetime -= deltaTime;
-	if (emitLifetime < 0 && mortal){
+	if (emitLifetime < 0 && emitterMortal){
 		m_output = UNUSED;
 	}
 
@@ -162,14 +119,19 @@ void Emitter::update(){
 	compute->sendFloat("deltaTime", (float)deltaTime);
 	compute->sendVec3("emitterPos", getPosition());
 	compute->sendFloat("fullLifetime", particleLifetime);
-	compute->sendVec4("gravity", gravity);
+	compute->sendInt("particleMortal", m_particleMortal);
+	compute->sendVec4("gravity", m_gravity);
 	compute->sendFloat("gravityRange", m_gravityRange);
-	compute->sendInt("gravityFunc", m_gravityFuncion);
+	compute->sendInt("gravityFunc", m_gravityFunction);
 	compute->sendInt("useTrajectory", m_useTrajectory);
-	compute->sendInt("useDirectToGravity", m_useDirectToGravity);
 	compute->sendInt("useDirectionGravity", m_useDirectionGravity);
 	compute->sendInt("usePointGravity", m_usePointGravity);
-	
+	compute->sendInt("useChaoticSwarmMotion", m_useChaoticSwarmMotion);
+	compute->sendInt("useMovementVertical", m_movementVertical);
+	compute->sendInt("useMovementHorizontalX", m_movementHorizontalX);
+	compute->sendInt("useMovementHorizontalZ", m_movementHorizontalZ);
+	compute->sendFloat("movementLength", m_movementLength);
+
 	//Unbind CD and all SSBO's
 	glDispatchCompute(computeGroupCount, 1, 1); //?
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 0);
@@ -179,6 +141,7 @@ void Emitter::update(){
 	emitterShader->unbind();
 }
 
+//TODO: PS WITHOUT TEXTURE
 void Emitter::render(Camera &cam)
 {
 	auto useTexture = getUseTexture();
@@ -200,6 +163,7 @@ void Emitter::render(Camera &cam)
 
 		//Uniform Vars
 		emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
+		emitterShader->sendInt("particleMortal", m_particleMortal);
 		emitterShader->sendInt("useColorFlow", m_useColorFlow); //TODO
 		emitterShader->sendInt("useTexture", useTexture);
 		emitterShader->sendFloat("birthTime", m_birthTime);
@@ -256,6 +220,7 @@ void Emitter::render(Camera &cam)
 	}
 }
 
+//TODO: MADELEINE ANGLE TO UBO
 void Emitter::pushParticle(int numberNewParticle){
 	auto emitPosition = getPosition();
 
@@ -345,7 +310,6 @@ void Emitter::pushParticle(int numberNewParticle){
 
 	indexBuffer = (indexBuffer + numberNewParticle) % numMaxParticle;
 }
-
 void Emitter::generateParticle()
 {
 	switch (m_output)
@@ -373,11 +337,18 @@ void Emitter::generateParticle()
 
 void Emitter::updateSize()
 {
-	numMaxParticle = (int)((particlesPerEmit * particleLifetime) / emitFrequency);
+	if (!m_particleMortal){
+		numMaxParticle = particlesPerEmit;
+		m_deathTime = 0.0;
+	}
+	else
+		numMaxParticle = (int)((particlesPerEmit * particleLifetime) / emitFrequency);
 	computeGroupCount = numMaxParticle / 16 + 1; //+1 to kill the Point. 16 is the local_size_x in the CS
 
 	loadBuffer();
 }
+
+//GS & PS swichting
 
 void Emitter::switchToGeometryShader(){
 	//Geometry Shader will be used, instead  of Point Sprites
@@ -389,7 +360,6 @@ void Emitter::switchToGeometryShader(){
 	m_usePointSprites = false;
 	m_useGeometryShader = true;
 }
-
 void Emitter::switchToPointSprites(){
 	//Point Sprites Shader will be used instead of Geometry Shader
 	VertexShader vsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemPointSprites.vert")));
@@ -400,7 +370,51 @@ void Emitter::switchToPointSprites(){
 	m_useGeometryShader = false;
 }
 
+//physic:
+
+void Emitter::usePhysicTrajectory(glm::vec4 gravity, float speed){
+	 setGravity(gravity);
+	 m_useTrajectory = true;
+	 m_useDirectionGravity = false;
+	 m_usePointGravity = false;
+	 m_useChaoticSwarmMotion = false;
+
+	 setSpeed(speed);
+}
+void Emitter::usePhysicDirectionGravity(glm::vec4 gravity, float speed){
+	setGravity(gravity);
+	m_useTrajectory = false;
+	m_useDirectionGravity = true;
+	m_usePointGravity = false;
+	m_useChaoticSwarmMotion = false;
+
+	setSpeed(speed);
+}
+void Emitter::usePhysicPointGravity(glm::vec4 gravity, float gravityRange, int gravityFunction, float speed){
+	setGravity(gravity);
+	m_useTrajectory = false;
+	m_useDirectionGravity = false;
+	m_usePointGravity = true;
+	m_useChaoticSwarmMotion = false;
+
+	setSpeed(speed);
+	m_gravityFunction = gravityFunction;
+	m_gravityRange = gravityRange;
+}
+void Emitter::usePhysicSwarmCircleMotion(bool movementVertical, bool movementHorizontalX, bool movementHorizontalZ, float movementLength){
+	m_useTrajectory = false;
+	m_useDirectionGravity = false;
+	m_usePointGravity = false;
+	m_useChaoticSwarmMotion = true;
+
+	m_movementVertical = movementVertical;
+	m_movementHorizontalX = movementHorizontalX;
+	m_movementHorizontalZ = movementHorizontalZ;
+	m_movementLength = movementLength;
+}
+
 //setters:
+
 void Emitter::setOutputMode(const int OUTPUT)
 {
 	m_output = static_cast<FLOW> (OUTPUT);
@@ -409,9 +423,12 @@ void Emitter::setPosition(glm::vec3 newPosition)
 {
 	emitterPosition = newPosition;
 }
-void Emitter::setMortality(bool mortality)
+void Emitter::setEmitterMortality(double emitterLifetime)
 {
-	mortal = mortality;
+	if (emitterLifetime < 0.001)
+		emitterMortal = false;
+	else
+		emitterMortal = true;
 }
 void Emitter::setEmitterLifetime(double emitterLifetime)
 {
@@ -432,23 +449,21 @@ void Emitter::setParticleLifetime(float newLifetime)
 	particleLifetime = newLifetime;
 	updateSize();
 }
+//TODO: Test if lifetime should be 0.0
+void Emitter::setParticleMortality(bool particleMortality)
+{
+	m_particleMortal = particleMortality;
+	if (!m_particleMortal || emitFrequency == 0.0 || particleLifetime == 0.0){
+		m_particleMortal = false;
+		emitFrequency = 0.0;
+		m_deathTime = 0.0;
+		particleLifetime = 5.0; //TODO: test if it can be setted to 0.0
+		m_output = static_cast<FLOW> (1); //set output to once
+	}
+}
 void Emitter::setGravity(glm::vec4 newGravity)
 {
-	gravity = newGravity;
-}
-void Emitter::setComputeVar(bool useTrajector, bool useDirectToGravity, bool useDirectionGravity, bool usePointGravity, float gravityRange, int gravityFunction)
-{	
-	if (useTrajector + useDirectToGravity + useDirectionGravity + usePointGravity > 1){
-		perror("Error in Emitter.cpp: Only 1 Function is allowed for setComputeVar");
-	}
-	else{
-		m_useTrajectory = useTrajector;
-		m_usePointGravity = usePointGravity;
-		m_useDirectionGravity = useDirectionGravity;
-		m_useDirectToGravity = useDirectToGravity;
-		m_gravityRange = gravityRange;
-		m_gravityFuncion = gravityFunction;
-	}
+	m_gravity = newGravity;
 }
 void Emitter::setComputeShader(std::string address){
 	ComputeShader csParticle(loadShaderSource(SHADERS_PATH + address));
@@ -471,40 +486,55 @@ void Emitter::setAreaEmitting(bool areaEmittingXY, bool areaEmittingXZ, float si
 		else m_areaAccuracy = accuracy;
 	}
 }
+//TODO: MADELEINE
 void Emitter::addTexture(Texture &texture, float percentageLife){
 	m_textureList.push_back(texture);
 }
+//TODO: MADELEINE
 void Emitter::deleteTexture(int position){
 	m_textureList.erase(m_textureList.begin() + position);
 }
-void Emitter::setUseTexture(bool useTexture){
+void Emitter::useTexture(bool useTexture, float birthTime, float deathTime){
 	m_useTexture = useTexture;
+	m_birthTime = birthTime;
+	m_deathTime = deathTime;
 }
+//TODO: use it also for PS and set left or right rotation
 void Emitter::setRotationSpeed(float rotationSpeed){
 	m_rotationSpeed = rotationSpeed;		
 }
 
 //Velocity Getter
-glm::vec3 Emitter::getVelocityZero(){
+glm::vec3 Emitter::useVelocityZero(){
 	return glm::vec3(0.0, 0.0, 0.0);
 }
-glm::vec3 Emitter::getVelocitySemiCircle(){
+glm::vec3 Emitter::useVelocityLeftQuarterCircle(){
+	return glm::vec3(((rand() % 100) / 100.0f) - 1.0f,
+		((rand() % 100) / 100.0f),
+		0.0f);
+}
+glm::vec3 Emitter::useVelocityRightQuarterCircle(){
+	return glm::vec3(((rand() % 100) / 100.0f),
+		((rand() % 100) / 100.0f),
+		0.0f);
+}
+glm::vec3 Emitter::useVelocitySemiCircle(){
 	return glm::vec3(((rand() % 200) / 100.0f) - 1.0f,
 					((rand() % 100) / 100.0f),
 					0.0f);
 }
-//TODO
-glm::vec3 Emitter::getVelocitySemiSphere(){
-	return glm::vec3(((rand() % 50) / 100.0f) - 0.25f,
-					((rand() % 100) / 100.0f),
-					((rand() % 50) / 100.0f) - 0.25f);
-}
-glm::vec3 Emitter::getVelocityCircle(){
+glm::vec3 Emitter::useVelocityCircle(){
 	return	glm::vec3(((rand() % 50) / 100.0f) - 0.25f,
 		((rand() % 200) / 100.0f) - 1.0f,
 		((rand() % 50) / 100.0f) - 0.25f);
 }
-glm::vec3 Emitter::getVelocitySphere(){
+//TODO: Nico? Don't get the Calculation
+glm::vec3 Emitter::useVelocitySemiSphere(){
+	return glm::vec3(((rand() % 50) / 100.0f) - 0.25f,
+		((rand() % 100) / 100.0f),
+		((rand() % 50) / 100.0f) - 0.25f);
+}
+glm::vec3 Emitter::useVelocitySphere(){
 	return glm::vec3(((rand() % 200) / 100.0f) - 1.0f,
 					((rand() % 200) / 100.0f) - 1.0f,
 					((rand() % 200) / 100.0f) - -1.0f);
@@ -522,9 +552,9 @@ glm::vec3 Emitter::getPosition()
 {
 	return emitterPosition;
 }
-bool Emitter::getMortality()
+bool Emitter::getEmitterMortality()
 {
-	return mortal;
+	return emitterMortal;
 }
 double Emitter::getEmitterLifetime()
 {
@@ -542,9 +572,12 @@ float Emitter::getParticleLifetime()
 {
 	return particleLifetime;
 }
+bool Emitter::getParticleMortality(){
+	return m_particleMortal;
+}
 glm::vec4 Emitter::getGravity()
 {
-	return gravity;
+	return m_gravity;
 }
 float Emitter::getSpeed(){
 	return m_speed;
@@ -569,9 +602,6 @@ bool Emitter::getUseGeometryShader(){
 }
 bool Emitter::getUsePointSprites(){
 	return m_usePointSprites;
-}
-glm::vec3 Emitter::getVelocity(){
-	return m_velocity;
 }
 float Emitter::getRotationSpeed(){
 	return m_rotationSpeed;

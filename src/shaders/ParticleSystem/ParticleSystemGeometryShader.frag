@@ -6,13 +6,14 @@ in float lifetime;
 uniform sampler2D tex;
 
 uniform float fullLifetime;
+uniform int particleMortal;
 uniform float birthTime;
 uniform float deathTime;
 
 out vec4 fragmentColor;
 
 void main(){
-	if(lifetime < 0) discard; //deletes the actual fragment
+	if(lifetime < 0 && particleMortal == 1) discard; //deletes the actual fragment
 
 	vec4 color = texture2D(tex,uv);
 

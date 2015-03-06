@@ -20,15 +20,22 @@ layout(std140, binding=2) buffer angle_ssbo
 uniform float deltaTime;
 uniform vec3 emitterPos;
 uniform float fullLifetime;
+uniform int particleMortal;
 
 uniform vec4 gravity; //xyz gravity Position, gravity Strength
 uniform float gravityRange;
 uniform int gravityFunc;
 
 uniform int useTrajectory;
-uniform int useDirectToGravity;
 uniform int useDirectionGravity;
 uniform int usePointGravity;
+uniform int useChaoticSwarmMotion;
+
+//for Flotation
+uniform int useMovementHorizontalX;
+uniform int useMovementHorizontalZ;
+uniform int useMovementVertical;
+uniform float movementLength;
 
 layout(local_size_x = 16, local_size_y = 1, local_size_z = 1) in;
 
@@ -44,7 +51,7 @@ void main(){
 	vec4 vel = velocity[gid]; //xyz course, speed
 	vec2 ang = angle[gid]; //xz angle, launch angle
 
-	if (pos.w >0){
+	if (pos.w >0 || particleMortal == 0){
 	
 		/*	trajectory aka schiefer wurf, we assume that gravity direction is 0/-1/0. The scattering angle of the particle is influenced by theta, gravity and speed 
 			If gravityStrengt is positive, the particles will fall, otherwise they will rise*/
@@ -60,11 +67,6 @@ void main(){
 			pos.y = vel.w * sin(theta) * lifetime + 0.5 * (-gravity.w) * pow(lifetime, 2.0) + emitterPos.y; //vertical position in 2d/3d
 		}
 
-		/**/
-		else if(useDirectToGravity == 1){
-			//TODO
-		}
-
 		/*	DirectionGravity. Speed is constant, particles flying to a direction*/
 		else if(useDirectionGravity == 1){
 
@@ -76,7 +78,8 @@ void main(){
 			vel.y += gravity.y * gravity.w * deltaTime;
 			vel.z += gravity.z * gravity.w * deltaTime;
 
-			vel = vec4(normalize(vel.xyz), vel.w);
+			if(vel.length != 0)
+				vel = vec4(normalize(vel.xyz), vel.w);
 		}
 		
 		/*	Gravity is intepreted as a position and not a direction. Function is for 0=linear, 1=const, 2=x^4, 3=cos
@@ -103,8 +106,22 @@ void main(){
 			vel.z = (vel.z + distanceFactor * distance.z * gravity.w * deltaTime) / 1.01;
 		}
 
+		/**/
+		else if(useChaoticSwarmMotion == 1){
+			if(useMovementHorizontalX == 1)
+				pos.x += sin(pos.w) * deltaTime / 3.0;
+			if(useMovementVertical == 1)
+				pos.y += cos(pos.w) * deltaTime / 3.0;
+			if(useMovementHorizontalZ == 1)
+				pos.z += cos(pos.w) * deltaTime / 3.0;
+		}
+
 		//set remainLifetime
-		pos.w -= deltaTime;
+		if(particleMortal == 1)
+			pos.w -= deltaTime;
+		else{
+			pos.w -= deltaTime; //Warning: Breaks Numeric Domain!!
+		}
 
 		//sync
 		positions[gid] = pos;
