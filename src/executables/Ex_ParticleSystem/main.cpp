@@ -54,7 +54,7 @@ int main()
 	Texture* snowTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle.bmp");
 	Texture* brick = new Texture((char*)RESOURCES_PATH "/brick.bmp");
 
-	//EMITTER SNOW
+	//EMITTER SNOW, needs better texture
 	Emitter* snow = new Emitter(0, glm::vec3(0.0, 2.0, 0.0), false, 0.166, 10, 30.0, true);
 	snow->setVelocity(&Emitter::useVelocityZero);	//We set our Function, which we want to use later in Emitter::pushParticle and define the velocity for the particle
 	snow->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 0.3f);
@@ -63,16 +63,25 @@ int main()
 	snow->setUseTexture(true);
 	snow->active();
 
-	//EMITTER FLIES
+	//EMITTER STRONG SNOW, better with multiple emitter
+	Emitter* snowStrong = new Emitter(0, glm::vec3(-3.5, 4.0, 0.0), false, 0.166, 50, 30.0, true);
+	snowStrong->setVelocity(&Emitter::useVelocityRightQuarterCircle);
+	snowStrong->usePhysicDirectionGravity(glm::vec4(0.4, -1.5, 0.0, 1.0), 2.6f);
+	snowStrong->setAreaEmitting(false, true, 3.0, 10000);
+	snowStrong->addTexture(*snowTex, 0.0);
+	snowStrong->setUseTexture(true);
+	snowStrong->active();
+
+	//EMITTER FLIES, needs better texture, and rotating for PS or scaling for GS
 	Emitter* flies = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), false, 0.166, 3, 10.0, true);
 	flies->setVelocity(&Emitter::useVelocityZero);	
 	flies->usePhysicSwarmCircleMotion(true, true, false, 0.0f);
 	flies->setAreaEmitting(true, false, 2.0, 10000);
 	flies->addTexture(*flyTex, 0.0);
-	flies->setUseTexture(true);
+	flies->setUseTexture(true); //TODO
 	flies->active();
 
-	//EMITTER SMOKE
+	//EMITTER SMOKE, dont like it
 	Emitter* smoke = new Emitter(0, glm::vec3(0, -0.5, 0.0), false, 0.25, 5, 4.0, true);
 	smoke->setVelocity(&Emitter::useVelocitySemiCircle);
 	smoke->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.1), 0.4f);
@@ -82,15 +91,33 @@ int main()
 	smoke->setRotationSpeed(0.5f);
 	smoke->active();
 
-	//EMITTER COMIC CLOUD
+	//EMITTER COMIC CLOUD TODO
+	Emitter* cloud = new Emitter(0, glm::vec3(0, -0.5, 0.0), false, 0.25, 5, 4.0, true);
+	cloud->setVelocity(&Emitter::useVelocitySemiCircle);
+	cloud->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.1), 0.4f);
+	cloud->addTexture(*smokeTex, 0.0);
+	cloud->setUseTexture(true);
+	cloud->switchToGeometryShader();
+	cloud->setRotationSpeed(0.5f);
+	cloud->active();
 
-	//EMITTER RAIN
+	//EMITTER RAIN, needs texture
+	Emitter* rain = new Emitter(0, glm::vec3(0.0, 3.0, 0.0), false, 0.166, 20, 5.0, true);
+	rain->setVelocity(&Emitter::useVelocityZero);
+	rain->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 5.0f);
+	rain->setAreaEmitting(false, true, 3.0, 10000);
+	rain->addTexture(*snowTex, 0.0);
+	rain->setUseTexture(true);
+	rain->active();
 
 	//EMITTER SWARM
+	Emitter* swarm = new Emitter(0, glm::vec3(0.0, 2.0, 0.0), false, 0.166, 10, 30.0, true);
 
 	//EMITTER FIRE
+	Emitter* fire = new Emitter(0, glm::vec3(0.0, 2.0, 0.0), false, 0.166, 10, 30.0, true);
 
 	//EMITTER FIREWORK
+	Emitter* firework = new Emitter(0, glm::vec3(0.0, 2.0, 0.0), false, 0.166, 10, 30.0, true);
 
 	//SHADER
 	VertexShader vsSkybox(loadShaderSource(SHADERS_PATH + std::string("/SkyboxShader/SkyboxShader.vert")));
@@ -148,13 +175,21 @@ int main()
 		snow->update();
 		//snow->render(cam);
 
+		snowStrong->generateParticle();
+		snowStrong->update();
+		snowStrong->render(cam);
+
+		rain->generateParticle();
+		rain->update();
+		//rain->render(cam);
+
 		flies->generateParticle();
 		flies->update();
-		flies->render(cam);
+		//flies->render(cam);
 
 		smoke->generateParticle();
 		smoke->update();
-		smoke->render(cam);
+		//smoke->render(cam);
 
 		//CAM
 		cam.setSensitivity((float)(glfwGetTime() - startCamTime));

@@ -124,7 +124,6 @@ void Emitter::update(){
 	compute->sendFloat("gravityRange", m_gravityRange);
 	compute->sendInt("gravityFunc", m_gravityFunction);
 	compute->sendInt("useTrajectory", m_useTrajectory);
-	compute->sendInt("useFlotation", m_useFlotation);
 	compute->sendInt("useDirectionGravity", m_useDirectionGravity);
 	compute->sendInt("usePointGravity", m_usePointGravity);
 	compute->sendInt("useChaoticSwarmMotion", m_useChaoticSwarmMotion);
@@ -372,7 +371,6 @@ void Emitter::usePhysicTrajectory(glm::vec4 gravity, float speed){
 	 m_useTrajectory = true;
 	 m_useDirectionGravity = false;
 	 m_usePointGravity = false;
-	 m_useFlotation = false;
 	 m_useChaoticSwarmMotion = false;
 
 	 setSpeed(speed);
@@ -382,7 +380,6 @@ void Emitter::usePhysicDirectionGravity(glm::vec4 gravity, float speed){
 	m_useTrajectory = false;
 	m_useDirectionGravity = true;
 	m_usePointGravity = false;
-	m_useFlotation = false;
 	m_useChaoticSwarmMotion = false;
 
 	setSpeed(speed);
@@ -392,29 +389,16 @@ void Emitter::usePhysicPointGravity(glm::vec4 gravity, float gravityRange, int g
 	m_useTrajectory = false;
 	m_useDirectionGravity = false;
 	m_usePointGravity = true;
-	m_useFlotation = false;
 	m_useChaoticSwarmMotion = false;
 
 	setSpeed(speed);
 	m_gravityFunction = gravityFunction;
 	m_gravityRange = gravityRange;
 }
-void Emitter::usePhysicFlotation(bool movementVertical, bool movementHorizontalX, float movementLength){
-	m_useTrajectory = false;
-	m_useDirectionGravity = false;
-	m_usePointGravity = false;
-	m_useFlotation = true;
-	m_useChaoticSwarmMotion = false;
-
-	m_movementVertical = movementVertical;
-	m_movementHorizontalX = movementHorizontalX;
-	m_movementLength = movementLength;
-}
 void Emitter::usePhysicSwarmCircleMotion(bool movementVertical, bool movementHorizontalX, bool movementHorizontalZ, float movementLength){
 	m_useTrajectory = false;
 	m_useDirectionGravity = false;
 	m_usePointGravity = false;
-	m_useFlotation = false;
 	m_useChaoticSwarmMotion = true;
 
 	m_movementVertical = movementVertical;
@@ -507,20 +491,30 @@ void Emitter::setRotationSpeed(float rotationSpeed){
 glm::vec3 Emitter::useVelocityZero(){
 	return glm::vec3(0.0, 0.0, 0.0);
 }
+glm::vec3 Emitter::useVelocityLeftQuarterCircle(){
+	return glm::vec3(((rand() % 100) / 100.0f) - 1.0f,
+		((rand() % 100) / 100.0f),
+		0.0f);
+}
+glm::vec3 Emitter::useVelocityRightQuarterCircle(){
+	return glm::vec3(((rand() % 100) / 100.0f),
+		((rand() % 100) / 100.0f),
+		0.0f);
+}
 glm::vec3 Emitter::useVelocitySemiCircle(){
 	return glm::vec3(((rand() % 200) / 100.0f) - 1.0f,
 					((rand() % 100) / 100.0f),
 					0.0f);
 }
-//TODO
-glm::vec3 Emitter::useVelocitySemiSphere(){
-	return glm::vec3(((rand() % 50) / 100.0f) - 0.25f,
-					((rand() % 100) / 100.0f),
-					((rand() % 50) / 100.0f) - 0.25f);
-}
 glm::vec3 Emitter::useVelocityCircle(){
 	return	glm::vec3(((rand() % 50) / 100.0f) - 0.25f,
 		((rand() % 200) / 100.0f) - 1.0f,
+		((rand() % 50) / 100.0f) - 0.25f);
+}
+//TODO
+glm::vec3 Emitter::useVelocitySemiSphere(){
+	return glm::vec3(((rand() % 50) / 100.0f) - 0.25f,
+		((rand() % 100) / 100.0f),
 		((rand() % 50) / 100.0f) - 0.25f);
 }
 glm::vec3 Emitter::useVelocitySphere(){

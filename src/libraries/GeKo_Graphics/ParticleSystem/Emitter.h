@@ -42,9 +42,11 @@ public:
 
 	//our method & var for velocity
 	glm::vec3 static useVelocityZero();
+	glm::vec3 static useVelocityLeftQuarterCircle();
+	glm::vec3 static useVelocityRightQuarterCircle();
 	glm::vec3 static useVelocitySemiCircle();
-	glm::vec3 static useVelocitySemiSphere();
 	glm::vec3 static useVelocityCircle();
+	glm::vec3 static useVelocitySemiSphere();
 	glm::vec3 static useVelocitySphere();
 	void setVelocity(glm::vec3(*pfunc)());
 	glm::vec3(*m_pfunc)();
