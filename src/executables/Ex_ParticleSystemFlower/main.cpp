@@ -46,18 +46,26 @@ int main()
 
 	glewInit();
 
-	Emitter* emitter = new Emitter(0, glm::vec3(0.0,-1.0,0.0), false, 0.05, 25, 15.0, glm::vec4(0.5, 0.5, 0.0, 1.0), 0.8f);
-	emitter->setComputeVar(false, false, false, true, 1.8, 1);
-	emitter->setComputeShader("/ParticleSystem/ParticleSystemFlower.comp");
-	emitter->active();
+	//TODO: WITHOUT TEXTURE
+	Texture* snowTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle.bmp");
+
+	Emitter* flower = new Emitter(0, glm::vec3(0.0,-1.0,0.0), 0.0, 0.005, 1, 15.0, true);
+	flower->setVelocity(&Emitter::useVelocityZero);
+	flower->usePhysicPointGravity(glm::vec4(0.5, 0.5, 0.0, 1.0), 1.8, 1, 0.8);
+	flower->setComputeShader("/ParticleSystem/ParticleSystemFlower.comp");
+	flower->addTexture(*snowTex, 0.0);
+	flower->useTexture(true, 0.0, 0.0);
+	flower->active();
 
 	float startCamTime = glfwGetTime();
 
 	while (!glfwWindowShouldClose(window))
 	{
-		emitter->generateParticle();
-		emitter->update();
-		emitter->render(cam);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		flower->generateParticle();
+		flower->update();
+		flower->render(cam);
 
 		cam.setSensitivity(glfwGetTime() - startCamTime);
 		startCamTime = glfwGetTime();

@@ -1,5 +1,7 @@
 #include "Emitter.h"
 
+//TODO: COMMENTS & VAR RENAMING
+
 Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, double emitFrequency,
 	int particlesPerEmit, double particleLifeTime, bool particleMortal)
 {
@@ -29,25 +31,29 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 
 	updateSize(); //?
 }
-
+//TODO: DEAD LOCKS?
 Emitter::~Emitter()
 {
 	deactive();
 	m_textureList.clear();
 }
 
+//??
+
+//TODO: NEED IT?
 void Emitter::active(){
 	updateTime = glfwGetTime();
 	deltaTime = updateTime;
 	generateTime = deltaTime;
 }
-
+//TODO: NEED IT?
 void Emitter::deactive(){
 	updateTime = 0;
 	deltaTime = 0;
 	generateTime = 0;
 }
 
+//TODO: MADELEINE ANGLE TO UBO
 void Emitter::loadBuffer(){
 	//?
 	glGenBuffers(1, &position_ssbo);
@@ -135,6 +141,7 @@ void Emitter::update(){
 	emitterShader->unbind();
 }
 
+//TODO: PS WITHOUT TEXTURE
 void Emitter::render(Camera &cam)
 {
 	auto useTexture = getUseTexture();
@@ -213,6 +220,7 @@ void Emitter::render(Camera &cam)
 	}
 }
 
+//TODO: MADELEINE ANGLE TO UBO
 void Emitter::pushParticle(int numberNewParticle){
 	auto emitPosition = getPosition();
 
@@ -302,7 +310,6 @@ void Emitter::pushParticle(int numberNewParticle){
 
 	indexBuffer = (indexBuffer + numberNewParticle) % numMaxParticle;
 }
-
 void Emitter::generateParticle()
 {
 	switch (m_output)
@@ -341,6 +348,8 @@ void Emitter::updateSize()
 	loadBuffer();
 }
 
+//GS & PS swichting
+
 void Emitter::switchToGeometryShader(){
 	//Geometry Shader will be used, instead  of Point Sprites
 	VertexShader vsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemGeometryShader.vert")));
@@ -351,7 +360,6 @@ void Emitter::switchToGeometryShader(){
 	m_usePointSprites = false;
 	m_useGeometryShader = true;
 }
-
 void Emitter::switchToPointSprites(){
 	//Point Sprites Shader will be used instead of Geometry Shader
 	VertexShader vsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemPointSprites.vert")));
@@ -361,6 +369,8 @@ void Emitter::switchToPointSprites(){
 	m_usePointSprites = true;
 	m_useGeometryShader = false;
 }
+
+//physic:
 
 void Emitter::usePhysicTrajectory(glm::vec4 gravity, float speed){
 	 setGravity(gravity);
@@ -402,7 +412,9 @@ void Emitter::usePhysicSwarmCircleMotion(bool movementVertical, bool movementHor
 	m_movementHorizontalZ = movementHorizontalZ;
 	m_movementLength = movementLength;
 }
+
 //setters:
+
 void Emitter::setOutputMode(const int OUTPUT)
 {
 	m_output = static_cast<FLOW> (OUTPUT);
@@ -437,6 +449,7 @@ void Emitter::setParticleLifetime(float newLifetime)
 	particleLifetime = newLifetime;
 	updateSize();
 }
+//TODO: Test if lifetime should be 0.0
 void Emitter::setParticleMortality(bool particleMortality)
 {
 	m_particleMortal = particleMortality;
@@ -444,7 +457,7 @@ void Emitter::setParticleMortality(bool particleMortality)
 		m_particleMortal = false;
 		emitFrequency = 0.0;
 		m_deathTime = 0.0;
-		particleLifetime = 5.0;
+		particleLifetime = 5.0; //TODO: test if it can be setted to 0.0
 		m_output = static_cast<FLOW> (1); //set output to once
 	}
 }
@@ -473,9 +486,11 @@ void Emitter::setAreaEmitting(bool areaEmittingXY, bool areaEmittingXZ, float si
 		else m_areaAccuracy = accuracy;
 	}
 }
+//TODO: MADELEINE
 void Emitter::addTexture(Texture &texture, float percentageLife){
 	m_textureList.push_back(texture);
 }
+//TODO: MADELEINE
 void Emitter::deleteTexture(int position){
 	m_textureList.erase(m_textureList.begin() + position);
 }
@@ -484,6 +499,7 @@ void Emitter::useTexture(bool useTexture, float birthTime, float deathTime){
 	m_birthTime = birthTime;
 	m_deathTime = deathTime;
 }
+//TODO: use it also for PS and set left or right rotation
 void Emitter::setRotationSpeed(float rotationSpeed){
 	m_rotationSpeed = rotationSpeed;		
 }
@@ -512,7 +528,7 @@ glm::vec3 Emitter::useVelocityCircle(){
 		((rand() % 200) / 100.0f) - 1.0f,
 		((rand() % 50) / 100.0f) - 0.25f);
 }
-//TODO
+//TODO: Nico? Don't get the Calculation
 glm::vec3 Emitter::useVelocitySemiSphere(){
 	return glm::vec3(((rand() % 50) / 100.0f) - 0.25f,
 		((rand() % 100) / 100.0f),

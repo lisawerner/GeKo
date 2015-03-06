@@ -38,7 +38,7 @@ public:
 			PARTICLESPEREMIT defines how much particle we generate, when we are generating some
 	
 		Particles:
-			if PARTICLEMORTALC is false, that means the particle won't die, so the OUTPUT will be setted as once,
+			if PARTICLEMORTAL is false, that means the particle won't die, so the OUTPUT will be setted as once,
 			the EMITFREQUENCY and DEATHTIME will be 0.0 (DEATHTIME is the time how long the blending in the end of the particlelife takes) 
 	*/
 	Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, double emitFrequency, int particlesPerEmit, 
@@ -116,7 +116,7 @@ public:
 	bool getUsePointSprites();
 	float getRotationSpeed();
 
-	//our physic
+	//our physic possibilities
 	void usePhysicTrajectory(glm::vec4 gravity, float speed);
 	bool m_useTrajectory = false;
 	void usePhysicDirectionGravity(glm::vec4 gravity, float speed);
@@ -126,6 +126,7 @@ public:
 	void usePhysicSwarmCircleMotion(bool verticalMovement, bool horizontalXMovement, bool horizontalYMovement, float movementLength);
 	bool m_useChaoticSwarmMotion = false;
 
+	//our physic attributes
 	float m_gravityRange = 0.0f;
 	int m_gravityFunction = 0;
 	float m_movementLength;
