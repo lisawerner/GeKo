@@ -1,12 +1,9 @@
 #include "Emitter.h"
 
-/*
-Point Sprites is default
-*/
 Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, double emitFrequency,
 	int particlesPerEmit, double particleLifeTime, bool particleMortal)
 {
-	m_output = static_cast<FLOW> (OUTPUT); //set if we generate just once, constant or unused
+	m_output = static_cast<FLOW> (OUTPUT); //set if won't generate (-1), constant (0) or just once (1)
 
 	//set Emitter properties
 	setPosition(position);
@@ -14,9 +11,11 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 	setEmitterMortality(emitterLifetime);
 
 	//set properties for the emitting
-	setParticleLifetime(particleLifeTime);
 	setEmitFrequency(emitFrequency);
 	setParticlesPerEmit(particlesPerEmit);
+
+	//set properties for the particles
+	setParticleLifetime(particleLifeTime);
 	setParticleMortality(particleMortal);
 
 	//our default shader (Point Sprites)

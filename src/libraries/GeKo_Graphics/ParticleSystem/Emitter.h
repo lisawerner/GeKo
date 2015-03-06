@@ -10,15 +10,42 @@
 #include "GeKo_Graphics/Material/Texture.h"
 
 /*
+Description:
 Source of the particles. Has parameter which define the form and the distribution of the particles
+
+Tipps:
+the particle maximum is PARTICLELIFETIME * PARTICLESPEREMIT / EMITFREQUENCY
+
+Methods:
+-setVelocity: for the movement in the beginning
+-usePhysic..: how the particle should moving
+-setAreaEmitting: if the particle should not come from the source, but in an area
+-addTexture & useTexture: to generate with textures
+-switchToGeometryShader or switchToPointSprites: to use Geometry Shader or PointSprites
 */
 class Emitter{
 public:
-	//construct & destructor
-	Emitter();	//default constructor
+	/*
+	1. Description
+		the constructor of the source for the particle. 
+		Point Sprites Shader is default. If you want change, use the method switchToGeometryShader()
+
+	2. Attributes
+		Emitter:
+			if OUTPUT is 0, we generate constant new particle, if 1 we just do it once and if -1, the emitter is unused
+			if EMITTERLIFE is equal zero, then the emitter won't die
+			EMITFREQUENCY defines after how many time we generate new particles
+			PARTICLESPEREMIT defines how much particle we generate, when we are generating some
+	
+		Particles:
+			if PARTICLEMORTALC is false, that means the particle won't die, so the OUTPUT will be setted as once,
+			the EMITFREQUENCY and DEATHTIME will be 0.0 (DEATHTIME is the time how long the blending in the end of the particlelife takes) 
+	*/
 	Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, double emitFrequency, int particlesPerEmit, 
-		double particleLifeTime, bool particleMortal);	//full constructor
-	Emitter(const int OUTPUT);	//temporary consturctor
+		double particleLifeTime, bool particleMortal);
+	/*
+	
+	*/
 	~Emitter();
 
 	//Emitter must be activated in the begin for setting the time

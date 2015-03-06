@@ -64,10 +64,10 @@ int main()
 	snow->active();
 
 	//EMITTER STRONG SNOW, better with multiple emitter
-	Emitter* snowStrong = new Emitter(0, glm::vec3(-3.5, 4.0, 0.0), 0.0, 0.166, 5000, 20.0, true);
+	Emitter* snowStrong = new Emitter(0, glm::vec3(-3.5, 4.0, 0.0), 0.0, 0.166, 50, 20.0, true);
 	snowStrong->setVelocity(&Emitter::useVelocityRightQuarterCircle);
 	snowStrong->usePhysicDirectionGravity(glm::vec4(0.4, -1.5, 0.0, 1.0), 2.6f);
-	snowStrong->setAreaEmitting(false, true, 3.0, 10000);
+	snowStrong->setAreaEmitting(false, true, 5.0, 10000);
 	snowStrong->addTexture(*snowTex, 0.0);
 	snowStrong->useTexture(true, 1.0, 3.0);
 	snowStrong->active();
