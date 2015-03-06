@@ -46,16 +46,11 @@ int main()
 
 	glewInit();
 
-	//TODO: WITHOUT TEXTURE
-	Texture* snowTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle.bmp");
 
 	Emitter* flower = new Emitter(0, glm::vec3(0.0,-1.0,0.0), 0.0, 0.005, 1, 15.0, true);
 	flower->setVelocity(&Emitter::useVelocityZero);
 	flower->usePhysicPointGravity(glm::vec4(0.5, 0.5, 0.0, 1.0), 1.8, 1, 0.8);
 	flower->setComputeShader("/ParticleSystem/ParticleSystemFlower.comp");
-	flower->addTexture(*snowTex, 0.0);
-	flower->useTexture(true, 0.0, 0.0);
-	flower->active();
 
 	float startCamTime = glfwGetTime();
 
