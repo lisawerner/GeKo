@@ -25,7 +25,7 @@ Effect::~Effect()
 void Effect::active()
 {
 	for (auto iterator = emitterVec.begin(); iterator < emitterVec.end(); iterator++){
-		iterator->startTime();
+		iterator->active();
 	}
 }
 

@@ -48,8 +48,9 @@ public:
 	*/
 	~Emitter();
 
-	//set the time for generating and stuff
-	void startTime();
+	//Emitter must be activated in the begin for setting the time
+	void active();
+	void deactive();
 
 	//update & generate the particle
 	void update();

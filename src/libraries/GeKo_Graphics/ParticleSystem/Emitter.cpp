@@ -30,18 +30,27 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 	compute = new ShaderProgram(csParticle);
 
 	updateSize(); //?
-	startTime();
 }
-//TODO: Memory?
+//TODO: DEAD LOCKS?
 Emitter::~Emitter()
 {
+	deactive();
 	m_textureList.clear();
 }
 
-void Emitter::startTime(){
+//??
+
+//TODO: NEED IT?
+void Emitter::active(){
 	updateTime = glfwGetTime();
 	deltaTime = updateTime;
 	generateTime = deltaTime;
+}
+//TODO: NEED IT?
+void Emitter::deactive(){
+	updateTime = 0;
+	deltaTime = 0;
+	generateTime = 0;
 }
 
 //TODO: MADELEINE ANGLE TO UBO
@@ -132,6 +141,7 @@ void Emitter::update(){
 	emitterShader->unbind();
 }
 
+//TODO: PS WITHOUT TEXTURE
 void Emitter::render(Camera &cam)
 {
 	auto useTexture = getUseTexture();
@@ -489,7 +499,7 @@ void Emitter::useTexture(bool useTexture, float birthTime, float deathTime){
 	m_birthTime = birthTime;
 	m_deathTime = deathTime;
 }
-//TODO: MADELEINE use it also for PS and set left or right rotation
+//TODO: use it also for PS and set left or right rotation
 void Emitter::setRotationSpeed(float rotationSpeed){
 	m_rotationSpeed = rotationSpeed;		
 }
@@ -518,10 +528,11 @@ glm::vec3 Emitter::useVelocityCircle(){
 		((rand() % 200) / 100.0f) - 1.0f,
 		((rand() % 50) / 100.0f) - 0.25f);
 }
+//TODO: Nico? Don't get the Calculation
 glm::vec3 Emitter::useVelocitySemiSphere(){
-	return glm::vec3(((rand() % 200) / 100.0f) - 1.0f,
+	return glm::vec3(((rand() % 50) / 100.0f) - 0.25f,
 		((rand() % 100) / 100.0f),
-		((rand() % 200) / 100.0f) - 1.0f);
+		((rand() % 50) / 100.0f) - 0.25f);
 }
 glm::vec3 Emitter::useVelocitySphere(){
 	return glm::vec3(((rand() % 200) / 100.0f) - 1.0f,
