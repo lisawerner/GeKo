@@ -15,6 +15,8 @@ uniform int screenHeight;
 uniform float zNear;
 uniform float zFar;
 
+uniform float reflectivity;
+
 layout(location = 2) out vec4 colorOutput;
 
 float normalizeDepth(float depth)
@@ -135,7 +137,7 @@ vec4 computeReflection()
 void main()
 {
 	colorOutput = texture(colorTexture, passUVCoord);
-	float reflectivity = 0.2;
-	colorOutput = reflectivity*computeReflection() + (1.0 - reflectivity)*colorOutput;
+	if(reflectivity > 0)
+		colorOutput = reflectivity*computeReflection() + (1.0 - reflectivity)*colorOutput;
 	colorOutput.w = 1.0;
 }

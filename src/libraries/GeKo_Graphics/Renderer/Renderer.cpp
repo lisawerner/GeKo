@@ -22,7 +22,7 @@ m_useReflections(false),      m_shaderRLR(NULL),
 m_useAntiAliasing(false),     m_shaderFXAA(NULL),
 m_useBloom(false),            m_shaderBloom(NULL),
 m_useSSAO(false),             m_shaderSSAOcalc(NULL), m_shaderSSAOblur(NULL), m_shaderSSAOfinal(NULL),
-
+m_useShadowMapping(false),    m_shaderShadowMapping(NULL), m_smCam(NULL),
 
 m_currentViewMatrix(glm::mat4()), m_currentProjectionMatrix(glm::mat4()),
 m_windowWidth(0), m_windowHeight(0)
@@ -49,6 +49,8 @@ Renderer::~Renderer()
   if(m_useSSAO)              delete m_shaderSSAOcalc;
   if(m_useSSAO)              delete m_shaderSSAOblur;
   if(m_useSSAO)              delete m_shaderSSAOfinal;
+  if (m_useShadowMapping)    delete m_shaderShadowMapping;
+
 }
 
 void Renderer::printInfo(){
@@ -71,14 +73,18 @@ void Renderer::init(int windowWidth, int windowHeight)
   m_ping    = new FBO(windowWidth, windowHeight, 3, true, false);
   m_pong    = new FBO(windowWidth, windowHeight, 3, true, false);
   m_gBuffer = new FBO(windowWidth, windowHeight, 3, true, false);
+  m_smFBO   = new FBO(windowWidth, windowHeight, 1, true, false);
 
   //load Shader
 
-  VertexShader vsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.vert")));
-  FragmentShader fsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.frag")));
-  m_shaderGBuffer = new ShaderProgram(vsGBuffer, fsGBuffer);
+  if (!m_shaderGBuffer)
+  {
+    VertexShader vsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.vert")));
+    FragmentShader fsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.frag")));
+    m_shaderGBuffer = new ShaderProgram(vsGBuffer, fsGBuffer);
+  }
 
-  if (m_useDeferredShading)
+  if (m_useDeferredShading && !m_shaderDSLighting && !m_shaderDSCompositing)
   {
     VertexShader vsDsLighting(loadShaderSource(SHADERS_PATH + std::string("/DeferredShading/dsLighting.vert")));
     FragmentShader fsDsLighting(loadShaderSource(SHADERS_PATH + std::string("/DeferredShading/dsLighting.frag")));
@@ -89,32 +95,35 @@ void Renderer::init(int windowWidth, int windowHeight)
     m_shaderDSCompositing = new ShaderProgram(vsDsCompositing, fsDsCompositing);
   }
 
-  if (m_useReflections)
+  if (m_useReflections && !m_shaderRLR)
   {
     VertexShader vsRLR(loadShaderSource(SHADERS_PATH + std::string("/RealtimeLocalReflections/RealtimeLocalReflections.vert")));
     FragmentShader fsRLR(loadShaderSource(SHADERS_PATH + std::string("/RealtimeLocalReflections/RealtimeLocalReflections.frag")));
     m_shaderRLR = new ShaderProgram(vsRLR, fsRLR);
   }
 
-  VertexShader vsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.vert")));
-  FragmentShader fsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.frag")));
-  m_shaderSFQ = new ShaderProgram(vsSfq, fsSfq);
+  if (!m_shaderSFQ)
+  {
+    VertexShader vsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.vert")));
+    FragmentShader fsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.frag")));
+    m_shaderSFQ = new ShaderProgram(vsSfq, fsSfq);
+  }
 
-  if (m_useBloom)
+  if (m_useBloom && !m_shaderBloom)
   {
     VertexShader vsBloom(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.vert")));
     FragmentShader fsBloom(loadShaderSource(SHADERS_PATH + std::string("/Bloom/Bloom.frag")));
     m_shaderBloom = new ShaderProgram(vsBloom, fsBloom);
   }
 
-  if (m_useAntiAliasing)
+  if (m_useAntiAliasing && !m_shaderFXAA)
   {
     VertexShader vsFXAA(loadShaderSource(SHADERS_PATH + std::string("/FXAA/FXAA.vert")));
     FragmentShader fsFXAA(loadShaderSource(SHADERS_PATH + std::string("/FXAA/FXAA.frag")));
     m_shaderFXAA = new ShaderProgram(vsFXAA, fsFXAA);
   }
 
-  if (m_useSSAO)
+  if (m_useSSAO && !m_shaderSSAOcalc && !m_shaderSSAOblur && !m_shaderSSAOfinal)
   {
     VertexShader vsSSAO(loadShaderSource(SHADERS_PATH + std::string("/SSAO/ssao.vert")));
     FragmentShader fsSSAO(loadShaderSource(SHADERS_PATH + std::string("/SSAO/ssao.frag")));
@@ -127,17 +136,30 @@ void Renderer::init(int windowWidth, int windowHeight)
     FragmentShader fsFinal(loadShaderSource(SHADERS_PATH + std::string("/SSAO/ssaoFinal.frag")));
     m_shaderSSAOfinal = new ShaderProgram(vsSfq, fsFinal);
   }
+
+  if (m_useShadowMapping && !m_shaderShadowMapping)
+  {
+    VertexShader vsSM(loadShaderSource(SHADERS_PATH + std::string("/ShadowMapping/ShadowMap.vert")));
+    FragmentShader fsSM(loadShaderSource(SHADERS_PATH + std::string("/ShadowMapping/ShadowMap.frag")));
+    m_shaderShadowMapping = new ShaderProgram(vsSM, fsSM);
+
+    if(!m_smCam)
+      m_smCam = new Pilotview("smCam");
+
+    m_smCam->setNearFar(1.0f,30.0f);
+  }
  }
 
 void Renderer::renderScene(Scene& scene, Window& window)
 {
-
-
   if (!m_ping || !m_pong)
     init(window.getWidth(), window.getHeight());
+  
+  if (m_useShadowMapping)
+    renderShadowMapping(scene);
 
   m_firstRender = true;
-
+  
   m_currentFBOIndex = 0;
 
   m_gBuffer->bind();
@@ -151,6 +173,49 @@ void Renderer::renderScene(Scene& scene, Window& window)
 
   m_shaderGBuffer->sendMat4("viewMatrix", m_currentViewMatrix);
   m_shaderGBuffer->sendMat4("projectionMatrix", m_currentProjectionMatrix);
+
+
+  //==================
+
+
+  m_shaderGBuffer->sendInt("useShadowMap", m_useShadowMapping);
+
+  if (m_useShadowMapping)
+  {
+
+    m_shaderGBuffer->sendVec4("light.pos", m_smConeLight->m_position);
+    m_shaderGBuffer->sendVec3("light.col", glm::vec3(m_smConeLight->m_color));
+
+    m_shaderGBuffer->sendVec3("light.spot_direction", m_smConeLight->m_direction);
+    m_shaderGBuffer->sendFloat("light.spot_exponent", m_smConeLight->m_exponent);
+    m_shaderGBuffer->sendFloat("light.spot_cutoff", m_smConeLight->m_radius);
+
+    m_shaderGBuffer->sendVec3("lightAmbient", glm::fvec3(0.0f,0.0f,0.0f));
+
+    //Shadow mapping
+    glm::mat4 lightPerspective, lightView, lightMVPBias;
+    lightPerspective = m_smCam->getProjectionMatrix();
+    lightView = m_smCam->getViewMatrix();
+
+    glm::mat4 sm_lightViewport(
+      0.5, 0.0, 0.0, 0.0,
+      0.0, 0.5, 0.0, 0.0,
+      0.0, 0.0, 0.5, 0.0,
+      0.5, 0.5, 0.5, 1.0
+      );
+
+    //Build "shadow matrix"
+    lightMVPBias = sm_lightViewport * lightPerspective * lightView;
+    m_shaderGBuffer->sendMat4("lightVPBias", lightMVPBias);
+
+    m_shaderGBuffer->sendVec3("mat.diffuse", darkgrey);
+    m_shaderGBuffer->sendVec3("mat.specular", grey);
+    m_shaderGBuffer->sendFloat("mat.shininess", 100.0f);
+    m_shaderGBuffer->sendFloat("mat.alpha", 1.0f);
+
+    //Bind and Pass shadow map. Only use SHADOW_TEXTURE_UNIT when Normal Mapping is applied.
+    m_shaderGBuffer->sendSampler2D("depthTexture", m_smFBO->getDepthTexture(), 1);
+  }
 
   scene.render(*m_shaderGBuffer);
   m_shaderGBuffer->unbind();
@@ -179,6 +244,14 @@ void Renderer::renderScene(Scene& scene, Window& window)
   m_sfq.renderGeometry();
   m_shaderSFQ->unbind();
 
+  if (m_guis.size() > 0)
+  {
+    for (std::vector<GUI*>::iterator it = m_guis.begin(); it != m_guis.end(); ++it)
+    {
+      (*it)->render(window);
+    }
+  }
+
   glfwSwapBuffers(window.getWindow());
   glfwPollEvents();
 }
@@ -188,9 +261,17 @@ void Renderer::renderGUI(GUI &guiToRender, Window &window)
   guiToRender.render(window);
 }
 
-void Renderer::useReflections(bool useReflections)
+void Renderer::addGui(GUI *guiToAdd)
+{
+  m_guis.push_back(guiToAdd);
+}
+
+void Renderer::useReflections(bool useReflections, float *reflectionStrength)
 {
   m_useReflections = useReflections;
+
+  if (m_screenSpaceReflectionsStrength != reflectionStrength)
+    m_screenSpaceReflectionsStrength = reflectionStrength;
 }
 
 void Renderer::useAntiAliasing(bool useAntiAliasing)
@@ -201,8 +282,15 @@ void Renderer::useAntiAliasing(bool useAntiAliasing)
 void Renderer::useDeferredShading(bool useDeferredShading, Node *lightRootNode, glm::fvec3 *lightColor)
 {
   m_useDeferredShading = useDeferredShading;
-  m_dsLightRootNode = lightRootNode;
-  m_dsLightColor = lightColor;
+  
+  if (!lightRootNode)
+    return;
+
+  if (lightRootNode != m_dsLightRootNode)
+    m_dsLightRootNode = lightRootNode;
+  
+  if (lightColor != m_dsLightColor)
+    m_dsLightColor = lightColor;
 }
 
 void Renderer::useBloom(bool useBloom)
@@ -210,10 +298,39 @@ void Renderer::useBloom(bool useBloom)
   m_useBloom = useBloom;
 }
 
-void Renderer::useSSAO(bool useSSAO)
+void Renderer::useSSAO(bool useSSAO, float *quality, float *radius)
 {
   m_useSSAO = useSSAO;
+
+  if (m_ssaoQuality != quality)
+    m_ssaoQuality = quality;
+
+  if (m_ssaoRadius != radius)
+    m_ssaoRadius = radius;
 }
+
+void Renderer::useShadowMapping(bool useShadowMapping, ConeLight *coneLight)
+{
+  m_useShadowMapping = useShadowMapping;
+
+  if (!coneLight)
+    return;
+
+  if (!m_smCam)
+    m_smCam = new Pilotview("smCam");
+
+  m_smConeLight = coneLight;
+  m_smCam->setFOV(m_smConeLight->m_angle);
+
+  //Set the position of the camera inside the light source
+  glm::vec4 lightPosition = m_smConeLight->m_position;
+  m_smCam->setPosition(lightPosition);
+
+  //Set the lookAt point of the camera along the direction of the spot light
+  glm::vec3 lookAt = glm::vec3(lightPosition) + (m_smConeLight->m_direction);
+  m_smCam->setLookAt(lookAt);
+}
+
 
 void Renderer::bindFBO()
 {
@@ -285,6 +402,8 @@ void Renderer::renderReflections(float camNear, float camFar)
 
   m_shaderRLR->sendFloat("zNear", camNear);
   m_shaderRLR->sendFloat("zFar", camFar);
+
+  m_shaderRLR->sendFloat("reflectivity", *m_screenSpaceReflectionsStrength);
 
   m_sfq.renderGeometry();
 
@@ -407,8 +526,8 @@ void Renderer::renderSSAO()
   m_shaderSSAOcalc->sendSampler2D("positionMap", m_gBuffer->getColorTexture(0), 0);
   m_shaderSSAOcalc->sendSampler2D("normalMap", m_gBuffer->getColorTexture(1), 1);
   m_shaderSSAOcalc->sendMat4("sceneProjectionMatrix", m_currentProjectionMatrix);
-  m_shaderSSAOcalc->sendFloat("radius", 0.1f);
-  m_shaderSSAOcalc->sendFloat("quality", 30.0f);
+  m_shaderSSAOcalc->sendFloat("radius", *m_ssaoRadius);
+  m_shaderSSAOcalc->sendFloat("quality", *m_ssaoQuality);
 
   m_sfq.renderGeometry();
 
@@ -458,4 +577,42 @@ void Renderer::renderSSAO()
 
   delete a;
   delete b;
+}
+
+void Renderer::renderShadowMapping(Scene& scene)
+{
+  if (!m_shaderShadowMapping || !m_smCam)
+    init(m_windowWidth, m_windowHeight);
+
+  if (!m_smConeLight)
+    throw std::string("Error in renderShadowMapping - Cone Light was not set");
+
+  if (!scene.getScenegraph()->containsCamera("smCam"))
+  {
+    scene.getScenegraph()->addCamera(m_smCam);
+  }
+
+  std::string mainCamName = scene.getScenegraph()->getActiveCamera()->getName();
+
+  scene.getScenegraph()->setActiveCamera("smCam");
+
+  //Bind Shadow Map FBO
+  m_smFBO->bind();
+
+  //Clear Shadow Map
+  glClear(GL_DEPTH_BUFFER_BIT);
+
+  //Set the shader for the light pass. This shader is highly optimized because the scene depth is the only thing that matters here!
+  m_shaderShadowMapping->bind();
+  m_shaderShadowMapping->sendMat4("viewMatrix", m_smCam->getViewMatrix());
+  m_shaderShadowMapping->sendMat4("projectionMatrix", m_smCam->getProjectionMatrix());
+
+  //Render the scene
+  scene.render(*m_shaderShadowMapping);
+
+  //Restore the default framebuffer
+  m_shaderShadowMapping->unbind();
+  m_smFBO->unbind();
+
+  scene.getScenegraph()->setActiveCamera(mainCamName);
 }

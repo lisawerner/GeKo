@@ -49,7 +49,6 @@ int main()
   glfwSetKeyCallback(testWindow.getWindow(), key_callback);
 
   glewInit();
-  gui = new GUI();
   
   //our shader
   VertexShader vsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.vert")));
@@ -159,7 +158,6 @@ int main()
   testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube4);
   //testScene.getScenegraph()->getRootNode()->addChildrenNode(&teaNode);
 
-  double startTime = glfwGetTime();
   //Renderloop
 
   //create Light spheres for DS
@@ -183,7 +181,8 @@ int main()
   //SETUP GUI
   float testFloat = float(0.0f);
   float testFloat2 = float(0.0f);
- 
+  gui = new GUI("GUI Test",200,100);
+
   GuiElement::Header *testHeader = new GuiElement::Header("testHeader");
     testHeader->addElement(new GuiElement::Text("This String is a Child of TestHeader"));
     testHeader->addElement(new GuiElement::Text("This String is also a Child of TestHeader"));
@@ -220,12 +219,14 @@ int main()
 
   float previousTestFloat = 0.0f;
   float previousTestFloat2 = 0.0f;
+  double startTime = glfwGetTime();
+
   while (!glfwWindowShouldClose(testWindow.getWindow()))
   {
     // You have to compute the delta time
-
-    float deltaTime = glfwGetTime() - startTime;
-    cam.setSensitivity(deltaTime);
+    float dT = glfwGetTime() - startTime;
+    cam.setSensitivity(dT / 50);
+    startTime = glfwGetTime();
 
     if (testFloat != previousTestFloat)
     {
@@ -248,7 +249,7 @@ int main()
       startTime = glfwGetTime();
 
       //update Model Matrix
-      lights.setModelMatrix(glm::rotate(lights.getModelMatrix(), 10.0f * deltaTime, glm::vec3(0.0, 1.0, 0.0)));
+      lights.setModelMatrix(glm::rotate(lights.getModelMatrix(), 10.0f * dT, glm::vec3(0.0, 1.0, 0.0)));
 
 
       fboGBuffer.bind();

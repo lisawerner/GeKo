@@ -12,8 +12,9 @@ const int WINDOW_HEIGHT = 600;
 
 //define camera (trackball)
 InputHandler iH;
-Trackball cam_trackball("cam");
-Trackball cam_shadow("shadow");
+
+Pilotview cam("Pilotview");
+Pilotview cam_shadow("Pilotview");
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
 	// The active InputMap is fetched
@@ -36,17 +37,15 @@ int main()
 	glfwMakeContextCurrent(testWindow.getWindow());
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	cam_shadow.setRadius(2.0);
 	cam_shadow.setNearFar(1.f, 30.f);
 
-	cam_trackball.setRadius(3.0);
-	cam_trackball.setPosition(glm::vec4(-2.0, 3.0, 1.0, 1.0));
-	cam_trackball.setNearFar(1.f, 30.f);
-	//cam_trackball.moveDown();
+  cam.setName("PilotviewCam");
+  cam.setPosition(glm::vec4(1.0, 0.0, 5.0, 1.0));
+  cam.setNearFar(0.01f, 100.0f);
 
 	// Set all InputMaps and set one InputMap active
-	iH.setAllInputMaps(cam_trackball);
-	iH.changeActiveInputMap("Trackball");
+	iH.setAllInputMaps(cam);
+	iH.changeActiveInputMap("Pilotview");
 
 	// Callback
 	glfwSetKeyCallback(testWindow.getWindow(), key_callback);
@@ -93,7 +92,7 @@ int main()
 	testLevel.changeScene("testScene");
 
 	//Add cameras to scenegraph
-	testScene.getScenegraph()->addCamera(&cam_trackball);
+	testScene.getScenegraph()->addCamera(&cam);
 	testScene.getScenegraph()->addCamera(&cam_shadow);
 
 	Node wallNode1("wall1");
@@ -114,7 +113,7 @@ int main()
 	cube1.addTexture(&bricks);
 	cube1.setModelMatrix(glm::translate(cube1.getModelMatrix(), glm::vec3(-0.3, 0.25, 0.2)));
 	cube1.setModelMatrix(glm::scale(cube1.getModelMatrix(), glm::vec3(0.3, 0.3, 0.3)));
-
+  
 	//Creating a scenegraph
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&wallNode1);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&wallNode2);
@@ -143,7 +142,7 @@ int main()
 
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{	
-		cam_trackball.setSensitivity(glfwGetTime() - startTime);
+		cam.setSensitivity(glfwGetTime() - startTime);
 		startTime = glfwGetTime();
 
 		///////////////////////////////////////////////////////////////////
@@ -187,8 +186,8 @@ int main()
 
 		shaderGBuffer.sendInt("useShadowMap", 1);
 
-		shaderGBuffer.sendMat4("viewMatrix", cam_trackball.getViewMatrix());
-		shaderGBuffer.sendMat4("projectionMatrix", cam_trackball.getProjectionMatrix());
+		shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
+		shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 
 		shaderGBuffer.sendVec4("light.pos", slight.m_position);
 		shaderGBuffer.sendVec3("light.col", glm::vec3(slight.m_color));

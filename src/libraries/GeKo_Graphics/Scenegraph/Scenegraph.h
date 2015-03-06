@@ -34,8 +34,10 @@ public:
 	///Returns a Camera-Object
 	/**The Camera Name must be known for finding the Camera Object. If there is no such Camera with this name
 		an error will be placed and NULL returns*/
-	Camera* getCamera(std::string cameraName);
-	void addCamera(Camera* camera);
+  Camera* getCamera(std::string cameraName);
+  
+  bool containsCamera(std::string cameraName);
+  void addCamera(Camera* camera);
 
 protected:
 

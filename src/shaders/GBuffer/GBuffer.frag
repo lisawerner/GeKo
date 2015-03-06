@@ -153,7 +153,7 @@ vec4 shadowMapping(vec4 baseColor)
 
     //test if the fragment is visible by comparing the z-values of the 
     //lightmap and the projection considering a bias (e.g. 0.0005)
-    if (lightDepth < shadowCoord.z - 0.0005) 
+    if (lightDepth < shadowCoord.z - 0.005) 
         inShadow = 0.3;   
 		
 	vec4 fragmentColor; 
