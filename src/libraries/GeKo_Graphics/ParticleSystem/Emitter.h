@@ -16,7 +16,7 @@ class Emitter{
 public:
 	//construct & destructor
 	Emitter();	//default constructor
-	Emitter(const int OUTPUT, glm::vec3 position, bool mortality, double emitFrequency, int particlesPerEmit, 
+	Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, double emitFrequency, int particlesPerEmit, 
 		double particleLifeTime, bool particleMortal);	//full constructor
 	Emitter(const int OUTPUT);	//temporary consturctor
 	~Emitter();
@@ -54,7 +54,7 @@ public:
 	//change properties
 	void setOutputMode(const int OUTPUT);
 	void setPosition(glm::vec3 newPosition);
-	void setEmitterMortality(bool emitterMortality);
+	void setEmitterMortality(double emitterLifetime);
 	void setEmitterLifetime(double emitterLifetime);
 	void setEmitFrequency(float newEmitFrequency);
 	void setParticlesPerEmit(int numberParticles);
@@ -66,7 +66,7 @@ public:
 	void setAreaEmitting(bool areaEmittingXY, bool areaEmittingXZ, float size, int accuracy);
 	void addTexture(Texture &texture, float percentageLife);
 	void deleteTexture(int position);
-	void setUseTexture(bool useTexture);
+	void useTexture(bool useTexture, float birthTime, float deathTime);
 	void setRotationSpeed(float rotationSpeed);
 
 	//get properties

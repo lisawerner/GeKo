@@ -3,20 +3,15 @@
 /*
 Point Sprites is default
 */
-Emitter::Emitter(const int OUTPUT, glm::vec3 position, bool emitterMortality, double emitFrequency,
+Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, double emitFrequency,
 	int particlesPerEmit, double particleLifeTime, bool particleMortal)
 {
 	m_output = static_cast<FLOW> (OUTPUT); //set if we generate just once, constant or unused
 
-	//TEMP
-	//TODO
-	m_birthTime = 3.0;
-	m_deathTime = 3.0;
-
 	//set Emitter properties
 	setPosition(position);
-	setEmitterMortality(emitterMortality);
-	setEmitterLifetime(0.0); //TODO
+	setEmitterLifetime(emitterLifetime);
+	setEmitterMortality(emitterLifetime);
 
 	//set properties for the emitting
 	setParticleLifetime(particleLifeTime);
@@ -336,8 +331,10 @@ void Emitter::generateParticle()
 
 void Emitter::updateSize()
 {
-	if (!m_particleMortal)
+	if (!m_particleMortal){
 		numMaxParticle = particlesPerEmit;
+		m_deathTime = 0.0;
+	}
 	else
 		numMaxParticle = (int)((particlesPerEmit * particleLifetime) / emitFrequency);
 	computeGroupCount = numMaxParticle / 16 + 1; //+1 to kill the Point. 16 is the local_size_x in the CS
@@ -415,9 +412,12 @@ void Emitter::setPosition(glm::vec3 newPosition)
 {
 	emitterPosition = newPosition;
 }
-void Emitter::setEmitterMortality(bool emitterMortality)
+void Emitter::setEmitterMortality(double emitterLifetime)
 {
-	emitterMortal = emitterMortality;
+	if (emitterLifetime < 0.001)
+		emitterMortal = false;
+	else
+		emitterMortal = true;
 }
 void Emitter::setEmitterLifetime(double emitterLifetime)
 {
@@ -480,8 +480,10 @@ void Emitter::addTexture(Texture &texture, float percentageLife){
 void Emitter::deleteTexture(int position){
 	m_textureList.erase(m_textureList.begin() + position);
 }
-void Emitter::setUseTexture(bool useTexture){
+void Emitter::useTexture(bool useTexture, float birthTime, float deathTime){
 	m_useTexture = useTexture;
+	m_birthTime = birthTime;
+	m_deathTime = deathTime;
 }
 void Emitter::setRotationSpeed(float rotationSpeed){
 	m_rotationSpeed = rotationSpeed;		
