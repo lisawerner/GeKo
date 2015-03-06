@@ -29,7 +29,6 @@ uniform int gravityFunc;
 uniform int useTrajectory;
 uniform int useDirectionGravity;
 uniform int usePointGravity;
-uniform int useFlotation;
 uniform int useChaoticSwarmMotion;
 
 //for Flotation

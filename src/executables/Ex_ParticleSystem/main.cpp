@@ -55,26 +55,16 @@ int main()
 	Texture* brick = new Texture((char*)RESOURCES_PATH "/brick.bmp");
 
 	//EMITTER SNOW
-	Emitter* snow = new Emitter(0, glm::vec3(0.0, 2.0, 0.0), false, 0.166, 10, 30.0, true); //Point Sprites is default
+	Emitter* snow = new Emitter(0, glm::vec3(0.0, 2.0, 0.0), false, 0.166, 10, 30.0, true);
 	snow->setVelocity(&Emitter::useVelocityZero);	//We set our Function, which we want to use later in Emitter::pushParticle and define the velocity for the particle
 	snow->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 0.3f);
-	//snow->usePhysicFlotation(false, false, 0.0f);
 	snow->setAreaEmitting(false,true, 3.0, 10000);
 	snow->addTexture(*snowTex, 0.0);
 	snow->setUseTexture(true);
 	snow->active();
 
-	//EMITTER Experiment
-	Emitter* exp = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), false, 0.166, 10, 30.0, true); //Point Sprites is default
-	exp->setVelocity(&Emitter::useVelocityZero);	//We set our Function, which we want to use later in Emitter::pushParticle and define the velocity for the particle
-	exp->usePhysicFlotation(false, false, 0.0f);
-	exp->setAreaEmitting(true, false, 3.0, 10000);
-	exp->addTexture(*snowTex, 0.0);
-	exp->setUseTexture(true);
-	exp->active();
-
-	//EMITTER Flies
-	Emitter* flies = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), false, 0.166, 5, 10.0, true);
+	//EMITTER FLIES
+	Emitter* flies = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), false, 0.166, 3, 10.0, true);
 	flies->setVelocity(&Emitter::useVelocityZero);	
 	flies->usePhysicSwarmCircleMotion(true, true, false, 0.0f);
 	flies->setAreaEmitting(true, false, 2.0, 10000);
@@ -91,6 +81,16 @@ int main()
 	smoke->switchToGeometryShader();
 	smoke->setRotationSpeed(0.5f);
 	smoke->active();
+
+	//EMITTER COMIC CLOUD
+
+	//EMITTER RAIN
+
+	//EMITTER SWARM
+
+	//EMITTER FIRE
+
+	//EMITTER FIREWORK
 
 	//SHADER
 	VertexShader vsSkybox(loadShaderSource(SHADERS_PATH + std::string("/SkyboxShader/SkyboxShader.vert")));
@@ -147,10 +147,6 @@ int main()
 		snow->generateParticle();
 		snow->update();
 		//snow->render(cam);
-
-		exp->generateParticle();
-		exp->update();
-		//exp->render(cam);
 
 		flies->generateParticle();
 		flies->update();

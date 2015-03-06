@@ -94,8 +94,6 @@ public:
 	bool m_usePointGravity = false;
 	void usePhysicPointGravity(glm::vec4 gravity, float gravityRange, int gravityFunction, float speed);
 	bool m_useDirectionGravity = true;
-	void usePhysicFlotation(bool verticalMovement, bool horizontalXMovement, float movementLength);
-	bool m_useFlotation = false;
 	void usePhysicSwarmCircleMotion(bool verticalMovement, bool horizontalXMovement, bool horizontalYMovement, float movementLength);
 	bool m_useChaoticSwarmMotion = false;
 

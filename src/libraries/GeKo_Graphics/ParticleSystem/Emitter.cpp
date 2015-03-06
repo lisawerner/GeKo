@@ -1,11 +1,15 @@
 #include "Emitter.h"
 
+/*
+Point Sprites is default
+*/
 Emitter::Emitter(const int OUTPUT, glm::vec3 position, bool emitterMortality, double emitFrequency,
 	int particlesPerEmit, double particleLifeTime, bool particleMortal)
 {
-	m_output = static_cast<FLOW> (OUTPUT); //set if we generate just once, constant or it is unused
+	m_output = static_cast<FLOW> (OUTPUT); //set if we generate just once, constant or unused
 
 	//TEMP
+	//TODO
 	m_birthTime = 3.0;
 	m_deathTime = 3.0;
 
