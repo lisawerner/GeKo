@@ -32,7 +32,7 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 	updateSize(); //?
 	startTime();
 }
-//TODO: DEAD LOCKS?
+//TODO: Memory?
 Emitter::~Emitter()
 {
 	m_textureList.clear();
