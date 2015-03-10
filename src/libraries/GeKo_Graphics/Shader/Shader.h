@@ -73,6 +73,7 @@ public:
 	void sendVec2(std::string uniform, glm::vec2 v);
     void sendVec3(std::string uniform,glm::vec3 v);
 	void sendVec4(std::string uniform, glm::vec4 v);
+	void sendFloatArray(std::string uniform, int size, GLfloat array[]);
 	void sendMat4(std::string uniform, glm::mat4 m);
 	void sendSampler2D(std::string uniform, GLuint sampler2Dhandler);
 	void sendSampler2D(std::string uniform, GLuint sampler2Dhandler, int textureIndex);
