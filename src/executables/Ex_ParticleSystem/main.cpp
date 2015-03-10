@@ -93,7 +93,9 @@ int main()
 	smoke->setVelocity(&Emitter::useVelocitySemiCircle);
 	smoke->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.1), 0.4f);
 	smoke->addTexture(*smokeTex, 0.0);
-	smoke->useTexture(true, 2.0, 3.0);
+	std::vector<float> size{ 0.0, 0.5, 2.0};
+	std::vector<float> time{ 0.0, 0.5, 1.0};
+	smoke->useTexture(true, 2.0, 3.0, size, time);
 	smoke->switchToGeometryShader();
 	smoke->setRotationSpeed(0.5f);
 

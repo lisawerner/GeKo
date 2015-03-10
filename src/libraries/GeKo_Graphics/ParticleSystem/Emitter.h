@@ -92,7 +92,10 @@ public:
 	void setAreaEmitting(bool areaEmittingXY, bool areaEmittingXZ, float size, int accuracy);
 	void addTexture(Texture &texture, float percentageLife);
 	void deleteTexture(int position);
+	void useTexture(bool useTexture);
 	void useTexture(bool useTexture, float birthTime, float deathTime);
+	void useTexture(bool useTexture, std::vector<float> scalingSize, std::vector<float> scalingMoment);
+	void useTexture(bool useTexture, float birthTime, float deathTime, std::vector<float> scalingSize, std::vector<float> scalingMoment);
 	void setRotationSpeed(float rotationSpeed);
 
 	//get properties
@@ -142,6 +145,10 @@ public:
 	float m_birthTime;
 	float m_deathTime;
 	std::vector<Texture> m_textureList;
+	float m_scalingData [32];
+	int m_scalingCount = 0;
+	bool m_useScaling = false;
+	float particleDefaultSize = 1.0;
 
 private:
 	//updates the buffer and compute size
