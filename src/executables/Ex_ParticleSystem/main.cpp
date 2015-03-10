@@ -37,6 +37,7 @@ int main()
 
 	//CAM
 	cam.setPosition(glm::vec4(0.0, 0.0, 2.5, 1.0));
+	cam.setKeySpeed(2.0);
 	iH.setAllInputMaps(cam);
 	glfwSetKeyCallback(window, key_callback);
 
@@ -167,7 +168,7 @@ int main()
 
 		snow->generateParticle();
 		snow->update();
-		snow->render(cam);
+//		snow->render(cam);
 
 		snowStrong->generateParticle();
 		snowStrong->update();
@@ -183,7 +184,7 @@ int main()
 
 		smoke->generateParticle();
 		smoke->update();
-		//smoke->render(cam);
+		smoke->render(cam);
 
 		//fire->generateParticle();
 		//fire->update();

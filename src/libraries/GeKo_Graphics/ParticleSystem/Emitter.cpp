@@ -193,6 +193,7 @@ void Emitter::render(Camera &cam)
 		emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
 		emitterShader->sendSampler2D("texture", m_textureList.at(0).getTexture());
 		emitterShader->sendFloat("rotationSpeed", m_rotationSpeed);
+		emitterShader->sendVec4("camPos", cam.getPosition());
 
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
