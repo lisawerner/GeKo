@@ -24,7 +24,7 @@ void main() {
 	vec4 center = gl_in[0].gl_Position;
 
 	//scaling
-	float temp = 1 - (lifetime/fullLifetime); //example for scaling; needing ubo
+	float temp = max(1 - (lifetime/fullLifetime), 0.2); //example for scaling; needing ubo
 	vec3 up =		vec3(temp, 0.0, 0.0);
 	vec3 right =	vec3(0.0, temp, 0.0);
 	
