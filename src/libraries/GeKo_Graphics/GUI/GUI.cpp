@@ -17,7 +17,13 @@ static bool mousePressed[2] = { false, false };
 
 #define OFFSETOF(TYPE, ELEMENT) ((size_t)&(((TYPE *)0)->ELEMENT))
 
-GUI::GUI() : m_initialized(false), m_visible(true), m_guiElements(new std::vector<GuiElement::Element*>())
+GUI::GUI(std::string windowName, int windowWidth, int windowHeight) :
+  m_initialized(false),
+  m_visible(true),
+  m_windowName(windowName),
+  m_windowWidth(windowWidth),
+  m_windowHeight(windowHeight),
+  m_guiElements(new std::vector<GuiElement::Element*>())
 {
 
 }
@@ -49,6 +55,7 @@ void GUI::render(Window& window)
   if (!m_visible)
     return;
 
+
   ImGuiIO& io = ImGui::GetIO();
 
   mousePressed[0] = static_cast<bool>(glfwGetKey(window.getWindow(), GLFW_MOUSE_BUTTON_1));
@@ -59,21 +66,26 @@ void GUI::render(Window& window)
   static float f;
   bool t = true;
 
-  ImGui::Begin("Test Window", &t, ImVec2(200, 100));
+  ImGui::SetNextWindowSize(ImVec2(m_windowWidth, m_windowHeight));
+
+  ImGui::Begin(m_windowName.c_str(), &t);
   
   for (std::vector<GuiElement::Element*>::iterator it = m_guiElements->begin(); it != m_guiElements->end(); ++it)
     (*it)->render();
  
-  //ImGui::Text("Hello, world!");
-  //ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-  //ImGui::ColorEdit3("clear color", (float*)&clear_col);
+  ImVec2 newSize = ImGui::GetWindowSize();
+    
+  if (newSize.y >= 35)
+  {
+    m_windowWidth  = newSize.x;
+    m_windowHeight = newSize.y;
+  }
 
-  //if (ImGui::Button("Test Window")) show_test_window ^= 1;
   ImGui::End();
-
 
   glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
   ImGui::Render();
+
 }
 
 void GUI::addElement(GuiElement::Element *comp)
@@ -89,6 +101,11 @@ void GUI::show()
 void GUI::hide()
 {
   m_visible = false;
+}
+
+bool GUI::visible()
+{
+  return m_visible;
 }
 
 void GUI::update(Window& window)

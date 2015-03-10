@@ -5,12 +5,33 @@
 #include <GeKo_Graphics/ShaderInclude.h>
 #include <GeKo_Graphics/ScenegraphInclude.h>
 #include "GeKo_Graphics/Camera/Pilotview.h"
+#include "GeKo_Graphics/GUI/GUI.h"
+
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
 
 InputHandler iH;
 Pilotview cam("Pilotview");
+
+
+glm::fvec3 *dsLightColor;
+float *ssaoQuality;
+float *ssaoRadius;
+float *reflectionStrength;
+GUI *gui;
+GuiElement::ToggleButton *useShadowMappingButton;
+GuiElement::ToggleButton *usePCFButton;
+GuiElement::ToggleButton *useDeferredShadingButton;
+GuiElement::ToggleButton *deferredShadingRotationButton;
+GuiElement::ToggleButton *useSSAOButton;
+GuiElement::ToggleButton *useReflectionsButton;
+GuiElement::ToggleButton *useBloomButton;
+GuiElement::ToggleButton *useFXAAButton;
+
+//our renderer
+OpenGL3Context context;
+Renderer *renderer;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
 	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
@@ -21,10 +42,118 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		if (it == activeMap.end())
 			std::cout << "Key is not mapped to an action" << std::endl;
 	}
+
+  if (glfwGetKey(window, GLFW_KEY_F10))
+    if (gui->visible()) gui->hide(); else gui->show();
+}
+
+
+void initGUI()
+{
+  //INIT GUI
+  gui = new GUI("Settings - Hide [F10]", 400, 400);
+
+  GuiElement::Header *shadowMappingHeader = new GuiElement::Header("Shadow Mapping");
+  shadowMappingHeader->addElement(new GuiElement::Text("Use Shadow Mapping"));
+  shadowMappingHeader->addElement(new GuiElement::SameLine);
+  useShadowMappingButton = new GuiElement::ToggleButton(false, "on", "off");
+  shadowMappingHeader->addElement(useShadowMappingButton);
+  shadowMappingHeader->addElement(new GuiElement::Spacing);
+
+  //TODO ADD FUNCTIONALITY
+  shadowMappingHeader->addElement(new GuiElement::Text("Use PCF Soft Shadows"));
+  shadowMappingHeader->addElement(new GuiElement::SameLine);
+  usePCFButton = new GuiElement::ToggleButton(false, "on", "off");
+  shadowMappingHeader->addElement(usePCFButton);
+  shadowMappingHeader->addElement(new GuiElement::Spacing);
+
+  //TODO add Light Position
+  gui->addElement(shadowMappingHeader);
+  //===============================================================================================
+
+
+  GuiElement::Header *deferredShadingHeader = new GuiElement::Header("Deferred Shading");
+  deferredShadingHeader->addElement(new GuiElement::Text("Use Deferred Shading"));
+  deferredShadingHeader->addElement(new GuiElement::SameLine);
+  useDeferredShadingButton = new GuiElement::ToggleButton(false, "on", "off");
+  deferredShadingHeader->addElement(useDeferredShadingButton);
+  deferredShadingHeader->addElement(new GuiElement::Spacing);
+
+  GuiElement::ColorEditRGB *deferredShadingLightColorEdit = new GuiElement::ColorEditRGB("Lightcolor", dsLightColor);
+  deferredShadingHeader->addElement(deferredShadingLightColorEdit);
+  deferredShadingHeader->addElement(new GuiElement::Spacing);
+
+  deferredShadingHeader->addElement(new GuiElement::Text("Rotate Lights"));
+  deferredShadingHeader->addElement(new GuiElement::SameLine);
+  deferredShadingRotationButton = new GuiElement::ToggleButton(false, "on", "off");
+  deferredShadingHeader->addElement(deferredShadingRotationButton);
+  deferredShadingHeader->addElement(new GuiElement::Spacing);
+
+  gui->addElement(deferredShadingHeader);
+
+  //===============================================================================================
+
+
+  GuiElement::Header *ssaoHeader = new GuiElement::Header("Screen Space Ambient Occlusion");
+  ssaoHeader->addElement(new GuiElement::Text("Use SSAO"));
+  ssaoHeader->addElement(new GuiElement::SameLine);
+
+  useSSAOButton = new GuiElement::ToggleButton(false, "on", "off");
+  ssaoHeader->addElement(useSSAOButton);
+  ssaoHeader->addElement(new GuiElement::Spacing);
+  ssaoHeader->addElement(new GuiElement::SliderFloat("Quality", ssaoQuality, 0.0f, 100.0f));
+  ssaoHeader->addElement(new GuiElement::Spacing);
+  ssaoHeader->addElement(new GuiElement::SliderFloat("Radius", ssaoRadius, 0.0f, 0.5f));
+  ssaoHeader->addElement(new GuiElement::Spacing);
+
+  gui->addElement(ssaoHeader);
+
+  //===============================================================================================
+  GuiElement::Header *reflectionsHeader = new GuiElement::Header("Screen Space Reflections");
+  reflectionsHeader->addElement(new GuiElement::Text("Use Screen Space Reflections"));
+  reflectionsHeader->addElement(new GuiElement::SameLine);
+
+  useReflectionsButton = new GuiElement::ToggleButton(false, "on", "off");
+  reflectionsHeader->addElement(useReflectionsButton);
+  reflectionsHeader->addElement(new GuiElement::Spacing);
+  reflectionsHeader->addElement(new GuiElement::SliderFloat("Reflection Strength", reflectionStrength, 0.0f, 0.4f));
+  reflectionsHeader->addElement(new GuiElement::Spacing);
+  
+  gui->addElement(reflectionsHeader);
+  //===============================================================================================
+
+  //===============================================================================================
+  GuiElement::Header *postProcessingHeader = new GuiElement::Header("Postprocessing");
+
+  //BLOOM
+  postProcessingHeader->addElement(new GuiElement::Text("Use Bloom"));
+  postProcessingHeader->addElement(new GuiElement::SameLine);
+
+  useBloomButton = new GuiElement::ToggleButton(false, "on", "off");
+  postProcessingHeader->addElement(useBloomButton);
+  postProcessingHeader->addElement(new GuiElement::Spacing);
+
+
+  //TODO ADD BLOOM STRENGTH SLIDER
+
+  //FXAA
+  postProcessingHeader->addElement(new GuiElement::Text("Use FXAA"));
+  postProcessingHeader->addElement(new GuiElement::SameLine);
+
+  useFXAAButton = new GuiElement::ToggleButton(false, "on", "off");
+  postProcessingHeader->addElement(useFXAAButton);
+  postProcessingHeader->addElement(new GuiElement::Spacing);
+
+
+  gui->addElement(postProcessingHeader);
+  //===============================================================================================
+
+  renderer->addGui(gui);
 }
 
 int main()
 {
+  
 	glfwInit();
 
 	Window testWindow(50, 50, WINDOW_WIDTH, WINDOW_HEIGHT, "Graphic Showcase");
@@ -44,10 +173,8 @@ int main()
 	glfwSetKeyCallback(testWindow.getWindow(), key_callback);
 
 	glewInit();
-
-	//our renderer
-	OpenGL3Context context;
-	Renderer renderer(context);
+  
+  renderer = new Renderer(context);
 
   //our object
 	Cube cube;
@@ -89,7 +216,7 @@ int main()
   cube1.addTexture(&bricks);
   cube1.addNormalMap(&bricks_normal);
   cube1.addHeightMap(&bricks_height,0.07,0.1,true);
-	cube1.setModelMatrix(glm::translate(cube1.getModelMatrix(), glm::vec3(-0.7, 0.35, 0.5)));
+	cube1.setModelMatrix(glm::translate(cube1.getModelMatrix(), glm::vec3(-0.7, 0.35, 0.0)));
   cube1.setModelMatrix(glm::scale(cube1.getModelMatrix(), glm::vec3(0.5, 0.5, 0.5)));
 
 	Node cube2("cube2");
@@ -134,39 +261,72 @@ int main()
 
   Node lights = Node("Root");
   Sphere lightSphere = Sphere();
+  ConeLight slight(glm::vec4(2.0, 2.5, 3.5, 1.0), glm::vec4(0.7, 0.7, 0.7, 1.0), true, glm::vec3(-1.0, -1.0, -1.0), 90.0f, 1.0f, 10.0f);
+  
+  dsLightColor = new glm::fvec3(1.0f, 1.0f, 1.0f);
 
-  for (int i = 0; i < 1; i++)
-    for (int j = 0; j < 3; j++)
-    {
-      Node *newLight = new Node(std::string("Node_" + std::to_string(i) + std::to_string(j)));
-      newLight->addGeometry(&lightSphere);
-      newLight->setModelMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(i*1.5, 1.0f, j*1.5)));
-      //newLight.setModelMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(0, 1, 1.0f)));
-      newLight->setModelMatrix(glm::scale(newLight->getModelMatrix(), glm::vec3(2.0, 2.0, 2.0)));
-      lights.addChildrenNode(newLight);
-    }
+  Node *newLight1 = new Node(std::string("Node_1"));
+  newLight1->addGeometry(&lightSphere);
+  newLight1->setModelMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(-1,1,1)));
+  newLight1->setModelMatrix(glm::scale(newLight1->getModelMatrix(), glm::vec3(3.0, 3.0, 3.0)));
+  lights.addChildrenNode(newLight1);
+  
+  Node *newLight2 = new Node(std::string("Node_2"));
+  newLight2->addGeometry(&lightSphere);
+  newLight2->setModelMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(1,1,1)));
+  newLight2->setModelMatrix(glm::scale(newLight2->getModelMatrix(), glm::vec3(3.0, 3.0, 3.0)));
+  lights.addChildrenNode(newLight2);
 
-  renderer.useDeferredShading(true,&lights,new glm::fvec3(1.0,1.0,0.8));
-  renderer.useSSAO(true);        
-  //renderer.useReflections(true); 
-  renderer.useBloom(true);
-  renderer.useAntiAliasing(true);
-	
+  Node *newLight3 = new Node(std::string("Node_3"));
+  newLight3->addGeometry(&lightSphere);
+  newLight3->setModelMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(1, 1, -1)));
+  newLight3->setModelMatrix(glm::scale(newLight3->getModelMatrix(), glm::vec3(3.0, 3.0, 3.0)));
+  lights.addChildrenNode(newLight3);
+
+  Node *newLight4 = new Node(std::string("Node_4"));
+  newLight4->addGeometry(&lightSphere);
+  newLight4->setModelMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(-1, 1, -1)));
+  newLight4->setModelMatrix(glm::scale(newLight4->getModelMatrix(), glm::vec3(3.0, 3.0, 3.0)));
+  lights.addChildrenNode(newLight4);
+
+  ssaoQuality = new float(30.0f);
+  ssaoRadius = new float(0.1f);
+
+  reflectionStrength = new float(0.2f);
+
+  initGUI();
+
+ 	
 	double startTime = glfwGetTime();
 	//Renderloop
   int outputFPS = 0;
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
+
+    renderer->useShadowMapping(useShadowMappingButton->isActive(), &slight);
+    renderer->useDeferredShading(useDeferredShadingButton->isActive(), &lights, dsLightColor);
+    renderer->useSSAO(useSSAOButton->isActive(), ssaoQuality, ssaoRadius);
+    renderer->useReflections(useReflectionsButton->isActive(), reflectionStrength);
+    renderer->useBloom(useBloomButton->isActive());
+    renderer->useAntiAliasing(useFXAAButton->isActive());
+
+
+
     // You have to compute the delta time
-    cam.setSensitivity(glfwGetTime() - startTime);
+    float dTime = glfwGetTime() - startTime;
+
+    cam.setSensitivity(dTime/50);
+
+    if (deferredShadingRotationButton->isActive())
+      lights.setModelMatrix(glm::rotate(lights.getModelMatrix(), 10.0f * dTime, glm::vec3(0.0, 1.0, 0.0)));
 
     if (!(outputFPS % 20))
-      std::cout <<  "FPS: " << static_cast<int> (1 / (glfwGetTime() - startTime)) << std::endl;
+      std::cout << "FPS: " << static_cast<int> (1 / dTime) << std::endl;
 
     outputFPS++;
 
     startTime = glfwGetTime();
-		renderer.renderScene(testScene,testWindow);
+    renderer->renderScene(testScene, testWindow);
 	}
 
 	glfwDestroyWindow(testWindow.getWindow());

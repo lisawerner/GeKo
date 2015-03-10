@@ -57,9 +57,6 @@ void Scenegraph::setActiveCamera(std::string cameraName)
 	}
 }
 
-
-
-
 Camera* Scenegraph::getCamera(std::string cameraName)
 {
 	for (int i = 0; i < m_cameraSet.size(); i++)
@@ -71,6 +68,17 @@ Camera* Scenegraph::getCamera(std::string cameraName)
 	std::cout << "ERROR: The Camera with the name " << cameraName << " does not exist!" << std::endl;
 	return NULL;
 }
+
+bool Scenegraph::containsCamera(std::string cameraName)
+{
+  for (int i = 0; i < m_cameraSet.size(); i++)
+  {
+    if (m_cameraSet.at(i)->getName() == cameraName)
+      return true;
+  }
+  return false;
+}
+
 
 void Scenegraph::addCamera(Camera* camera)
 {

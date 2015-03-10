@@ -1,9 +1,6 @@
 #pragma once
 
-//TODO CHANGE FONT & COLOR OF WINDOW
-//TODO ADD TABS WITH CHILD GUI ELEMENTS
-//TODO MOUSE SCROLL INPUT
-//TODO DESTRUCTORS
+//FIX BUG WITH TOGGLE BUTTONS
 
 #include <string>
 #include <vector>
@@ -18,7 +15,7 @@ class GUI
 {
   public:
     ///Constructor
-    GUI();
+    GUI(std::string windowName, int windowWidth, int windowHeight);
     ///Destructor
     ~GUI();
  
@@ -26,15 +23,19 @@ class GUI
     void addElement(GuiElement::Element *comp);
     void show();
     void hide();
+    bool visible();
 
   private:
     
     void init();
     void loadFonts();
     void update(Window& window);
-    
 
     bool m_initialized;
     bool m_visible;
+
+    std::string m_windowName;
+    int m_windowWidth, m_windowHeight;
+
     std::vector<GuiElement::Element*> *m_guiElements;
 };

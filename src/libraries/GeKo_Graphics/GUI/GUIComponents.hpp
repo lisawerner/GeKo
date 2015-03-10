@@ -1,6 +1,7 @@
 #pragma once
 #include<string>
 #include<imgui.h>
+#include<glm/ext.hpp>
 
 ///These Classes are wrapper classes for the ImGui Render methods
 
@@ -98,6 +99,18 @@ namespace GuiElement
 
   };
 
+  class SameLine : public Element
+  {
+  public:
+    SameLine() {}
+    inline void render() { ImGui::SameLine(); }
+    inline void dispose() { SameLine::~SameLine(); }
+
+  private:
+    ~SameLine() {}
+
+  };
+
   class PushButton : public Element
   {
   public:
@@ -142,6 +155,38 @@ namespace GuiElement
     std::string m_ActiveString;
     std::string m_InactiveString;
 
+  };
+
+  class ColorEditRGB : public Element
+  {
+  public:
+    ColorEditRGB(std::string ID, glm::fvec3 *color) : m_ID(ID), m_colorVec(color) { m_color[0] = m_colorVec->r; m_color[1] = m_colorVec->g; m_color[2] = m_colorVec->b; }
+  
+    inline void render() { ImGui::ColorEdit3(m_ID.c_str(), m_color); m_colorVec->r = m_color[0]; m_colorVec->g = m_color[1]; m_colorVec->b = m_color[2]; }
+    inline void dispose(){ ColorEditRGB::~ColorEditRGB(); }
+   
+  private:
+    ~ColorEditRGB() {}
+    float m_color[3];
+
+    std::string m_ID;
+    glm::fvec3 *m_colorVec;
+  };
+
+  class ColorEditRGBA : public Element
+  {
+  public:
+    ColorEditRGBA(std::string ID, glm::fvec4 *color) : m_ID(ID), m_colorVec(color) { m_color[0] = m_colorVec->r; m_color[1] = m_colorVec->g; m_color[2] = m_colorVec->b; m_color[3] = m_colorVec->a; }
+
+    inline void render() { ImGui::ColorEdit4(m_ID.c_str(), m_color); m_colorVec->r = m_color[0]; m_colorVec->g = m_color[1]; m_colorVec->b = m_color[2]; m_colorVec->a = m_color[3]; }
+    inline void dispose(){ ColorEditRGBA::~ColorEditRGBA(); }
+
+  private:
+    ~ColorEditRGBA() {}
+    float m_color[4];
+
+    std::string m_ID;
+    glm::fvec4 *m_colorVec;
   };
 
 };

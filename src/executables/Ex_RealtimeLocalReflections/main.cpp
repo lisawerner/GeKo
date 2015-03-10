@@ -168,7 +168,8 @@ int main()
 		shaderRLR.sendInt("screenHeight", WINDOW_HEIGHT);
 	
 		shaderRLR.sendFloat("zNear", cam.getNear());
-		shaderRLR.sendFloat("zFar", cam.getFar());
+    shaderRLR.sendFloat("zFar", cam.getFar());
+    shaderRLR.sendFloat("reflectivity", 0.2f);
 
 		screenFillingQuad.renderGeometry();
 		

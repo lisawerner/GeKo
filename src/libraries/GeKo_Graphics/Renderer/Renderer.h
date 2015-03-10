@@ -6,6 +6,7 @@
 #include <GeKo_Graphics/Scenegraph/Scene.h>
 #include <GeKo_Graphics/Shader/FBO.h>
 #include <GeKo_Graphics/Scenegraph/Node.h>
+#include <GeKo_Graphics/Camera/Pilotview.h>
 #include <glm/glm.hpp>
 
 
@@ -56,11 +57,14 @@ public:
   ///renders the given GUI
   void renderGUI(GUI &guiToRender, Window &window);
 
-  void useReflections(bool useReflections);
+  void useReflections(bool useReflections, float *reflectionStrength = new float(0.2f));
   void useAntiAliasing(bool useAntiAliasing);
-  void useDeferredShading(bool useDeferredShading, Node *lightRootNode, glm::fvec3 *lightColor = new glm::fvec3(1.0,1.0,1.0));
+  void useDeferredShading(bool useDeferredShading, Node *lightRootNode = nullptr, glm::fvec3 *lightColor = new glm::fvec3(1.0,1.0,1.0));
   void useBloom(bool useBloom);
-  void useSSAO(bool useSSAO);
+  void useSSAO(bool useSSAO, float *quality = new float(30.0f), float *radius = new float(0.1f));
+  void useShadowMapping(bool useShadowMapping, ConeLight *coneLight = nullptr);
+
+  void addGui(GUI *guiToAdd);
 
 private:
   void bindFBO();
@@ -72,20 +76,33 @@ private:
   void renderDeferredShading();
   void renderBloom();
   void renderSSAO();
+  void renderShadowMapping(Scene& scene);
+  
+  std::vector<GUI*> m_guis;
 
   bool m_useReflections;
   bool m_useAntiAliasing;
   bool m_useBloom;
   bool m_useDeferredShading;
   bool m_useSSAO;
-
+  bool m_useShadowMapping;
+  
   Node *m_dsLightRootNode;
   glm::fvec3 *m_dsLightColor;
+
+  float *m_ssaoQuality;
+  float *m_ssaoRadius;
+
+  float *m_screenSpaceReflectionsStrength;
+
+  ConeLight *m_smConeLight;
+  Pilotview *m_smCam;
 
 	bool m_currentFBOIndex;
   bool m_firstRender;
 
   FBO *m_gBuffer;
+  FBO *m_smFBO;
 	FBO *m_ping;
 	FBO *m_pong;
 
@@ -105,6 +122,7 @@ private:
   ShaderProgram *m_shaderSSAOcalc;
   ShaderProgram *m_shaderSSAOblur;
   ShaderProgram *m_shaderSSAOfinal;
+  ShaderProgram *m_shaderShadowMapping;
 
   Rect m_sfq;
 };
