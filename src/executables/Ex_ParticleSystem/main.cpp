@@ -37,6 +37,7 @@ int main()
 
 	//CAM
 	cam.setPosition(glm::vec4(0.0, 0.0, 2.5, 1.0));
+	cam.setKeySpeed(2.0);
 	iH.setAllInputMaps(cam);
 	glfwSetKeyCallback(window, key_callback);
 
@@ -55,12 +56,12 @@ int main()
 	Texture* brick = new Texture((char*)RESOURCES_PATH "/brick.bmp");
 
 	//EMITTER SNOW, needs better texture
-	Emitter* snow = new Emitter(0, glm::vec3(0.0, 3.0, 0.0), 0.0, 0.166, 10, 30.0, true);
+	Emitter* snow = new Emitter(0, glm::vec3(0.0, 3.0, 0.0), 0.0, 0.166, 100, 30.0, true);
 	snow->setVelocity(&Emitter::useVelocityZero);
 	snow->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 0.5f);
-	snow->setAreaEmitting(false,true, 3.0, 10000);
+	snow->setAreaEmitting(false,true, 10.0, 10000);
 	snow->addTexture(*snowTex, 0.0);
-	snow->useTexture(true, 1.0, 3.0);
+	snow->useTexture(true, 1.0, 2.0);
 
 	//EMITTER STRONG SNOW, better with multiple emitter
 	Emitter* snowStrong = new Emitter(0, glm::vec3(-3.5, 4.0, 0.0), 0.0, 0.166, 50, 20.0, true);
@@ -68,7 +69,7 @@ int main()
 	snowStrong->usePhysicDirectionGravity(glm::vec4(0.4, -1.5, 0.0, 1.0), 2.6f);
 	snowStrong->setAreaEmitting(false, true, 5.0, 10000);
 	snowStrong->addTexture(*snowTex, 0.0);
-	snowStrong->useTexture(true, 1.0, 3.0);
+	snowStrong->useTexture(true, 0.2, 1.0, 3.0);
 
 	//EMITTER RAIN, needs texture
 	Emitter* rain = new Emitter(0, glm::vec3(0.0, 3.0, 0.0), 0.0, 0.166, 20, 5.0, true);
@@ -76,42 +77,42 @@ int main()
 	rain->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 5.0f);
 	rain->setAreaEmitting(false, true, 3.0, 10000);
 	rain->addTexture(*snowTex, 0.0);
-	rain->useTexture(true, 1.0, 0.0);
+	rain->useTexture(true, 0.2, 1.0, 0.0);
 
 	//EMITTER COMIC CLOUD TODO
 	Emitter* cloud = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 0.25, 5, 4.0, true);
 	cloud->setVelocity(&Emitter::useVelocitySemiCircle);
 	cloud->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.1), 0.4f);
 	cloud->addTexture(*smokeTex, 0.0);
-	cloud->useTexture(true, 0.0, 0.0);
+	cloud->useTexture(true, 0.0);
 	cloud->switchToGeometryShader();
-	cloud->setRotationSpeed(0.5f);
 
 	//EMITTER SMOKE, dont like it
-	Emitter* smoke = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 0.25, 5, 4.0, true);
+	Emitter* smoke = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 0.25, 4, 8.0, true);
 	smoke->setVelocity(&Emitter::useVelocitySemiCircle);
 	smoke->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.1), 0.4f);
 	smoke->addTexture(*smokeTex, 0.0);
-	smoke->useTexture(true, 2.0, 3.0);
+	std::vector<float> size{ 0.2f, 1.0f, 2.5f};
+	std::vector<float> time{ 0.0f, 0.2f, 1.0f};
+	smoke->useTexture(true, size, time, 2.0, 3.0, false, 0.3);
 	smoke->switchToGeometryShader();
-	smoke->setRotationSpeed(0.5f);
 
 	//EMITTER FIRE
 	Emitter* fire = new Emitter(0, glm::vec3(0.0, 2.0, 0.0), 0.0, 0.166, 10, 30.0, true);
 
 	//EMITTER FLIES, needs better texture, and rotating for PS or scaling for GS
-	Emitter* flies = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.166, 3, 10.0, true);
+	Emitter* flies = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.166, 5, 10.0, true);
 	flies->setVelocity(&Emitter::useVelocityZero);
 	flies->usePhysicSwarmCircleMotion(true, true, false, 0.0f);
 	flies->setAreaEmitting(true, false, 2.0, 10000);
 	flies->addTexture(*flyTex, 0.0);
-	flies->useTexture(true, 2.0, 3.0);
+	flies->useTexture(true, 1.0, 1.0, 2.0);
 
 	//EMITTER SWARM
 	Emitter* swarm = new Emitter(0, glm::vec3(0.0, 2.0, 0.0), 0.0, 0.166, 10, 30.0, true);
 
 	//EMITTER FIREWORK
-	Emitter* firework = new Emitter(0, glm::vec3(0.0, 2.0, 0.0), 0.0, 0.166, 10, 30.0, true);
+	Emitter* firework = new Emitter(0, glm::vec3(0.0, 3.0, 0.0), 0.0, 0.166, 10, 30.0, true);
 
 	//SHADER
 	VertexShader vsSkybox(loadShaderSource(SHADERS_PATH + std::string("/SkyboxShader/SkyboxShader.vert")));
@@ -165,16 +166,16 @@ int main()
 		//EMITTER
 //		glEnable(GL_DEPTH_TEST);
 
-		snow->generateParticle();
-		snow->update();
+		snow->generateParticle(glm::vec3(cam.getPosition()));
+		snow->update(glm::vec3(cam.getPosition()));
 		snow->render(cam);
 
-		snowStrong->generateParticle();
-		snowStrong->update();
+		snowStrong->generateParticle(glm::vec3(cam.getPosition()));
+		snowStrong->update(glm::vec3(cam.getPosition()));
 		//snowStrong->render(cam);
 
-		rain->generateParticle();
-		rain->update();
+		rain->generateParticle(glm::vec3(cam.getPosition()));
+		rain->update(glm::vec3(cam.getPosition()));
 		//rain->render(cam);
 
 		//cloud->generateParticle();
@@ -183,7 +184,7 @@ int main()
 
 		smoke->generateParticle();
 		smoke->update();
-		//smoke->render(cam);
+		smoke->render(cam);
 
 		//fire->generateParticle();
 		//fire->update();

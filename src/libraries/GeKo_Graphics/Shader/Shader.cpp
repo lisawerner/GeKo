@@ -107,6 +107,10 @@ void ShaderProgram::sendVec4(std::string uniform, glm::vec4 v) {
 	glUniform4f(getLocation(uniform), v.x, v.y, v.z, v.w);
 }
 
+void ShaderProgram::sendFloatArray(std::string uniform, int size, GLfloat array []) {
+	glUniform1fv(getLocation(uniform), size, array);
+}
+
 void ShaderProgram::sendMat4(std::string uniform, glm::mat4 m) {
 	glUniformMatrix4fv(getLocation(uniform), 1, false, glm::value_ptr(m));
 }

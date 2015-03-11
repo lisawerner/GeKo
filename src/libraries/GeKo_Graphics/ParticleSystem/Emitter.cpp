@@ -91,6 +91,50 @@ void Emitter::loadBuffer(){
 }
 
 void Emitter::update(){
+
+	deltaTime = glfwGetTime() - updateTime; //time remain since last update
+	updateTime = glfwGetTime();
+
+	emitLifetime -= deltaTime;
+	if (emitLifetime < 0 && emitterMortal){
+		m_output = UNUSED;
+	}
+
+	//Bind CS and all SSBO's
+	compute->bind();
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, position_ssbo);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, velocity_ssbo);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, angle_ssbo);
+
+	//Uniform Vars
+	compute->sendFloat("deltaTime", (float)deltaTime);
+	compute->sendVec3("emitterPos", getPosition()); //can be saved position, or parameter
+	compute->sendFloat("fullLifetime", particleLifetime);
+	compute->sendInt("particleMortal", m_particleMortal);
+
+	compute->sendVec4("gravity", m_gravity);
+	compute->sendFloat("gravityRange", m_gravityRange);
+	compute->sendInt("gravityFunc", m_gravityFunction);
+	
+	compute->sendInt("useTrajectory", m_useTrajectory);
+	compute->sendInt("useDirectionGravity", m_useDirectionGravity);
+	compute->sendInt("usePointGravity", m_usePointGravity);
+	compute->sendInt("useChaoticSwarmMotion", m_useChaoticSwarmMotion);
+	
+	compute->sendInt("useMovementVertical", m_movementVertical);
+	compute->sendInt("useMovementHorizontalX", m_movementHorizontalX);
+	compute->sendInt("useMovementHorizontalZ", m_movementHorizontalZ);
+
+	//Unbind CD and all SSBO's
+	glDispatchCompute(computeGroupCount, 1, 1); //?
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 0);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, 0);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, 0);
+	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
+	emitterShader->unbind();
+}
+
+void Emitter::update(glm::vec3 playerPosition){
 	
 	deltaTime = glfwGetTime() - updateTime; //time remain since last update
 	updateTime = glfwGetTime();
@@ -108,20 +152,22 @@ void Emitter::update(){
 
 	//Uniform Vars
 	compute->sendFloat("deltaTime", (float)deltaTime);
-	compute->sendVec3("emitterPos", getPosition());
+	compute->sendVec3("emitterPos", getPosition() + playerPosition); //can be saved position, or parameter
 	compute->sendFloat("fullLifetime", particleLifetime);
 	compute->sendInt("particleMortal", m_particleMortal);
+
 	compute->sendVec4("gravity", m_gravity);
 	compute->sendFloat("gravityRange", m_gravityRange);
 	compute->sendInt("gravityFunc", m_gravityFunction);
+
 	compute->sendInt("useTrajectory", m_useTrajectory);
 	compute->sendInt("useDirectionGravity", m_useDirectionGravity);
 	compute->sendInt("usePointGravity", m_usePointGravity);
 	compute->sendInt("useChaoticSwarmMotion", m_useChaoticSwarmMotion);
+
 	compute->sendInt("useMovementVertical", m_movementVertical);
 	compute->sendInt("useMovementHorizontalX", m_movementHorizontalX);
 	compute->sendInt("useMovementHorizontalZ", m_movementHorizontalZ);
-	compute->sendFloat("movementLength", m_movementLength);
 
 	//Unbind CD and all SSBO's
 	glDispatchCompute(computeGroupCount, 1, 1); //?
@@ -154,14 +200,27 @@ void Emitter::render(Camera &cam)
 		//Uniform Vars
 		emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
 		emitterShader->sendInt("particleMortal", m_particleMortal);
-		emitterShader->sendInt("useColorFlow", m_useColorFlow); //TODO
-		emitterShader->sendInt("useTexture", useTexture);
 		emitterShader->sendFloat("birthTime", m_birthTime);
 		emitterShader->sendFloat("deathTime", m_deathTime);
 		emitterShader->sendMat4("viewMatrix", cam.getViewMatrix());
 		emitterShader->sendMat4("projectionMatrix", cam.getProjectionMatrix());
+		
+		if (m_useScaling){
+			emitterShader->sendInt("useScaling", 1);
+			emitterShader->sendInt("scalingCount", m_scalingCount);
+			emitterShader->sendFloatArray("scalingData", m_scalingCount, m_scalingData);
+			emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
+			emitterShader->sendInt("particleMortal", m_particleMortal);
+		}
+		else{
+			emitterShader->sendInt("useScaling", 0);
+			emitterShader->sendFloat("size", particleDefaultSize);
+		}
+
 		if (useTexture)
-			emitterShader->sendSampler2D("particleTex", m_textureList.at(0).getTexture());
+			emitterShader->sendSampler2D("tex", m_textureList.at(0).getTexture());
+		emitterShader->sendInt("useTexture", useTexture);
+
 
 		glVertexPointer(4, GL_FLOAT, 0, (void*)0);
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -192,7 +251,21 @@ void Emitter::render(Camera &cam)
 		emitterShader->sendFloat("deathTime", m_deathTime);
 		emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
 		emitterShader->sendSampler2D("texture", m_textureList.at(0).getTexture());
-		emitterShader->sendFloat("rotationSpeed", m_rotationSpeed);
+		emitterShader->sendVec4("camPos", cam.getPosition());
+
+		emitterShader->sendInt("rotateLeft", m_rotateLeft);
+		emitterShader->sendFloat("rotationSpeed", m_rotationSpeed); 
+
+		if (m_useScaling){
+			emitterShader->sendInt("useScaling", 1);
+			emitterShader->sendInt("scalingCount", m_scalingCount);
+			emitterShader->sendFloatArray("scalingData", m_scalingCount, m_scalingData);
+			emitterShader->sendInt("particleMortal", m_particleMortal);
+		}
+		else{
+			emitterShader->sendInt("useScaling", 0);
+			emitterShader->sendFloat("size", particleDefaultSize);
+		}
 
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
@@ -300,6 +373,95 @@ void Emitter::pushParticle(int numberNewParticle){
 
 	indexBuffer = (indexBuffer + numberNewParticle) % numMaxParticle;
 }
+void Emitter::pushParticle(int numberNewParticle, glm::vec3 playerPosition){
+	auto emitPosition = getPosition()+playerPosition;
+
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, position_ssbo);
+	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
+
+	glm::vec4* positions = (glm::vec4*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask);
+	if (getAreaEmittingXZ()){ //emits in a xz area, like rain
+		auto accuracy = getAreaAccuracy(); //how near it will be generated
+		auto areaSize = getAreaSize(); //how big the area is
+		float randomNumber;
+		glm::vec3 pos;
+
+		for (int i = 0; i < numberNewParticle; i++)
+		{
+			int index = (indexBuffer + i) % numMaxParticle;
+
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1 with a certain comma accuracy
+			pos.x = emitPosition.x + areaSize * randomNumber;
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1
+			pos.z = emitPosition.z + areaSize * randomNumber;
+			pos.y = emitPosition.y;
+
+			positions[index] = glm::vec4(pos, particleLifetime);
+		}
+	}
+	else if (getAreaEmittingXY()){ //will be emitted in xy area
+		auto accuracy = getAreaAccuracy();
+		auto areaSize = getAreaSize();
+		float randomNumber;
+		glm::vec3 pos;
+
+		for (int i = 0; i < numberNewParticle; i++)
+		{
+			int index = (indexBuffer + i) % numMaxParticle;
+
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1 with a certain comma accuracy
+			pos.x = emitPosition.x + areaSize * randomNumber;
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1
+			pos.y = emitPosition.y + areaSize * randomNumber;
+			pos.z = emitPosition.z;
+
+			positions[index] = glm::vec4(pos, particleLifetime);
+		}
+	}
+	else{ //will be emitted like a jet
+		for (int i = 0; i < numberNewParticle; i++)
+		{
+			int index = (indexBuffer + i) % numMaxParticle;
+			positions[index] = glm::vec4(emitPosition, particleLifetime);
+		}
+	}
+
+	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+	auto speed = getSpeed();
+
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, velocity_ssbo);
+
+	glm::vec4* velocity = (glm::vec4*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask); //direction of movement
+	for (int i = 0; i < numberNewParticle; i++)
+	{
+		glm::vec3 vel = this->m_pfunc(); //gets a random vector from the desired vector space
+		if (glm::length(vel) != 0.0)
+			vel = glm::normalize(vel);
+		int index = (indexBuffer + i) % numMaxParticle;
+		velocity[index] = glm::vec4(vel, speed);
+	}
+
+	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+	//TODO just 2 of 4
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, angle_ssbo);
+
+	glm::vec4* angle = (glm::vec4*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask); //angle of movement as option to velocity
+	for (int i = 0; i < numberNewParticle; i++)
+	{
+		int index = (indexBuffer + i) % numMaxParticle;
+		int phi = (rand() % 360);
+		int theta = (rand() % 90);
+		angle[index] = glm::vec4(phi, theta, 0.0, 0.0);
+	}
+	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+	indexBuffer = (indexBuffer + numberNewParticle) % numMaxParticle;
+}
 void Emitter::generateParticle()
 {
 	switch (m_output)
@@ -317,6 +479,30 @@ void Emitter::generateParticle()
 	case ONCE: //we generate only one time particle
 		if (glfwGetTime() - generateTime >= emitFrequency){
 			pushParticle(particlesPerEmit);
+			m_output = UNUSED;
+		}
+		break;
+	case UNUSED: // we dont generate new particle
+		break;
+	}
+}
+void Emitter::generateParticle(glm::vec3 playerPosition)
+{
+	switch (m_output)
+	{
+	case CONSTANT: //we generate constant new particle
+		if (glfwGetTime() - generateTime >= emitFrequency){
+			deltaTime = glfwGetTime() - generateTime;
+			while (deltaTime >= emitFrequency) {
+				pushParticle(particlesPerEmit, playerPosition);
+				deltaTime -= emitFrequency;
+			}
+			generateTime = glfwGetTime();
+		}
+		break;
+	case ONCE: //we generate only one time particle
+		if (glfwGetTime() - generateTime >= emitFrequency){
+			pushParticle(particlesPerEmit, playerPosition);
 			m_output = UNUSED;
 		}
 		break;
@@ -413,6 +599,9 @@ void Emitter::setPosition(glm::vec3 newPosition)
 {
 	emitterPosition = newPosition;
 }
+void Emitter::movePosition(glm::vec3 playerPosition){
+	setPosition(getPosition()+playerPosition);
+}
 void Emitter::setEmitterMortality(double emitterLifetime)
 {
 	if (emitterLifetime < 0.001)
@@ -439,7 +628,6 @@ void Emitter::setParticleLifetime(float newLifetime)
 	particleLifetime = newLifetime;
 	updateSize();
 }
-//TODO: Test if lifetime should be 0.0
 void Emitter::setParticleMortality(bool particleMortality)
 {
 	m_particleMortal = particleMortality;
@@ -447,7 +635,6 @@ void Emitter::setParticleMortality(bool particleMortality)
 		m_particleMortal = false;
 		emitFrequency = 0.0;
 		m_deathTime = 0.0;
-		particleLifetime = 5.0; //TODO: test if it can be setted to 0.0
 		m_output = static_cast<FLOW> (1); //set output to once
 	}
 }
@@ -484,14 +671,44 @@ void Emitter::addTexture(Texture &texture, float percentageLife){
 void Emitter::deleteTexture(int position){
 	m_textureList.erase(m_textureList.begin() + position);
 }
-void Emitter::useTexture(bool useTexture, float birthTime, float deathTime){
+
+void Emitter::useTexture(bool useTexture, float particleSize, float birthTime, float deathTime, bool rotateLeft, float rotationSpeed){
 	m_useTexture = useTexture;
+
 	m_birthTime = birthTime;
 	m_deathTime = deathTime;
+
+	m_rotateLeft = rotateLeft;
+	m_rotationSpeed = rotationSpeed;
+
+	particleDefaultSize = particleSize;
 }
-//TODO: MADELEINE use it also for PS and set left or right rotation
-void Emitter::setRotationSpeed(float rotationSpeed){
-	m_rotationSpeed = rotationSpeed;		
+void Emitter::useTexture(bool useTexture, std::vector<float> scalingSize, std::vector<float> scalingMoment, 
+	float birthTime, float deathTime, bool rotateLeft, float rotationSpeed){
+	m_useTexture = useTexture;
+	
+	m_birthTime = birthTime;
+	m_deathTime = deathTime;
+
+	m_rotateLeft = rotateLeft;
+	m_rotationSpeed = rotationSpeed;
+
+	if (scalingSize.empty() == false && scalingMoment.empty() == false){
+		if (scalingSize.size() > 16 || scalingMoment.size() > 16)
+			perror("Error in Emitter: We just support a maximum of 16 scaling-steps");
+		else{
+			if (scalingSize.size() != scalingMoment.size())
+				perror("Error in Emitter: Size of scalingSize & scalingMoment is not equal");
+			else {
+				for (int i = 0; i < scalingSize.size(); i++){
+					m_scalingData[2 * i] = scalingMoment[i];
+					m_scalingData[2 * i + 1] = scalingSize[i];
+					m_scalingCount = m_scalingCount + 2;
+				}
+				m_useScaling = true;
+			}
+		}
+	}
 }
 
 //Velocity Getter
