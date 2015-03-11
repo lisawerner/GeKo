@@ -4,8 +4,9 @@ uniform int useTexture;
 uniform int useNormalMap;
 uniform int useHeightMap;
 uniform int useHeightMapShadows;
-uniform int useMotionBlur;
 uniform int useShadowMap;
+
+uniform int usePCFlinear;
 
 uniform sampler2D fboTexture;
 uniform sampler2D normalMap;
@@ -45,6 +46,7 @@ uniform struct
 } light;
 
 uniform vec3 lightAmbient;
+uniform float fDepthBias = 0.75f;
 
 in vec4 passPosition;
 in vec3 passNormal;
@@ -58,51 +60,50 @@ layout(location = 0) out vec4 positionOutput;
 layout(location = 1) out vec4 normalOutput;
 layout(location = 2) out vec4 colorOutput;
 
-vec4 motionBlur(vec4 startColor, vec2 startUV)
+float sampleShadowMap(sampler2D shadowMap, vec3 shadowCoord) 
 {
-	mat4 inverseModelProjection = mat4(transpose(inverse(projectionMatrix * viewMatrix * modelMatrix)));
-	mat4 previousModelProjection = mat4(previousProjectionMatrix * previousViewMatrix * previousModelMatrix);
-	mat4 modelProjection = mat4(projectionMatrix * viewMatrix * modelMatrix);
-	vec4 tmp1,tmp2; 
-	vec2 UV = startUV;
-	vec4 originalColor = startColor;
-	//Retrieve depth of pixel 
-	float z = texture(depthTexture, UV).z;
-	
-	//Simplified equation of GluUnproject
-	vec4 currentPos = vec4( 2.0* (gl_FragCoord.x/fWindowHeight)  - 1.0, 2.0* (gl_FragCoord.y/fWindowWidth) - 1.0, 2.0*z -1.0 , 1.0);
+	  if (texture(shadowMap, shadowCoord.xy).z < shadowCoord.z - fDepthBias) 
+        return 0.3f; 
+	return 1.0f;
+}
 
-	//Back into the worldSpace 
-	tmp1 =  currentPos  * inverseModelProjection;  
-	
-	//Homogenous value 
-	vec4 posInWorldSpace = tmp1/tmp1.w;  
-	
-	//Using the world coordinate, we transform those into the previous frame
-	//tmp2 =  previousModelProjection *posInWorldSpace ;  
-	tmp2 =  modelProjection *posInWorldSpace ;  
-	vec4 previousPos = tmp2/tmp2.w;  
-	
-	//Compute the frame velocity using the difference 
-	vec2 velocity = ((currentPos - previousPos)/100.0).xy;
+float sampleShadowMap_Linear(sampler2D shadowMap, vec3 shadowCoord) 
+{
+	vec2 texelSize	= vec2(1.0f/1024.0f, 1.0f/1024.0f);
+	vec2 pixelPos	= (shadowCoord.xy/texelSize) + vec2(0.5f);
+	vec2 fracPart	= fract(pixelPos);
+	vec2 startTexel = (pixelPos - fracPart) * texelSize;
 
-	//Get the initial color at this pixel.  
-	UV += velocity.xy;  
-	vec4 currentColor;
-	for(int i = 1; i < 20.0; ++i)  
-	{  
-		//Sample the color buffer along the velocity vector.  
-		if (useTexture != 0)
-		{
-			currentColor = vec4(texture(fboTexture, UV).rgb, 1.0f);
-		}  
-		//Add the current color to our color sum.  
-		originalColor += currentColor;  
-		UV.x += velocity.x;
-		UV.y += velocity.y;
-	}  
-	//Average all of the samples to get the final blur color.  
-	return originalColor / 20.0;  	
+	float blTexel = sampleShadowMap(shadowMap, vec3(startTexel,shadowCoord.z));
+	float brTexel = sampleShadowMap(shadowMap, vec3(startTexel + vec2(texelSize.x,0.0),shadowCoord.z));
+	float tlTexel = sampleShadowMap(shadowMap, vec3(startTexel + vec2(0.0,texelSize.y),shadowCoord.z));
+	float trTexel = sampleShadowMap(shadowMap, vec3(startTexel + vec2(texelSize.x,texelSize.y),shadowCoord.z));
+
+	float mixA = mix(blTexel,tlTexel,fracPart.y);
+	float mixB = mix(brTexel,trTexel,fracPart.y);
+
+	return mix(mixA,mixB,fracPart.x);
+}
+
+float PCF_linear(sampler2D shadowMap, vec3 shadowCoord) 
+{
+
+	const float f_PCFsize = 5.0f;				//3x3 Area, 5x5...
+	const float start = (f_PCFsize-1.0f)/2.0f;
+	const float f_PCFsizeSquared = f_PCFsize * f_PCFsize;
+
+	vec2 texelSize	= vec2(1.0f/1024.0f, 1.0f/1024.0f);
+	float result = 0.0f;
+
+	for(float y = -start; y <= start; y += 1.0f) {
+		for(float x = -start; x <= start; x += 1.0f) {
+				vec2 coordsOffset = vec2(x,y)*texelSize;
+				vec3 samplingPoint = vec3(shadowCoord.x + coordsOffset.x,shadowCoord.y + coordsOffset.y,shadowCoord.z);
+				result += sampleShadowMap_Linear(shadowMap,samplingPoint);
+			}
+		}
+
+		return result/f_PCFsizeSquared;
 }
 
 vec4 shadowMapping(vec4 baseColor)
@@ -157,6 +158,11 @@ vec4 shadowMapping(vec4 baseColor)
         inShadow = 0.3;   
 		
 	vec4 fragmentColor; 
+			
+	if (usePCFlinear == 1)
+	{
+	inShadow = PCF_linear(depthTexture, vec3(passShadowCoord));
+	} 
 
 	// All together 
 	fragmentColor.rgb = diffuse_color * lightAmbient;
@@ -207,12 +213,6 @@ void main(){
 		colorOutput = shadowMapping(colorOutput);
 	}
 
-	if (useMotionBlur !=0)
-	{
-		colorOutput = motionBlur(colorOutput,finalUV);		
-	}
-	
-		
 	if (useNormalMap != 0)
 	{
 		vec3 Normal   = vec3(normalize(normalMatrix * passWorldNormal));

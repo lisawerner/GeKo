@@ -9,6 +9,9 @@ in vec4 passShadowCoord;
 
 uniform mat4 viewMatrix;
 
+uniform int usePCFlinear;
+uniform int usePCF;
+
 uniform struct 
 {
     vec3 diffuse;
@@ -34,6 +37,49 @@ uniform sampler2D colorTexture;
 uniform sampler2D shadowMap;
 
 out vec4 fragmentColor;
+
+float PCF_linear(sampler2D shadowMap, vec3 shadowCoord) 
+{
+
+	const float f_PCFsize = 5.0f;				//3x3 Area, 5x5...
+	const float start = (f_PCFsize-1.0f)/2.0f;
+	const float f_PCFsizeSquared = f_PCFsize * f_PCFsize;
+
+	vec2 texelSize	= vec2(1.0f/1024.0f, 1.0f/1024.0f);
+	float result = 0.0f;
+
+	for(float y = -start; y <= start; y += 1.0f) {
+		for(float x = -start; x <= start; x += 1.0f) {
+				vec2 coordsOffset = vec2(x,y)*texelSize;
+				vec3 samplingPoint = vec3(shadowCoord.x + coordsOffset.x,shadowCoord.y + coordsOffset.y,shadowCoord.z);
+				result += sampleShadowMap_Linear(shadowMap,samplingPoint);
+			}
+		}
+
+		return result/f_PCFsizeSquared;
+}
+
+float PCF(sampler2D shadowMap, vec3 shadowCoord) 
+{
+
+	const float f_PCFsize = 5.0f;				//3x3 Area, 5x5...
+	const float start = (f_PCFsize-1.0f)/2.0f;
+	const float f_PCFsizeSquared = f_PCFsize * f_PCFsize;
+
+	vec2 texelSize	= vec2(1.0f/1024.0f, 1.0f/1024.0f);
+	float result = 0.0f;
+
+	for(float y = -start; y <= start; y += 1.0f) {
+		for(float x = -start; x <= start; x += 1.0f) {
+				vec2 coordsOffset = vec2(x,y)*texelSize;
+				vec3 samplingPoint = vec3(shadowCoord.x + coordsOffset.x,shadowCoord.y + coordsOffset.y,shadowCoord.z);
+				result += sampleShadowMap(shadowMap,samplingPoint);
+			}
+		}
+
+		return result/f_PCFsizeSquared;
+}
+
 
 
 void main() 
@@ -85,7 +131,17 @@ void main()
     //test if the fragment is visible by comparing the z-values of the 
     //lightmap and the projection considering a bias (e.g. 0.0005)
     if (lightDepth < shadowCoord.z - 0.00005) 
-        inShadow = 0.3;    
+        inShadow = 0.3;   
+		
+	if (usePCFlinear == 1)
+	{
+	inShadow = sampleShadowMap_PCF_linear(shadowMap,shadowCoord);
+	} 
+
+	if (usePCF == 1)
+	{
+	inShadow = PCF(shadowMap,shadowCoord);
+	}
 
 	// All together 
 	fragmentColor.rgb = diffuse_color * lightAmbient;

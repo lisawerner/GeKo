@@ -198,6 +198,8 @@ int main()
 
 		shaderGBuffer.sendVec3("lightAmbient", lightAmbient);
 
+		shaderGBuffer.sendInt("usePCFlinear", 0);
+
 		//Shadow mapping
 		glm::mat4 lightPerspective, lightView, lightMVPBias;
 		lightPerspective = cam_shadow.getProjectionMatrix();
