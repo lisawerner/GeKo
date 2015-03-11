@@ -3,13 +3,17 @@
 in vec2 passUV;
 
 uniform sampler2D tex;
+uniform float blurstrength;
+
+layout(location = 2) out vec4 colorOutput;
  
 // some const, tweak for best look
 const float sampleDist = 1.0;
-const float sampleStrength = 1.2; 
+const float sampleStrength = 1.0; 
  
 void main(void)
 {
+   float radialBlurStrength = blurstrength * sampleStrength;
    // some sample positions
    float samples[10] =
    float[](-0.08,-0.05,-0.03,-0.02,-0.01,0.01,0.02,0.03,0.05,0.08);
@@ -43,9 +47,9 @@ void main(void)
  
     // weighten the blur effect with the distance to the
     // center of the screen ( further out is blurred more)
-    float t = dist * sampleStrength;
+    float t = dist * radialBlurStrength;
     t = clamp( t ,0.0,1.0); //0 &lt;= t &lt;= 1
  
     //Blend the original color with the averaged pixels
-    gl_FragColor = mix( color, sum, t );
+    colorOutput = mix( color, sum, t );
 } 

@@ -84,6 +84,7 @@ void Geometry::renderGeometry()
 		glDrawArrays(GL_TRIANGLES, 0, m_indices);
 	}
 
+	glBindVertexArray(0);
 }
 
 

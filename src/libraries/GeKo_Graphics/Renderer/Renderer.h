@@ -61,6 +61,9 @@ public:
   void useAntiAliasing(bool useAntiAliasing);
   void useDeferredShading(bool useDeferredShading, Node *lightRootNode = nullptr, glm::fvec3 *lightColor = new glm::fvec3(1.0,1.0,1.0));
   void useBloom(bool useBloom);
+  void useBlur(bool useBlur, float *blurStrength = new float(1.0f));
+  void useRadialBlur(bool useRadialBlur, float *radialBlurStrength = new float(1.0f));
+  void useDoF(bool useDoF, float *focusDepth = new float(0.04f));
   void useSSAO(bool useSSAO, float *quality = new float(30.0f), float *radius = new float(0.1f));
   void useShadowMapping(bool useShadowMapping, ConeLight *coneLight = nullptr);
 
@@ -75,6 +78,9 @@ private:
   void renderAntiAliasing();
   void renderDeferredShading();
   void renderBloom();
+  void renderBlur();
+  void renderRadialBlur();
+  void renderDoF(Scene& scene);
   void renderSSAO();
   void renderShadowMapping(Scene& scene);
   
@@ -83,6 +89,9 @@ private:
   bool m_useReflections;
   bool m_useAntiAliasing;
   bool m_useBloom;
+  bool m_useBlur;
+  bool m_useRadialBlur;
+  bool m_useDoF;
   bool m_useDeferredShading;
   bool m_useSSAO;
   bool m_useShadowMapping;
@@ -94,6 +103,9 @@ private:
   float *m_ssaoRadius;
 
   float *m_screenSpaceReflectionsStrength;
+  float *m_blurStrength;
+  float *m_radialBlurStrength;
+  float *m_focusDepth;
 
   ConeLight *m_smConeLight;
   Pilotview *m_smCam;
@@ -112,13 +124,17 @@ private:
   int m_windowWidth;
   int m_windowHeight;
 	
-	ShaderProgram *m_shaderGBuffer;
-	ShaderProgram *m_shaderRLR;
+  ShaderProgram *m_shaderGBuffer;
+  ShaderProgram *m_shaderRLR;
   ShaderProgram *m_shaderSFQ;
   ShaderProgram *m_shaderFXAA;
   ShaderProgram *m_shaderDSLighting;
   ShaderProgram *m_shaderDSCompositing;
   ShaderProgram *m_shaderBloom;
+  ShaderProgram *m_shaderBlur;
+  ShaderProgram *m_shaderRadialBlur;
+  ShaderProgram *m_shaderDoF;
+  ShaderProgram *m_shaderDepth;
   ShaderProgram *m_shaderSSAOcalc;
   ShaderProgram *m_shaderSSAOblur;
   ShaderProgram *m_shaderSSAOfinal;

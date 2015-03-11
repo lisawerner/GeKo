@@ -62,6 +62,13 @@ ShaderProgram::ShaderProgram(const ComputeShader &cs)
   glLinkProgram(handle);
 }
 
+ShaderProgram::ShaderProgram(const VertexShader &vs, const GeometryShader &gs, const FragmentShader &fs)
+{
+	handle = glCreateProgram();
+	attachShaders(handle, vs.handle, gs.handle, fs.handle);
+	glLinkProgram(handle);
+}
+
 void ShaderProgram::bind() const
 {
   glUseProgram(handle);
@@ -98,6 +105,10 @@ void ShaderProgram::sendVec3(std::string uniform, glm::vec3 v) {
 
 void ShaderProgram::sendVec4(std::string uniform, glm::vec4 v) {
 	glUniform4f(getLocation(uniform), v.x, v.y, v.z, v.w);
+}
+
+void ShaderProgram::sendFloatArray(std::string uniform, int size, GLfloat array []) {
+	glUniform1fv(getLocation(uniform), size, array);
 }
 
 void ShaderProgram::sendMat4(std::string uniform, glm::mat4 m) {
