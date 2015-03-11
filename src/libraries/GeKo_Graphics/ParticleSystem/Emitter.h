@@ -53,8 +53,11 @@ public:
 
 	//update & generate the particle
 	void update();
+	void update(glm::vec3 playerPosition); //for moving emitter
 	void generateParticle();
+	void generateParticle(glm::vec3 playerPosition); //also for moving emitter
 	void pushParticle(int numberNewParticle);
+	void pushParticle(int numberNewParticle, glm::vec3 playerPosition); //alos for moving emitter
 
 	//handle the buffer
 	void loadBuffer();
@@ -67,7 +70,7 @@ public:
 	void render(Camera &cam);
 
 	//our method & var for velocity
-	glm::vec3 static useVelocityZero();
+	glm::vec3 static useVelocityZero(); //TODO
 	glm::vec3 static useVelocityLeftQuarterCircle();
 	glm::vec3 static useVelocityRightQuarterCircle();
 	glm::vec3 static useVelocitySemiCircle();
@@ -149,6 +152,7 @@ public:
 	bool m_useScaling = false;
 	bool m_rotateLeft = true;
 	float particleDefaultSize = 1.0;
+	void movePosition(glm::vec3 playerPosition);
 
 private:
 	//updates the buffer and compute size

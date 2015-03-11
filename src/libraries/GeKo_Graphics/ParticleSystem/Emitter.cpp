@@ -2,6 +2,7 @@
 
 //TODO: COMMENTS & VAR RENAMING
 
+
 Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, double emitFrequency,
 	int particlesPerEmit, double particleLifeTime, bool particleMortal)
 {
@@ -91,7 +92,50 @@ void Emitter::loadBuffer(){
 }
 
 //TODO Dynamic
+
 void Emitter::update(){
+
+	deltaTime = glfwGetTime() - updateTime; //time remain since last update
+	updateTime = glfwGetTime();
+
+	emitLifetime -= deltaTime;
+	if (emitLifetime < 0 && emitterMortal){
+		m_output = UNUSED;
+	}
+
+	//Bind CS and all SSBO's
+	compute->bind();
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, position_ssbo);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, velocity_ssbo);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, angle_ssbo);
+
+	//Uniform Vars
+	compute->sendFloat("deltaTime", (float)deltaTime);
+	compute->sendVec3("emitterPos", getPosition()); //can be saved position, or parameter
+	compute->sendFloat("fullLifetime", particleLifetime);
+	compute->sendInt("particleMortal", m_particleMortal);
+	compute->sendVec4("gravity", m_gravity);
+	compute->sendFloat("gravityRange", m_gravityRange);
+	compute->sendInt("gravityFunc", m_gravityFunction);
+	compute->sendInt("useTrajectory", m_useTrajectory);
+	compute->sendInt("useDirectionGravity", m_useDirectionGravity);
+	compute->sendInt("usePointGravity", m_usePointGravity);
+	compute->sendInt("useChaoticSwarmMotion", m_useChaoticSwarmMotion);
+	compute->sendInt("useMovementVertical", m_movementVertical);
+	compute->sendInt("useMovementHorizontalX", m_movementHorizontalX);
+	compute->sendInt("useMovementHorizontalZ", m_movementHorizontalZ);
+	compute->sendFloat("movementLength", m_movementLength);
+
+	//Unbind CD and all SSBO's
+	glDispatchCompute(computeGroupCount, 1, 1); //?
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 0);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, 0);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, 0);
+	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
+	emitterShader->unbind();
+}
+
+void Emitter::update(glm::vec3 playerPosition){
 	
 	deltaTime = glfwGetTime() - updateTime; //time remain since last update
 	updateTime = glfwGetTime();
@@ -109,7 +153,7 @@ void Emitter::update(){
 
 	//Uniform Vars
 	compute->sendFloat("deltaTime", (float)deltaTime);
-	compute->sendVec3("emitterPos", getPosition());
+	compute->sendVec3("emitterPos", getPosition() + playerPosition); //can be saved position, or parameter
 	compute->sendFloat("fullLifetime", particleLifetime);
 	compute->sendInt("particleMortal", m_particleMortal);
 	compute->sendVec4("gravity", m_gravity);
@@ -326,6 +370,95 @@ void Emitter::pushParticle(int numberNewParticle){
 
 	indexBuffer = (indexBuffer + numberNewParticle) % numMaxParticle;
 }
+void Emitter::pushParticle(int numberNewParticle, glm::vec3 playerPosition){
+	auto emitPosition = getPosition()+playerPosition;
+
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, position_ssbo);
+	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
+
+	glm::vec4* positions = (glm::vec4*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask);
+	if (getAreaEmittingXZ()){ //emits in a xz area, like rain
+		auto accuracy = getAreaAccuracy(); //how near it will be generated
+		auto areaSize = getAreaSize(); //how big the area is
+		float randomNumber;
+		glm::vec3 pos;
+
+		for (int i = 0; i < numberNewParticle; i++)
+		{
+			int index = (indexBuffer + i) % numMaxParticle;
+
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1 with a certain comma accuracy
+			pos.x = emitPosition.x + areaSize * randomNumber;
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1
+			pos.z = emitPosition.z + areaSize * randomNumber;
+			pos.y = emitPosition.y;
+
+			positions[index] = glm::vec4(pos, particleLifetime);
+		}
+	}
+	else if (getAreaEmittingXY()){ //will be emitted in xy area
+		auto accuracy = getAreaAccuracy();
+		auto areaSize = getAreaSize();
+		float randomNumber;
+		glm::vec3 pos;
+
+		for (int i = 0; i < numberNewParticle; i++)
+		{
+			int index = (indexBuffer + i) % numMaxParticle;
+
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1 with a certain comma accuracy
+			pos.x = emitPosition.x + areaSize * randomNumber;
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1
+			pos.y = emitPosition.y + areaSize * randomNumber;
+			pos.z = emitPosition.z;
+
+			positions[index] = glm::vec4(pos, particleLifetime);
+		}
+	}
+	else{ //will be emitted like a jet
+		for (int i = 0; i < numberNewParticle; i++)
+		{
+			int index = (indexBuffer + i) % numMaxParticle;
+			positions[index] = glm::vec4(emitPosition, particleLifetime);
+		}
+	}
+
+	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+	auto speed = getSpeed();
+
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, velocity_ssbo);
+
+	glm::vec4* velocity = (glm::vec4*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask); //direction of movement
+	for (int i = 0; i < numberNewParticle; i++)
+	{
+		glm::vec3 vel = this->m_pfunc(); //gets a random vector from the desired vector space
+		if (glm::length(vel) != 0.0)
+			vel = glm::normalize(vel);
+		int index = (indexBuffer + i) % numMaxParticle;
+		velocity[index] = glm::vec4(vel, speed);
+	}
+
+	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+	//TODO just 2 of 4
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, angle_ssbo);
+
+	glm::vec4* angle = (glm::vec4*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask); //angle of movement as option to velocity
+	for (int i = 0; i < numberNewParticle; i++)
+	{
+		int index = (indexBuffer + i) % numMaxParticle;
+		int phi = (rand() % 360);
+		int theta = (rand() % 90);
+		angle[index] = glm::vec4(phi, theta, 0.0, 0.0);
+	}
+	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+	indexBuffer = (indexBuffer + numberNewParticle) % numMaxParticle;
+}
 void Emitter::generateParticle()
 {
 	switch (m_output)
@@ -343,6 +476,30 @@ void Emitter::generateParticle()
 	case ONCE: //we generate only one time particle
 		if (glfwGetTime() - generateTime >= emitFrequency){
 			pushParticle(particlesPerEmit);
+			m_output = UNUSED;
+		}
+		break;
+	case UNUSED: // we dont generate new particle
+		break;
+	}
+}
+void Emitter::generateParticle(glm::vec3 playerPosition)
+{
+	switch (m_output)
+	{
+	case CONSTANT: //we generate constant new particle
+		if (glfwGetTime() - generateTime >= emitFrequency){
+			deltaTime = glfwGetTime() - generateTime;
+			while (deltaTime >= emitFrequency) {
+				pushParticle(particlesPerEmit, playerPosition);
+				deltaTime -= emitFrequency;
+			}
+			generateTime = glfwGetTime();
+		}
+		break;
+	case ONCE: //we generate only one time particle
+		if (glfwGetTime() - generateTime >= emitFrequency){
+			pushParticle(particlesPerEmit, playerPosition);
 			m_output = UNUSED;
 		}
 		break;
@@ -438,6 +595,9 @@ void Emitter::setOutputMode(const int OUTPUT)
 void Emitter::setPosition(glm::vec3 newPosition)
 {
 	emitterPosition = newPosition;
+}
+void Emitter::movePosition(glm::vec3 playerPosition){
+	setPosition(getPosition()+playerPosition);
 }
 void Emitter::setEmitterMortality(double emitterLifetime)
 {
