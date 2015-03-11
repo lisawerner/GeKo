@@ -21,6 +21,9 @@ m_useDeferredShading(false),  m_shaderDSLighting(NULL), m_shaderDSCompositing(NU
 m_useReflections(false),      m_shaderRLR(NULL),
 m_useAntiAliasing(false),     m_shaderFXAA(NULL),
 m_useBloom(false),            m_shaderBloom(NULL),
+m_useBlur(false),			  m_shaderBlur(NULL),
+m_useRadialBlur(false),		  m_shaderRadialBlur(NULL),
+m_useDoF(false),			  m_shaderDoF(NULL), m_shaderDepth(NULL),
 m_useSSAO(false),             m_shaderSSAOcalc(NULL), m_shaderSSAOblur(NULL), m_shaderSSAOfinal(NULL),
 m_useShadowMapping(false),    m_shaderShadowMapping(NULL), m_smCam(NULL),
 
@@ -46,10 +49,14 @@ Renderer::~Renderer()
   if(m_useDeferredShading)   delete m_shaderDSLighting;
   if(m_useDeferredShading)   delete m_shaderDSCompositing;
   if(m_useBloom)             delete m_shaderBloom;
+  if(m_useBlur)				 delete m_shaderBlur;
+  if(m_useRadialBlur)		 delete m_shaderRadialBlur;
+  if(m_useDoF)				 delete m_shaderDoF;
+  if (m_useDoF)				 delete m_shaderDepth;
   if(m_useSSAO)              delete m_shaderSSAOcalc;
   if(m_useSSAO)              delete m_shaderSSAOblur;
   if(m_useSSAO)              delete m_shaderSSAOfinal;
-  if (m_useShadowMapping)    delete m_shaderShadowMapping;
+  if(m_useShadowMapping)     delete m_shaderShadowMapping;
 
 }
 
@@ -114,6 +121,31 @@ void Renderer::init(int windowWidth, int windowHeight)
     VertexShader vsBloom(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.vert")));
     FragmentShader fsBloom(loadShaderSource(SHADERS_PATH + std::string("/Bloom/Bloom.frag")));
     m_shaderBloom = new ShaderProgram(vsBloom, fsBloom);
+  }
+
+  if (m_useBlur && !m_shaderBlur)
+  {
+	  VertexShader vsBlur(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.vert")));
+	  FragmentShader fsBlur(loadShaderSource(SHADERS_PATH + std::string("/Blur/blur1D.frag")));
+	  m_shaderBlur = new ShaderProgram(vsBlur, fsBlur);
+  }
+
+  if (m_useRadialBlur && !m_shaderRadialBlur)
+  {
+	  VertexShader vsBlur(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.vert")));
+	  FragmentShader fsBlur(loadShaderSource(SHADERS_PATH + std::string("/RadialBlur/RadialBlur.frag")));
+	  m_shaderRadialBlur = new ShaderProgram(vsBlur, fsBlur);
+  }
+
+  if (m_useDoF && !m_shaderDoF)
+  {
+	  VertexShader vsDoF(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.vert")));
+	  FragmentShader fsDoF(loadShaderSource(SHADERS_PATH + std::string("/DoF/DoF.frag")));
+	  m_shaderDoF = new ShaderProgram(vsDoF, fsDoF);
+
+	  VertexShader vsDepth(loadShaderSource(SHADERS_PATH + std::string("/ShadowMapping/ShadowMap.vert")));
+	  FragmentShader fsDepth(loadShaderSource(SHADERS_PATH + std::string("/ShadowMapping/ShadowMap.frag")));
+	  m_shaderDepth = new ShaderProgram(vsDepth, fsDepth);
   }
 
   if (m_useAntiAliasing && !m_shaderFXAA)
@@ -233,6 +265,15 @@ void Renderer::renderScene(Scene& scene, Window& window)
   if (m_useBloom)
     renderBloom();
 
+  if (m_useBlur)
+	  renderBlur();
+
+  if (m_useRadialBlur)
+	  renderRadialBlur();
+
+  if (m_useDoF)
+	  renderDoF(scene);
+
   if (m_useAntiAliasing)
     renderAntiAliasing();
 
@@ -296,6 +337,30 @@ void Renderer::useDeferredShading(bool useDeferredShading, Node *lightRootNode, 
 void Renderer::useBloom(bool useBloom)
 {
   m_useBloom = useBloom;
+}
+
+void Renderer::useBlur(bool useBlur, float *blurStrength)
+{
+	m_useBlur = useBlur;
+
+	if (m_blurStrength != blurStrength)
+		m_blurStrength = blurStrength;
+}
+
+void Renderer::useRadialBlur(bool useRadialBlur, float *radialBlurStrength)
+{
+	m_useRadialBlur = useRadialBlur;
+
+	if (m_radialBlurStrength != radialBlurStrength)
+		m_radialBlurStrength = radialBlurStrength;
+}
+
+void Renderer::useDoF(bool useDoF, float *focusDepth)
+{
+	m_useDoF = useDoF;
+
+	if (m_focusDepth != focusDepth)
+		m_focusDepth = focusDepth;
 }
 
 void Renderer::useSSAO(bool useSSAO, float *quality, float *radius)
@@ -506,6 +571,82 @@ void Renderer::renderBloom()
   m_shaderBloom->unbind();
 
  unbindFBO();
+}
+
+void Renderer::renderBlur()
+{
+	if (!m_shaderBlur)
+		init(m_windowWidth, m_windowHeight);
+
+	bindFBO();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	m_shaderBlur->bind();
+	
+	m_shaderBlur->sendSampler2D("image", getLastFBO()->getColorTexture(2), 2);
+	m_shaderBlur->sendFloat("blurstrength", *m_blurStrength);
+	m_sfq.renderGeometry();
+
+	m_shaderBlur->unbind();
+	unbindFBO();
+}
+
+void Renderer::renderRadialBlur()
+{
+	if (!m_shaderRadialBlur)
+		init(m_windowWidth, m_windowHeight);
+
+	bindFBO();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	m_shaderRadialBlur->bind();
+
+	m_shaderRadialBlur->sendSampler2D("tex", getLastFBO()->getColorTexture(2), 2);
+	m_shaderRadialBlur->sendFloat("blurstrength", *m_radialBlurStrength);
+	m_sfq.renderGeometry();
+
+	m_shaderRadialBlur->unbind();
+
+	unbindFBO();
+}
+
+void Renderer::renderDoF(Scene& scene)
+{
+	if (!m_shaderDepth || !m_shaderDoF)
+		init(m_windowWidth, m_windowHeight);
+
+	m_smFBO->bind();
+
+	//Clear Shadow Map
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	//Set the shader for the light pass. This shader is highly optimized because the scene depth is the only thing that matters here!
+	m_shaderDepth->bind();
+	m_shaderDepth->sendMat4("viewMatrix", m_currentViewMatrix);
+	m_shaderDepth->sendMat4("projectionMatrix", m_currentProjectionMatrix);
+
+	//Render the scene
+	scene.render(*m_shaderDepth);
+
+	//Restore the default framebuffer
+	m_shaderDepth->unbind();
+	m_smFBO->unbind();
+
+	bindFBO();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	m_shaderDoF->bind();
+
+	m_shaderDoF->sendSampler2D("tex", getLastFBO()->getColorTexture(2), 2);
+	m_shaderDoF->sendSampler2D("depth", m_smFBO->getDepthTexture(), 1);
+
+	m_shaderDoF->sendFloat("focus_depth", *m_focusDepth);
+
+	m_sfq.renderGeometry();
+
+	m_shaderDoF->unbind();
+
+	unbindFBO();
 }
 
 void Renderer::renderSSAO()

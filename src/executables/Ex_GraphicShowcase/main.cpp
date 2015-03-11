@@ -19,6 +19,9 @@ glm::fvec3 *dsLightColor;
 float *ssaoQuality;
 float *ssaoRadius;
 float *reflectionStrength;
+float *blurStrength;
+float *radialBlurStrength;
+float *focusDepth;
 GUI *gui;
 GuiElement::ToggleButton *useShadowMappingButton;
 GuiElement::ToggleButton *usePCFButton;
@@ -28,6 +31,9 @@ GuiElement::ToggleButton *useSSAOButton;
 GuiElement::ToggleButton *useReflectionsButton;
 GuiElement::ToggleButton *useBloomButton;
 GuiElement::ToggleButton *useFXAAButton;
+GuiElement::ToggleButton *useDepthOfFieldButton;
+GuiElement::ToggleButton *useBlurButton;
+GuiElement::ToggleButton *useRadialBlurButton;
 
 //our renderer
 OpenGL3Context context;
@@ -146,6 +152,45 @@ void initGUI()
 
 
   gui->addElement(postProcessingHeader);
+  //===============================================================================================
+  //===============================================================================================
+  GuiElement::Header *deptOfFieldHeader = new GuiElement::Header("Depth of Field");
+  deptOfFieldHeader->addElement(new GuiElement::Text("Use Depth of Field"));
+  deptOfFieldHeader->addElement(new GuiElement::SameLine);
+
+  useDepthOfFieldButton = new GuiElement::ToggleButton(false, "on", "off");
+  deptOfFieldHeader->addElement(useDepthOfFieldButton);
+  deptOfFieldHeader->addElement(new GuiElement::Spacing);
+  deptOfFieldHeader->addElement(new GuiElement::SliderFloat("Depthfield", focusDepth, 0.0f, 2.0f));
+  deptOfFieldHeader->addElement(new GuiElement::Spacing);
+
+  gui->addElement(deptOfFieldHeader);
+  //===============================================================================================
+  //===============================================================================================
+  GuiElement::Header *blurHeader = new GuiElement::Header("Blur");
+  blurHeader->addElement(new GuiElement::Text("Use Blur"));
+  blurHeader->addElement(new GuiElement::SameLine);
+
+  useBlurButton = new GuiElement::ToggleButton(false, "on", "off");
+  blurHeader->addElement(useBlurButton);
+  blurHeader->addElement(new GuiElement::Spacing);
+  blurHeader->addElement(new GuiElement::SliderFloat("Blurstrength", blurStrength, 0.0f, 5.0f));
+  blurHeader->addElement(new GuiElement::Spacing);
+
+  gui->addElement(blurHeader);
+  //===============================================================================================
+  //===============================================================================================
+  GuiElement::Header *radialBlurHeader = new GuiElement::Header("RadialBlur");
+  radialBlurHeader->addElement(new GuiElement::Text("Use RadialBlur"));
+  radialBlurHeader->addElement(new GuiElement::SameLine);
+
+  useRadialBlurButton = new GuiElement::ToggleButton(false, "on", "off");
+  radialBlurHeader->addElement(useRadialBlurButton);
+  radialBlurHeader->addElement(new GuiElement::Spacing);
+  radialBlurHeader->addElement(new GuiElement::SliderFloat("Blurstrength", radialBlurStrength, 0.0f, 5.0f));
+  radialBlurHeader->addElement(new GuiElement::Spacing);
+
+  gui->addElement(radialBlurHeader);
   //===============================================================================================
 
   renderer->addGui(gui);
@@ -293,6 +338,9 @@ int main()
   ssaoRadius = new float(0.1f);
 
   reflectionStrength = new float(0.2f);
+  blurStrength = new float(1.0f);
+  radialBlurStrength = new float(1.0f);
+  focusDepth = new float(0.04);
 
   initGUI();
 
@@ -309,8 +357,9 @@ int main()
     renderer->useReflections(useReflectionsButton->isActive(), reflectionStrength);
     renderer->useBloom(useBloomButton->isActive());
     renderer->useAntiAliasing(useFXAAButton->isActive());
-
-
+	renderer->useBlur(useBlurButton->isActive(), blurStrength);
+	renderer->useRadialBlur(useRadialBlurButton->isActive(), radialBlurStrength);
+	renderer->useDoF(useDepthOfFieldButton->isActive(), focusDepth);
 
     // You have to compute the delta time
     float dTime = glfwGetTime() - startTime;
@@ -320,8 +369,8 @@ int main()
     if (deferredShadingRotationButton->isActive())
       lights.setModelMatrix(glm::rotate(lights.getModelMatrix(), 10.0f * dTime, glm::vec3(0.0, 1.0, 0.0)));
 
-    if (!(outputFPS % 20))
-      std::cout << "FPS: " << static_cast<int> (1 / dTime) << std::endl;
+    //if (!(outputFPS % 20))
+      //std::cout << "FPS: " << static_cast<int> (1 / dTime) << std::endl;
 
     outputFPS++;
 

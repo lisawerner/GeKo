@@ -64,8 +64,7 @@ int main()
 	Renderer renderer(context);
 
 	FBO fboGBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, 3, true, false);
-	FBO fboBlurX(WINDOW_WIDTH, WINDOW_HEIGHT, 1, false, false);
-	FBO fboBlurXY(WINDOW_WIDTH, WINDOW_HEIGHT, 1, false, false);
+	FBO fboBlur(WINDOW_WIDTH, WINDOW_HEIGHT, 3, false, false);
 
 	//our object
 	Cube cube;
@@ -150,36 +149,23 @@ int main()
 		shaderGBuffer.sendInt("useTexture", 1);
 		testScene.render(shaderGBuffer);
 		shaderGBuffer.unbind();
-		fboGBuffer.unbind();
+		fboGBuffer.unbind();	
 
-		
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shaderBlur.bind();
-
-		fboBlurX.bind();
-		shaderBlur.sendSampler2D("colortexture", fboGBuffer.getColorTexture(2));
-		shaderBlur.sendFloat("yAxis", 0.0);
-		screenFillingQuad.renderGeometry();
-		//testScene.render(shaderBlur);
-		fboBlurX.unbind();
-
+		fboBlur.bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		fboBlurXY.bind();
-
-		shaderBlur.sendSampler2D("colortexture", fboBlurX.getColorTexture(0));
-		shaderBlur.sendFloat("yAxis", 1.0);
+		shaderBlur.sendSampler2D("image", fboGBuffer.getColorTexture(2), 2);
 		screenFillingQuad.renderGeometry();
-		//testScene.render(shaderBlur);
-		fboBlurXY.unbind();
+		fboBlur.unbind();
 
 		shaderBlur.unbind();
 				
 		//ScreenFillingQuad Render Pass
 		shaderSFQ.bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shaderSFQ.sendSampler2D("fboTexture", fboBlurXY.getColorTexture(0));
+		shaderSFQ.sendSampler2D("fboTexture", fboBlur.getColorTexture(2), 2);
 		screenFillingQuad.renderGeometry();
 		shaderSFQ.unbind();
 		
