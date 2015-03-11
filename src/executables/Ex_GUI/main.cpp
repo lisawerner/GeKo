@@ -10,8 +10,6 @@
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
 
-bool showlightTexture = false;
-
 InputHandler iH;
 Pilotview cam("Pilotview");
 
@@ -207,9 +205,9 @@ int main()
   gui->addElement(new GuiElement::Separator);
   gui->addElement(new GuiElement::Spacing);
 
-  gui->addElement(new GuiElement::Text("Show Deferred Shading Lightmap:"));
-  GuiElement::ToggleButton *toggleButton = new GuiElement::ToggleButton(false,"on","off");
-  gui->addElement(toggleButton);
+  
+  GuiElement::Checkbox *checkbox = new GuiElement::Checkbox("Show Deferred Shading Lightmap");
+  gui->addElement(checkbox);
 
 
   //TODO
@@ -319,7 +317,7 @@ int main()
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
 
-    if (!toggleButton->isActive())
+    if (!checkbox->isActive())
       shaderSFQ.sendSampler2D("fboTexture", fboCompositing.getColorTexture(2));
     else
       shaderSFQ.sendSampler2D("fboTexture", fboDeferredShading.getColorTexture(2));

@@ -23,17 +23,18 @@ float *blurStrength;
 float *radialBlurStrength;
 float *focusDepth;
 GUI *gui;
-GuiElement::ToggleButton *useShadowMappingButton;
-GuiElement::ToggleButton *usePCFButton;
-GuiElement::ToggleButton *useDeferredShadingButton;
-GuiElement::ToggleButton *deferredShadingRotationButton;
-GuiElement::ToggleButton *useSSAOButton;
-GuiElement::ToggleButton *useReflectionsButton;
-GuiElement::ToggleButton *useBloomButton;
-GuiElement::ToggleButton *useFXAAButton;
-GuiElement::ToggleButton *useDepthOfFieldButton;
-GuiElement::ToggleButton *useBlurButton;
-GuiElement::ToggleButton *useRadialBlurButton;
+
+GuiElement::Checkbox *useShadowMappingButton;
+GuiElement::Checkbox *usePCFButton;
+GuiElement::Checkbox *useDeferredShadingButton;
+GuiElement::Checkbox *deferredShadingRotationButton;
+GuiElement::Checkbox *useSSAOButton;
+GuiElement::Checkbox *useReflectionsButton;
+GuiElement::Checkbox *useBloomButton;
+GuiElement::Checkbox *useFXAAButton;
+GuiElement::Checkbox *useDepthOfFieldButton;
+GuiElement::Checkbox *useBlurButton;
+GuiElement::Checkbox *useRadialBlurButton;
 
 //our renderer
 OpenGL3Context context;
@@ -60,16 +61,12 @@ void initGUI()
   gui = new GUI("Settings - Hide [F10]", 400, 400);
 
   GuiElement::Header *shadowMappingHeader = new GuiElement::Header("Shadow Mapping");
-  shadowMappingHeader->addElement(new GuiElement::Text("Use Shadow Mapping"));
-  shadowMappingHeader->addElement(new GuiElement::SameLine);
-  useShadowMappingButton = new GuiElement::ToggleButton(false, "on", "off");
+  useShadowMappingButton = new GuiElement::Checkbox("Use Shadow Mapping");
   shadowMappingHeader->addElement(useShadowMappingButton);
   shadowMappingHeader->addElement(new GuiElement::Spacing);
 
   //TODO ADD FUNCTIONALITY
-  shadowMappingHeader->addElement(new GuiElement::Text("Use PCF Soft Shadows"));
-  shadowMappingHeader->addElement(new GuiElement::SameLine);
-  usePCFButton = new GuiElement::ToggleButton(false, "on", "off");
+  usePCFButton = new GuiElement::Checkbox("Use PCF Soft Shadows");
   shadowMappingHeader->addElement(usePCFButton);
   shadowMappingHeader->addElement(new GuiElement::Spacing);
 
@@ -77,21 +74,19 @@ void initGUI()
   gui->addElement(shadowMappingHeader);
   //===============================================================================================
 
+  
 
   GuiElement::Header *deferredShadingHeader = new GuiElement::Header("Deferred Shading");
-  deferredShadingHeader->addElement(new GuiElement::Text("Use Deferred Shading"));
-  deferredShadingHeader->addElement(new GuiElement::SameLine);
-  useDeferredShadingButton = new GuiElement::ToggleButton(false, "on", "off");
+  useDeferredShadingButton = new GuiElement::Checkbox("Use Deferred Shading");
   deferredShadingHeader->addElement(useDeferredShadingButton);
   deferredShadingHeader->addElement(new GuiElement::Spacing);
+
 
   GuiElement::ColorEditRGB *deferredShadingLightColorEdit = new GuiElement::ColorEditRGB("Lightcolor", dsLightColor);
   deferredShadingHeader->addElement(deferredShadingLightColorEdit);
   deferredShadingHeader->addElement(new GuiElement::Spacing);
 
-  deferredShadingHeader->addElement(new GuiElement::Text("Rotate Lights"));
-  deferredShadingHeader->addElement(new GuiElement::SameLine);
-  deferredShadingRotationButton = new GuiElement::ToggleButton(false, "on", "off");
+  deferredShadingRotationButton = new GuiElement::Checkbox("Rotate Lights");
   deferredShadingHeader->addElement(deferredShadingRotationButton);
   deferredShadingHeader->addElement(new GuiElement::Spacing);
 
@@ -101,10 +96,7 @@ void initGUI()
 
 
   GuiElement::Header *ssaoHeader = new GuiElement::Header("Screen Space Ambient Occlusion");
-  ssaoHeader->addElement(new GuiElement::Text("Use SSAO"));
-  ssaoHeader->addElement(new GuiElement::SameLine);
-
-  useSSAOButton = new GuiElement::ToggleButton(false, "on", "off");
+  useSSAOButton = new GuiElement::Checkbox("Use SSAO");
   ssaoHeader->addElement(useSSAOButton);
   ssaoHeader->addElement(new GuiElement::Spacing);
   ssaoHeader->addElement(new GuiElement::SliderFloat("Quality", ssaoQuality, 0.0f, 100.0f));
@@ -116,15 +108,12 @@ void initGUI()
 
   //===============================================================================================
   GuiElement::Header *reflectionsHeader = new GuiElement::Header("Screen Space Reflections");
-  reflectionsHeader->addElement(new GuiElement::Text("Use Screen Space Reflections"));
-  reflectionsHeader->addElement(new GuiElement::SameLine);
-
-  useReflectionsButton = new GuiElement::ToggleButton(false, "on", "off");
+  useReflectionsButton = new GuiElement::Checkbox("Use Screen Space Reflections");
   reflectionsHeader->addElement(useReflectionsButton);
   reflectionsHeader->addElement(new GuiElement::Spacing);
   reflectionsHeader->addElement(new GuiElement::SliderFloat("Reflection Strength", reflectionStrength, 0.0f, 0.4f));
   reflectionsHeader->addElement(new GuiElement::Spacing);
-  
+
   gui->addElement(reflectionsHeader);
   //===============================================================================================
 
@@ -132,21 +121,14 @@ void initGUI()
   GuiElement::Header *postProcessingHeader = new GuiElement::Header("Postprocessing");
 
   //BLOOM
-  postProcessingHeader->addElement(new GuiElement::Text("Use Bloom"));
-  postProcessingHeader->addElement(new GuiElement::SameLine);
-
-  useBloomButton = new GuiElement::ToggleButton(false, "on", "off");
+  useBloomButton = new GuiElement::Checkbox("Use Bloom");
   postProcessingHeader->addElement(useBloomButton);
   postProcessingHeader->addElement(new GuiElement::Spacing);
-
 
   //TODO ADD BLOOM STRENGTH SLIDER
 
   //FXAA
-  postProcessingHeader->addElement(new GuiElement::Text("Use FXAA"));
-  postProcessingHeader->addElement(new GuiElement::SameLine);
-
-  useFXAAButton = new GuiElement::ToggleButton(false, "on", "off");
+  useFXAAButton = new GuiElement::Checkbox("Use FXAA");
   postProcessingHeader->addElement(useFXAAButton);
   postProcessingHeader->addElement(new GuiElement::Spacing);
 
@@ -155,10 +137,7 @@ void initGUI()
   //===============================================================================================
   //===============================================================================================
   GuiElement::Header *deptOfFieldHeader = new GuiElement::Header("Depth of Field");
-  deptOfFieldHeader->addElement(new GuiElement::Text("Use Depth of Field"));
-  deptOfFieldHeader->addElement(new GuiElement::SameLine);
-
-  useDepthOfFieldButton = new GuiElement::ToggleButton(false, "on", "off");
+  useDepthOfFieldButton = new GuiElement::Checkbox("Use Depth of Field");
   deptOfFieldHeader->addElement(useDepthOfFieldButton);
   deptOfFieldHeader->addElement(new GuiElement::Spacing);
   deptOfFieldHeader->addElement(new GuiElement::SliderFloat("Depthfield", focusDepth, 0.0f, 2.0f));
@@ -168,10 +147,7 @@ void initGUI()
   //===============================================================================================
   //===============================================================================================
   GuiElement::Header *blurHeader = new GuiElement::Header("Blur");
-  blurHeader->addElement(new GuiElement::Text("Use Blur"));
-  blurHeader->addElement(new GuiElement::SameLine);
-
-  useBlurButton = new GuiElement::ToggleButton(false, "on", "off");
+  useBlurButton = new GuiElement::Checkbox("Use Blur");
   blurHeader->addElement(useBlurButton);
   blurHeader->addElement(new GuiElement::Spacing);
   blurHeader->addElement(new GuiElement::SliderFloat("Blurstrength", blurStrength, 0.0f, 5.0f));
@@ -181,10 +157,8 @@ void initGUI()
   //===============================================================================================
   //===============================================================================================
   GuiElement::Header *radialBlurHeader = new GuiElement::Header("RadialBlur");
-  radialBlurHeader->addElement(new GuiElement::Text("Use RadialBlur"));
-  radialBlurHeader->addElement(new GuiElement::SameLine);
 
-  useRadialBlurButton = new GuiElement::ToggleButton(false, "on", "off");
+  useRadialBlurButton = new GuiElement::Checkbox("Use RadialBlur");
   radialBlurHeader->addElement(useRadialBlurButton);
   radialBlurHeader->addElement(new GuiElement::Spacing);
   radialBlurHeader->addElement(new GuiElement::SliderFloat("Blurstrength", radialBlurStrength, 0.0f, 5.0f));
@@ -357,9 +331,9 @@ int main()
     renderer->useReflections(useReflectionsButton->isActive(), reflectionStrength);
     renderer->useBloom(useBloomButton->isActive());
     renderer->useAntiAliasing(useFXAAButton->isActive());
-	renderer->useBlur(useBlurButton->isActive(), blurStrength);
-	renderer->useRadialBlur(useRadialBlurButton->isActive(), radialBlurStrength);
-	renderer->useDoF(useDepthOfFieldButton->isActive(), focusDepth);
+	  renderer->useBlur(useBlurButton->isActive(), blurStrength);
+	  renderer->useRadialBlur(useRadialBlurButton->isActive(), radialBlurStrength);
+	  renderer->useDoF(useDepthOfFieldButton->isActive(), focusDepth);
 
     // You have to compute the delta time
     float dTime = glfwGetTime() - startTime;
