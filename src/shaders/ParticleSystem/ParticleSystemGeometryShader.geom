@@ -11,14 +11,12 @@ uniform int useScaling;
 uniform int scalingCount;
 uniform float scalingData[32]; //first moment, then size
 uniform float size;
+uniform float fullLifetime;
+uniform int particleMortal;
 
 //our rotation data
 uniform int rotateLeft;
 uniform float rotationSpeed;
-
-//?
-uniform float fullLifetime;
-uniform vec4 camPos;
 
 layout(points) in;
 layout(triangle_strip) out;
@@ -44,9 +42,9 @@ void main() {
 		do{
 			upperBorder=upperBorder+2;
 		}
-		while( scalingData[upperBorder] < percentageLifetime && upperBorder <= scalingCount);
+		while( scalingData[upperBorder] < percentageLifetime && ((upperBorder <= scalingCount && particleMortal == 1) || (upperBorder < scalingCount && particleMortal == 0)));
 		int lowerBorder = upperBorder-2;
-		float pUpper = (percentageLifetime - scalingData[lowerBorder]) / (scalingData[upperBorder] - scalingData[lowerBorder]); 
+		float pUpper = min((percentageLifetime - scalingData[lowerBorder]) / (scalingData[upperBorder] - scalingData[lowerBorder]), 1.0); 
 		float scalingSize = (1-pUpper) * scalingData[lowerBorder+1] + pUpper * scalingData[upperBorder+1];
 		up = vec3(scalingSize, 0.0, 0.0);
 		right = vec3(0.0, scalingSize, 0.0);	

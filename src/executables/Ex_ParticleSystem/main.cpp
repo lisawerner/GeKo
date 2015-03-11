@@ -88,12 +88,12 @@ int main()
 	cloud->switchToGeometryShader();
 
 	//EMITTER SMOKE, dont like it
-	Emitter* smoke = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 0.25, 5, 4.0, true);
+	Emitter* smoke = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 0.25, 4, 8.0, true);
 	smoke->setVelocity(&Emitter::useVelocitySemiCircle);
 	smoke->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.1), 0.4f);
 	smoke->addTexture(*smokeTex, 0.0);
-	std::vector<float> size{ 0.2f, 0.5f, 2.0f};
-	std::vector<float> time{ 0.0, 0.5, 1.0};
+	std::vector<float> size{ 0.2f, 1.0f, 2.5f};
+	std::vector<float> time{ 0.0f, 0.2f, 1.0f};
 	smoke->useTexture(true, size, time, 2.0, 3.0, false, 0.3);
 	smoke->switchToGeometryShader();
 
@@ -101,12 +101,12 @@ int main()
 	Emitter* fire = new Emitter(0, glm::vec3(0.0, 2.0, 0.0), 0.0, 0.166, 10, 30.0, true);
 
 	//EMITTER FLIES, needs better texture, and rotating for PS or scaling for GS
-	Emitter* flies = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.166, 3, 10.0, true);
+	Emitter* flies = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.166, 5, 10.0, true);
 	flies->setVelocity(&Emitter::useVelocityZero);
 	flies->usePhysicSwarmCircleMotion(true, true, false, 0.0f);
 	flies->setAreaEmitting(true, false, 2.0, 10000);
 	flies->addTexture(*flyTex, 0.0);
-	flies->useTexture(true, 0.1, 1.0, 2.0);
+	flies->useTexture(true, 1.0, 1.0, 2.0);
 
 	//EMITTER SWARM
 	Emitter* swarm = new Emitter(0, glm::vec3(0.0, 2.0, 0.0), 0.0, 0.166, 10, 30.0, true);

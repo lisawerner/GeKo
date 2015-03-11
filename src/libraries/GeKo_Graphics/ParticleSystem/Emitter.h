@@ -1,12 +1,7 @@
 #pragma once
 #include "GeKo_Graphics/Shader/Shader.h"
 #include "GeKo_Graphics/Camera/Camera.h"
-
-//das Folgende fliegt noch raus
 #include "GeKo_Graphics/ObjectInclude.h"
-//#include "GeKo_Graphics/Object/Geometry.h"
-//#include "GeKo_Graphics/Object/Teapot.h"
-//#include "GeKo_Graphics/Object/Cube.h"
 #include "GeKo_Graphics/Material/Texture.h"
 
 /*
@@ -53,32 +48,75 @@ public:
 
 	//update & generate the particle
 	void update();
-	void update(glm::vec3 playerPosition); //for moving emitter
 	void generateParticle();
-	void generateParticle(glm::vec3 playerPosition); //also for moving emitter
 	void pushParticle(int numberNewParticle);
-	void pushParticle(int numberNewParticle, glm::vec3 playerPosition); //alos for moving emitter
+
+	//for moving emitter
+	void update(glm::vec3 playerPosition);
+	void generateParticle(glm::vec3 playerPosition);
+	void pushParticle(int numberNewParticle, glm::vec3 playerPosition);
+	void movePosition(glm::vec3 playerPosition);
 
 	//handle the buffer
 	void loadBuffer();
+	glm::vec4* positions;
 
-	//switch between Point Sprites & Geometry Shader. PS is default
+	//switch between Point Sprites & Geometry Shader. PS is default. Differents CS can be loaded 
 	void switchToGeometryShader();
 	void switchToPointSprites();
+	void setComputeShader(std::string address);
 
 	//draw the particle
 	void render(Camera &cam);
 
 	//our method & var for velocity
-	glm::vec3 static useVelocityZero(); //TODO
-	glm::vec3 static useVelocityLeftQuarterCircle();
-	glm::vec3 static useVelocityRightQuarterCircle();
-	glm::vec3 static useVelocitySemiCircle();
-	glm::vec3 static useVelocityCircle();
-	glm::vec3 static useVelocitySemiSphere();
-	glm::vec3 static useVelocitySphere();
+	void setAreaEmitting(bool areaEmittingXY, bool areaEmittingXZ, float size, int accuracy);
+	static glm::vec3 useVelocityZero();
+	static glm::vec3 useVelocityLeftQuarterCircle();
+	static glm::vec3 useVelocityRightQuarterCircle();
+	static glm::vec3 useVelocitySemiCircle();
+	static glm::vec3 useVelocityCircle();
+	static glm::vec3 useVelocitySemiSphere();
+	static glm::vec3 useVelocitySphere();
 	void setVelocity(glm::vec3(*pfunc)());
 	glm::vec3(*m_pfunc)();
+
+	//our physic possibilities
+	void usePhysicTrajectory(glm::vec4 gravity, float speed);
+	bool m_useTrajectory = false;
+	void usePhysicDirectionGravity(glm::vec4 gravity, float speed);
+	bool m_usePointGravity = false;
+	void usePhysicPointGravity(glm::vec4 gravity, float gravityRange, int gravityFunction, float speed);
+	bool m_useDirectionGravity = true;
+	void usePhysicSwarmCircleMotion(bool verticalMovement, bool horizontalXMovement, bool horizontalYMovement, float movementLength);
+	bool m_useChaoticSwarmMotion = false;
+
+	//our physic attributes
+	float m_gravityRange = 0.0f;
+	int m_gravityFunction = 0;
+	float m_speed = 0.0f;
+	float m_movementLength; //TODO
+	bool m_movementVertical = false;
+	bool m_movementHorizontalX = false;
+	bool m_movementHorizontalZ = false;
+
+	//texturing	
+	void addTexture(Texture &texture, float percentageLife);
+	void deleteTexture(int position);
+	void useTexture(bool useTexture, float particleSize,
+		float birthTime = 0.0, float deathTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
+	void useTexture(bool useTexture, std::vector<float> scalingSize, std::vector<float> scalingMoment,
+		float birthTime = 0.0, float deathTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
+	std::vector<Texture> m_textureList;
+
+	//rotating, scaling and blending of the particle
+	float m_birthTime;
+	float m_deathTime;
+	float m_scalingData[32];
+	int m_scalingCount = 0;
+	bool m_useScaling = false;
+	float particleDefaultSize = 1.0;
+	bool m_rotateLeft = true;
 
 	//change properties
 	void setOutputMode(const int OUTPUT);
@@ -90,15 +128,7 @@ public:
 	void setParticleLifetime(float newLifetime);
 	void setParticleMortality(bool particleMortality);
 	void setGravity(glm::vec4 newGravity);
-	void setComputeShader(std::string address);
 	void setSpeed(float speed);
-	void setAreaEmitting(bool areaEmittingXY, bool areaEmittingXZ, float size, int accuracy);
-	void addTexture(Texture &texture, float percentageLife);
-	void deleteTexture(int position);
-	void useTexture(bool useTexture, float particleSize,
-		float birthTime = 0.0, float deathTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
-	void useTexture(bool useTexture, std::vector<float> scalingSize, std::vector<float> scalingMoment, 
-		float birthTime = 0.0, float deathTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
 
 	//get properties
 	int getOutputMode();
@@ -119,40 +149,6 @@ public:
 	bool getUseGeometryShader();
 	bool getUsePointSprites();
 	float getRotationSpeed();
-
-	//our physic possibilities
-	void usePhysicTrajectory(glm::vec4 gravity, float speed);
-	bool m_useTrajectory = false;
-	void usePhysicDirectionGravity(glm::vec4 gravity, float speed);
-	bool m_usePointGravity = false;
-	void usePhysicPointGravity(glm::vec4 gravity, float gravityRange, int gravityFunction, float speed);
-	bool m_useDirectionGravity = true;
-	void usePhysicSwarmCircleMotion(bool verticalMovement, bool horizontalXMovement, bool horizontalYMovement, float movementLength);
-	bool m_useChaoticSwarmMotion = false;
-
-	//our physic attributes
-	float m_gravityRange = 0.0f;
-	int m_gravityFunction = 0;
-	float m_movementLength;
-	bool m_movementVertical = false;
-	bool m_movementHorizontalX = false;
-	bool m_movementHorizontalZ = false;
-
-	//Kevin
-	glm::vec4* positions;
-	std::vector<glm::vec4> colorList;
-	bool m_useColorFlow = false;
-	GLuint color_ubo;
-	float m_speed = 0.0f;
-	float m_birthTime;
-	float m_deathTime;
-	std::vector<Texture> m_textureList;
-	float m_scalingData [32];
-	int m_scalingCount = 0;
-	bool m_useScaling = false;
-	bool m_rotateLeft = true;
-	float particleDefaultSize = 1.0;
-	void movePosition(glm::vec3 playerPosition);
 
 private:
 	//updates the buffer and compute size
@@ -186,9 +182,7 @@ private:
 
 	//property of the particle
 	float particleLifetime;	//lifetime of any particle in seconds
-	bool m_particleMortal;
-	int minParticleSize;	//TODO (better by an array?)
-	int maxParticleSize;	//TODO
+	bool m_particleMortal; //if the particle can die
 	glm::vec4 m_gravity = glm::vec4(0.0,-1.0,0.0,1.0);		//xyz = direction of the gravity, z = power
 
 	//Var for time measure
@@ -199,8 +193,8 @@ private:
 	//Var for emitting in an Area
 	bool m_areaEmittingXY = false;
 	bool m_areaEmittingXZ = false;
-	float m_areaSize;
-	int m_areaAccuracy;
+	float m_areaSize = 3.0;
+	int m_areaAccuracy = 1000;
 
 	//Property of the rendering
 	bool m_useGeometryShader = false;
@@ -210,12 +204,3 @@ private:
 	//Property of the Geometry Shader
 	float m_rotationSpeed = 0.0;
 };
-
-/*
-1. lifetime = 0.0?
-2. angle / ubo
-3. delete all unnecessary things
-4. dynamic position
-5. memory
-6. rename & stuff
-*/

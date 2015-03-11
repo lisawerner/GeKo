@@ -2,7 +2,6 @@
 
 //TODO: COMMENTS & VAR RENAMING
 
-
 Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, double emitFrequency,
 	int particlesPerEmit, double particleLifeTime, bool particleMortal)
 {
@@ -91,8 +90,6 @@ void Emitter::loadBuffer(){
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 }
 
-//TODO Dynamic
-
 void Emitter::update(){
 
 	deltaTime = glfwGetTime() - updateTime; //time remain since last update
@@ -114,17 +111,19 @@ void Emitter::update(){
 	compute->sendVec3("emitterPos", getPosition()); //can be saved position, or parameter
 	compute->sendFloat("fullLifetime", particleLifetime);
 	compute->sendInt("particleMortal", m_particleMortal);
+
 	compute->sendVec4("gravity", m_gravity);
 	compute->sendFloat("gravityRange", m_gravityRange);
 	compute->sendInt("gravityFunc", m_gravityFunction);
+	
 	compute->sendInt("useTrajectory", m_useTrajectory);
 	compute->sendInt("useDirectionGravity", m_useDirectionGravity);
 	compute->sendInt("usePointGravity", m_usePointGravity);
 	compute->sendInt("useChaoticSwarmMotion", m_useChaoticSwarmMotion);
+	
 	compute->sendInt("useMovementVertical", m_movementVertical);
 	compute->sendInt("useMovementHorizontalX", m_movementHorizontalX);
 	compute->sendInt("useMovementHorizontalZ", m_movementHorizontalZ);
-	compute->sendFloat("movementLength", m_movementLength);
 
 	//Unbind CD and all SSBO's
 	glDispatchCompute(computeGroupCount, 1, 1); //?
@@ -156,17 +155,19 @@ void Emitter::update(glm::vec3 playerPosition){
 	compute->sendVec3("emitterPos", getPosition() + playerPosition); //can be saved position, or parameter
 	compute->sendFloat("fullLifetime", particleLifetime);
 	compute->sendInt("particleMortal", m_particleMortal);
+
 	compute->sendVec4("gravity", m_gravity);
 	compute->sendFloat("gravityRange", m_gravityRange);
 	compute->sendInt("gravityFunc", m_gravityFunction);
+
 	compute->sendInt("useTrajectory", m_useTrajectory);
 	compute->sendInt("useDirectionGravity", m_useDirectionGravity);
 	compute->sendInt("usePointGravity", m_usePointGravity);
 	compute->sendInt("useChaoticSwarmMotion", m_useChaoticSwarmMotion);
+
 	compute->sendInt("useMovementVertical", m_movementVertical);
 	compute->sendInt("useMovementHorizontalX", m_movementHorizontalX);
 	compute->sendInt("useMovementHorizontalZ", m_movementHorizontalZ);
-	compute->sendFloat("movementLength", m_movementLength);
 
 	//Unbind CD and all SSBO's
 	glDispatchCompute(computeGroupCount, 1, 1); //?
@@ -181,7 +182,6 @@ void Emitter::render(Camera &cam)
 {
 	auto useTexture = getUseTexture();
 
-	//TODO Pointsprites größe ändern & rotation
 	if (getUsePointSprites()){ //if we dont use a geometry shader..
 
 		glDepthFunc(GL_FALSE);
@@ -200,17 +200,17 @@ void Emitter::render(Camera &cam)
 		//Uniform Vars
 		emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
 		emitterShader->sendInt("particleMortal", m_particleMortal);
-		emitterShader->sendInt("useTexture", useTexture);
 		emitterShader->sendFloat("birthTime", m_birthTime);
 		emitterShader->sendFloat("deathTime", m_deathTime);
 		emitterShader->sendMat4("viewMatrix", cam.getViewMatrix());
 		emitterShader->sendMat4("projectionMatrix", cam.getProjectionMatrix());
 		
-		if (m_useScaling){ //TODO nicht sterbbar
+		if (m_useScaling){
 			emitterShader->sendInt("useScaling", 1);
 			emitterShader->sendInt("scalingCount", m_scalingCount);
 			emitterShader->sendFloatArray("scalingData", m_scalingCount, m_scalingData);
 			emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
+			emitterShader->sendInt("particleMortal", m_particleMortal);
 		}
 		else{
 			emitterShader->sendInt("useScaling", 0);
@@ -219,6 +219,8 @@ void Emitter::render(Camera &cam)
 
 		if (useTexture)
 			emitterShader->sendSampler2D("tex", m_textureList.at(0).getTexture());
+		emitterShader->sendInt("useTexture", useTexture);
+
 
 		glVertexPointer(4, GL_FLOAT, 0, (void*)0);
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -254,10 +256,11 @@ void Emitter::render(Camera &cam)
 		emitterShader->sendInt("rotateLeft", m_rotateLeft);
 		emitterShader->sendFloat("rotationSpeed", m_rotationSpeed); 
 
-		if (m_useScaling){ //TODO nicht sterbbar
+		if (m_useScaling){
 			emitterShader->sendInt("useScaling", 1);
 			emitterShader->sendInt("scalingCount", m_scalingCount);
 			emitterShader->sendFloatArray("scalingData", m_scalingCount, m_scalingData);
+			emitterShader->sendInt("particleMortal", m_particleMortal);
 		}
 		else{
 			emitterShader->sendInt("useScaling", 0);
@@ -625,7 +628,6 @@ void Emitter::setParticleLifetime(float newLifetime)
 	particleLifetime = newLifetime;
 	updateSize();
 }
-//TODO: Test if lifetime should be 0.0
 void Emitter::setParticleMortality(bool particleMortality)
 {
 	m_particleMortal = particleMortality;
@@ -633,7 +635,6 @@ void Emitter::setParticleMortality(bool particleMortality)
 		m_particleMortal = false;
 		emitFrequency = 0.0;
 		m_deathTime = 0.0;
-		particleLifetime = 5.0; //TODO: test if it can be setted to 0.0
 		m_output = static_cast<FLOW> (1); //set output to once
 	}
 }
@@ -682,7 +683,6 @@ void Emitter::useTexture(bool useTexture, float particleSize, float birthTime, f
 
 	particleDefaultSize = particleSize;
 }
-
 void Emitter::useTexture(bool useTexture, std::vector<float> scalingSize, std::vector<float> scalingMoment, 
 	float birthTime, float deathTime, bool rotateLeft, float rotationSpeed){
 	m_useTexture = useTexture;

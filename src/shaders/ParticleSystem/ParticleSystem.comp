@@ -35,13 +35,8 @@ uniform int useChaoticSwarmMotion;
 uniform int useMovementHorizontalX;
 uniform int useMovementHorizontalZ;
 uniform int useMovementVertical;
-uniform float movementLength;
 
 layout(local_size_x = 16, local_size_y = 1, local_size_z = 1) in;
-
-/*
-TOOD: direkter Magnet
-*/
 
 void main(){
 
@@ -106,7 +101,7 @@ void main(){
 			vel.z = (vel.z + distanceFactor * distance.z * gravity.w * deltaTime) / 1.01;
 		}
 
-		/**/
+		/*Particles fly in a circle/sphere*/
 		else if(useChaoticSwarmMotion == 1){
 			if(useMovementHorizontalX == 1)
 				pos.x += sin(pos.w) * deltaTime / 3.0;

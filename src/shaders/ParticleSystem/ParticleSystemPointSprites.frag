@@ -1,12 +1,5 @@
 #version 430 core
 
-//TODO ColorFlow Buffer
-/*layout(std140, binding=2) buffer color_ubo
-{
-	vector colorList[];
-};*/
-
-uniform int useColorFlow;
 uniform int useTexture;
 uniform float fullLifetime;
 uniform int particleMortal;
