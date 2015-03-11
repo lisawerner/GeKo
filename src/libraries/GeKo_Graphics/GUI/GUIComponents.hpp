@@ -126,34 +126,23 @@ namespace GuiElement
     std::string m_ID;
   };
 
-  class ToggleButton : public Element
+  class Checkbox : public Element
   {
   public:
-    ToggleButton(bool startValue = false, std::string activeText = "on", std::string inactiveText = "off") : m_isActive(startValue), m_ActiveString(activeText), m_InactiveString(inactiveText)  {}
+    Checkbox(std::string ID, bool startingValue = false) : m_ID(ID), m_bool(startingValue){}
     inline void render() 
     {
-      if (m_isActive)
-      {
-        if (ImGui::Button(m_ActiveString.c_str()))
-          m_isActive = false;
-      }
-
-      else
-      {
-        if (ImGui::Button(m_InactiveString.c_str()))
-          m_isActive = true;
-      }
+      ImGui::Checkbox(m_ID.c_str(),&m_bool);
     }
     
-    inline bool isActive() { return m_isActive; }
-    inline void dispose() { ToggleButton::~ToggleButton(); };
+    inline void dispose()   { Checkbox::~Checkbox(); };
+    inline bool isActive()  { return m_bool; }
 
   private:
-    ~ToggleButton() {}
+    ~Checkbox() {}
 
-    bool m_isActive;
-    std::string m_ActiveString;
-    std::string m_InactiveString;
+    bool m_bool;
+    std::string m_ID;
 
   };
 
