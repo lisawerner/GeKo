@@ -92,11 +92,10 @@ public:
 	void setAreaEmitting(bool areaEmittingXY, bool areaEmittingXZ, float size, int accuracy);
 	void addTexture(Texture &texture, float percentageLife);
 	void deleteTexture(int position);
-	void useTexture(bool useTexture);
-	void useTexture(bool useTexture, float birthTime, float deathTime);
-	void useTexture(bool useTexture, std::vector<float> scalingSize, std::vector<float> scalingMoment);
-	void useTexture(bool useTexture, float birthTime, float deathTime, std::vector<float> scalingSize, std::vector<float> scalingMoment);
-	void setRotationSpeed(float rotationSpeed);
+	void useTexture(bool useTexture, float particleSize,
+		float birthTime = 0.0, float deathTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
+	void useTexture(bool useTexture, std::vector<float> scalingSize, std::vector<float> scalingMoment, 
+		float birthTime = 0.0, float deathTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
 
 	//get properties
 	int getOutputMode();
@@ -148,6 +147,7 @@ public:
 	float m_scalingData [32];
 	int m_scalingCount = 0;
 	bool m_useScaling = false;
+	bool m_rotateLeft = true;
 	float particleDefaultSize = 1.0;
 
 private:
@@ -204,5 +204,14 @@ private:
 	bool m_useTexture = false;
 
 	//Property of the Geometry Shader
-	float m_rotationSpeed = 0;
+	float m_rotationSpeed = 0.0;
 };
+
+/*
+1. lifetime = 0.0?
+2. angle / ubo
+3. delete all unnecessary things
+4. dynamic position
+5. memory
+6. rename & stuff
+*/

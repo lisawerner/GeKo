@@ -90,6 +90,7 @@ void Emitter::loadBuffer(){
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 }
 
+//TODO Dynamic
 void Emitter::update(){
 	
 	deltaTime = glfwGetTime() - updateTime; //time remain since last update
@@ -155,14 +156,25 @@ void Emitter::render(Camera &cam)
 		//Uniform Vars
 		emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
 		emitterShader->sendInt("particleMortal", m_particleMortal);
-		emitterShader->sendInt("useColorFlow", m_useColorFlow); //TODO
 		emitterShader->sendInt("useTexture", useTexture);
 		emitterShader->sendFloat("birthTime", m_birthTime);
 		emitterShader->sendFloat("deathTime", m_deathTime);
 		emitterShader->sendMat4("viewMatrix", cam.getViewMatrix());
 		emitterShader->sendMat4("projectionMatrix", cam.getProjectionMatrix());
+		
+		if (m_useScaling){ //TODO nicht sterbbar
+			emitterShader->sendInt("useScaling", 1);
+			emitterShader->sendInt("scalingCount", m_scalingCount);
+			emitterShader->sendFloatArray("scalingData", m_scalingCount, m_scalingData);
+			emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
+		}
+		else{
+			emitterShader->sendInt("useScaling", 0);
+			emitterShader->sendFloat("size", particleDefaultSize);
+		}
+
 		if (useTexture)
-			emitterShader->sendSampler2D("particleTex", m_textureList.at(0).getTexture());
+			emitterShader->sendSampler2D("tex", m_textureList.at(0).getTexture());
 
 		glVertexPointer(4, GL_FLOAT, 0, (void*)0);
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -189,12 +201,15 @@ void Emitter::render(Camera &cam)
 		//Uniform Vars
 		emitterShader->sendMat4("viewMatrix", cam.getViewMatrix());
 		emitterShader->sendMat4("projectionMatrix", cam.getProjectionMatrix());
-		emitterShader->sendFloat("birthTime", m_birthTime); //TODO 0
+		emitterShader->sendFloat("birthTime", m_birthTime);
 		emitterShader->sendFloat("deathTime", m_deathTime);
 		emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
 		emitterShader->sendSampler2D("texture", m_textureList.at(0).getTexture());
-		emitterShader->sendFloat("rotationSpeed", m_rotationSpeed); // TODO left
 		emitterShader->sendVec4("camPos", cam.getPosition());
+
+		emitterShader->sendInt("rotateLeft", m_rotateLeft);
+		emitterShader->sendFloat("rotationSpeed", m_rotationSpeed); 
+
 		if (m_useScaling){ //TODO nicht sterbbar
 			emitterShader->sendInt("useScaling", 1);
 			emitterShader->sendInt("scalingCount", m_scalingCount);
@@ -496,51 +511,29 @@ void Emitter::deleteTexture(int position){
 	m_textureList.erase(m_textureList.begin() + position);
 }
 
-
-void Emitter::useTexture(bool useTexture){
+void Emitter::useTexture(bool useTexture, float particleSize, float birthTime, float deathTime, bool rotateLeft, float rotationSpeed){
 	m_useTexture = useTexture;
-	m_birthTime = 0.0;
-	m_deathTime = 0.0;
-}
 
-void Emitter::useTexture(bool useTexture, float birthTime, float deathTime){
-	m_useTexture = useTexture;
 	m_birthTime = birthTime;
 	m_deathTime = deathTime;
+
+	m_rotateLeft = rotateLeft;
+	m_rotationSpeed = rotationSpeed;
+
+	particleDefaultSize = particleSize;
 }
 
-void Emitter::useTexture(bool useTexture, std::vector<float> scalingSize, std::vector<float> scalingMoment){
+void Emitter::useTexture(bool useTexture, std::vector<float> scalingSize, std::vector<float> scalingMoment, 
+	float birthTime, float deathTime, bool rotateLeft, float rotationSpeed){
 	m_useTexture = useTexture;
-
-	if (scalingSize.empty() || scalingMoment.empty())
-		Emitter::useTexture(useTexture);
-	else {
-		if (scalingSize.size() > 16 || scalingMoment.size() > 16)
-			perror("Error in Emitter: We just support a maximum of 16 scaling-steps");
-		else{
-			if (scalingSize.size() != scalingMoment.size())
-				perror("Error in Emitter: Size of scalingSize & scalingMoment is not equal");
-			else {
-				for (int i = 0; i < 2 * scalingSize.size(); i = i + 2){
-					m_scalingData[i] = scalingMoment[i];
-					m_scalingData[i + 1] = scalingSize[i];
-					m_scalingCount = m_scalingCount + 2;
-				}
-				m_useScaling = true;
-			}
-		}
-	}
-}
-
-void Emitter::useTexture(bool useTexture, float birthTime, float deathTime, std::vector<float> scalingSize, std::vector<float> scalingMoment){
-	m_useTexture = useTexture;
-	m_birthTime = birthTime;
-	m_deathTime = deathTime;
 	
-	if (scalingSize.empty() || scalingMoment.empty()){
-		Emitter::useTexture(useTexture, birthTime, deathTime);
-	}
-	{
+	m_birthTime = birthTime;
+	m_deathTime = deathTime;
+
+	m_rotateLeft = rotateLeft;
+	m_rotationSpeed = rotationSpeed;
+
+	if (scalingSize.empty() == false && scalingMoment.empty() == false){
 		if (scalingSize.size() > 16 || scalingMoment.size() > 16)
 			perror("Error in Emitter: We just support a maximum of 16 scaling-steps");
 		else{
@@ -548,18 +541,14 @@ void Emitter::useTexture(bool useTexture, float birthTime, float deathTime, std:
 				perror("Error in Emitter: Size of scalingSize & scalingMoment is not equal");
 			else {
 				for (int i = 0; i < scalingSize.size(); i++){
-					m_scalingData[2*i] = scalingMoment[i];
-					m_scalingData[2*i + 1] = scalingSize[i];
+					m_scalingData[2 * i] = scalingMoment[i];
+					m_scalingData[2 * i + 1] = scalingSize[i];
 					m_scalingCount = m_scalingCount + 2;
 				}
 				m_useScaling = true;
 			}
 		}
 	}
-}
-//TODO: MADELEINE use it also for PS and set left or right rotation
-void Emitter::setRotationSpeed(float rotationSpeed){
-	m_rotationSpeed = rotationSpeed;		
 }
 
 //Velocity Getter
