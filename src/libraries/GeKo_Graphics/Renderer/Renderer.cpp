@@ -248,7 +248,7 @@ void Renderer::renderScene(Scene& scene, Window& window)
     m_shaderGBuffer->sendFloat("mat.alpha", 1.0f);
 
     //Bind and Pass shadow map. Only use SHADOW_TEXTURE_UNIT when Normal Mapping is applied.
-    m_shaderGBuffer->sendSampler2D("depthTexture", m_smFBO->getDepthTexture(), 1);
+    m_shaderGBuffer->sendSampler2D("depthTexture", m_smFBO->getDepthTexture(), 3);
   }
 
   scene.render(*m_shaderGBuffer);
