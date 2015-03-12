@@ -20,13 +20,22 @@ vec4 sampleBox(float u, float v, float size) {
   color += texture2D(tex, vec2(passUV.x + size,  passUV.y + size))  * 0.075;
   return color;
 }
+
+float clampZeroOne(float inputVal)
+{
+	if(inputVal < 0.0)
+		return 0.0;
+		
+	if(inputVal > 1.0)
+		return 1.0;
+}
  
 void main(void)
 {
   float depth = texture2D(depth, passUV).r;
   float blur_amount = abs(depth-focus_depth)*20.0;
   if(depth < depth-focus_depth) { blur_amount *= 10.0; }
-  blur_amount = clamp(blur_amount, 0.0, 1.0);
+  blur_amount = clampZeroOne(blur_amount);
  
   vec4 baseColor = texture2D(tex,passUV);
   vec4 blurredColor = vec4(0.0,0.0,0.0,0.0);

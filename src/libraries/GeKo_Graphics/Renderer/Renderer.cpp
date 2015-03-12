@@ -222,7 +222,7 @@ void Renderer::renderScene(Scene& scene, Window& window)
     m_shaderGBuffer->sendFloat("light.spot_exponent", m_smConeLight->m_exponent);
     m_shaderGBuffer->sendFloat("light.spot_cutoff", m_smConeLight->m_radius);
 
-    m_shaderGBuffer->sendVec3("lightAmbient", glm::fvec3(0.0f,0.0f,0.0f));
+    m_shaderGBuffer->sendVec3("lightAmbient", glm::fvec3(0.3f,0.3f,0.3f));
 
     //Shadow mapping
     glm::mat4 lightPerspective, lightView, lightMVPBias;

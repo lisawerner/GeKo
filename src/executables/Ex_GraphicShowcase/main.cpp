@@ -140,7 +140,7 @@ void initGUI()
   useDepthOfFieldButton = new GuiElement::Checkbox("Use Depth of Field");
   deptOfFieldHeader->addElement(useDepthOfFieldButton);
   deptOfFieldHeader->addElement(new GuiElement::Spacing);
-  deptOfFieldHeader->addElement(new GuiElement::SliderFloat("Depthfield", focusDepth, 0.0f, 2.0f));
+  deptOfFieldHeader->addElement(new GuiElement::SliderFloat("Depthfield", focusDepth, 0.0f, 1.0f));
   deptOfFieldHeader->addElement(new GuiElement::Spacing);
 
   gui->addElement(deptOfFieldHeader);
@@ -254,16 +254,6 @@ int main()
 	wallNode1.setModelMatrix(glm::rotate(wallNode1.getModelMatrix(), -90.0f, glm::vec3(1.0, 0.0, 0.0)));
 	wallNode1.setModelMatrix(glm::scale(wallNode1.getModelMatrix(), glm::vec3(1.5, 1.5, 1.5)));
   
-
-	Node wallNode2("wall2");
-	wallNode2.addGeometry(&plane);
-  wallNode2.addTexture(&stone);
-  wallNode2.addNormalMap(&stone_normal);
-  wallNode2.addHeightMap(&stone_height, 0.07, 0.1);
-	wallNode2.setModelMatrix(glm::translate(wallNode2.getModelMatrix(), glm::vec3(0.0, 1.0, -0.2)));
-	wallNode2.setModelMatrix(glm::scale(wallNode2.getModelMatrix(), glm::vec3(1.5, 1.5, 1.5)));
-
-
 	Node teaNode("teaNode");
 	teaNode.addGeometry(&teapot);
 	teaNode.addTexture(&chrome);
@@ -338,13 +328,13 @@ int main()
     // You have to compute the delta time
     float dTime = glfwGetTime() - startTime;
 
-    cam.setSensitivity(dTime/50);
+    cam.setSensitivity(dTime);
 
     if (deferredShadingRotationButton->isActive())
       lights.setModelMatrix(glm::rotate(lights.getModelMatrix(), 10.0f * dTime, glm::vec3(0.0, 1.0, 0.0)));
 
-    //if (!(outputFPS % 20))
-      //std::cout << "FPS: " << static_cast<int> (1 / dTime) << std::endl;
+    if (!(outputFPS % 20))
+      std::cout << "FPS: " << static_cast<int> (1 / dTime) << std::endl;
 
     outputFPS++;
 
