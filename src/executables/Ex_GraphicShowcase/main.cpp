@@ -328,7 +328,7 @@ int main()
     // You have to compute the delta time
     float dTime = glfwGetTime() - startTime;
 
-    cam.setSensitivity(dTime);
+    cam.setSensitivity(dTime/50);
 
     if (deferredShadingRotationButton->isActive())
       lights.setModelMatrix(glm::rotate(lights.getModelMatrix(), 10.0f * dTime, glm::vec3(0.0, 1.0, 0.0)));
