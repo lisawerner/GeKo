@@ -133,156 +133,6 @@ void Emitter::update(){
 	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
 	emitterShader->unbind();
 }
-
-void Emitter::update(glm::vec3 playerPosition){
-	
-	deltaTime = glfwGetTime() - updateTime; //time remain since last update
-	updateTime = glfwGetTime();
-
-	emitLifetime -= deltaTime;
-	if (emitLifetime < 0 && emitterMortal){
-		m_output = UNUSED;
-	}
-
-	//Bind CS and all SSBO's
-	compute->bind();
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, position_ssbo);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, velocity_ssbo);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, angle_ssbo);
-
-	//Uniform Vars
-	compute->sendFloat("deltaTime", (float)deltaTime);
-	compute->sendVec3("emitterPos", getPosition() + playerPosition); //can be saved position, or parameter
-	compute->sendFloat("fullLifetime", particleLifetime);
-	compute->sendInt("particleMortal", m_particleMortal);
-
-	compute->sendVec4("gravity", m_gravity);
-	compute->sendFloat("gravityRange", m_gravityRange);
-	compute->sendInt("gravityFunc", m_gravityFunction);
-
-	compute->sendInt("useTrajectory", m_useTrajectory);
-	compute->sendInt("useDirectionGravity", m_useDirectionGravity);
-	compute->sendInt("usePointGravity", m_usePointGravity);
-	compute->sendInt("useChaoticSwarmMotion", m_useChaoticSwarmMotion);
-
-	compute->sendInt("useMovementVertical", m_movementVertical);
-	compute->sendInt("useMovementHorizontalX", m_movementHorizontalX);
-	compute->sendInt("useMovementHorizontalZ", m_movementHorizontalZ);
-
-	//Unbind CD and all SSBO's
-	glDispatchCompute(computeGroupCount, 1, 1); //?
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 0);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, 0);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, 0);
-	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
-	emitterShader->unbind();
-}
-
-void Emitter::render(Camera &cam)
-{
-	auto useTexture = getUseTexture();
-
-	if (getUsePointSprites()){ //if we dont use a geometry shader..
-
-		glDepthFunc(GL_FALSE);
-
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //how we calculate transperancy
-
-		if (useTexture){
-			glEnable(GL_POINT_SPRITE);
-			glTexEnvi(GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE);	//the fragment color gets interpolated
-		}
-
-		emitterShader->bind();
-		glBindBuffer(GL_ARRAY_BUFFER, position_ssbo);
-
-		//Uniform Vars
-		emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
-		emitterShader->sendInt("particleMortal", m_particleMortal);
-		emitterShader->sendFloat("birthTime", m_birthTime);
-		emitterShader->sendFloat("deathTime", m_deathTime);
-		emitterShader->sendMat4("viewMatrix", cam.getViewMatrix());
-		emitterShader->sendMat4("projectionMatrix", cam.getProjectionMatrix());
-		
-		if (m_useScaling){
-			emitterShader->sendInt("useScaling", 1);
-			emitterShader->sendInt("scalingCount", m_scalingCount);
-			emitterShader->sendFloatArray("scalingData", m_scalingCount, m_scalingData);
-			emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
-			emitterShader->sendInt("particleMortal", m_particleMortal);
-		}
-		else{
-			emitterShader->sendInt("useScaling", 0);
-			emitterShader->sendFloat("size", particleDefaultSize);
-		}
-
-		if (useTexture)
-			emitterShader->sendSampler2D("tex", m_textureList.at(0).getTexture());
-		emitterShader->sendInt("useTexture", useTexture);
-
-
-		glVertexPointer(4, GL_FLOAT, 0, (void*)0);
-		glEnableClientState(GL_VERTEX_ARRAY);
-
-		if (useTexture){
-			glEnable(GL_PROGRAM_POINT_SIZE);
-		}
-		glDrawArrays(GL_POINTS, 0, numMaxParticle);
-
-		glDisableClientState(GL_VERTEX_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glDepthFunc(GL_TRUE);
-		glDisable(GL_BLEND);
-		emitterShader->unbind();
-	}
-	else if (getUseGeometryShader() && useTexture){
-		glDepthFunc(GL_FALSE);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		emitterShader->bind();
-		glBindBuffer(GL_ARRAY_BUFFER, position_ssbo);
-
-		//Uniform Vars
-		emitterShader->sendMat4("viewMatrix", cam.getViewMatrix());
-		emitterShader->sendMat4("projectionMatrix", cam.getProjectionMatrix());
-		emitterShader->sendFloat("birthTime", m_birthTime);
-		emitterShader->sendFloat("deathTime", m_deathTime);
-		emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
-		emitterShader->sendSampler2D("texture", m_textureList.at(0).getTexture());
-		emitterShader->sendVec4("camPos", cam.getPosition());
-
-		emitterShader->sendInt("rotateLeft", m_rotateLeft);
-		emitterShader->sendFloat("rotationSpeed", m_rotationSpeed); 
-
-		if (m_useScaling){
-			emitterShader->sendInt("useScaling", 1);
-			emitterShader->sendInt("scalingCount", m_scalingCount);
-			emitterShader->sendFloatArray("scalingData", m_scalingCount, m_scalingData);
-			emitterShader->sendInt("particleMortal", m_particleMortal);
-		}
-		else{
-			emitterShader->sendInt("useScaling", 0);
-			emitterShader->sendFloat("size", particleDefaultSize);
-		}
-
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-		glDrawArrays(GL_POINTS, 0, numMaxParticle);
-		glDisableVertexAttribArray(0);
-
-		glDisableClientState(GL_VERTEX_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glDepthFunc(GL_TRUE);
-		glDisable(GL_BLEND);
-		emitterShader->unbind();
-	}
-	else{
-		perror("Problem in Emitter.cpp: Geometry Shader maybe miss a texture");
-	}
-}
-
 //TODO: MADELEINE ANGLE TO UBO
 void Emitter::pushParticle(int numberNewParticle){
 	auto emitPosition = getPosition();
@@ -373,8 +223,77 @@ void Emitter::pushParticle(int numberNewParticle){
 
 	indexBuffer = (indexBuffer + numberNewParticle) % numMaxParticle;
 }
+void Emitter::generateParticle()
+{
+	switch (m_output)
+	{
+	case CONSTANT: //we generate constant new particle
+		if (glfwGetTime() - generateTime >= emitFrequency){
+			deltaTime = glfwGetTime() - generateTime;
+			while (deltaTime >= emitFrequency) {
+				pushParticle(particlesPerEmit);
+				deltaTime -= emitFrequency;
+			}
+			generateTime = glfwGetTime();
+		}
+		break;
+	case ONCE: //we generate only one time particle
+		if (glfwGetTime() - generateTime >= emitFrequency){
+			pushParticle(particlesPerEmit);
+			m_output = UNUSED;
+		}
+		break;
+	case UNUSED: // we dont generate new particle
+		break;
+	}
+}
+
+void Emitter::update(glm::vec3 playerPosition){
+
+	deltaTime = glfwGetTime() - updateTime; //time remain since last update
+	updateTime = glfwGetTime();
+
+	emitLifetime -= deltaTime;
+	if (emitLifetime < 0 && emitterMortal){
+		m_output = UNUSED;
+	}
+
+	//Bind CS and all SSBO's
+	compute->bind();
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, position_ssbo);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, velocity_ssbo);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, angle_ssbo);
+
+	//Uniform Vars
+	compute->sendFloat("deltaTime", (float)deltaTime);
+	compute->sendVec3("emitterPos", getPosition()); //can be saved position, or parameter
+	compute->sendFloat("fullLifetime", particleLifetime);
+	compute->sendInt("particleMortal", m_particleMortal);
+
+	compute->sendVec4("gravity", m_gravity);
+	compute->sendFloat("gravityRange", m_gravityRange);
+	compute->sendInt("gravityFunc", m_gravityFunction);
+
+	compute->sendInt("useTrajectory", m_useTrajectory);
+	compute->sendInt("useDirectionGravity", m_useDirectionGravity);
+	compute->sendInt("usePointGravity", m_usePointGravity);
+	compute->sendInt("useChaoticSwarmMotion", m_useChaoticSwarmMotion);
+
+	compute->sendInt("useMovementVertical", m_movementVertical);
+	compute->sendInt("useMovementHorizontalX", m_movementHorizontalX);
+	compute->sendInt("useMovementHorizontalZ", m_movementHorizontalZ);
+
+	//Unbind CD and all SSBO's
+	glDispatchCompute(computeGroupCount, 1, 1); //?
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 0);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, 0);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, 0);
+	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
+	emitterShader->unbind();
+}
+//TODO: MADELEINE ANGLE TO UBO
 void Emitter::pushParticle(int numberNewParticle, glm::vec3 playerPosition){
-	auto emitPosition = getPosition()+playerPosition;
+	auto emitPosition = getPosition() + playerPosition;
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, position_ssbo);
 	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
@@ -462,30 +381,6 @@ void Emitter::pushParticle(int numberNewParticle, glm::vec3 playerPosition){
 
 	indexBuffer = (indexBuffer + numberNewParticle) % numMaxParticle;
 }
-void Emitter::generateParticle()
-{
-	switch (m_output)
-	{
-	case CONSTANT: //we generate constant new particle
-		if (glfwGetTime() - generateTime >= emitFrequency){
-			deltaTime = glfwGetTime() - generateTime;
-			while (deltaTime >= emitFrequency) {
-				pushParticle(particlesPerEmit);
-				deltaTime -= emitFrequency;
-			}
-			generateTime = glfwGetTime();
-		}
-		break;
-	case ONCE: //we generate only one time particle
-		if (glfwGetTime() - generateTime >= emitFrequency){
-			pushParticle(particlesPerEmit);
-			m_output = UNUSED;
-		}
-		break;
-	case UNUSED: // we dont generate new particle
-		break;
-	}
-}
 void Emitter::generateParticle(glm::vec3 playerPosition)
 {
 	switch (m_output)
@@ -508,6 +403,111 @@ void Emitter::generateParticle(glm::vec3 playerPosition)
 		break;
 	case UNUSED: // we dont generate new particle
 		break;
+	}
+}
+
+void Emitter::render(Camera &cam)
+{
+	auto useTexture = getUseTexture();
+
+	if (getUsePointSprites()){ //if we dont use a geometry shader..
+
+		glDepthFunc(GL_FALSE);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //how we calculate transperancy
+
+		if (useTexture){
+			glEnable(GL_POINT_SPRITE);
+			glTexEnvi(GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE);	//the fragment color gets interpolated
+		}
+
+		emitterShader->bind();
+		glBindBuffer(GL_ARRAY_BUFFER, position_ssbo);
+
+		//Uniform Vars
+		emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
+		emitterShader->sendInt("particleMortal", m_particleMortal);
+		emitterShader->sendFloat("birthTime", m_birthTime);
+		emitterShader->sendFloat("deathTime", m_deathTime);
+		emitterShader->sendMat4("viewMatrix", cam.getViewMatrix());
+		emitterShader->sendMat4("projectionMatrix", cam.getProjectionMatrix());
+
+		if (m_useScaling){
+			emitterShader->sendInt("useScaling", 1);
+			emitterShader->sendInt("scalingCount", m_scalingCount);
+			emitterShader->sendFloatArray("scalingData", m_scalingCount, m_scalingData);
+			emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
+			emitterShader->sendInt("particleMortal", m_particleMortal);
+		}
+		else{
+			emitterShader->sendInt("useScaling", 0);
+			emitterShader->sendFloat("size", particleDefaultSize);
+		}
+
+		if (useTexture)
+			emitterShader->sendSampler2D("tex", m_textureList.at(0).getTexture());
+		emitterShader->sendInt("useTexture", useTexture);
+
+
+		glVertexPointer(4, GL_FLOAT, 0, (void*)0);
+		glEnableClientState(GL_VERTEX_ARRAY);
+
+		if (useTexture){
+			glEnable(GL_PROGRAM_POINT_SIZE);
+		}
+		glDrawArrays(GL_POINTS, 0, numMaxParticle);
+
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glDepthFunc(GL_TRUE);
+		glDisable(GL_BLEND);
+		emitterShader->unbind();
+	}
+	else if (getUseGeometryShader() && useTexture){
+		glDepthFunc(GL_FALSE);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		emitterShader->bind();
+		glBindBuffer(GL_ARRAY_BUFFER, position_ssbo);
+
+		//Uniform Vars
+		emitterShader->sendMat4("viewMatrix", cam.getViewMatrix());
+		emitterShader->sendMat4("projectionMatrix", cam.getProjectionMatrix());
+		emitterShader->sendFloat("birthTime", m_birthTime);
+		emitterShader->sendFloat("deathTime", m_deathTime);
+		emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
+		emitterShader->sendSampler2D("texture", m_textureList.at(0).getTexture());
+		emitterShader->sendVec4("camPos", cam.getPosition());
+
+		emitterShader->sendInt("rotateLeft", m_rotateLeft);
+		emitterShader->sendFloat("rotationSpeed", m_rotationSpeed);
+
+		if (m_useScaling){
+			emitterShader->sendInt("useScaling", 1);
+			emitterShader->sendInt("scalingCount", m_scalingCount);
+			emitterShader->sendFloatArray("scalingData", m_scalingCount, m_scalingData);
+			emitterShader->sendInt("particleMortal", m_particleMortal);
+		}
+		else{
+			emitterShader->sendInt("useScaling", 0);
+			emitterShader->sendFloat("size", particleDefaultSize);
+		}
+
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+		glDrawArrays(GL_POINTS, 0, numMaxParticle);
+		glDisableVertexAttribArray(0);
+
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glDepthFunc(GL_TRUE);
+		glDisable(GL_BLEND);
+		emitterShader->unbind();
+	}
+	else{
+		perror("Problem in Emitter.cpp: Geometry Shader maybe miss a texture");
 	}
 }
 
@@ -731,9 +731,9 @@ glm::vec3 Emitter::useVelocitySemiCircle(){
 					0.0f);
 }
 glm::vec3 Emitter::useVelocityCircle(){
-	return	glm::vec3(((rand() % 50) / 100.0f) - 0.25f,
+	return	glm::vec3(((rand() % 200) / 100.0f) - 1.0f,
 		((rand() % 200) / 100.0f) - 1.0f,
-		((rand() % 50) / 100.0f) - 0.25f);
+		0.0f);
 }
 glm::vec3 Emitter::useVelocitySemiSphere(){
 	return glm::vec3(((rand() % 200) / 100.0f) - 1.0f,
