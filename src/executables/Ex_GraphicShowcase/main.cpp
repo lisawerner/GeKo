@@ -235,9 +235,7 @@ int main()
 
 	Node cube1("cube1");
 	cube1.addGeometry(&cube);
-  cube1.addTexture(&bricks);
-  cube1.addNormalMap(&bricks_normal);
-  cube1.addHeightMap(&bricks_height,0.07,0.1,true);
+  cube1.addTexture(&marble);
 	cube1.setModelMatrix(glm::translate(cube1.getModelMatrix(), glm::vec3(-0.7, 0.35, 0.0)));
   cube1.setModelMatrix(glm::scale(cube1.getModelMatrix(), glm::vec3(0.5, 0.5, 0.5)));
 
@@ -252,7 +250,9 @@ int main()
 
 	Node wallNode1("wall1");
 	wallNode1.addGeometry(&plane);
-  wallNode1.addTexture(&marble);
+  wallNode1.addTexture(&bricks);
+  wallNode1.addNormalMap(&bricks_normal);
+  wallNode1.addHeightMap(&bricks_height, 0.07, 0.1, false);
 	wallNode1.setModelMatrix(glm::translate(wallNode1.getModelMatrix(), glm::vec3(0.0, 0.1, 0.2)));
 	wallNode1.setModelMatrix(glm::rotate(wallNode1.getModelMatrix(), -90.0f, glm::vec3(1.0, 0.0, 0.0)));
 	wallNode1.setModelMatrix(glm::scale(wallNode1.getModelMatrix(), glm::vec3(1.5, 1.5, 1.5)));
@@ -308,6 +308,7 @@ int main()
   blurStrength = new float(1.0f);
   radialBlurStrength = new float(1.0f);
   focusDepth = new float(0.04);
+  bloomStrength = new float(1.0f);
   useLinear = new int(0);
 
   initGUI();
