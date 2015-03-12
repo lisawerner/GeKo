@@ -52,7 +52,7 @@ Renderer::~Renderer()
   if(m_useBlur)				 delete m_shaderBlur;
   if(m_useRadialBlur)		 delete m_shaderRadialBlur;
   if(m_useDoF)				 delete m_shaderDoF;
-  if (m_useDoF)				 delete m_shaderDepth;
+  if(m_useDoF)				 delete m_shaderDepth;
   if(m_useSSAO)              delete m_shaderSSAOcalc;
   if(m_useSSAO)              delete m_shaderSSAOblur;
   if(m_useSSAO)              delete m_shaderSSAOfinal;
@@ -215,6 +215,8 @@ void Renderer::renderScene(Scene& scene, Window& window)
   if (m_useShadowMapping)
   {
 
+	m_shaderGBuffer->sendInt("useLinear", *m_pcf);
+
     m_shaderGBuffer->sendVec4("light.pos", m_smConeLight->m_position);
     m_shaderGBuffer->sendVec3("light.col", glm::vec3(m_smConeLight->m_color));
 
@@ -334,9 +336,12 @@ void Renderer::useDeferredShading(bool useDeferredShading, Node *lightRootNode, 
     m_dsLightColor = lightColor;
 }
 
-void Renderer::useBloom(bool useBloom)
+void Renderer::useBloom(bool useBloom, float *bloomStrength)
 {
   m_useBloom = useBloom;
+
+  if (bloomStrength != m_bloomStrength)
+	  m_bloomStrength = bloomStrength;
 }
 
 void Renderer::useBlur(bool useBlur, float *blurStrength)
@@ -374,7 +379,7 @@ void Renderer::useSSAO(bool useSSAO, float *quality, float *radius)
     m_ssaoRadius = radius;
 }
 
-void Renderer::useShadowMapping(bool useShadowMapping, ConeLight *coneLight)
+void Renderer::useShadowMapping(bool useShadowMapping, int *pcf, ConeLight *coneLight)
 {
   m_useShadowMapping = useShadowMapping;
 
@@ -383,6 +388,9 @@ void Renderer::useShadowMapping(bool useShadowMapping, ConeLight *coneLight)
 
   if (!m_smCam)
     m_smCam = new Pilotview("smCam");
+
+  if (m_pcf != pcf)
+	  m_pcf = pcf;
 
   m_smConeLight = coneLight;
   m_smCam->setFOV(m_smConeLight->m_angle);
@@ -566,6 +574,7 @@ void Renderer::renderBloom()
   m_shaderBloom->bind();
 
   m_shaderBloom->sendSampler2D("bgl_RenderedTexture", getLastFBO()->getColorTexture(2),2);
+  m_shaderBloom->sendFloat("bloomStrength", *m_bloomStrength);
   m_sfq.renderGeometry();
 
   m_shaderBloom->unbind();
