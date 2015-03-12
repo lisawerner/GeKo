@@ -2,54 +2,36 @@
 
 in vec2 passUV;
 
+//layout(location = 2) out vec4 colorOutput;
+  
 uniform sampler2D tex;
 uniform float blurstrength;
+uniform float bluramount = 1.5f;
+
+vec2 texcoord = passUV;
 
 layout(location = 2) out vec4 colorOutput;
- 
-// some const, tweak for best look
-const float sampleDist = 1.0;
-const float sampleStrength = 1.0; 
- 
-void main(void)
+
+void main()
 {
-   float radialBlurStrength = blurstrength * sampleStrength;
-   // some sample positions
-   float samples[10] =
-   float[](-0.08,-0.05,-0.03,-0.02,-0.01,0.01,0.02,0.03,0.05,0.08);
- 
-    // 0.5,0.5 is the center of the screen
-    // so substracting passUV from it will result in
-    // a vector pointing to the middle of the screen
-    vec2 dir = 0.5 - passUV; 
- 
-    // calculate the distance to the center of the screen
-    float dist = sqrt(dir.x*dir.x + dir.y*dir.y); 
- 
-    // normalize the direction (reuse the distance)
-    dir = dir/dist; 
- 
-    // this is the original colour of this fragment
-    // using only this would result in a nonblurred version
-    vec4 color = texture2D(tex,passUV); 
- 
-    vec4 sum = color;
- 
-    // take 10 additional blur samples in the direction towards
-    // the center of the screen
-    for (int i = 0; i < 10; i++)
-    {
-      sum += texture2D( tex, passUV + dir * samples[i] * sampleDist );
-    }
- 
-    // we have taken eleven samples
-    sum *= 1.0/11.0;
- 
-    // weighten the blur effect with the distance to the
-    // center of the screen ( further out is blurred more)
-    float t = dist * radialBlurStrength;
-    t = clamp( t ,0.0,1.0); //0 &lt;= t &lt;= 1
- 
-    //Blend the original color with the averaged pixels
-    colorOutput = mix( color, sum, t );
-} 
+
+vec3 color = texture2D(tex, passUV).rgb;
+
+// generate vingette falloff factor
+vec2 powers = pow(abs(passUV.xy - 0.5),vec2(2.0));
+float gradient = smoothstep(0.49-0.6, 0.49+0.6, powers.x+powers.y);
+gradient *= blurstrength;
+
+// use vingette as blur factor
+vec4 col = vec4(0.0);
+for ( float x = -bluramount + 1.0; x < bluramount; x += 1.0 )
+{
+for ( float y = -bluramount + 1.0; y < bluramount; y += 1.0 )
+{
+col+=texture2D(tex,passUV+vec2(gradient*x,gradient*y));
+}
+}
+col /= ((bluramount*2.0)-1.0)*((bluramount*2.0)-1.0);
+
+colorOutput = col;
+}
