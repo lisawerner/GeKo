@@ -46,7 +46,7 @@ vec4 computeReflection()
 
 	int numRefine = 0;
 	float stepRefine = 0.7;
-	int maxRefine = 1;
+	int maxRefine = 3;
 	
 	//Compute reflection vector in screen space for each pixel
 	vec2 screenPos = passUVCoord;
