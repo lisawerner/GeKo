@@ -145,7 +145,7 @@ vec4 shadowMapping(vec4 baseColor)
 	// All together 
 	fragmentColor.rgb = diffuse_color * lightAmbient;
 	fragmentColor.rgb += spot * diffuse_color * cos_phi * light.col;
-	//fragmentColor.rgb += spot * mat.specular * cos_psi_n * light.col;
+	fragmentColor.rgb += spot * mat.specular * cos_psi_n * light.col;
 	fragmentColor.rgb *= inShadow;
 	fragmentColor.a = diffuse_alpha;
 
@@ -202,6 +202,6 @@ void main(){
 										Tangent.z, Binormal.z, Normal.z);
 						   
 		vec3 calcNormal = vec3((texture(normalMap,finalUV).rgb * 2.0 - 1.0)*tangentToWorldSpace);
-		normalOutput =  vec4(calcNormal,1.0);
+		normalOutput =  vec4(normalMatrix * calcNormal,1.0);
 	}
 }
