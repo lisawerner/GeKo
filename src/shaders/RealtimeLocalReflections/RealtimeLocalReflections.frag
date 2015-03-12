@@ -37,16 +37,16 @@ vec4 computeReflection()
 	bool FADE2VIEWER = true;
 	bool FADE2EDGE = true;
 	float fade2EdgeDistance = 0.2;
-	float stepSize = 0.05;
+	float stepSize = 0.02;
 				
 	vec4 color = vec4(0.0,0.0,0.0,1);
 	int count = 0;
 	int depth = 0;
-	int maxDepth = 1;
+	int maxDepth = 3;
 
 	int numRefine = 0;
 	float stepRefine = 0.7;
-	int maxRefine = 3;
+	int maxRefine = 1;
 	
 	//Compute reflection vector in screen space for each pixel
 	vec2 screenPos = passUVCoord;
@@ -67,7 +67,7 @@ vec4 computeReflection()
 	//Raymarch along reflection vector
 	while(depth < maxDepth)
 	{
-		while(count < 700)
+		while(count < 50)
 		{
 			//stop ray when reaching the end of screen space
 			if( currentPos.x < 0.0 || currentPos.x > 1.0 ||
@@ -92,6 +92,7 @@ vec4 computeReflection()
 					
 					//color fetch for new position
 					color = texture(colorTexture,currentPos.xy);
+					break;
 				}
 			}			
 			oldPos = currentPos;
