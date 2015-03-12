@@ -1,12 +1,14 @@
 #version 330 core
 
+#define HW_PCF
+
 uniform int useTexture;
 uniform int useNormalMap;
 uniform int useHeightMap;
 uniform int useHeightMapShadows;
 uniform int useShadowMap;
 
-uniform int usePCFlinear;
+uniform int useLinear;
 
 uniform sampler2D fboTexture;
 uniform sampler2D normalMap;
@@ -46,7 +48,7 @@ uniform struct
 } light;
 
 uniform vec3 lightAmbient;
-uniform float fDepthBias = 0.75f;
+uniform float fDepthBias = 0.005f;
 
 in vec4 passPosition;
 in vec3 passNormal;
@@ -85,27 +87,6 @@ float sampleShadowMap_Linear(sampler2D shadowMap, vec3 shadowCoord)
 	return mix(mixA,mixB,fracPart.x);
 }
 
-float PCF_linear(sampler2D shadowMap, vec3 shadowCoord) 
-{
-
-	const float f_PCFsize = 5.0f;				//3x3 Area, 5x5...
-	const float start = (f_PCFsize-1.0f)/2.0f;
-	const float f_PCFsizeSquared = f_PCFsize * f_PCFsize;
-
-	vec2 texelSize	= vec2(1.0f/1024.0f, 1.0f/1024.0f);
-	float result = 0.0f;
-
-	for(float y = -start; y <= start; y += 1.0f) {
-		for(float x = -start; x <= start; x += 1.0f) {
-				vec2 coordsOffset = vec2(x,y)*texelSize;
-				vec3 samplingPoint = vec3(shadowCoord.x + coordsOffset.x,shadowCoord.y + coordsOffset.y,shadowCoord.z);
-				result += sampleShadowMap_Linear(shadowMap,samplingPoint);
-			}
-		}
-
-		return result/f_PCFsizeSquared;
-}
-
 vec4 shadowMapping(vec4 baseColor)
 {
 	vec3 lightVector;
@@ -116,13 +97,13 @@ vec4 shadowMapping(vec4 baseColor)
 	// Diffuse
 	vec3 light_camcoord = (viewMatrix * light.pos).xyz;
     if (light.pos.w > 0.001f)
-		lightVector = normalize( light_camcoord - vec3(passPosition));
+		lightVector = normalize( light_camcoord - passPosition.xyz);
     else
 		lightVector = normalize(light_camcoord);
     float cos_phi = max( dot( passNormal, lightVector), 0.0f);
 
     // Specular
-    vec3 eye = normalize( -vec3(passPosition));    
+    vec3 eye = normalize(-passPosition.xyz);    
     vec3 reflection = normalize( reflect( -lightVector, passNormal));
     float cos_psi_n = pow( max( dot( reflection, eye), 0.0f), mat.shininess);
 
@@ -149,20 +130,17 @@ vec4 shadowMapping(vec4 baseColor)
 	float inShadow = 1.0;
 	vec3 shadowCoord = passShadowCoord.xyz / passShadowCoord.w;
 
-	//make a depth map lookup
-    float lightDepth = texture(depthTexture, shadowCoord.xy).z;
+	//NORMAL
+	if(useLinear == 0) {
+		inShadow = sampleShadowMap(depthTexture,shadowCoord);
+	}
 
-    //test if the fragment is visible by comparing the z-values of the 
-    //lightmap and the projection considering a bias (e.g. 0.0005)
-    if (lightDepth < shadowCoord.z - 0.005) 
-        inShadow = 0.3;   
-		
-	vec4 fragmentColor; 
-			
-	if (usePCFlinear == 1)
-	{
-	inShadow = PCF_linear(depthTexture, vec3(passShadowCoord));
-	} 
+	//LINEAR FILTERING
+	else if(useLinear == 1) {
+	inShadow = sampleShadowMap_Linear(depthTexture,shadowCoord);
+	}
+
+	vec4 fragmentColor = vec4(1.0f,1.0f,1.0f,1.0f);
 
 	// All together 
 	fragmentColor.rgb = diffuse_color * lightAmbient;

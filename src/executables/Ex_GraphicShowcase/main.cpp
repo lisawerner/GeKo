@@ -22,6 +22,8 @@ float *reflectionStrength;
 float *blurStrength;
 float *radialBlurStrength;
 float *focusDepth;
+float *bloomStrength;
+int *useLinear;
 GUI *gui;
 
 GuiElement::Checkbox *useShadowMappingButton;
@@ -66,9 +68,8 @@ void initGUI()
   shadowMappingHeader->addElement(new GuiElement::Spacing);
 
   //TODO ADD FUNCTIONALITY
-  usePCFButton = new GuiElement::Checkbox("Use PCF Soft Shadows");
+  usePCFButton = new GuiElement::Checkbox("Use linear filtering");
   shadowMappingHeader->addElement(usePCFButton);
-  shadowMappingHeader->addElement(new GuiElement::Spacing);
 
   //TODO add Light Position
   gui->addElement(shadowMappingHeader);
@@ -123,6 +124,8 @@ void initGUI()
   //BLOOM
   useBloomButton = new GuiElement::Checkbox("Use Bloom");
   postProcessingHeader->addElement(useBloomButton);
+  postProcessingHeader->addElement(new GuiElement::Spacing);
+  postProcessingHeader->addElement(new GuiElement::SliderFloat("Bloom Strength", bloomStrength, 0.0f, 2.0f));
   postProcessingHeader->addElement(new GuiElement::Spacing);
 
   //TODO ADD BLOOM STRENGTH SLIDER
@@ -305,6 +308,7 @@ int main()
   blurStrength = new float(1.0f);
   radialBlurStrength = new float(1.0f);
   focusDepth = new float(0.04);
+  useLinear = new int(0);
 
   initGUI();
 
@@ -314,16 +318,24 @@ int main()
   int outputFPS = 0;
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
+		if (usePCFButton->isActive() == true)
+		{
+			*useLinear = 1;
+		}
+		else
+		{
+			*useLinear = 0;
+		}
 
-    renderer->useShadowMapping(useShadowMappingButton->isActive(), &slight);
+	renderer->useShadowMapping(useShadowMappingButton->isActive(), useLinear, &slight);
     renderer->useDeferredShading(useDeferredShadingButton->isActive(), &lights, dsLightColor);
     renderer->useSSAO(useSSAOButton->isActive(), ssaoQuality, ssaoRadius);
     renderer->useReflections(useReflectionsButton->isActive(), reflectionStrength);
-    renderer->useBloom(useBloomButton->isActive());
+	renderer->useBloom(useBloomButton->isActive(), bloomStrength);
     renderer->useAntiAliasing(useFXAAButton->isActive());
-	  renderer->useBlur(useBlurButton->isActive(), blurStrength);
-	  renderer->useRadialBlur(useRadialBlurButton->isActive(), radialBlurStrength);
-	  renderer->useDoF(useDepthOfFieldButton->isActive(), focusDepth);
+	renderer->useBlur(useBlurButton->isActive(), blurStrength);
+	renderer->useRadialBlur(useRadialBlurButton->isActive(), radialBlurStrength);
+	renderer->useDoF(useDepthOfFieldButton->isActive(), focusDepth);
 
     // You have to compute the delta time
     float dTime = glfwGetTime() - startTime;

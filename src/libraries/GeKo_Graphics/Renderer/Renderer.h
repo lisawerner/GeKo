@@ -60,12 +60,12 @@ public:
   void useReflections(bool useReflections, float *reflectionStrength = new float(0.2f));
   void useAntiAliasing(bool useAntiAliasing);
   void useDeferredShading(bool useDeferredShading, Node *lightRootNode = nullptr, glm::fvec3 *lightColor = new glm::fvec3(1.0,1.0,1.0));
-  void useBloom(bool useBloom);
+  void useBloom(bool useBloom, float *bloomStrength = new float(0.20f));
   void useBlur(bool useBlur, float *blurStrength = new float(1.0f));
   void useRadialBlur(bool useRadialBlur, float *radialBlurStrength = new float(1.0f));
   void useDoF(bool useDoF, float *focusDepth = new float(0.04f));
   void useSSAO(bool useSSAO, float *quality = new float(30.0f), float *radius = new float(0.1f));
-  void useShadowMapping(bool useShadowMapping, ConeLight *coneLight = nullptr);
+  void useShadowMapping(bool useShadowMapping, int *usePCF, ConeLight *coneLight = nullptr);
 
   void addGui(GUI *guiToAdd);
 
@@ -106,6 +106,9 @@ private:
   float *m_blurStrength;
   float *m_radialBlurStrength;
   float *m_focusDepth;
+  float *m_depthBias;
+  float *m_bloomStrength;
+  int *m_pcf;
 
   ConeLight *m_smConeLight;
   Pilotview *m_smCam;
