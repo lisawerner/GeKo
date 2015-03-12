@@ -101,13 +101,12 @@ public:
 	bool m_movementHorizontalZ = false;
 
 	//texturing	
-	void addTexture(Texture &texture, float percentageLife);
-	void deleteTexture(int position);
+	void addTexture(Texture* texture, float time);
 	void useTexture(bool useTexture, float particleSize,
 		float birthTime = 0.0, float deathTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
 	void useTexture(bool useTexture, std::vector<float> scalingSize, std::vector<float> scalingMoment,
 		float birthTime = 0.0, float deathTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
-	std::vector<Texture> m_textureList;
+	std::vector<Texture*> m_textureList;
 
 	//rotating, scaling and blending of the particle
 	float m_birthTime;
@@ -129,6 +128,7 @@ public:
 	void setParticleMortality(bool particleMortality);
 	void setGravity(glm::vec4 newGravity);
 	void setSpeed(float speed);
+	void setInBlendingOutBlending(bool in, bool out);
 
 	//get properties
 	int getOutputMode();
@@ -149,6 +149,8 @@ public:
 	bool getUseGeometryShader();
 	bool getUsePointSprites();
 	float getRotationSpeed();
+	bool getInblending();
+	bool getOutblending();
 
 private:
 	//updates the buffer and compute size
@@ -203,4 +205,11 @@ private:
 
 	//Property of the Geometry Shader
 	float m_rotationSpeed = 0.0;
+
+	//Blending
+	float blendingTime[4];
+	int textureCount;
+	void addTexture(Texture* texture, float time);
+	bool inBlending = false;
+	bool outBlending = false;
 };
