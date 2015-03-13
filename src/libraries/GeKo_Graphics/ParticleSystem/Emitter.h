@@ -78,8 +78,12 @@ public:
 	static glm::vec3 useVelocityCircle();
 	static glm::vec3 useVelocitySemiSphere();
 	static glm::vec3 useVelocitySphere();
-	void setVelocity(glm::vec3(*pfunc)());
+	/*0 = Zero; 1 = LeftQuarterCircle; 2 = RightQuarterCircle;
+	3 = SemiCircle; 4 = Circle; 5 = SemiSphere; 6 = Sphere*/
+	void setVelocity(int velocityType);
+	int getVelocityType();
 	glm::vec3(*m_pfunc)();
+	int m_velocityType;
 
 	//our physic possibilities
 	void usePhysicTrajectory(glm::vec4 gravity, float speed);
@@ -208,8 +212,7 @@ private:
 
 	//Blending
 	float blendingTime[4];
-	int textureCount;
-	void addTexture(Texture* texture, float time);
+	int textureCount = 0;
 	bool inBlending = false;
 	bool outBlending = false;
 };

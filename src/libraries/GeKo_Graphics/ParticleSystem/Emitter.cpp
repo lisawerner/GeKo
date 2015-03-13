@@ -31,6 +31,8 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 
 	updateSize(); //?
 	startTime();
+
+	blendingTime[4] = { 0 };
 }
 //TODO: Memory?
 Emitter::~Emitter()
@@ -697,9 +699,9 @@ void Emitter::addTexture(Texture* texture, float time){
 	else if (textureCount == 4){
 		perror("just 4 textures per emitter possible");
 	}
-	else if (blendingTime[textureCount - 1] > time){
+	/*else if (blendingTime[textureCount - 1] > time){
 		perror("the textures must be added ordered descending by their blending time");
-	}
+	}*/
 }
 
 void Emitter::useTexture(bool useTexture, float particleSize, float birthTime, float deathTime, bool rotateLeft, float rotationSpeed){
@@ -775,8 +777,46 @@ glm::vec3 Emitter::useVelocitySphere(){
 					((rand() % 200) / 100.0f) - 1.0f,
 					((rand() % 200) / 100.0f) - -1.0f);
 }
-void Emitter::setVelocity(glm::vec3 (*pfunc)()){
-	m_pfunc = pfunc;
+void Emitter::setVelocity(int velocityType){
+	switch (velocityType)
+	{
+	case 0:
+		m_velocityType = 0;
+		m_pfunc = &Emitter::useVelocityZero;
+		break;
+	case 1:
+		m_velocityType = 1;
+		m_pfunc = &Emitter::useVelocityLeftQuarterCircle;
+		break;
+	case 2:
+		m_velocityType = 2;
+		m_pfunc = &Emitter::useVelocityRightQuarterCircle;
+		break;
+	case 3:
+		m_velocityType = 3;
+		m_pfunc = &Emitter::useVelocitySemiCircle;
+		break;
+	case 4:
+		m_velocityType = 4;
+		m_pfunc = &Emitter::useVelocityCircle;
+		break;
+	case 5:
+		m_velocityType = 5;
+		m_pfunc = &Emitter::useVelocitySemiSphere;
+		break;
+	case 6:
+		m_velocityType = 6;
+		m_pfunc = &Emitter::useVelocitySphere;
+		break;
+	default:
+		m_velocityType = -1;
+		perror("Error: setVelocity_Ungültige Eingabe");
+		break;
+	}
+}
+int Emitter::getVelocityType()
+{
+	return m_velocityType;
 }
 
 //getters:
