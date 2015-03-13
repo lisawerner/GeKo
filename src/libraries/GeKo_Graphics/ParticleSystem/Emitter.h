@@ -78,8 +78,12 @@ public:
 	static glm::vec3 useVelocityCircle();
 	static glm::vec3 useVelocitySemiSphere();
 	static glm::vec3 useVelocitySphere();
-	void setVelocity(glm::vec3(*pfunc)());
+	/*0 = Zero; 1 = LeftQuarterCircle; 2 = RightQuarterCircle;
+	3 = SemiCircle; 4 = Circle; 5 = SemiSphere; 6 = Sphere*/
+	void setVelocity(int velocityType);
+	int getVelocityType();
 	glm::vec3(*m_pfunc)();
+	int m_velocityType;
 
 	//our physic possibilities
 	void usePhysicTrajectory(glm::vec4 gravity, float speed);
@@ -101,13 +105,12 @@ public:
 	bool m_movementHorizontalZ = false;
 
 	//texturing	
-	void addTexture(Texture &texture, float percentageLife);
-	void deleteTexture(int position);
+	void addTexture(Texture* texture, float time);
 	void useTexture(bool useTexture, float particleSize,
 		float birthTime = 0.0, float deathTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
 	void useTexture(bool useTexture, std::vector<float> scalingSize, std::vector<float> scalingMoment,
 		float birthTime = 0.0, float deathTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
-	std::vector<Texture> m_textureList;
+	std::vector<Texture*> m_textureList;
 
 	//rotating, scaling and blending of the particle
 	float m_birthTime;
@@ -129,6 +132,7 @@ public:
 	void setParticleMortality(bool particleMortality);
 	void setGravity(glm::vec4 newGravity);
 	void setSpeed(float speed);
+	void setInBlendingOutBlending(bool in, bool out);
 
 	//get properties
 	int getOutputMode();
@@ -149,6 +153,8 @@ public:
 	bool getUseGeometryShader();
 	bool getUsePointSprites();
 	float getRotationSpeed();
+	bool getInblending();
+	bool getOutblending();
 
 private:
 	//updates the buffer and compute size
@@ -203,4 +209,10 @@ private:
 
 	//Property of the Geometry Shader
 	float m_rotationSpeed = 0.0;
+
+	//Blending
+	float blendingTime[4];
+	int textureCount = 0;
+	bool inBlending = false;
+	bool outBlending = false;
 };

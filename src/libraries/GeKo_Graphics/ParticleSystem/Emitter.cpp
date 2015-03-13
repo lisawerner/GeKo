@@ -31,6 +31,8 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 
 	updateSize(); //?
 	startTime();
+
+	blendingTime[4] = { 0 };
 }
 //TODO: Memory?
 Emitter::~Emitter()
@@ -446,7 +448,7 @@ void Emitter::render(Camera &cam)
 		}
 
 		if (useTexture)
-			emitterShader->sendSampler2D("tex", m_textureList.at(0).getTexture());
+			emitterShader->sendSampler2D("tex", m_textureList.at(0)->getTexture());
 		emitterShader->sendInt("useTexture", useTexture);
 
 
@@ -478,11 +480,22 @@ void Emitter::render(Camera &cam)
 		emitterShader->sendFloat("birthTime", m_birthTime);
 		emitterShader->sendFloat("deathTime", m_deathTime);
 		emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
-		emitterShader->sendSampler2D("texture", m_textureList.at(0).getTexture());
 		emitterShader->sendVec4("camPos", cam.getPosition());
 
 		emitterShader->sendInt("rotateLeft", m_rotateLeft);
 		emitterShader->sendFloat("rotationSpeed", m_rotationSpeed);
+
+		std::string s = "tex";
+		for (int i = 0; i < textureCount; i++){
+			std::string i2 = std::to_string(i);
+			s += i2;
+			emitterShader->sendSampler2D(s, m_textureList.at(i)->getTexture(), i + 1);
+			s = "tex";
+		}
+		emitterShader->sendInt("textureCount", textureCount);
+		emitterShader->sendInt("inBlending", inBlending);
+		emitterShader->sendInt("outBlending", outBlending);
+		emitterShader->sendFloatArray("time", 4, blendingTime);
 
 		if (m_useScaling){
 			emitterShader->sendInt("useScaling", 1);
@@ -663,13 +676,32 @@ void Emitter::setAreaEmitting(bool areaEmittingXY, bool areaEmittingXZ, float si
 		else m_areaAccuracy = accuracy;
 	}
 }
-//TODO: MADELEINE
-void Emitter::addTexture(Texture &texture, float percentageLife){
-	m_textureList.push_back(texture);
+void Emitter::setInBlendingOutBlending(bool in, bool out){
+	inBlending = in;
+	outBlending = out;
 }
+
+
 //TODO: MADELEINE
-void Emitter::deleteTexture(int position){
-	m_textureList.erase(m_textureList.begin() + position);
+void Emitter::addTexture(Texture* texture, float time){
+	if (textureCount == 0){
+		blendingTime[0] = 1.0f; //bei wie viel prozent der lebenszeit es eingeblendet wird
+		m_textureList.push_back(texture);
+		textureCount++;
+
+	}  // first added texture has always the blending time 1
+	else if (textureCount > 0 && textureCount < 4 && blendingTime[textureCount - 1] > time && 0 <= time <= 1.0){
+		blendingTime[textureCount] = time;
+		m_textureList.push_back(texture);
+		textureCount++;
+
+	}
+	else if (textureCount == 4){
+		perror("just 4 textures per emitter possible");
+	}
+	/*else if (blendingTime[textureCount - 1] > time){
+		perror("the textures must be added ordered descending by their blending time");
+	}*/
 }
 
 void Emitter::useTexture(bool useTexture, float particleSize, float birthTime, float deathTime, bool rotateLeft, float rotationSpeed){
@@ -745,8 +777,46 @@ glm::vec3 Emitter::useVelocitySphere(){
 					((rand() % 200) / 100.0f) - 1.0f,
 					((rand() % 200) / 100.0f) - -1.0f);
 }
-void Emitter::setVelocity(glm::vec3 (*pfunc)()){
-	m_pfunc = pfunc;
+void Emitter::setVelocity(int velocityType){
+	switch (velocityType)
+	{
+	case 0:
+		m_velocityType = 0;
+		m_pfunc = &Emitter::useVelocityZero;
+		break;
+	case 1:
+		m_velocityType = 1;
+		m_pfunc = &Emitter::useVelocityLeftQuarterCircle;
+		break;
+	case 2:
+		m_velocityType = 2;
+		m_pfunc = &Emitter::useVelocityRightQuarterCircle;
+		break;
+	case 3:
+		m_velocityType = 3;
+		m_pfunc = &Emitter::useVelocitySemiCircle;
+		break;
+	case 4:
+		m_velocityType = 4;
+		m_pfunc = &Emitter::useVelocityCircle;
+		break;
+	case 5:
+		m_velocityType = 5;
+		m_pfunc = &Emitter::useVelocitySemiSphere;
+		break;
+	case 6:
+		m_velocityType = 6;
+		m_pfunc = &Emitter::useVelocitySphere;
+		break;
+	default:
+		m_velocityType = -1;
+		perror("Error: setVelocity_Ungültige Eingabe");
+		break;
+	}
+}
+int Emitter::getVelocityType()
+{
+	return m_velocityType;
 }
 
 //getters:
@@ -811,4 +881,10 @@ bool Emitter::getUsePointSprites(){
 }
 float Emitter::getRotationSpeed(){
 	return m_rotationSpeed;
+}
+bool  Emitter::getInblending(){
+	return inBlending;
+}
+bool  Emitter::getOutblending(){
+	return outBlending;
 }

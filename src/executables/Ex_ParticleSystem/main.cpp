@@ -55,7 +55,7 @@ int main()
 
 	Texture* flyTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/Fly.png");
 
-	Texture* smokeTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke.png");
+	Texture* smokeTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke1_L.png");
 
 	Texture* rainTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/rain.png");
 
@@ -69,41 +69,41 @@ int main()
 
 	//EMITTER SNOW, needs better texture
 	Emitter* snow = new Emitter(0, glm::vec3(0.0, 3.0, 0.0), 0.0, 0.166, 100, 30.0, true);
-	snow->setVelocity(&Emitter::useVelocityZero);
+	snow->setVelocity(0);
 	snow->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 0.5f);
 	snow->setAreaEmitting(false,true, 10.0, 10000);
-	snow->addTexture(*snowTex, 0.0);
+	snow->addTexture(snowTex, 0.0);
 	snow->useTexture(true, 1.0, 2.0);
 
 	//EMITTER STRONG SNOW, better with multiple emitter
 	Emitter* snowStrong = new Emitter(0, glm::vec3(-3.5, 4.0, 0.0), 0.0, 0.166, 50, 20.0, true);
-	snowStrong->setVelocity(&Emitter::useVelocityRightQuarterCircle);
+	snowStrong->setVelocity(2);
 	snowStrong->usePhysicDirectionGravity(glm::vec4(0.4, -1.5, 0.0, 1.0), 2.6f);
 	snowStrong->setAreaEmitting(false, true, 5.0, 10000);
-	snowStrong->addTexture(*snowTex, 0.0);
+	snowStrong->addTexture(snowTex, 0.0);
 	snowStrong->useTexture(true, 0.2, 1.0, 3.0);
 
 	//EMITTER RAIN, needs texture
 	Emitter* rain = new Emitter(0, glm::vec3(0.0, 3.0, 0.0), 0.0, 0.166, 20, 5.0, true);
-	rain->setVelocity(&Emitter::useVelocityZero);
+	rain->setVelocity(0);
 	rain->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 5.0f);
 	rain->setAreaEmitting(false, true, 3.0, 10000);
-	rain->addTexture(*rainTex, 0.0);
+	rain->addTexture(rainTex, 0.0);
 	rain->useTexture(true, 0.6, 1.0, 0.0);
 
 	//EMITTER COMIC CLOUD TODO
 	Emitter* cloud = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 0.25, 5, 4.0, true);
-	cloud->setVelocity(&Emitter::useVelocitySemiCircle);
+	cloud->setVelocity(3);
 	cloud->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.1), 0.4f);
-	cloud->addTexture(*smokeTex, 0.0);
+	cloud->addTexture(smokeTex, 0.0);
 	cloud->useTexture(true, 0.0);
 	cloud->switchToGeometryShader();
 
 	//EMITTER SMOKE, dont like it
 	Emitter* smoke = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 0.25, 4, 8.0, true);
-	smoke->setVelocity(&Emitter::useVelocitySemiCircle);
+	smoke->setVelocity(3);
 	smoke->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.1), 0.4f);
-	smoke->addTexture(*smokeTex, 0.0);
+	smoke->addTexture(smokeTex, 0.0);
 	std::vector<float> size{ 0.2f, 1.0f, 2.5f};
 	std::vector<float> time{ 0.0f, 0.2f, 1.0f};
 	smoke->useTexture(true, size, time, 2.0, 3.0, false, 0.3);
@@ -114,18 +114,18 @@ int main()
 
 	//EMITTER FRUITFLIES, should move with player
 	Emitter* fruitFlies = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.166*5, 5, 10.0, true);
-	fruitFlies->setVelocity(&Emitter::useVelocityZero);
+	fruitFlies->setVelocity(0);
 	fruitFlies->usePhysicSwarmCircleMotion(true, true, false, 0.0f);
 	fruitFlies->setAreaEmitting(true, false, 2.0, 10000);
-	fruitFlies->addTexture(*darkTex, 0.0);
+	fruitFlies->addTexture(darkTex, 0.0);
 	fruitFlies->useTexture(true, 0.1, 1.0, 2.0);
 
 	//EMITTER FLIES, should move with player
 	Emitter* flies = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.166, 1, 10.0, true);
-	flies->setVelocity(&Emitter::useVelocityZero);
+	flies->setVelocity(0);
 	flies->usePhysicSwarmCircleMotion(true, true, false, 0.0f);
 	flies->setAreaEmitting(true, false, 2.0, 10000);
-	flies->addTexture(*flyTex, 0.0);
+	flies->addTexture(flyTex, 0.0);
 	flies->useTexture(true, 0.1, 1.0, 2.0);
 	flies->switchToGeometryShader();
 
@@ -134,12 +134,12 @@ int main()
 
 	//EMITTER FIREWORK
 	Emitter* firework = new Emitter(0, glm::vec3(0.6, 0.6, 0.0), 0.0, 0.5, 5, 1.0, true);
-	firework->setVelocity(&Emitter::useVelocityCircle);
+	firework->setVelocity(4);
 	firework->usePhysicDirectionGravity(glm::vec4(0.0,-1.0,0.0,0.1), 1.0f);
 	//firework->addTexture(*fireWorkYellowTex, 0.0);
 	//firework->useTexture(true, 0.8, 0.1, 0.2);
 	Emitter* firework2 = new Emitter(0, glm::vec3(-0.6, -0.6, 0.0), 0.0, 0.5, 5, 1.0, true);
-	firework2->setVelocity(&Emitter::useVelocityCircle);
+	firework2->setVelocity(4);
 	firework2->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 0.1), 1.0f);
 	//firework2->addTexture(*fireWorkOrangeTex, 0.0);
 	//firework2->useTexture(true, 0.8, 0.1, 0.2);
@@ -214,7 +214,7 @@ int main()
 
 		smoke->generateParticle();
 		smoke->update();
-		//smoke->render(cam);
+		smoke->render(cam);
 
 		//fire->generateParticle();
 		//fire->update();
@@ -226,7 +226,7 @@ int main()
 
 		flies->generateParticle();
 		flies->update();
-		flies->render(cam);
+		//flies->render(cam);
 
 		//swarm->generateParticle();
 		//swarm->update();

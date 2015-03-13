@@ -4,23 +4,23 @@
 class ParticleSystem{
 public:
 	ParticleSystem(glm::vec3 position);
-	ParticleSystem(glm::vec3 position, Effect effect);
-	ParticleSystem(glm::vec3 position, const std::string &filepath);
+	ParticleSystem(glm::vec3 position, Effect* effect);
+	ParticleSystem(glm::vec3 position, const char* filepath);
 	~ParticleSystem();
 
-	void active();
+	/*void active();*/
 
 	void update();
 	void render(Camera &cam);
 
 	void setPosition(glm::vec3 newPosition);
-	void setEffect(Effect newEffect);
-	void loadEffect(const std::string &filepath);
+	void setEffect(Effect* newEffect);
+	void loadEffect(const char* filepath);
 
 	glm::vec3 getPosition();
-	Effect getEffect();
+	Effect* getEffect();
 
 private:
 	glm::vec3 position;
-	Effect effect;
+	Effect* effect;
 };
