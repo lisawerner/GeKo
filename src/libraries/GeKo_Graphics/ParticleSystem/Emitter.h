@@ -92,14 +92,13 @@ public:
 	bool m_usePointGravity = false;
 	void usePhysicPointGravity(glm::vec4 gravity, float gravityRange, int gravityFunction, float speed);
 	bool m_useDirectionGravity = true;
-	void usePhysicSwarmCircleMotion(bool verticalMovement, bool horizontalXMovement, bool horizontalYMovement, float movementLength);
+	void usePhysicSwarmCircleMotion(bool verticalMovement, bool horizontalXMovement, bool horizontalYMovement);
 	bool m_useChaoticSwarmMotion = false;
 
 	//our physic attributes
 	float m_gravityRange = 0.0f;
 	int m_gravityFunction = 0;
 	float m_speed = 0.0f;
-	float m_movementLength; //TODO
 	bool m_movementVertical = false;
 	bool m_movementHorizontalX = false;
 	bool m_movementHorizontalZ = false;

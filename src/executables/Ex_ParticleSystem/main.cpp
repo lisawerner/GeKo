@@ -48,26 +48,32 @@ int main()
 	//Renderer renderer(context);
 
 	//TEXTURES
+	Texture* blackTex = new Texture((char*)RESOURCES_PATH ""); //TODO
 
-	Texture* fireTex;
+	Texture* particleTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle.png");
 
-	Texture* darkTex = new Texture((char*)RESOURCES_PATH "");
+	Texture* rainTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/rain.png"); //TODO
 
-	Texture* flyTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/Fly.png");
+	Texture* snowTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/snowflake.png"); //TODO
 
-	Texture* smokeTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke1_L.png");
+	Texture* smokeTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke1_L.png");
+	Texture* smokeTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/Smoke2_XL.png");
+	Texture* smokeTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/Smoke3_L.png");
+	Texture* smokeTex4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/Smoke4_L.png");
 
-	Texture* rainTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/rain.png");
+	Texture* fireTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/Flame1_L.png");
+	Texture* fireTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/Flame2_L.png");
+	Texture* fireTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/Flames3_L.png");
 
-	Texture* snowTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle.png");
+	Texture* flyTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/Fly.png"); //TODO
 
-	//Texture* fireWorkYellowTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/StarYellow.png");
-	//Texture* fireWorkOrangeTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/StarOrange.png");
-	//Texture* fireWorkRedTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/StarRed.png");
-	//Texture* fireWorkBlueTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/StarBlue.png");
-	//Texture* fireWorkGreenTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/StarGreen.png");
+	Texture* fireWorkYellowTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/starYellow.png");
+	Texture* fireWorkOrangeTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/starPink.png");
+	Texture* fireWorkRedTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/starRed.png");
+	Texture* fireWorkBlueTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/starBlue.png");
+	Texture* fireWorkGreenTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/starGreen.png");
 
-	//EMITTER SNOW, needs better texture
+	//FINAL EMITTER SNOW
 	Emitter* snow = new Emitter(0, glm::vec3(0.0, 3.0, 0.0), 0.0, 0.166, 100, 30.0, true);
 	snow->setVelocity(0);
 	snow->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 0.5f);
@@ -75,15 +81,15 @@ int main()
 	snow->addTexture(snowTex, 0.0);
 	snow->useTexture(true, 1.0, 2.0);
 
-	//EMITTER STRONG SNOW, better with multiple emitter
-	Emitter* snowStrong = new Emitter(0, glm::vec3(-3.5, 4.0, 0.0), 0.0, 0.166, 50, 20.0, true);
+	//FINAL EMITTER STRONG SNOW
+	Emitter* snowStrong = new Emitter(0, glm::vec3(-3.5, 4.0, 0.0), 0.0, 0.166, 100, 20.0, true);
 	snowStrong->setVelocity(2);
-	snowStrong->usePhysicDirectionGravity(glm::vec4(0.4, -1.5, 0.0, 1.0), 2.6f);
-	snowStrong->setAreaEmitting(false, true, 5.0, 10000);
+	snowStrong->usePhysicDirectionGravity(glm::vec4(0.6, -1.5, 0.0, 1.0), 2.6f);
+	snowStrong->setAreaEmitting(false, true, 8.0, 10000);
 	snowStrong->addTexture(snowTex, 0.0);
-	snowStrong->useTexture(true, 0.2, 1.0, 3.0);
+	snowStrong->useTexture(true, 0.8, 1.0, 3.0);
 
-	//EMITTER RAIN, needs texture
+	//!EMITTER RAIN, needs texture
 	Emitter* rain = new Emitter(0, glm::vec3(0.0, 3.0, 0.0), 0.0, 0.166, 20, 5.0, true);
 	rain->setVelocity(0);
 	rain->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 5.0f);
@@ -91,48 +97,76 @@ int main()
 	rain->addTexture(rainTex, 0.0);
 	rain->useTexture(true, 0.6, 1.0, 0.0);
 
-	//EMITTER COMIC CLOUD TODO
-	Emitter* cloud = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 0.25, 5, 4.0, true);
+	//!EMITTER COMIC CLOUD TODO
+	Emitter* cloud = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 0.25, 4, 4.0, true);
 	cloud->setVelocity(3);
 	cloud->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.1), 0.4f);
-	cloud->addTexture(smokeTex, 0.0);
-	cloud->useTexture(true, 0.0);
+	cloud->addTexture(smokeTex1, 0.0);
+	std::vector<float> cloudSize{ 0.2f, 1.0f, 2.5f };
+	std::vector<float> cloudTime{ 0.0f, 0.2f, 1.0f };
+	cloud->useTexture(true, cloudSize, cloudTime, 2.0, 3.0, false, 0.3);
 	cloud->switchToGeometryShader();
 
-	//EMITTER SMOKE, dont like it
-	Emitter* smoke = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 0.25, 4, 8.0, true);
-	smoke->setVelocity(3);
-	smoke->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.1), 0.4f);
-	smoke->addTexture(smokeTex, 0.0);
-	std::vector<float> size{ 0.2f, 1.0f, 2.5f};
-	std::vector<float> time{ 0.0f, 0.2f, 1.0f};
-	smoke->useTexture(true, size, time, 2.0, 3.0, false, 0.3);
-	smoke->switchToGeometryShader();
+	//!EMITTER SMOKE, better Textures
+	Emitter* smokeMiddle = new Emitter(0, glm::vec3(0, -1.0, 0.0), 0.0, 0.5, 1, 8.0, true);
+	smokeMiddle->setVelocity(0);
+	smokeMiddle->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.1), 0.3f);
+	smokeMiddle->addTexture(smokeTex1, 1.0);
+	smokeMiddle->addTexture(smokeTex3, 0.0);
+	std::vector<float> smokeMiddleSize{ 0.05f, 0.2f, 0.6f, 1.0f};
+	std::vector<float> smokeMiddleTime{ 0.0f, 0.1f, 0.4f, 1.0f};
+	smokeMiddle->useTexture(true, smokeMiddleSize, smokeMiddleTime, 0.5, 4.0, false, 0.3);
+	smokeMiddle->switchToGeometryShader();
 
-	//EMITTER FIRE
-	Emitter* fire = new Emitter(0, glm::vec3(0.0, 2.0, 0.0), 0.0, 0.166, 10, 30.0, true);
+	Emitter* smokeRightSide = new Emitter(0, glm::vec3(0, -1.0, 0.0), 0.0, 0.9, 1, 8.0, true);
+	smokeRightSide->setVelocity(2);
+	smokeRightSide->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.8), 0.3f);
+	smokeRightSide->addTexture(smokeTex1, 0.0);
+	std::vector<float> smokeRightSideSize{ 0.05f, 0.6f, 0.9f };
+	std::vector<float> smokeRightSideTime{ 0.0f, 0.4f, 1.0f };
+	smokeRightSide->useTexture(true, smokeRightSideSize, smokeRightSideTime, 1.0, 4.0, false, 0.3);
+	smokeRightSide->switchToGeometryShader();
 
-	//EMITTER FRUITFLIES, should move with player
-	Emitter* fruitFlies = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.166*5, 5, 10.0, true);
+	Emitter* smokeLeftSide = new Emitter(0, glm::vec3(0, -1.0, 0.0), 0.0, 0.9, 1, 8.0, true);
+	smokeLeftSide->setVelocity(1);
+	smokeLeftSide->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.8), 0.3f);
+	smokeLeftSide->addTexture(smokeTex1, 0.0);
+	std::vector<float> smokeLeftSideSize{ 0.05f, 0.6f, 0.9f };
+	std::vector<float> smokeLeftSideTime{ 0.0f, 0.4f, 1.0f };
+	smokeLeftSide->useTexture(true, smokeLeftSideSize, smokeLeftSideTime, 1.0, 4.0, false, 0.3);
+	smokeLeftSide->switchToGeometryShader();
+
+	//!EMITTER FIRE
+	Emitter* fireMiddle = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 1.0, 3.0, 4.0, true);
+	fireMiddle->setVelocity(3);
+	fireMiddle->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.5), 0.2);
+	fireMiddle->addTexture(fireTex1, 1.0);
+	//fireMiddle->addTexture(fireTex2, 0.5);
+	fireMiddle->addTexture(fireTex3, 0.0);
+	fireMiddle->useTexture(true, 0.5, 1.0, 2.0);
+	fireMiddle->switchToGeometryShader();
+
+	//!EMITTER FRUITFLIES, needs rounded black texture
+	Emitter* fruitFlies = new Emitter(0, glm::vec3(cam.getPosition()), 0.0, 0.166, 50, 10.0, true);
 	fruitFlies->setVelocity(0);
-	fruitFlies->usePhysicSwarmCircleMotion(true, true, false, 0.0f);
-	fruitFlies->setAreaEmitting(true, false, 2.0, 10000);
-	fruitFlies->addTexture(darkTex, 0.0);
-	fruitFlies->useTexture(true, 0.1, 1.0, 2.0);
+	fruitFlies->usePhysicSwarmCircleMotion(true, true, true);
+	fruitFlies->setAreaEmitting(true, true, 8.0, 10000);
+	fruitFlies->addTexture(blackTex, 0.0);
+	fruitFlies->useTexture(true, 0.08, 1.0, 2.0);
 
-	//EMITTER FLIES, should move with player
-	Emitter* flies = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.166, 1, 10.0, true);
+	//!EMITTER FLIES, should move with player
+	Emitter* flies = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.166, 5, 10.0, true);
 	flies->setVelocity(0);
-	flies->usePhysicSwarmCircleMotion(true, true, false, 0.0f);
-	flies->setAreaEmitting(true, false, 2.0, 10000);
+	flies->usePhysicSwarmCircleMotion(true, true, false);
+	flies->setAreaEmitting(true, true, 8.0, 10000);
 	flies->addTexture(flyTex, 0.0);
 	flies->useTexture(true, 0.1, 1.0, 2.0);
 	flies->switchToGeometryShader();
 
-	//EMITTER SWARM
+	//!EMITTER SWARM
 	Emitter* swarm = new Emitter(0, glm::vec3(0.0, 2.0, 0.0), 0.0, 0.166, 10, 30.0, true);
 
-	//EMITTER FIREWORK
+	//!EMITTER FIREWORK
 	Emitter* firework = new Emitter(0, glm::vec3(0.6, 0.6, 0.0), 0.0, 0.5, 5, 1.0, true);
 	firework->setVelocity(4);
 	firework->usePhysicDirectionGravity(glm::vec4(0.0,-1.0,0.0,0.1), 1.0f);
@@ -193,8 +227,8 @@ int main()
 		skyboxNode.render();
 		shaderSkybox.unbind();
 
-		//EMITTER
-//		glEnable(GL_DEPTH_TEST);
+		//FINAL EMITTER
+		//glEnable(GL_DEPTH_TEST);
 
 		snow->generateParticle(glm::vec3(cam.getPosition()));
 		snow->update(glm::vec3(cam.getPosition()));
@@ -204,6 +238,12 @@ int main()
 		snowStrong->update(glm::vec3(cam.getPosition()));
 		//snowStrong->render(cam);
 
+		//WAITING FOR TEXTURES EMITTER
+
+		fruitFlies->generateParticle(glm::vec3(cam.getPosition()));
+		fruitFlies->update(glm::vec3(cam.getPosition()));
+		//fruitFlies->render(cam);
+
 		rain->generateParticle(glm::vec3(cam.getPosition()));
 		rain->update(glm::vec3(cam.getPosition()));
 		//rain->render(cam);
@@ -212,21 +252,25 @@ int main()
 		//cloud->update();
 		//cloud->render(cam);
 
-		smoke->generateParticle();
-		smoke->update();
-		smoke->render(cam);
-
-		//fire->generateParticle();
-		//fire->update();
-		//fire->render(cam);
-
-		fruitFlies->generateParticle();
-		fruitFlies->update();
-		//fruitFlies->render(cam);
+		smokeMiddle->generateParticle();
+		smokeMiddle->update();
+		//smokeMiddle->render(cam);
+		smokeRightSide->generateParticle();
+		smokeRightSide->update();
+		//smokeRightSide->render(cam);
+		smokeLeftSide->generateParticle();
+		smokeLeftSide->update();
+		//smokeLeftSide->render(cam);
 
 		flies->generateParticle();
 		flies->update();
 		//flies->render(cam);
+
+		//TODO EMITTER
+
+		fireMiddle->generateParticle();
+		fireMiddle->update();
+		//fireMiddle->render(cam);
 
 		//swarm->generateParticle();
 		//swarm->update();
