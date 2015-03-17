@@ -13,6 +13,12 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 	setEmitterMortality(emitterLifetime);
 
 	//set properties for the emitting
+	if (emitFrequency > particleLifeTime){
+		std::string emitFrequencyString = std::to_string(emitFrequency);
+		std::string particleLifetimeString = std::to_string(particleLifetime);
+		perror("Error in Emitter: emitFrequency  > particleLifetime");
+		std::cout << "ef:" << emitFrequency << "pt:" << particleLifetimeString << std::endl;
+	}
 	setEmitFrequency(emitFrequency);
 	setParticlesPerEmit(particlesPerEmit);
 
@@ -138,12 +144,34 @@ void Emitter::update(){
 //TODO: MADELEINE ANGLE TO UBO
 void Emitter::pushParticle(int numberNewParticle){
 	auto emitPosition = getPosition();
+	auto areaEmittingXY = getAreaEmittingXY();
+	auto areaEmittingXZ = getAreaEmittingXZ();
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, position_ssbo);
 	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
 
-	glm::vec4* positions = (glm::vec4*) glMapBufferRange (GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask);	
-	if (getAreaEmittingXZ()){ //emits in a xz area, like rain
+	glm::vec4* positions = (glm::vec4*) glMapBufferRange (GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask);
+	if (areaEmittingXY && areaEmittingXZ){//will be emitted in a 3d area
+		auto accuracy = getAreaAccuracy(); //how near it will be generated
+		auto areaSize = getAreaSize(); //how big the area is
+		float randomNumber;
+		glm::vec3 pos;
+
+		for (int i = 0; i < numberNewParticle; i++)
+		{
+			int index = (indexBuffer + i) % numMaxParticle;
+
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1 with a certain comma accuracy
+			pos.x = emitPosition.x + areaSize * randomNumber;
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1
+			pos.y = emitPosition.y + areaSize * randomNumber;
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1
+			pos.z = emitPosition.z + areaSize * randomNumber;
+
+			positions[index] = glm::vec4(pos, particleLifetime);
+		}
+	}
+	else if (areaEmittingXZ){ //emits in a xz area, like rain
 		auto accuracy = getAreaAccuracy(); //how near it will be generated
 		auto areaSize = getAreaSize(); //how big the area is
 		float randomNumber;
@@ -162,7 +190,7 @@ void Emitter::pushParticle(int numberNewParticle){
 			positions[index] = glm::vec4(pos, particleLifetime);
 		}
 	}
-	else if (getAreaEmittingXY()){ //will be emitted in xy area
+	else if (areaEmittingXY){ //will be emitted in xy area
 		auto accuracy = getAreaAccuracy();
 		auto areaSize = getAreaSize();
 		float randomNumber;
@@ -296,12 +324,34 @@ void Emitter::update(glm::vec3 playerPosition){
 //TODO: MADELEINE ANGLE TO UBO
 void Emitter::pushParticle(int numberNewParticle, glm::vec3 playerPosition){
 	auto emitPosition = getPosition() + playerPosition;
+	auto areaEmittingXY = getAreaEmittingXY();
+	auto areaEmittingXZ = getAreaEmittingXZ();
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, position_ssbo);
 	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
 
 	glm::vec4* positions = (glm::vec4*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask);
-	if (getAreaEmittingXZ()){ //emits in a xz area, like rain
+	if (areaEmittingXY && areaEmittingXZ){
+		auto accuracy = getAreaAccuracy(); //how near it will be generated
+		auto areaSize = getAreaSize(); //how big the area is
+		float randomNumber;
+		glm::vec3 pos;
+
+		for (int i = 0; i < numberNewParticle; i++)
+		{
+			int index = (indexBuffer + i) % numMaxParticle;
+
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1 with a certain comma accuracy
+			pos.x = emitPosition.x + areaSize * randomNumber;
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1
+			pos.y = emitPosition.y + areaSize * randomNumber;
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1
+			pos.z = emitPosition.z + areaSize * randomNumber;
+
+			positions[index] = glm::vec4(pos, particleLifetime);
+		}
+	}
+	else if (areaEmittingXZ){ //emits in a xz area, like rain
 		auto accuracy = getAreaAccuracy(); //how near it will be generated
 		auto areaSize = getAreaSize(); //how big the area is
 		float randomNumber;
@@ -320,7 +370,7 @@ void Emitter::pushParticle(int numberNewParticle, glm::vec3 playerPosition){
 			positions[index] = glm::vec4(pos, particleLifetime);
 		}
 	}
-	else if (getAreaEmittingXY()){ //will be emitted in xy area
+	else if (areaEmittingXY){ //will be emitted in xy area
 		auto accuracy = getAreaAccuracy();
 		auto areaSize = getAreaSize();
 		float randomNumber;
@@ -590,7 +640,7 @@ void Emitter::usePhysicPointGravity(glm::vec4 gravity, float gravityRange, int g
 	m_gravityFunction = gravityFunction;
 	m_gravityRange = gravityRange;
 }
-void Emitter::usePhysicSwarmCircleMotion(bool movementVertical, bool movementHorizontalX, bool movementHorizontalZ, float movementLength){
+void Emitter::usePhysicSwarmCircleMotion(bool movementVertical, bool movementHorizontalX, bool movementHorizontalZ){
 	m_useTrajectory = false;
 	m_useDirectionGravity = false;
 	m_usePointGravity = false;
@@ -599,7 +649,6 @@ void Emitter::usePhysicSwarmCircleMotion(bool movementVertical, bool movementHor
 	m_movementVertical = movementVertical;
 	m_movementHorizontalX = movementHorizontalX;
 	m_movementHorizontalZ = movementHorizontalZ;
-	m_movementLength = movementLength;
 }
 
 //setters:
@@ -663,18 +712,13 @@ void Emitter::setSpeed(float speed){
 	m_speed = speed;
 }
 void Emitter::setAreaEmitting(bool areaEmittingXY, bool areaEmittingXZ, float size, int accuracy){
+	m_areaEmittingXY = areaEmittingXY; //emits in a XY area
+	m_areaEmittingXZ = areaEmittingXZ; //emits in XZ, like Rain
+	m_areaSize = size;
+	if (accuracy > 10000)
+		m_areaAccuracy = 10000;
+	else m_areaAccuracy = accuracy;
 
-	if (areaEmittingXY && areaEmittingXZ){
-		perror("Choose beteween areaEmittingXY and -XZ. If both are enabled XZ will be used");
-	}
-	else{
-		m_areaEmittingXY = areaEmittingXY; //emits in a XY area
-		m_areaEmittingXZ = areaEmittingXZ; //emits in XZ, like Rain
-		m_areaSize = size;
-		if (accuracy > 10000)
-			m_areaAccuracy = 10000;
-		else m_areaAccuracy = accuracy;
-	}
 }
 void Emitter::setInBlendingOutBlending(bool in, bool out){
 	inBlending = in;
