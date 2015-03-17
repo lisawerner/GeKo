@@ -48,9 +48,9 @@ int main()
 	//Renderer renderer(context);
 
 	//TEXTURES
-	Texture* blackTex = new Texture((char*)RESOURCES_PATH ""); //TODO
+	Texture* particleBlackTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particleBlack.png");
 
-	Texture* particleTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle.png");
+	Texture* particleWhiteTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle.png");
 
 	Texture* rainTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/rain.png"); //TODO
 
@@ -118,6 +118,14 @@ int main()
 	smokeBlack->useTexture(true, smokeBlackSize, smokeBlackTime, 1.0, 4.0, false, 0.3);
 	smokeBlack->switchToGeometryShader();
 
+	//FINAL EMITTER FRUITFLIES
+	Emitter* fruitFlies = new Emitter(0, glm::vec3(cam.getPosition()), 0.0, 0.166, 50, 10.0, true);
+	fruitFlies->setVelocity(0);
+	fruitFlies->usePhysicSwarmCircleMotion(true, true, true);
+	fruitFlies->setAreaEmitting(true, true, 8.0, 10000);
+	fruitFlies->addTexture(particleBlackTex, 0.0);
+	fruitFlies->useTexture(true, 0.6, 1.0, 2.0);
+
 	////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////
 
 	//!EMITTER RAIN, needs texture
@@ -127,6 +135,8 @@ int main()
 	rain->setAreaEmitting(false, true, 3.0, 10000);
 	rain->addTexture(rainTex, 0.0);
 	rain->useTexture(true, 0.6, 1.0, 0.0);
+
+	//EMITTER STRONG RAIN
 
 	//!EMITTER COMIC CLOUD TODO
 	Emitter* cloud = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 0.25, 4, 4.0, true);
@@ -147,14 +157,6 @@ int main()
 	fireMiddle->addTexture(fireTex3, 0.0);
 	fireMiddle->useTexture(true, 0.5, 1.0, 2.0);
 	fireMiddle->switchToGeometryShader();
-
-	//!EMITTER FRUITFLIES, needs rounded black texture
-	Emitter* fruitFlies = new Emitter(0, glm::vec3(cam.getPosition()), 0.0, 0.166, 50, 10.0, true);
-	fruitFlies->setVelocity(0);
-	fruitFlies->usePhysicSwarmCircleMotion(true, true, true);
-	fruitFlies->setAreaEmitting(true, true, 8.0, 10000);
-	fruitFlies->addTexture(blackTex, 0.0);
-	fruitFlies->useTexture(true, 0.08, 1.0, 2.0);
 
 	//!EMITTER FLIES, should move with player
 	Emitter* flies = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.166, 5, 10.0, true);
@@ -244,13 +246,13 @@ int main()
 
 		smokeBlack->generateParticle();
 		smokeBlack->update();
-		smokeBlack->render(cam);
+		//smokeBlack->render(cam);
 
-		////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////
-		
 		fruitFlies->generateParticle(glm::vec3(cam.getPosition()));
 		fruitFlies->update(glm::vec3(cam.getPosition()));
 		//fruitFlies->render(cam);
+
+		////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////
 
 		rain->generateParticle(glm::vec3(cam.getPosition()));
 		rain->update(glm::vec3(cam.getPosition()));
