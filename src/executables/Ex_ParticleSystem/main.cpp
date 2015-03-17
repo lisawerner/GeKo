@@ -136,7 +136,7 @@ int main()
 
 	////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////
 
-	//EMITTER STRONG RAIN
+	//EMITTER STRONG RAIN, need smog and velo
 	Emitter* rainStrong = new Emitter(0, glm::vec3(0.0, 3.0, 0.0), 0.0, 0.166, 200, 5.0, true);
 	rainStrong->setVelocity(0);
 	rainStrong->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 5.0f);
