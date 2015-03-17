@@ -249,13 +249,13 @@ int Effect::loadEffect(const char* filepath)
 				error = physicElement->QueryBoolText(&movementHorizontalZ);
 				XMLCheckResult(error);
 
-				physicElement = physicType->FirstChildElement("MovementLength");
-				if (physicElement == nullptr) return XML_ERROR_PARSING_ELEMENT;
-				float movementLength;
-				error = physicElement->QueryFloatText(&movementLength);
-				XMLCheckResult(error);
+				//physicElement = physicType->FirstChildElement("MovementLength");
+				//if (physicElement == nullptr) return XML_ERROR_PARSING_ELEMENT;
+				//float movementLength;
+				//error = physicElement->QueryFloatText(&movementLength);
+				//XMLCheckResult(error);
 
-				emitter->usePhysicSwarmCircleMotion(movementVertical, movementHorizontalX, movementHorizontalZ, movementLength);
+				emitter->usePhysicSwarmCircleMotion(movementVertical, movementHorizontalX, movementHorizontalZ);
 			}
 		}
 
@@ -535,9 +535,9 @@ int Effect::saveEffect(char* filepath)
 			temp->SetText(emitter->m_movementHorizontalZ);
 			physic->InsertEndChild(temp);
 
-			temp = doc.NewElement("MovementLength");
-			temp->SetText(emitter->m_movementLength);
-			physic->InsertEndChild(temp);
+			//temp = doc.NewElement("MovementLength");
+			//temp->SetText(emitter->m_movementLength);
+			//physic->InsertEndChild(temp);
 			element->InsertEndChild(physic);
 		}
 		emitterNode->InsertEndChild(element);
