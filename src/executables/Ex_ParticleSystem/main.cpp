@@ -118,6 +118,14 @@ int main()
 	smokeBlack->useTexture(true, smokeBlackSize, smokeBlackTime, 1.0, 4.0, false, 0.3);
 	smokeBlack->switchToGeometryShader();
 
+	//FINAL EMITTER RAIN
+	Emitter* rain = new Emitter(0, glm::vec3(0.0, 3.0, 0.0), 0.0, 0.166, 200, 5.0, true);
+	rain->setVelocity(0);
+	rain->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 5.0f);
+	rain->setAreaEmitting(false, true, 8.0, 10000);
+	rain->addTexture(rainTex, 0.0);
+	rain->useTexture(true, 0.8, 1.0, 0.0);
+
 	//FINAL EMITTER FRUITFLIES
 	Emitter* fruitFlies = new Emitter(0, glm::vec3(cam.getPosition()), 0.0, 0.166, 50, 10.0, true);
 	fruitFlies->setVelocity(0);
@@ -128,15 +136,13 @@ int main()
 
 	////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////
 
-	//!EMITTER RAIN, needs texture
-	Emitter* rain = new Emitter(0, glm::vec3(0.0, 3.0, 0.0), 0.0, 0.166, 20, 5.0, true);
-	rain->setVelocity(0);
-	rain->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 5.0f);
-	rain->setAreaEmitting(false, true, 3.0, 10000);
-	rain->addTexture(rainTex, 0.0);
-	rain->useTexture(true, 0.6, 1.0, 0.0);
-
 	//EMITTER STRONG RAIN
+	Emitter* rainStrong = new Emitter(0, glm::vec3(0.0, 3.0, 0.0), 0.0, 0.166, 200, 5.0, true);
+	rainStrong->setVelocity(0);
+	rainStrong->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 5.0f);
+	rainStrong->setAreaEmitting(false, true, 8.0, 10000);
+	rainStrong->addTexture(rainTex, 0.0);
+	rainStrong->useTexture(true, 0.8, 1.0, 0.0);
 
 	//!EMITTER COMIC CLOUD TODO
 	Emitter* cloud = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 0.25, 4, 4.0, true);
@@ -228,7 +234,7 @@ int main()
 		shaderSkybox.sendMat4("viewMatrix", cam.getViewMatrix());
 		shaderSkybox.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 		shaderSkybox.sendSkyboxTexture("testTexture", skybox.getSkyboxTexture());
-		skyboxNode.render();
+		//skyboxNode.render();
 		shaderSkybox.unbind();
 
 		///////////////////////////////////////FINAL EMITTER///////////////////////////////////////
@@ -248,15 +254,19 @@ int main()
 		smokeBlack->update();
 		//smokeBlack->render(cam);
 
+		rain->generateParticle(glm::vec3(cam.getPosition()));
+		rain->update(glm::vec3(cam.getPosition()));
+		//rain->render(cam);
+
 		fruitFlies->generateParticle(glm::vec3(cam.getPosition()));
 		fruitFlies->update(glm::vec3(cam.getPosition()));
 		//fruitFlies->render(cam);
 
 		////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////
 
-		rain->generateParticle(glm::vec3(cam.getPosition()));
-		rain->update(glm::vec3(cam.getPosition()));
-		//rain->render(cam);
+		rainStrong->generateParticle(glm::vec3(cam.getPosition()));
+		rainStrong->update(glm::vec3(cam.getPosition()));
+		rainStrong->render(cam);
 
 		//cloud->generateParticle();
 		//cloud->update();
