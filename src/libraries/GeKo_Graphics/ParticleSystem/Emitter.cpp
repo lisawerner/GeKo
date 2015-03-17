@@ -13,6 +13,12 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 	setEmitterMortality(emitterLifetime);
 
 	//set properties for the emitting
+	if (emitFrequency > particleLifeTime){
+		std::string emitFrequencyString = std::to_string(emitFrequency);
+		std::string particleLifetimeString = std::to_string(particleLifetime);
+		perror("Error in Emitter: emitFrequency  > particleLifetime");
+		std::cout << "ef:" << emitFrequency << "pt:" << particleLifetimeString << std::endl;
+	}
 	setEmitFrequency(emitFrequency);
 	setParticlesPerEmit(particlesPerEmit);
 
