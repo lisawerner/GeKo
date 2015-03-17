@@ -66,6 +66,12 @@ int main()
 	Texture* smokeTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/Smoke3_L.png");
 	Texture* smokeTex4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/Smoke4_L.png");
 
+	Texture* comicCloudTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud.png");
+	Texture* comicSymbolTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicSymbol1.png");
+	Texture* comicSymbolTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicSymbol2.png");
+	Texture* comicSymbolTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicSymbol3.png");
+	Texture* comicSymbolTex4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicSymbol4.png");
+
 	Texture* fireTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/Flame1_L.png");
 	Texture* fireTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/Flame2_L.png");
 	Texture* fireTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/Flames3_L.png");
@@ -136,7 +142,7 @@ int main()
 
 	////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////
 
-	//EMITTER STRONG RAIN, need smog and velo
+	//EMITTER STRONG RAIN, need velo
 	Emitter* rainStrong = new Emitter(0, glm::vec3(0.0, 3.0, 0.0), 0.0, 0.166, 200, 5.0, true);
 	rainStrong->setVelocity(0);
 	rainStrong->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 5.0f);
@@ -145,14 +151,44 @@ int main()
 	rainStrong->useTexture(true, 0.8, 1.0, 0.0);
 
 	//!EMITTER COMIC CLOUD TODO
-	Emitter* cloud = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 0.25, 4, 4.0, true);
+	/*Emitter* cloud = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 0.7, 1, 10.0, true);
 	cloud->setVelocity(3);
-	cloud->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.1), 0.4f);
-	cloud->addTexture(smokeTex1, 0.0);
-	std::vector<float> cloudSize{ 0.2f, 1.0f, 2.5f };
-	std::vector<float> cloudTime{ 0.0f, 0.2f, 1.0f };
-	cloud->useTexture(true, cloudSize, cloudTime, 2.0, 3.0, false, 0.3);
+	cloud->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.12), 0.3f);
+	cloud->addTexture(comicCloudTex1, 0.0);
+	std::vector<float> cloudSize{ 0.4f, 2.0f };
+	std::vector<float> cloudTime{ 0.0f, 1.0f };
+	cloud->useTexture(true, cloudSize, cloudTime, 1.0, 1.0, false, 0.3);
 	cloud->switchToGeometryShader();
+
+	Emitter* cloud1 = new Emitter(0, glm::vec3(0.2, 0.7, 0.0), 0.0, 5.0, 1, 5.0, true);
+	cloud1->setVelocity(0);
+	cloud1->setAreaEmitting(true, false, 1.0, 10);
+	std::vector<float> cloud1Size{ 0.5f, 0.5f };
+	std::vector<float> cloud1Time{ 0.0f, 1.0f };
+	cloud1->addTexture(comicSymbolTex1, 1.0);
+	cloud1->useTexture(true, cloud1Size, cloud1Time, 1.0, 2.0);
+	cloud1->switchToGeometryShader();
+
+	Emitter* cloud2 = new Emitter(0, glm::vec3(0.2, 0.7, 0.0), 0.0, 5.0, 1, 5.0, true);
+	cloud2->setVelocity(0);
+	cloud2->setAreaEmitting(true, false, 1.0, 10);
+	cloud2->addTexture(comicSymbolTex2, 1.0);
+	cloud2->useTexture(true, cloud1Size, cloud1Time, 1.0, 2.0);
+	cloud2->switchToGeometryShader();
+
+	Emitter* cloud3 = new Emitter(0, glm::vec3(-0.2, 0.7, 0.0), 0.0, 5.0, 1, 5.0, true);
+	cloud3->setVelocity(0);
+	cloud3->setAreaEmitting(true, false, 1.0, 10);
+	cloud3->addTexture(comicSymbolTex3, 1.0);
+	cloud3->useTexture(true, cloud1Size, cloud1Time, 1.0, 2.0);
+	cloud3->switchToGeometryShader();
+
+	Emitter* cloud4 = new Emitter(0, glm::vec3(-0.2, 0.7, 0.0), 0.0, 5.0, 1, 5.0, true);
+	cloud4->setVelocity(0);
+	cloud4->setAreaEmitting(true, false, 1.0, 10);
+	cloud4->addTexture(comicSymbolTex4, 1.0);
+	cloud4->useTexture(true, cloud1Size, cloud1Time, 1.0, 2.0);
+	cloud4->switchToGeometryShader();*/
 
 	//!EMITTER FIRE
 	Emitter* fireMiddle = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 1.0, 3.0, 4.0, true);
@@ -163,15 +199,15 @@ int main()
 	fireMiddle->addTexture(fireTex3, 0.0);
 	fireMiddle->useTexture(true, 0.5, 1.0, 2.0);
 	fireMiddle->switchToGeometryShader();
-
-	//!EMITTER FLIES, should move with player
-	Emitter* flies = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.166, 5, 10.0, true);
-	flies->setVelocity(0);
-	flies->usePhysicSwarmCircleMotion(true, true, false);
-	flies->setAreaEmitting(true, true, 8.0, 10000);
-	flies->addTexture(flyTex, 0.0);
-	flies->useTexture(true, 0.1, 1.0, 2.0);
-	flies->switchToGeometryShader();
+	Emitter* fireSmoke = new Emitter(0, glm::vec3(0, -1.0, 0.0), 0.0, 0.4, 1, 8.0, true);
+	fireSmoke->setVelocity(2);
+	fireSmoke->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.8), 0.3f);
+	fireSmoke->addTexture(smokeBlackTex1, 1.0);
+	fireSmoke->addTexture(smokeBlackTex2, 0.08);
+	std::vector<float> fireSmokeSize{ 0.1f, 0.4f, 0.8f, 1.2f };
+	std::vector<float> fireSmokeTime{ 0.0f, 0.2f, 0.75f, 1.0f };
+	fireSmoke->useTexture(true, fireSmokeSize, fireSmokeTime, 1.0, 4.0, false, 0.3);
+	fireSmoke->switchToGeometryShader();
 
 	//!EMITTER SWARM
 	Emitter* swarm = new Emitter(0, glm::vec3(0.0, 2.0, 0.0), 0.0, 0.166, 10, 30.0, true);
@@ -234,7 +270,7 @@ int main()
 		shaderSkybox.sendMat4("viewMatrix", cam.getViewMatrix());
 		shaderSkybox.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 		shaderSkybox.sendSkyboxTexture("testTexture", skybox.getSkyboxTexture());
-		//skyboxNode.render();
+		skyboxNode.render();
 		shaderSkybox.unbind();
 
 		///////////////////////////////////////FINAL EMITTER///////////////////////////////////////
@@ -266,21 +302,33 @@ int main()
 
 		rainStrong->generateParticle(glm::vec3(cam.getPosition()));
 		rainStrong->update(glm::vec3(cam.getPosition()));
-		rainStrong->render(cam);
+		//rainStrong->render(cam);
 
-		//cloud->generateParticle();
-		//cloud->update();
-		//cloud->render(cam);
-
-		flies->generateParticle();
-		flies->update();
-		//flies->render(cam);
+		//shitty comic cloud
+//		cloud->generateParticle();
+//		cloud->update();
+//		cloud->render(cam);
+//		cloud1->generateParticle();
+//		cloud1->update();
+//		cloud1->render(cam);
+//		cloud2->generateParticle();
+//		cloud2->update();
+//		cloud2->render(cam);
+//		cloud3->generateParticle();
+//		cloud3->update();
+//		cloud3->render(cam);
+//		cloud4->generateParticle();
+//		cloud4->update();
+//		cloud4->render(cam);
 
 		//TODO EMITTER
 
 		fireMiddle->generateParticle();
 		fireMiddle->update();
 		//fireMiddle->render(cam);
+		fireSmoke->generateParticle();
+		fireSmoke->update();
+		fireSmoke->render(cam);
 
 		//swarm->generateParticle();
 		//swarm->update();
