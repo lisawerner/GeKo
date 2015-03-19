@@ -59,7 +59,6 @@ public:
 
 	//handle the buffer
 	void loadBuffer();
-	glm::vec4* positions;
 
 	//switch between Point Sprites & Geometry Shader. PS is default. Differents CS can be loaded 
 	void switchToGeometryShader();
@@ -104,11 +103,20 @@ public:
 	bool m_movementHorizontalZ = false;
 
 	//texturing	
+	/*
+		WARNING: Only 2 Textures at the same time are interpolating. if you have a too small fading time not all textures are interpolationg
+	*/
 	void addTexture(Texture* texture, float time);
+	/*
+		WARNING: Only 2 Textures at the same time are interpolating. if you have a too small fading time not all textures are interpolationg
+	*/
 	void useTexture(bool useTexture, float particleSize,
-		float birthTime = 0.0, float deathTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
+		float birthTime = 0.0, float deathTime = 0.0, float blendingTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
+	/*
+		WARNING: Only 2 Textures at the same time are interpolating. if you have a too small fading time not all textures are interpolationg
+	*/
 	void useTexture(bool useTexture, std::vector<float> scalingSize, std::vector<float> scalingMoment,
-		float birthTime = 0.0, float deathTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
+		float birthTime = 0.0, float deathTime = 0.0, float blendingTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
 	std::vector<Texture*> m_textureList;
 
 	//rotating, scaling and blending of the particle
@@ -119,6 +127,9 @@ public:
 	bool m_useScaling = false;
 	float particleDefaultSize = 1.0;
 	bool m_rotateLeft = true;
+	float blendingTime[4];
+	int textureCount = 0;
+	float m_blendingTime;
 
 	//change properties
 	void setOutputMode(const int OUTPUT);
@@ -131,7 +142,6 @@ public:
 	void setParticleMortality(bool particleMortality);
 	void setGravity(glm::vec4 newGravity);
 	void setSpeed(float speed);
-	void setInBlendingOutBlending(bool in, bool out);
 
 	//get properties
 	int getOutputMode();
@@ -152,8 +162,6 @@ public:
 	bool getUseGeometryShader();
 	bool getUsePointSprites();
 	float getRotationSpeed();
-	bool getInblending();
-	bool getOutblending();
 
 private:
 	//updates the buffer and compute size
@@ -208,10 +216,4 @@ private:
 
 	//Property of the Geometry Shader
 	float m_rotationSpeed = 0.0;
-
-	//Blending
-	float blendingTime[4];
-	int textureCount = 0;
-	bool inBlending = false;
-	bool outBlending = false;
 };
