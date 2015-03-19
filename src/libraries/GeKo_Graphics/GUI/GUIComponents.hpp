@@ -25,7 +25,7 @@ namespace GuiElement
   public:
     Text(std::string text) : m_text(text) {}
     inline void render() { ImGui::Text(m_text.c_str()); }
-    inline void dispose() { Text::~Text(); }
+    inline void dispose() { delete this; }
 
   private:
     ~Text() {}
@@ -40,7 +40,7 @@ namespace GuiElement
   public:
     SliderFloat(std::string ID, float *parameter, float min, float max) : m_ID(ID), m_parameter(parameter), m_min(min), m_max(max) {}
     inline void render() { ImGui::SliderFloat(m_ID.c_str(), m_parameter, m_min, m_max); }
-    inline void dispose() { SliderFloat::~SliderFloat(); }
+    inline void dispose() {delete this;}
 
   private:
     ~SliderFloat() {}
@@ -61,7 +61,7 @@ namespace GuiElement
     }
 
     inline void addElement(Element *child) { m_childElements.push_back(child); }
-    inline void dispose() { Header::~Header(); }
+    inline void dispose() { delete this;}
 
   private:
     ~Header() 
@@ -80,7 +80,7 @@ namespace GuiElement
   public:
     Spacing() {}
     inline void render() { ImGui::Spacing(); }
-    inline void dispose() { Spacing::~Spacing(); }
+    inline void dispose() { delete this; }
 
   private:
     ~Spacing() {}
@@ -92,7 +92,7 @@ namespace GuiElement
   public:
     Separator() {}
     inline void render() { ImGui::Separator(); }
-    inline void dispose() { Separator::~Separator(); }
+    inline void dispose() { delete this; }
 
   private:
     ~Separator() {}
@@ -104,7 +104,7 @@ namespace GuiElement
   public:
     SameLine() {}
     inline void render() { ImGui::SameLine(); }
-    inline void dispose() { SameLine::~SameLine(); }
+    inline void dispose() { delete this; }
 
   private:
     ~SameLine() {}
@@ -117,7 +117,7 @@ namespace GuiElement
     PushButton(std::string ID) : m_isPushed(false), m_ID(ID) {}
     inline void render() { m_isPushed = ImGui::Button(m_ID.c_str()); }
     inline bool isPushed() { return m_isPushed; }
-    inline void dispose() { PushButton::~PushButton(); };
+    inline void dispose() { delete this; };
 
   private:
     ~PushButton() {}
@@ -135,7 +135,7 @@ namespace GuiElement
       ImGui::Checkbox(m_ID.c_str(),&m_bool);
     }
     
-    inline void dispose()   { Checkbox::~Checkbox(); };
+    inline void dispose()   { delete this; };
     inline bool isActive()  { return m_bool; }
 
   private:
@@ -152,7 +152,7 @@ namespace GuiElement
     ColorEditRGB(std::string ID, glm::fvec3 *color) : m_ID(ID), m_colorVec(color) { m_color[0] = m_colorVec->r; m_color[1] = m_colorVec->g; m_color[2] = m_colorVec->b; }
   
     inline void render() { ImGui::ColorEdit3(m_ID.c_str(), m_color); m_colorVec->r = m_color[0]; m_colorVec->g = m_color[1]; m_colorVec->b = m_color[2]; }
-    inline void dispose(){ ColorEditRGB::~ColorEditRGB(); }
+    inline void dispose(){ delete this; }
    
   private:
     ~ColorEditRGB() {}
@@ -168,7 +168,7 @@ namespace GuiElement
     ColorEditRGBA(std::string ID, glm::fvec4 *color) : m_ID(ID), m_colorVec(color) { m_color[0] = m_colorVec->r; m_color[1] = m_colorVec->g; m_color[2] = m_colorVec->b; m_color[3] = m_colorVec->a; }
 
     inline void render() { ImGui::ColorEdit4(m_ID.c_str(), m_color); m_colorVec->r = m_color[0]; m_colorVec->g = m_color[1]; m_colorVec->b = m_color[2]; m_colorVec->a = m_color[3]; }
-    inline void dispose(){ ColorEditRGBA::~ColorEditRGBA(); }
+    inline void dispose(){ delete this; }
 
   private:
     ~ColorEditRGBA() {}

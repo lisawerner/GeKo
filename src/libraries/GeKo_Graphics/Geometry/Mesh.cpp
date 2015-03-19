@@ -1,12 +1,12 @@
 #include <GeKo_Graphics/Geometry/Mesh.h>
-#include <assimp\scene.h>
-#include <assimp\mesh.h>
+#include <assimp/scene.h>
+#include <assimp/mesh.h>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 
 Mesh::Mesh(const char *filename)
 {
-	
+
 	std::string path = RESOURCES_PATH + std::string("/") + filename;
 
 	Assimp::Importer importer;
@@ -24,7 +24,7 @@ Mesh::Mesh(const char *filename)
 		meshEntries.push_back(scene->mMeshes[i]);
 	}
 	initializeData();
-	
+
 }
 
 Mesh::~Mesh()
