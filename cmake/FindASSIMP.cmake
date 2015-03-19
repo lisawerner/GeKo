@@ -5,7 +5,7 @@
 # ASSIMP_FOUND
 # ASSIMP_INCLUDE_PATH
 # ASSIMP_LIBRARY
-# 
+#
 
 IF (MINGW)
     FIND_PATH( ASSIMP_INCLUDE_PATH assimp/defs.h
@@ -40,6 +40,16 @@ ELSEIF (MSVC)
             ${PROJECT_BINARY_DIR}/bin/${CONFIGURATION_TYPE}/
         )
     endforeach()
+
+ELSEIF("${CMAKE_SYSTEM}" MATCHES "Linux")
+
+  #set(ASSIMP_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/dependencies/assimp_linux/include")
+  #set(ASSIMP_LIB "${CMAKE_SOURCE_DIR}/dependencies/assimp/libMinGW/libassimp.a")
+
+  set(ASSIMP_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/dependencies/assimp/include/")
+  FIND_LIBRARY(ASSIMP_LIBRARY
+       NAMES assimp
+)
 
 ELSE()
 
