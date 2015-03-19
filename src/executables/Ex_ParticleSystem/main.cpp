@@ -288,7 +288,7 @@ int main()
 
 		smokeBlack->generateParticle();
 		smokeBlack->update();
-		//smokeBlack->render(cam);
+		smokeBlack->render(cam);
 
 		rain->generateParticle(glm::vec3(cam.getPosition()));
 		rain->update(glm::vec3(cam.getPosition()));
@@ -328,7 +328,7 @@ int main()
 		//fireMiddle->render(cam);
 		fireSmoke->generateParticle();
 		fireSmoke->update();
-		fireSmoke->render(cam);
+		//fireSmoke->render(cam);
 
 		//swarm->generateParticle();
 		//swarm->update();

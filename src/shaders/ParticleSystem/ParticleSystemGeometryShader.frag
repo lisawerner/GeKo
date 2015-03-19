@@ -7,110 +7,132 @@ uniform sampler2D tex0;
 uniform sampler2D tex1;
 uniform sampler2D tex2;
 uniform sampler2D tex3;
-
 uniform float fullLifetime;
 uniform int particleMortal;
 uniform float birthTime;
 uniform float deathTime;
-uniform int inBlending;
-uniform int outBlending;
-
+uniform float blendingTime;
 uniform float time[4];
 uniform int textureCount;
 
 out vec4 fragmentColor;
 
 void main(){
-	
+	if(lifetime < 0 && particleMortal == 1) discard;
 	int texCount = textureCount;
-
-	if(lifetime < 0 && particleMortal == 1) discard; //deletes the actual fragment
-
 	float alpha;
-	vec4 color;
+	vec4 color, color1, color2, color3, color4;
 	float passedLifetime = fullLifetime - lifetime;
-	
+
 	if(texCount == 1){
 		color = texture(tex0,uv);
-		//Interpolation while being born & dead
+		//fade in
+		if(passedLifetime <= birthTime && passedLifetime > 0){
+		color.w *= min(passedLifetime / birthTime, 1);
+		}
+		// fade out
+		else if (lifetime <= deathTime && particleMortal == 1){
+			color.w *= min(lifetime / deathTime, 1);
+		}
+	}
+	else if (texCount == 2){
+		color1 = texture(tex0, uv);
+		color2 = texture(tex1, uv);
+		// time when the texture fades in
+		float lifetimeTexture1 = time[0] * fullLifetime;
+		float lifetimeTexture2 = time[1] * fullLifetime;
+		//computing the color
+		if(lifetime >= lifetimeTexture2 + blendingTime){
+			color = color1;
+		}
+		else if(lifetime -lifetimeTexture2 <= blendingTime && lifetime - lifetimeTexture2 >= 0.0){
+			//interpolation
+			float leftInterpolationTime = lifetime - lifetimeTexture2;
+			color = color1 * min(leftInterpolationTime/blendingTime,1)+ color2 * (1.0 - min(leftInterpolationTime/blendingTime,1));
+		}
+		else{
+			color = color2;
+		}
 		if(passedLifetime <= birthTime && passedLifetime > 0){
 			color.w *= min(passedLifetime / birthTime, 1);
 		}
-		else if (lifetime <= deathTime && particleMortal == 1){
-		color.w *= min(lifetime / deathTime, 1);
-
+		else if (lifetime <= deathTime && particleMortal == 1) {
+			color.w *= min(lifetime / deathTime, 1);
+		}
 	}
-}
-
-	else if (texCount == 2){
-			
-			// compute alpha by linear interpolation y=y1+((y2-y1)/(x2-x1))*(x-x1), y alpha, x time area
-			if((lifetime/fullLifetime)>time[1]){
-				alpha = (1/(time[1] - time[0]))*((lifetime/fullLifetime)-time[0]);
-				color = mix(texture(tex0,uv),texture(tex1,uv), alpha);
-				if (inBlending==1){
-					color.w *=passedLifetime;
-				 }
-			}
-			
-			else if( lifetime/fullLifetime>0 && lifetime/fullLifetime<=time[1] && particleMortal == 0 && outBlending==1){
-				alpha = 1+(-1/(0-time[1]))*((lifetime/fullLifetime)-time[1]);
-				color = texture(tex1,uv);
-				color.w *= alpha;
-				
-			}
-		
-	}
-
 	else if (texCount == 3){
-		
-			if((lifetime/fullLifetime)>time[1]){
-				alpha = (1/(time[1] - time[0]))*((lifetime/fullLifetime)-time[0]);
-				color = mix(texture(tex0,uv),texture(tex1,uv), alpha);
-				 if (inBlending==1){
-					color.w *=passedLifetime;
-				 }
+		color1 = texture(tex0, uv);
+		color2 = texture(tex1, uv);
+		color3 = texture(tex2, uv);
+		//TODO uniform
+		float lifetimeTexture1 = time[0] * fullLifetime;
+		float lifetimeTexture2 = time[1] * fullLifetime;
+		float lifetimeTexture3 = time[2] * fullLifetime;
+		//compute our color
+		if(lifetime >= lifetimeTexture2 + blendingTime){
+			color = color1;
+		}
+		else if(lifetime -lifetimeTexture2 <= blendingTime && lifetime - lifetimeTexture2 >= 0.0){
+			float leftInterpolationTime = lifetime - lifetimeTexture2;
+			color = color1 * min(leftInterpolationTime/blendingTime,1)+ color2 * (1.0 - min(leftInterpolationTime/blendingTime,1));
 			}
-
-			else if(lifetime/fullLifetime<=time[1] && lifetime/fullLifetime>time[2]){
-				alpha = (1/(time[2] - time[1]))*((lifetime/fullLifetime)-time[1]);
-				color = mix(texture(tex1,uv),texture(tex2,uv), alpha);
-			}
-			
-			else if( lifetime/fullLifetime>0 && lifetime/fullLifetime<=time[2] && particleMortal == 0 && outBlending==1){
-				alpha = 1+(-1/(0-time[2]))*((lifetime/fullLifetime)-time[2]);
-				color = texture(tex2,uv);
-				color.w *= alpha;
-				
-			}
-		
+		else if (lifetime-lifetimeTexture2 <0 && lifetime-lifetimeTexture3>blendingTime){
+			color = color2;
+		}
+		else if(lifetime -lifetimeTexture3 <= blendingTime && lifetime - lifetimeTexture3 >= 0.0){
+			float leftInterpolationTime = lifetime - lifetimeTexture3;
+			color = color2 * min(leftInterpolationTime/blendingTime,1)+ color3 * (1.0 - min(leftInterpolationTime/blendingTime,1));
+		}
+		else{
+			color = color3;
+		}
+		if(passedLifetime <= birthTime && passedLifetime > 0){
+			color.w *= min(passedLifetime / birthTime, 1);
+		}
+		else if (lifetime <= deathTime && particleMortal == 1) {
+			color.w *= min(lifetime / deathTime, 1);
+		}
 	}
-
-	else if(texCount==4){
-			
-			if((lifetime/fullLifetime)>time[1]){
-				alpha = (1/(time[1] - time[0]))*((lifetime/fullLifetime)-time[0]);
-				color = mix(texture(tex0,uv),texture(tex1,uv), alpha);
-				 if (inBlending==1){
-					color.w *=passedLifetime;
-				 }
-			}
-
-			else if(lifetime/fullLifetime<=time[1] && lifetime/fullLifetime>time[2]){
-				alpha = (1/(time[2] - time[1]))*((lifetime/fullLifetime)-time[1]);
-				color = mix(texture(tex1,uv),texture(tex2,uv), alpha);
-			}
-
-			else if(lifetime/fullLifetime<=time[2] && lifetime/fullLifetime>time[3]){
-				alpha = (1/(time[3] - time[2]))*((lifetime/fullLifetime)-time[2]);
-				color = mix(texture(tex2,uv),texture(tex3,uv), alpha);
-			}	
-			else if( lifetime/fullLifetime>0 && lifetime/fullLifetime<=time[3] && particleMortal == 0 && outBlending==1){
-				alpha = 1+(-1/(0-time[3]))*((lifetime/fullLifetime)-time[3]);
-				color = texture(tex3,uv);
-				color.w *= alpha;
-			}	
-		
-	}	
-	fragmentColor=color;
+	else if (texCount == 4){
+		color1 = texture(tex0, uv);
+		color2 = texture(tex1, uv);
+		color3 = texture(tex2, uv);
+		color4 = texture(tex3, uv);
+		float lifetimeTexture1 = time[0] * fullLifetime;
+		float lifetimeTexture2 = time[1] * fullLifetime;
+		float lifetimeTexture3 = time[2] * fullLifetime;
+		float lifetimeTexture4 = time[3] * fullLifetime;
+		//compute our color
+		if(lifetime >= lifetimeTexture2 + blendingTime){
+			color = color1;
+		}
+		else if(lifetime -lifetimeTexture2 <= blendingTime && lifetime - lifetimeTexture2 >= 0.0){
+			float leftInterpolationTime = lifetime - lifetimeTexture2;
+			color = color1 * min(leftInterpolationTime/blendingTime,1)+ color2 * (1.0 - min(leftInterpolationTime/blendingTime,1));
+		}
+		else if (lifetime-lifetimeTexture2 <0 && lifetime-lifetimeTexture3>blendingTime){
+			color = color2;
+		}
+		else if(lifetime -lifetimeTexture3 <= blendingTime && lifetime - lifetimeTexture3 >= 0.0){
+			float leftInterpolationTime = lifetime - lifetimeTexture3;
+			color = color2 * min(leftInterpolationTime/blendingTime,1)+ color3 * (1.0 - min(leftInterpolationTime/blendingTime,1));
+		}
+		else if (lifetime-lifetimeTexture3 <0 && lifetime-lifetimeTexture4>blendingTime){
+			color = color3;
+		}
+		else if(lifetime -lifetimeTexture4 <= blendingTime && lifetime - lifetimeTexture4 >= 0.0){
+			float leftInterpolationTime = lifetime - lifetimeTexture4;
+			color = color3 * min(leftInterpolationTime/blendingTime,1)+ color4 * (1.0 - min(leftInterpolationTime/blendingTime,1));
+		}
+		else{
+			color = color4;
+		}
+		if(passedLifetime <= birthTime && passedLifetime > 0){
+			color.w *= min(passedLifetime / birthTime, 1);
+		}
+		else if (lifetime <= deathTime && particleMortal == 1) {
+			color.w *= min(lifetime / deathTime, 1);
+		}
+	}
+	fragmentColor= color;
 }
