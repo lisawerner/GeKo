@@ -7,6 +7,14 @@ Texture::Texture(char* fileName)
 {
 	m_textureID = INVALID_OGL_VALUE;
 
+	//save path without RESSOURCES_PATH
+	std::string str(fileName);
+	std::string delimiter = std::string(RESOURCES_PATH);
+	str = str.substr(str.find(delimiter) + delimiter.length(), str.length());
+	char* ch = new char[str.length() + 1];
+	strcpy(ch, str.c_str());
+	filepath = ch;
+
 	load(fileName);
 }
 
@@ -99,4 +107,9 @@ void Texture::setTexture(GLuint texture)
 unsigned int Texture::getTexture()
 {
 	return m_textureID;
+}
+
+char* Texture::getFilepath()
+{
+	return filepath;
 }

@@ -13,6 +13,12 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 	setEmitterMortality(emitterLifetime);
 
 	//set properties for the emitting
+	if (emitFrequency > particleLifeTime){
+		std::string emitFrequencyString = std::to_string(emitFrequency);
+		std::string particleLifetimeString = std::to_string(particleLifetime);
+		perror("Error in Emitter: emitFrequency  > particleLifetime");
+		std::cout << "ef:" << emitFrequency << "pt:" << particleLifetimeString << std::endl;
+	}
 	setEmitFrequency(emitFrequency);
 	setParticlesPerEmit(particlesPerEmit);
 
@@ -24,18 +30,32 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 	VertexShader vsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemPointSprites.vert")));
 	FragmentShader fsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemPointSprites.frag")));
 	emitterShader = new ShaderProgram(vsParticle, fsParticle);
+	glDeleteShader(emitterShader->handle);
+
 	
 	//our default compute shader
 	ComputeShader csParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystem.comp")));
 	compute = new ShaderProgram(csParticle);
+	glDeleteShader(compute->handle);
 
 	updateSize(); //?
 	startTime();
+
+	blendingTime[4] = { 0 };
 }
 //TODO: Memory?
 Emitter::~Emitter()
 {
 	m_textureList.clear();
+
+	glDeleteBuffers(1, &position_ssbo);
+	glDeleteBuffers(1, &velocity_ssbo);
+	glDeleteBuffers(1, &angle_ssbo);
+	//maybe transfer to shader class
+	glDeleteProgram(emitterShader->handle);
+	glDeleteProgram(compute->handle);
+	delete emitterShader;
+	delete compute;
 }
 
 void Emitter::startTime(){
@@ -44,14 +64,13 @@ void Emitter::startTime(){
 	generateTime = deltaTime;
 }
 
-//TODO: MADELEINE ANGLE TO UBO
 void Emitter::loadBuffer(){
 	//?
 	glGenBuffers(1, &position_ssbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, position_ssbo);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, numMaxParticle * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW);
 	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
-	positions = (glm::vec4*) glMapBufferRange (GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask);
+	glm::vec4* positions = (glm::vec4*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask);
 	for (int i = 0; i < numMaxParticle; i++)
 	{
 		positions[i] = glm::vec4(getPosition(), -1.0f);
@@ -78,13 +97,11 @@ void Emitter::loadBuffer(){
 	glGenBuffers(1, &angle_ssbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, angle_ssbo);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, numMaxParticle * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW);
-	glm::vec4* angle = (glm::vec4*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask);
+	glm::vec2* angle = (glm::vec2*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask);
 	for (int i = 0; i < numMaxParticle; i++)
 	{
 		angle[i].x = 0.0f;
 		angle[i].y = 0.0f;
-		angle[i].z = 0.0f;
-		angle[i].w = 0.0f;
 	}
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
@@ -131,17 +148,38 @@ void Emitter::update(){
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, 0);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, 0);
 	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
-	emitterShader->unbind();
+	compute->unbind();
 }
-//TODO: MADELEINE ANGLE TO UBO
 void Emitter::pushParticle(int numberNewParticle){
 	auto emitPosition = getPosition();
+	auto areaEmittingXY = getAreaEmittingXY();
+	auto areaEmittingXZ = getAreaEmittingXZ();
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, position_ssbo);
 	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
 
-	glm::vec4* positions = (glm::vec4*) glMapBufferRange (GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask);	
-	if (getAreaEmittingXZ()){ //emits in a xz area, like rain
+	glm::vec4* positions = (glm::vec4*) glMapBufferRange (GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask);
+	if (areaEmittingXY && areaEmittingXZ){//will be emitted in a 3d area
+		auto accuracy = getAreaAccuracy(); //how near it will be generated
+		auto areaSize = getAreaSize(); //how big the area is
+		float randomNumber;
+		glm::vec3 pos;
+
+		for (int i = 0; i < numberNewParticle; i++)
+		{
+			int index = (indexBuffer + i) % numMaxParticle;
+
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1 with a certain comma accuracy
+			pos.x = emitPosition.x + areaSize * randomNumber;
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1
+			pos.y = emitPosition.y + areaSize * randomNumber;
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1
+			pos.z = emitPosition.z + areaSize * randomNumber;
+
+			positions[index] = glm::vec4(pos, particleLifetime);
+		}
+	}
+	else if (areaEmittingXZ){ //emits in a xz area, like rain
 		auto accuracy = getAreaAccuracy(); //how near it will be generated
 		auto areaSize = getAreaSize(); //how big the area is
 		float randomNumber;
@@ -160,7 +198,7 @@ void Emitter::pushParticle(int numberNewParticle){
 			positions[index] = glm::vec4(pos, particleLifetime);
 		}
 	}
-	else if (getAreaEmittingXY()){ //will be emitted in xy area
+	else if (areaEmittingXY){ //will be emitted in xy area
 		auto accuracy = getAreaAccuracy();
 		auto areaSize = getAreaSize();
 		float randomNumber;
@@ -210,13 +248,13 @@ void Emitter::pushParticle(int numberNewParticle){
 	//TODO just 2 of 4
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, angle_ssbo);
 	
-	glm::vec4* angle = (glm::vec4*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask); //angle of movement as option to velocity
+	glm::vec2* angle = (glm::vec2*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask); //angle of movement as option to velocity
 	for (int i = 0; i < numberNewParticle; i++)
 	{
 		int index = (indexBuffer + i) % numMaxParticle;
 		int phi = (rand() % 360);
 		int theta = (rand() % 90);
-		angle[index] = glm::vec4(phi, theta, 0.0, 0.0);
+		angle[index] = glm::vec2(phi, theta);
 	}
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
@@ -291,15 +329,36 @@ void Emitter::update(glm::vec3 playerPosition){
 	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
 	emitterShader->unbind();
 }
-//TODO: MADELEINE ANGLE TO UBO
 void Emitter::pushParticle(int numberNewParticle, glm::vec3 playerPosition){
 	auto emitPosition = getPosition() + playerPosition;
+	auto areaEmittingXY = getAreaEmittingXY();
+	auto areaEmittingXZ = getAreaEmittingXZ();
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, position_ssbo);
 	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
 
 	glm::vec4* positions = (glm::vec4*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask);
-	if (getAreaEmittingXZ()){ //emits in a xz area, like rain
+	if (areaEmittingXY && areaEmittingXZ){
+		auto accuracy = getAreaAccuracy(); //how near it will be generated
+		auto areaSize = getAreaSize(); //how big the area is
+		float randomNumber;
+		glm::vec3 pos;
+
+		for (int i = 0; i < numberNewParticle; i++)
+		{
+			int index = (indexBuffer + i) % numMaxParticle;
+
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1 with a certain comma accuracy
+			pos.x = emitPosition.x + areaSize * randomNumber;
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1
+			pos.y = emitPosition.y + areaSize * randomNumber;
+			randomNumber = (rand() % (2 * accuracy + 1) - accuracy) / (float)accuracy; //-1 .. 1
+			pos.z = emitPosition.z + areaSize * randomNumber;
+
+			positions[index] = glm::vec4(pos, particleLifetime);
+		}
+	}
+	else if (areaEmittingXZ){ //emits in a xz area, like rain
 		auto accuracy = getAreaAccuracy(); //how near it will be generated
 		auto areaSize = getAreaSize(); //how big the area is
 		float randomNumber;
@@ -318,7 +377,7 @@ void Emitter::pushParticle(int numberNewParticle, glm::vec3 playerPosition){
 			positions[index] = glm::vec4(pos, particleLifetime);
 		}
 	}
-	else if (getAreaEmittingXY()){ //will be emitted in xy area
+	else if (areaEmittingXY){ //will be emitted in xy area
 		auto accuracy = getAreaAccuracy();
 		auto areaSize = getAreaSize();
 		float randomNumber;
@@ -368,13 +427,13 @@ void Emitter::pushParticle(int numberNewParticle, glm::vec3 playerPosition){
 	//TODO just 2 of 4
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, angle_ssbo);
 
-	glm::vec4* angle = (glm::vec4*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask); //angle of movement as option to velocity
+	glm::vec2* angle = (glm::vec2*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask); //angle of movement as option to velocity
 	for (int i = 0; i < numberNewParticle; i++)
 	{
 		int index = (indexBuffer + i) % numMaxParticle;
 		int phi = (rand() % 360);
 		int theta = (rand() % 90);
-		angle[index] = glm::vec4(phi, theta, 0.0, 0.0);
+		angle[index] = glm::vec2(phi, theta);
 	}
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
@@ -446,7 +505,7 @@ void Emitter::render(Camera &cam)
 		}
 
 		if (useTexture)
-			emitterShader->sendSampler2D("tex", m_textureList.at(0).getTexture());
+			emitterShader->sendSampler2D("tex", m_textureList.at(0)->getTexture());
 		emitterShader->sendInt("useTexture", useTexture);
 
 
@@ -478,11 +537,21 @@ void Emitter::render(Camera &cam)
 		emitterShader->sendFloat("birthTime", m_birthTime);
 		emitterShader->sendFloat("deathTime", m_deathTime);
 		emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
-		emitterShader->sendSampler2D("texture", m_textureList.at(0).getTexture());
 		emitterShader->sendVec4("camPos", cam.getPosition());
 
 		emitterShader->sendInt("rotateLeft", m_rotateLeft);
 		emitterShader->sendFloat("rotationSpeed", m_rotationSpeed);
+
+		std::string s = "tex";
+		for (int i = 0; i < textureCount; i++){
+			std::string i2 = std::to_string(i);
+			s += i2;
+			emitterShader->sendSampler2D(s, m_textureList.at(i)->getTexture(), i + 1);
+			s = "tex";
+		}
+		emitterShader->sendInt("textureCount", textureCount);
+		emitterShader->sendInt("blendingTime", m_blendingTime);
+		emitterShader->sendFloatArray("time", 4, blendingTime);
 
 		if (m_useScaling){
 			emitterShader->sendInt("useScaling", 1);
@@ -527,20 +596,26 @@ void Emitter::updateSize()
 //GS & PS swichting
 
 void Emitter::switchToGeometryShader(){
+	glDeleteProgram(emitterShader->handle);
+	delete emitterShader;
 	//Geometry Shader will be used, instead  of Point Sprites
 	VertexShader vsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemGeometryShader.vert")));
 	GeometryShader gsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemGeometryShader.geom")));
 	FragmentShader fsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemGeometryShader.frag")));
 	emitterShader = new ShaderProgram(vsParticle, gsParticle, fsParticle);
+	glDeleteShader(emitterShader->handle);
 
 	m_usePointSprites = false;
 	m_useGeometryShader = true;
 }
 void Emitter::switchToPointSprites(){
+	glDeleteProgram(emitterShader->handle);
+	delete emitterShader;
 	//Point Sprites Shader will be used instead of Geometry Shader
 	VertexShader vsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemPointSprites.vert")));
 	FragmentShader fsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemPointSprites.frag")));
 	emitterShader = new ShaderProgram(vsParticle, fsParticle);
+	glDeleteShader(emitterShader->handle);
 
 	m_usePointSprites = true;
 	m_useGeometryShader = false;
@@ -577,7 +652,7 @@ void Emitter::usePhysicPointGravity(glm::vec4 gravity, float gravityRange, int g
 	m_gravityFunction = gravityFunction;
 	m_gravityRange = gravityRange;
 }
-void Emitter::usePhysicSwarmCircleMotion(bool movementVertical, bool movementHorizontalX, bool movementHorizontalZ, float movementLength){
+void Emitter::usePhysicSwarmCircleMotion(bool movementVertical, bool movementHorizontalX, bool movementHorizontalZ){
 	m_useTrajectory = false;
 	m_useDirectionGravity = false;
 	m_usePointGravity = false;
@@ -586,7 +661,6 @@ void Emitter::usePhysicSwarmCircleMotion(bool movementVertical, bool movementHor
 	m_movementVertical = movementVertical;
 	m_movementHorizontalX = movementHorizontalX;
 	m_movementHorizontalZ = movementHorizontalZ;
-	m_movementLength = movementLength;
 }
 
 //setters:
@@ -643,40 +717,52 @@ void Emitter::setGravity(glm::vec4 newGravity)
 	m_gravity = newGravity;
 }
 void Emitter::setComputeShader(std::string address){
+	glDeleteProgram(compute->handle);
+	delete compute;
 	ComputeShader csParticle(loadShaderSource(SHADERS_PATH + address));
 	compute = new ShaderProgram(csParticle);
+	glDeleteShader(compute->handle);
 }
 void Emitter::setSpeed(float speed){
 	m_speed = speed;
 }
 void Emitter::setAreaEmitting(bool areaEmittingXY, bool areaEmittingXZ, float size, int accuracy){
+	m_areaEmittingXY = areaEmittingXY; //emits in a XY area
+	m_areaEmittingXZ = areaEmittingXZ; //emits in XZ, like Rain
+	m_areaSize = size;
+	if (accuracy > 10000)
+		m_areaAccuracy = 10000;
+	else m_areaAccuracy = accuracy;
 
-	if (areaEmittingXY && areaEmittingXZ){
-		perror("Choose beteween areaEmittingXY and -XZ. If both are enabled XZ will be used");
-	}
-	else{
-		m_areaEmittingXY = areaEmittingXY; //emits in a XY area
-		m_areaEmittingXZ = areaEmittingXZ; //emits in XZ, like Rain
-		m_areaSize = size;
-		if (accuracy > 10000)
-			m_areaAccuracy = 10000;
-		else m_areaAccuracy = accuracy;
-	}
-}
-//TODO: MADELEINE
-void Emitter::addTexture(Texture &texture, float percentageLife){
-	m_textureList.push_back(texture);
-}
-//TODO: MADELEINE
-void Emitter::deleteTexture(int position){
-	m_textureList.erase(m_textureList.begin() + position);
 }
 
-void Emitter::useTexture(bool useTexture, float particleSize, float birthTime, float deathTime, bool rotateLeft, float rotationSpeed){
+void Emitter::addTexture(Texture* texture, float time){
+	if (textureCount == 0){
+		blendingTime[0] = 1.0f; //bei wie viel prozent der lebenszeit es eingeblendet wird
+		m_textureList.push_back(texture);
+		textureCount++;
+
+	}  // first added texture has always the blending time 1
+	else if (textureCount > 0 && textureCount < 4 && blendingTime[textureCount - 1] > time && 0 <= time <= 1.0){
+		blendingTime[textureCount] = time;
+		m_textureList.push_back(texture);
+		textureCount++;
+
+	}
+	else if (textureCount == 4){
+		perror("just 4 textures per emitter possible");
+	}
+	else if (blendingTime[textureCount - 1] > time){
+		perror("the textures must be added ordered descending by their blending time");
+	}
+}
+
+void Emitter::useTexture(bool useTexture, float particleSize, float birthTime, float deathTime, float blendingTime, bool rotateLeft, float rotationSpeed){
 	m_useTexture = useTexture;
 
 	m_birthTime = birthTime;
 	m_deathTime = deathTime;
+	m_blendingTime = blendingTime;
 
 	m_rotateLeft = rotateLeft;
 	m_rotationSpeed = rotationSpeed;
@@ -684,11 +770,12 @@ void Emitter::useTexture(bool useTexture, float particleSize, float birthTime, f
 	particleDefaultSize = particleSize;
 }
 void Emitter::useTexture(bool useTexture, std::vector<float> scalingSize, std::vector<float> scalingMoment, 
-	float birthTime, float deathTime, bool rotateLeft, float rotationSpeed){
+	float birthTime, float deathTime, float blendingTime, bool rotateLeft, float rotationSpeed){
 	m_useTexture = useTexture;
 	
 	m_birthTime = birthTime;
 	m_deathTime = deathTime;
+	m_blendingTime = blendingTime;
 
 	m_rotateLeft = rotateLeft;
 	m_rotationSpeed = rotationSpeed;
@@ -745,8 +832,46 @@ glm::vec3 Emitter::useVelocitySphere(){
 					((rand() % 200) / 100.0f) - 1.0f,
 					((rand() % 200) / 100.0f) - -1.0f);
 }
-void Emitter::setVelocity(glm::vec3 (*pfunc)()){
-	m_pfunc = pfunc;
+void Emitter::setVelocity(int velocityType){
+	switch (velocityType)
+	{
+	case 0:
+		m_velocityType = 0;
+		m_pfunc = &Emitter::useVelocityZero;
+		break;
+	case 1:
+		m_velocityType = 1;
+		m_pfunc = &Emitter::useVelocityLeftQuarterCircle;
+		break;
+	case 2:
+		m_velocityType = 2;
+		m_pfunc = &Emitter::useVelocityRightQuarterCircle;
+		break;
+	case 3:
+		m_velocityType = 3;
+		m_pfunc = &Emitter::useVelocitySemiCircle;
+		break;
+	case 4:
+		m_velocityType = 4;
+		m_pfunc = &Emitter::useVelocityCircle;
+		break;
+	case 5:
+		m_velocityType = 5;
+		m_pfunc = &Emitter::useVelocitySemiSphere;
+		break;
+	case 6:
+		m_velocityType = 6;
+		m_pfunc = &Emitter::useVelocitySphere;
+		break;
+	default:
+		m_velocityType = -1;
+		perror("Error: setVelocity_Ungültige Eingabe");
+		break;
+	}
+}
+int Emitter::getVelocityType()
+{
+	return m_velocityType;
 }
 
 //getters:

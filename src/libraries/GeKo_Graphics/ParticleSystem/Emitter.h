@@ -59,7 +59,6 @@ public:
 
 	//handle the buffer
 	void loadBuffer();
-	glm::vec4* positions;
 
 	//switch between Point Sprites & Geometry Shader. PS is default. Differents CS can be loaded 
 	void switchToGeometryShader();
@@ -78,8 +77,12 @@ public:
 	static glm::vec3 useVelocityCircle();
 	static glm::vec3 useVelocitySemiSphere();
 	static glm::vec3 useVelocitySphere();
-	void setVelocity(glm::vec3(*pfunc)());
+	/*0 = Zero; 1 = LeftQuarterCircle; 2 = RightQuarterCircle;
+	3 = SemiCircle; 4 = Circle; 5 = SemiSphere; 6 = Sphere*/
+	void setVelocity(int velocityType);
+	int getVelocityType();
 	glm::vec3(*m_pfunc)();
+	int m_velocityType;
 
 	//our physic possibilities
 	void usePhysicTrajectory(glm::vec4 gravity, float speed);
@@ -88,26 +91,33 @@ public:
 	bool m_usePointGravity = false;
 	void usePhysicPointGravity(glm::vec4 gravity, float gravityRange, int gravityFunction, float speed);
 	bool m_useDirectionGravity = true;
-	void usePhysicSwarmCircleMotion(bool verticalMovement, bool horizontalXMovement, bool horizontalYMovement, float movementLength);
+	void usePhysicSwarmCircleMotion(bool verticalMovement, bool horizontalXMovement, bool horizontalYMovement);
 	bool m_useChaoticSwarmMotion = false;
 
 	//our physic attributes
 	float m_gravityRange = 0.0f;
 	int m_gravityFunction = 0;
 	float m_speed = 0.0f;
-	float m_movementLength; //TODO
 	bool m_movementVertical = false;
 	bool m_movementHorizontalX = false;
 	bool m_movementHorizontalZ = false;
 
 	//texturing	
-	void addTexture(Texture &texture, float percentageLife);
-	void deleteTexture(int position);
+	/*
+		WARNING: Only 2 Textures at the same time are interpolating. if you have a too small fading time not all textures are interpolationg
+	*/
+	void addTexture(Texture* texture, float time);
+	/*
+		WARNING: Only 2 Textures at the same time are interpolating. if you have a too small fading time not all textures are interpolationg
+	*/
 	void useTexture(bool useTexture, float particleSize,
-		float birthTime = 0.0, float deathTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
+		float birthTime = 0.0, float deathTime = 0.0, float blendingTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
+	/*
+		WARNING: Only 2 Textures at the same time are interpolating. if you have a too small fading time not all textures are interpolationg
+	*/
 	void useTexture(bool useTexture, std::vector<float> scalingSize, std::vector<float> scalingMoment,
-		float birthTime = 0.0, float deathTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
-	std::vector<Texture> m_textureList;
+		float birthTime = 0.0, float deathTime = 0.0, float blendingTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
+	std::vector<Texture*> m_textureList;
 
 	//rotating, scaling and blending of the particle
 	float m_birthTime;
@@ -117,6 +127,9 @@ public:
 	bool m_useScaling = false;
 	float particleDefaultSize = 1.0;
 	bool m_rotateLeft = true;
+	float blendingTime[4];
+	int textureCount = 0;
+	float m_blendingTime;
 
 	//change properties
 	void setOutputMode(const int OUTPUT);

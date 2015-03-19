@@ -22,10 +22,12 @@ public:
 
 	void setTexture(GLuint texture);
 	unsigned int getTexture();
+	char* getFilepath();
 
 private:
 	unsigned int m_textureID;
 	int m_width, m_heigth;
+	char* filepath;
 
 protected:
 
