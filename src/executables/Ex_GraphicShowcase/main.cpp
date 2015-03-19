@@ -6,6 +6,7 @@
 #include <GeKo_Graphics/ScenegraphInclude.h>
 #include "GeKo_Graphics/Camera/Pilotview.h"
 #include "GeKo_Graphics/GUI/GUI.h"
+#include "GeKo_Graphics/Geometry/Mesh.h"
 
 
 const int WINDOW_WIDTH = 800;
@@ -201,6 +202,7 @@ int main()
   //our object
 	Cube cube;
 	Teapot teapot;
+	Mesh dragon = Mesh("dragon.obj");
 	
   Rect plane;
   plane.setTcoords(
@@ -232,6 +234,10 @@ int main()
 	testScene.getScenegraph()->addCamera(&cam);
 	testScene.getScenegraph()->getCamera("PilotviewCam");
   testScene.getScenegraph()->setActiveCamera("PilotviewCam");
+
+  Node dragonNode("dragonNode");
+  dragonNode.addGeometry(&dragon);
+  
 
 	Node cube1("cube1");
 	cube1.addGeometry(&cube);
@@ -270,7 +276,7 @@ int main()
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube1);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube2);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&teaNode);
-
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&dragonNode);
   Node lights = Node("Root");
   Sphere lightSphere = Sphere();
   ConeLight slight(glm::vec4(2.0, 2.5, 3.5, 1.0), glm::vec4(0.7, 0.7, 0.7, 1.0), true, glm::vec3(-1.0, -1.0, -1.0), 90.0f, 1.0f, 10.0f);
