@@ -44,7 +44,7 @@ void main() {
 		}
 		while( scalingData[upperBorder] < percentageLifetime && ((upperBorder <= scalingCount && particleMortal == 1) || (upperBorder < scalingCount && particleMortal == 0)));
 		int lowerBorder = upperBorder-2;
-		float pUpper = min((percentageLifetime - scalingData[lowerBorder]) / (scalingData[upperBorder] - scalingData[lowerBorder]), 1.0); 
+		float pUpper = max(min((percentageLifetime - scalingData[lowerBorder]) / (scalingData[upperBorder] - scalingData[lowerBorder]), 1.0), 0.0); 
 		float scalingSize = (1-pUpper) * scalingData[lowerBorder+1] + pUpper * scalingData[upperBorder+1];
 		up = vec3(scalingSize, 0.0, 0.0);
 		right = vec3(0.0, scalingSize, 0.0);	
@@ -70,19 +70,23 @@ void main() {
 							0, 0, 1, 0,
 							0, 0, 0, 1);
 
-	uv  = vec2(0,0);
+	//down left
+	uv = vec2(0.0, 0.0);
 	gl_Position = projectionMatrix * viewMatrix * billBoardMatrix * (center + rotZMatrix * vec4(-right-up, 1.0));
 	EmitVertex();
 
-	uv = vec2( 1,0);
-	gl_Position = projectionMatrix * viewMatrix * billBoardMatrix * (center + rotZMatrix * vec4(right-up, 1.0));
-	EmitVertex();
-
-	uv = vec2(0, 1);
+	//upper left
+	uv  = vec2(1.0, 0.0);
 	gl_Position = projectionMatrix * viewMatrix * billBoardMatrix * (center + rotZMatrix * vec4(-right+up, 1.0));
 	EmitVertex();
 
-	uv = vec2( 1, 1);
+	//down right
+	uv = vec2(0.0, 1.0);
+	gl_Position = projectionMatrix * viewMatrix * billBoardMatrix * (center + rotZMatrix * vec4(right-up, 1.0));
+	EmitVertex();
+
+	//upper right
+	uv = vec2( 1.0, 1.0);
 	gl_Position = projectionMatrix * viewMatrix * billBoardMatrix * (center + rotZMatrix * vec4(right+up, 1.0));
 	EmitVertex();
 }
