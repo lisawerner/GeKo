@@ -50,12 +50,12 @@ int main()
 	/////////////////////////////////////////TEXTURES//////////////////////////////////////////
 
 	//COMIC CLOUD
-	Texture* comicBalloonTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/balloon01.png");
-	Texture* comicBalloonTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/balloon02.png");
-	Texture* comicBalloonTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/balloon03.png");
-	Texture* comicBalloonTex4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/balloon04.png");
-	Texture* comicCloudTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/cloud01.png"); //TODO Nico
-	Texture* comicCloudTex11 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/cloudN01.png"); //TODO 
+	Texture* comicBalloonTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/balloon01.png"); //TODO NICO
+	Texture* comicBalloonTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/balloon02.png"); //TODO NICO
+	Texture* comicBalloonTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/balloon03.png"); //TODO NICO
+	Texture* comicBalloonTex4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/balloon04.png"); //TODO NICO
+	Texture* comicCloudTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/cloud01.png"); //TODO NICO
+	Texture* comicCloudTex11 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/cloudN01.png"); //TODO NICO
 	Texture* comicCloudTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/cloud02.png");
 	Texture* comicCloudTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/cloud03.png");
 	Texture* comicCloudTex4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/cloud04.png");
@@ -164,18 +164,7 @@ int main()
 	fruitFlies->useTexture(true, 0.04, 3.0, 3.0, true, 1.0);
 	fruitFlies->switchToGeometryShader();
 
-	////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////
-
-	//!EMITTER GLÜHWÜRMCHEN
-	Emitter* glowworm = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.4, 2, 6.0, true);
-	glowworm->setVelocity(0);
-	glowworm->usePhysicSwarmCircleMotion(true, true, true);
-	glowworm->setAreaEmitting(true, false, 0.4, 1000);
-	glowworm->addTexture(glowwormTex, 0.0);
-	glowworm->useTexture(true, 0.4, 1.0, 2.0);
-	glowworm->switchToGeometryShader();
-
-	//!EMITTER COMIC CLOUD
+	//FINAL EMITTER COMIC CLOUD
 	Emitter* cloud01 = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 1.5, 1, 10.0, true);
 	cloud01->setVelocity(4);
 	cloud01->usePhysicPointGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.0, 0, 0.62);
@@ -247,6 +236,17 @@ int main()
 	cloud11->addTexture(comicExclamationMarkTex2, 1.0);
 	cloud11->useTexture(true, 0.5, 2.0);
 	cloud11->switchToGeometryShader();
+
+	////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////
+
+	//!EMITTER GLÜHWÜRMCHEN
+	Emitter* glowworm = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.4, 2, 6.0, true);
+	glowworm->setVelocity(0);
+	glowworm->usePhysicSwarmCircleMotion(true, true, true);
+	glowworm->setAreaEmitting(true, false, 0.4, 1000);
+	glowworm->addTexture(glowwormTex, 0.0);
+	glowworm->useTexture(true, 0.4, 1.0, 2.0);
+	glowworm->switchToGeometryShader();
 
 	//!EMITTER FIRE
 	Emitter* fireMiddle = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 1.0, 3.0, 4.0, true);
@@ -352,46 +352,45 @@ int main()
 		fruitFlies->update(glm::vec3(cam.getPosition()));
 		//fruitFlies->render(cam);
 
+		cloud01->generateParticle();
+		cloud01->update();
+		//cloud01->render(cam);
+		cloud02->generateParticle();
+		cloud02->update();
+		//cloud02->render(cam);
+		cloud03->generateParticle();
+		cloud03->update();
+		//cloud03->render(cam);
+		cloud04->generateParticle();
+		cloud04->update();
+		//cloud04->render(cam);
+		cloud05->generateParticle();
+		cloud05->update();
+		//cloud05->render(cam);
+		cloud06->generateParticle();
+		cloud06->update();
+		//cloud06->render(cam);
+		cloud07->generateParticle();
+		cloud07->update();
+		//cloud07->render(cam);
+		cloud08->generateParticle();
+		cloud08->update();
+		//cloud08->render(cam);
+		cloud09->generateParticle();
+		cloud09->update();
+		//cloud09->render(cam);
+		cloud10->generateParticle();
+		cloud10->update();
+		//cloud10->render(cam);
+		cloud11->generateParticle();
+		cloud11->update();
+		//cloud11->render(cam);
+
 		////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////
 
 		glowworm->generateParticle();
 		glowworm->update();
 		//glowworm->render(cam);
-
-		//wait for textures
-		cloud01->generateParticle();
-		cloud01->update();
-		cloud01->render(cam);
-		cloud02->generateParticle();
-		cloud02->update();
-		cloud02->render(cam);
-		cloud03->generateParticle();
-		cloud03->update();
-		cloud03->render(cam);
-		cloud04->generateParticle();
-		cloud04->update();
-		cloud04->render(cam);
-		cloud05->generateParticle();
-		cloud05->update();
-		cloud05->render(cam);
-		cloud06->generateParticle();
-		cloud06->update();
-		cloud06->render(cam);
-		cloud07->generateParticle();
-		cloud07->update();
-		cloud07->render(cam);
-		cloud08->generateParticle();
-		cloud08->update();
-		cloud08->render(cam);
-		cloud09->generateParticle();
-		cloud09->update();
-		cloud09->render(cam);
-		cloud10->generateParticle();
-		cloud10->update();
-		cloud10->render(cam);
-		cloud11->generateParticle();
-		cloud11->update();
-		cloud11->render(cam);
 
 		//todo: funken & glühlämpchen
 		fireMiddle->generateParticle();
