@@ -59,22 +59,22 @@ int main()
 	Texture* comicCloudTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/cloud02.png");
 	Texture* comicCloudTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/cloud03.png");
 	Texture* comicCloudTex4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/cloud04.png");
-	Texture* exclamationMarkTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/exclamationMark01.png");
-	Texture* exclamationMarkTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/exclamationMark02.png");
-	Texture* exclamationMarkTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/exclamationMark03.png");
-	Texture* exclamationMarkTex4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/exclamationMark04.png");
-	Texture* lightningTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/lightning01.png");
-	Texture* lightningTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/lightning02.png");
-	Texture* lightningTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/lightning03.png");
-	Texture* lightningTex4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/lightning04.png");
-	Texture* spiralTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/spiral01.png");
-	Texture* spiralTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/spiral02.png");
-	Texture* spiralTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/spiral03.png");
-	Texture* spiralTex4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/spiral04.png");
-	Texture* spiralTex5 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/spiral05.png");
-	Texture* spiralTex6 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/spiral06.png");
-	Texture* starTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/star01.png");
-	Texture* starTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/star02.png");
+	Texture* comicExclamationMarkTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/exclamationMark01.png");
+	Texture* comicExclamationMarkTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/exclamationMark02.png");
+	Texture* comicExclamationMarkTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/exclamationMark03.png");
+	Texture* comicExclamationMarkTex4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/exclamationMark04.png");
+	Texture* comicLightningTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/lightning01.png");
+	Texture* comicLightningTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/lightning02.png");
+	Texture* comicLightningTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/lightning03.png");
+	Texture* comicLightningTex4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/lightning04.png");
+	Texture* comicSpiralTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/spiral01.png");
+	Texture* comicSpiralTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/spiral02.png");
+	Texture* comicSpiralTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/spiral03.png");
+	Texture* comicSpiralTex4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/spiral04.png");
+	Texture* comicSpiralTex5 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/spiral05.png");
+	Texture* comicSpiralTex6 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/spiral06.png");
+	Texture* comicStarTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/star01.png");
+	Texture* comicStarTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/star02.png");
 
 	//FIRE
 	Texture* fireTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/flame01_L.png");
@@ -176,44 +176,77 @@ int main()
 	glowworm->switchToGeometryShader();
 
 	//!EMITTER COMIC CLOUD
-	Emitter* cloud = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 1.0, 1, 10.0, true);
-	cloud->setVelocity(4);
-	cloud->usePhysicPointGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.0, 0, 0.4);
-	cloud->addTexture(comicCloudTex1, 0.0);
-	std::vector<float> cloudSize{ 0.6f, 1.5f };
-	std::vector<float> cloudTime{ 0.0f, 1.0f };
-	cloud->useTexture(true, cloudSize, cloudTime, 0.6, 1.0, false, 0.3);
-	cloud->switchToGeometryShader();
+	Emitter* cloud01 = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 1.5, 1, 10.0, true);
+	cloud01->setVelocity(4);
+	cloud01->usePhysicPointGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.0, 0, 0.62);
+	cloud01->addTexture(comicCloudTex1, 0.0);
+	std::vector<float> cloudSize1{ 0.8f, 1.6f };
+	std::vector<float> cloudTime1{ 0.0f, 1.0f };
+	cloud01->useTexture(true, cloudSize1, cloudTime1, 0.4, 4.0, false, 0.3);
+	cloud01->switchToGeometryShader();
 
-	Emitter* cloud1 = new Emitter(0, glm::vec3(0.2, 0.7, 0.0), 0.0, 5.0, 1, 5.0, true);
-	cloud1->setVelocity(0);
-	cloud1->setAreaEmitting(true, false, 1.0, 10);
-	std::vector<float> cloud1Size{ 0.5f, 0.5f };
-	std::vector<float> cloud1Time{ 0.0f, 1.0f };
-	cloud1->addTexture(comicBalloonTex1, 1.0);
-	cloud1->useTexture(true, cloud1Size, cloud1Time, 0.3, 1.0);
-	cloud1->switchToGeometryShader();
+	Emitter* cloud02 = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 2.1, 1, 10.0, true);
+	cloud02->setVelocity(4);
+	cloud02->usePhysicPointGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.0, 0, 0.5);
+	cloud02->addTexture(comicCloudTex3, 0.0);
+	std::vector<float> cloudSize2{ 0.8f, 1.6f };
+	std::vector<float> cloudTime2{ 0.0f, 1.0f };
+	cloud02->useTexture(true, cloudSize2, cloudTime2, 0.4, 4.0, false, 0.3);
+	cloud02->switchToGeometryShader();
 
-	Emitter* cloud2 = new Emitter(0, glm::vec3(0.2, 0.7, 0.0), 0.0, 5.0, 1, 5.0, true);
-	cloud2->setVelocity(0);
-	cloud2->setAreaEmitting(true, false, 1.0, 10);
-	cloud2->addTexture(comicBalloonTex2, 1.0);
-	cloud2->useTexture(true, cloud1Size, cloud1Time, 1.0, 2.0);
-	cloud2->switchToGeometryShader();
+	Emitter* cloud03 = new Emitter(0, glm::vec3(-0.35, 0.45, 0.0), 0.0, 0.0, 1, 0.0, false);
+	cloud03->setVelocity(0);
+	cloud03->addTexture(comicBalloonTex4, 1.0);
+	cloud03->useTexture(true, 0.8, 2.0);
+	cloud03->switchToGeometryShader();
 
-	Emitter* cloud3 = new Emitter(0, glm::vec3(-0.2, 0.7, 0.0), 0.0, 5.0, 1, 5.0, true);
-	cloud3->setVelocity(0);
-	cloud3->setAreaEmitting(true, false, 1.0, 10);
-	cloud3->addTexture(comicBalloonTex3, 1.0);
-	cloud3->useTexture(true, cloud1Size, cloud1Time, 1.0, 2.0);
-	cloud3->switchToGeometryShader();
+	Emitter* cloud04 = new Emitter(0, glm::vec3(1.2, 1.0, 0.0), 0.0, 0.0, 1, 0.0, false);
+	cloud04->setVelocity(0);
+	cloud04->addTexture(comicStarTex2, 1.0);
+	cloud04->useTexture(true, 0.3, 2.0, 0.0, false, 0.6);
+	cloud04->switchToGeometryShader();
 
-	Emitter* cloud4 = new Emitter(0, glm::vec3(-0.2, 0.7, 0.0), 0.0, 5.0, 1, 5.0, true);
-	cloud4->setVelocity(0);
-	cloud4->setAreaEmitting(true, false, 1.0, 10);
-	cloud4->addTexture(comicBalloonTex4, 1.0);
-	cloud4->useTexture(true, cloud1Size, cloud1Time, 1.0, 2.0);
-	cloud4->switchToGeometryShader();
+	Emitter* cloud05 = new Emitter(0, glm::vec3(-1.0, -1.0, 0.0), 0.0, 0.0, 1, 0.0, false);
+	cloud05->setVelocity(0);
+	cloud05->addTexture(comicStarTex2, 1.0);
+	cloud05->useTexture(true, 0.5, 2.0, 0.0, true, 0.4);
+	cloud05->switchToGeometryShader();
+
+	Emitter* cloud06 = new Emitter(0, glm::vec3(1.7, -0.8, 0.0), 0.0, 0.0, 1, 0.0, false);
+	cloud06->setVelocity(0);
+	cloud06->addTexture(comicSpiralTex5, 1.0);
+	cloud06->useTexture(true, 0.3, 2.0);
+	cloud06->switchToGeometryShader();
+
+	Emitter* cloud07 = new Emitter(0, glm::vec3(-2.0, -0.3, 0.0), 0.0, 0.0, 1, 0.0, false);
+	cloud07->setVelocity(0);
+	cloud07->addTexture(comicSpiralTex3, 1.0);
+	cloud07->useTexture(true, 0.3, 2.0);
+	cloud07->switchToGeometryShader();
+
+	Emitter* cloud08 = new Emitter(0, glm::vec3(-1.9, 1.1, 0.0), 0.0, 0.0, 1, 0.0, false);
+	cloud08->setVelocity(0);
+	cloud08->addTexture(comicLightningTex1, 1.0);
+	cloud08->useTexture(true, 0.6, 2.0);
+	cloud08->switchToGeometryShader();
+
+	Emitter* cloud09 = new Emitter(0, glm::vec3(2.0, 0.4, 0.0), 0.0, 0.0, 1, 0.0, false);
+	cloud09->setVelocity(0);
+	cloud09->addTexture(comicLightningTex4, 1.0);
+	cloud09->useTexture(true, 0.5, 2.0);
+	cloud09->switchToGeometryShader();
+
+	Emitter* cloud10 = new Emitter(0, glm::vec3(2.3, -0.2, 0.0), 0.0, 0.0, 1, 0.0, false);
+	cloud10->setVelocity(0);
+	cloud10->addTexture(comicExclamationMarkTex3, 1.0);
+	cloud10->useTexture(true, 0.3, 2.0);
+	cloud10->switchToGeometryShader();
+
+	Emitter* cloud11 = new Emitter(0, glm::vec3(-0.5, 1.4, 0.0), 0.0, 0.0, 1, 0.0, false);
+	cloud11->setVelocity(0);
+	cloud11->addTexture(comicExclamationMarkTex2, 1.0);
+	cloud11->useTexture(true, 0.5, 2.0);
+	cloud11->switchToGeometryShader();
 
 	//!EMITTER FIRE
 	Emitter* fireMiddle = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 1.0, 3.0, 4.0, true);
@@ -303,7 +336,6 @@ int main()
 		snowStrong->generateParticle(glm::vec3(cam.getPosition()));
 		snowStrong->update(glm::vec3(cam.getPosition()));
 		//snowStrong->render(cam);
-
 		smokeWhite->generateParticle();
 		smokeWhite->update();
 		//smokeWhite->render(cam);
@@ -327,21 +359,39 @@ int main()
 		//glowworm->render(cam);
 
 		//wait for textures
-		cloud->generateParticle();
-		cloud->update();
-		//cloud->render(cam);
-		cloud1->generateParticle();
-		cloud1->update();
-		//cloud1->render(cam);
-		cloud2->generateParticle();
-		cloud2->update();
-		//cloud2->render(cam);
-		cloud3->generateParticle();
-		cloud3->update();
-		//cloud3->render(cam);
-		cloud4->generateParticle();
-		cloud4->update();
-		//cloud4->render(cam);
+		cloud01->generateParticle();
+		cloud01->update();
+		cloud01->render(cam);
+		cloud02->generateParticle();
+		cloud02->update();
+		cloud02->render(cam);
+		cloud03->generateParticle();
+		cloud03->update();
+		cloud03->render(cam);
+		cloud04->generateParticle();
+		cloud04->update();
+		cloud04->render(cam);
+		cloud05->generateParticle();
+		cloud05->update();
+		cloud05->render(cam);
+		cloud06->generateParticle();
+		cloud06->update();
+		cloud06->render(cam);
+		cloud07->generateParticle();
+		cloud07->update();
+		cloud07->render(cam);
+		cloud08->generateParticle();
+		cloud08->update();
+		cloud08->render(cam);
+		cloud09->generateParticle();
+		cloud09->update();
+		cloud09->render(cam);
+		cloud10->generateParticle();
+		cloud10->update();
+		cloud10->render(cam);
+		cloud11->generateParticle();
+		cloud11->update();
+		cloud11->render(cam);
 
 		//todo: funken & glühlämpchen
 		fireMiddle->generateParticle();
