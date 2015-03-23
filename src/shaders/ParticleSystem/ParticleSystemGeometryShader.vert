@@ -6,8 +6,10 @@ uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 
 out float lifetimeparticle;
+out vec4 pos;
 
 void main(){
 	lifetimeparticle = position.w;
-    gl_Position = projectionMatrix * viewMatrix * vec4(position.xyz, 1.0);
+	pos=position;
+    gl_Position = position;
 }
