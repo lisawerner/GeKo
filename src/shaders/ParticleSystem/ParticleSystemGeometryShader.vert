@@ -9,5 +9,5 @@ out float lifetimeparticle;
 
 void main(){
 	lifetimeparticle = position.w;
-    gl_Position = projectionMatrix * viewMatrix * vec4(position.xyz, 1.0);
+    gl_Position = position;
 }
