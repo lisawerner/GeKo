@@ -86,6 +86,7 @@ int main()
 	Texture* particleWhiteTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/particle.png");
 	Texture* snowTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/snowflake.png"); //TODO better Resolution
 	Texture* glowwormTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/glowworm2.png");
+	Texture* fireflyTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/firefly.png");
 
 	//RAIN
 	Texture* rainTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/rain/rain.png");
@@ -257,6 +258,7 @@ int main()
 	fireMiddle->addTexture(fireTex3, 0.0);
 	fireMiddle->useTexture(true, 0.5, 1.0, 2.0);
 	fireMiddle->switchToGeometryShader();
+
 	Emitter* fireSmoke = new Emitter(0, glm::vec3(0, -1.0, 0.0), 0.0, 0.4, 1, 8.0, true);
 	fireSmoke->setVelocity(2);
 	fireSmoke->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.8), 0.3f);
@@ -266,6 +268,12 @@ int main()
 	std::vector<float> fireSmokeTime{ 0.0f, 0.2f, 0.75f, 1.0f };
 	fireSmoke->useTexture(true, fireSmokeSize, fireSmokeTime, 1.0, 4.0, false, 0.3);
 	fireSmoke->switchToGeometryShader();
+
+	Emitter* fireParticle = new Emitter(0, glm::vec3(0.1, -0.9, 0.0), 0.0, 1.3, 1, 9.0, true);
+	fireParticle->setVelocity(3);
+	fireParticle->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.5), 0.13f);
+	fireParticle->addTexture(fireflyTex, 1.0);
+	fireParticle->useTexture(true, 0.4, 0.4, 2.0, false, 0.3);
 
 	//!EMITTER FIREWORK
 	Emitter* firework = new Emitter(0, glm::vec3(0.6, 0.6, 0.0), 0.0, 0.5, 5, 1.0, true);
@@ -392,13 +400,16 @@ int main()
 		glowworm->update();
 		//glowworm->render(cam);
 
-		//todo: funken & glühlämpchen
+		//todo: funken & flamme
 		fireMiddle->generateParticle();
 		fireMiddle->update();
 		//fireMiddle->render(cam);
 		fireSmoke->generateParticle();
 		fireSmoke->update();
-		//fireSmoke->render(cam);
+		fireSmoke->render(cam);
+		fireParticle->generateParticle();
+		fireParticle->update();
+		fireParticle->render(cam);
 
 		firework->generateParticle();
 		firework->update();
