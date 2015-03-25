@@ -87,6 +87,7 @@ int main()
 	Texture* snowTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/snowflake.png"); //TODO better Resolution
 	Texture* glowwormTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/glowworm2.png");
 	Texture* fireflyTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/firefly.png");
+	Texture* fireSparkTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/spark.png");
 
 	//RAIN
 	Texture* rainTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/rain/rain.png");
@@ -269,11 +270,19 @@ int main()
 	fireSmoke->useTexture(true, fireSmokeSize, fireSmokeTime, 1.0, 4.0, false, 0.3);
 	fireSmoke->switchToGeometryShader();
 
-	Emitter* fireParticle = new Emitter(0, glm::vec3(0.1, -0.9, 0.0), 0.0, 1.3, 1, 9.0, true);
-	fireParticle->setVelocity(3);
-	fireParticle->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.5), 0.13f);
-	fireParticle->addTexture(fireflyTex, 1.0);
-	fireParticle->useTexture(true, 0.4, 0.4, 2.0, false, 0.3);
+	Emitter* firefly = new Emitter(0, glm::vec3(0.1, -0.9, 0.0), 0.0, 1.3, 1, 9.0, true);
+	firefly->setVelocity(3);
+	firefly->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.5), 0.13f);
+	firefly->addTexture(fireflyTex, 1.0);
+	firefly->useTexture(true, 0.4, 0.4, 2.0, false, 0.3);
+
+	Emitter* fireSpark = new Emitter(0, glm::vec3(0.1, -0.9, 0.0), 0.0, 0.8, 3, 2.0, true);
+	fireSpark->setVelocity(3);
+	fireSpark->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.0), 0.5f);
+	fireSpark->addTexture(fireSparkTex, 1.0);
+	fireSpark->useTexture(true, 0.1, 0.4, 0.9, false, 0.3);
+
+	//second red
 
 	//!EMITTER FIREWORK
 	Emitter* firework = new Emitter(0, glm::vec3(0.6, 0.6, 0.0), 0.0, 0.5, 5, 1.0, true);
@@ -333,7 +342,7 @@ int main()
 		shaderSkybox.sendMat4("viewMatrix", cam.getViewMatrix());
 		shaderSkybox.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 		shaderSkybox.sendSkyboxTexture("testTexture", skybox.getSkyboxTexture());
-		skyboxNode.render();
+		//skyboxNode.render();
 		shaderSkybox.unbind();
 
 		///////////////////////////////////////FINAL EMITTER///////////////////////////////////////
@@ -407,9 +416,12 @@ int main()
 		fireSmoke->generateParticle();
 		fireSmoke->update();
 		fireSmoke->render(cam);
-		fireParticle->generateParticle();
-		fireParticle->update();
-		fireParticle->render(cam);
+		firefly->generateParticle();
+		firefly->update();
+		firefly->render(cam);
+		fireSpark->generateParticle();
+		fireSpark->update();
+		fireSpark->render(cam);
 
 		firework->generateParticle();
 		firework->update();
