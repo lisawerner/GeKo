@@ -1,11 +1,11 @@
 #version 330 core
 
-uniform sampler2D texture;
+uniform sampler2D testTexture;
 
 in vec3 passNormal;
 in vec2 passUV;
 out vec4 fragmentColor;
 
 void main(){
-	fragmentColor = vec4(texture(texture, passUV).rgb, 1.0f);
+	fragmentColor = texture(testTexture, passUV);
 }
