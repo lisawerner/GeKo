@@ -329,12 +329,12 @@ int main()
 		(char*)RESOURCES_PATH "/PereaBeach1/negy.jpg",
 		(char*)RESOURCES_PATH "/PereaBeach1/posz.jpg",
 		(char*)RESOURCES_PATH "/PereaBeach1/negz.jpg"*/
-		(char*)RESOURCES_PATH "/ParticleSystem/testTex.png",
-		(char*)RESOURCES_PATH "/ParticleSystem/testTex.png",
-		(char*)RESOURCES_PATH "/ParticleSystem/testTex.png",
-		(char*)RESOURCES_PATH "/ParticleSystem/testTex.png",
-		(char*)RESOURCES_PATH "/ParticleSystem/testTex.png",
-		(char*)RESOURCES_PATH "/ParticleSystem/testTex.png" };
+		(char*)RESOURCES_PATH "/testTex.png",
+		(char*)RESOURCES_PATH "/testTex.png",
+		(char*)RESOURCES_PATH "/testTex.png",
+		(char*)RESOURCES_PATH "/testTex.png",
+		(char*)RESOURCES_PATH "/testTex.png",
+		(char*)RESOURCES_PATH "/testTex.png" };
 	Skybox skybox(textureNames);
 	Node skyboxNode("skybox");
 	skyboxNode.addGeometry(&cube);
