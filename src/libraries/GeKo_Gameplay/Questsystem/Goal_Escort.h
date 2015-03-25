@@ -6,7 +6,7 @@
 #include <string>
 
 #include "Goal.h"
-#include <GeKo_Gameplay/Object/AI.h>
+#include "GeKo_Gameplay/Object/AI.h"
 
 class Goal_Escort : public Goal
 {

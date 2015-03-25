@@ -1,3 +1,5 @@
+#pragma once
+
 class Acceleration{
 protected:
 	double m_acceleration;

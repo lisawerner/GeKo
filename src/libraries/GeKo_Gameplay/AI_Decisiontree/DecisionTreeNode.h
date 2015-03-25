@@ -3,9 +3,9 @@
 #include <iostream>
 #include <glm/glm.hpp>
 
-#include <GeKo_Gameplay/AI_Pathfinding/GraphNode.h>
-#include <GeKo_Gameplay/AI_Pathfinding/AStarNode.h>
-#include <GeKo_Gameplay/AI_Pathfinding/AStarAlgorithm.h>
+#include "GeKo_Gameplay/AI_Pathfinding/GraphNode.h"
+#include "GeKo_Gameplay/AI_Pathfinding/AStarNode.h"
+#include "GeKo_Gameplay/AI_Pathfinding/AStarAlgorithm.h"
 
 #include "TreeOutput.h"
 #include <GeKo_Gameplay/Object/States.h>

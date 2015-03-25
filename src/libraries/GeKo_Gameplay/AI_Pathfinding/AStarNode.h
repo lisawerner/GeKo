@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <glm/ext.hpp>
-#include <GeKo_Gameplay/AI_Pathfinding/GraphNode.h>
+#include "GeKo_Gameplay/AI_Pathfinding/GraphNode.h"
 
 //class Path;
 

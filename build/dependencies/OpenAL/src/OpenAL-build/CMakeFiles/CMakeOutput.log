@@ -1,0 +1,1448 @@
+The system is: Linux - 3.13.0-43-generic - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /usr/bin/cc 
+Build flags: 
+Id flags: 
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is GNU, found in "/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/2.8.12.2/CompilerIdC/a.out"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /usr/bin/c++ 
+Build flags: 
+Id flags: 
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is GNU, found in "/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/2.8.12.2/CompilerIdCXX/a.out"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3100166580/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3100166580.dir/build.make CMakeFiles/cmTryCompileExec3100166580.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3100166580.dir/testCCompiler.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec3100166580.dir/testCCompiler.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTryCompileExec3100166580
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3100166580.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTryCompileExec3100166580.dir/testCCompiler.c.o  -o cmTryCompileExec3100166580 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2320788553/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2320788553.dir/build.make CMakeFiles/cmTryCompileExec2320788553.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2320788553.dir/CMakeCCompilerABI.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec2320788553.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-2.8/Modules/CMakeCCompilerABI.c
+Linking C executable cmTryCompileExec2320788553
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2320788553.dir/link.txt --verbose=1
+/usr/bin/cc     -v CMakeFiles/cmTryCompileExec2320788553.dir/CMakeCCompilerABI.c.o  -o cmTryCompileExec2320788553 -rdynamic  
+Using built-in specs.
+COLLECT_GCC=/usr/bin/cc
+COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/4.9/lto-wrapper
+Target: x86_64-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion='Ubuntu 4.9.2-0ubuntu1~14.04' --with-bugurl=file:///usr/share/doc/gcc-4.9/README.Bugs --enable-languages=c,c++,java,go,d,fortran,objc,obj-c++ --prefix=/usr --program-suffix=-4.9 --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --with-gxx-include-dir=/usr/include/c++/4.9 --libdir=/usr/lib --enable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-gnu-unique-object --disable-vtable-verify --enable-plugin --with-system-zlib --disable-browser-plugin --enable-java-awt=gtk --enable-gtk-cairo --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-4.9-amd64/jre --enable-java-home --with-jvm-root-dir=/usr/lib/jvm/java-1.5.0-gcj-4.9-amd64 --with-jvm-jar-dir=/usr/lib/jvm-exports/java-1.5.0-gcj-4.9-amd64 --with-arch-directory=amd64 --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --enable-objc-gc --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --enable-multilib --with-tune=generic --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
+Thread model: posix
+gcc version 4.9.2 (Ubuntu 4.9.2-0ubuntu1~14.04) 
+COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.9/:/usr/lib/gcc/x86_64-linux-gnu/4.9/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.9/:/usr/lib/gcc/x86_64-linux-gnu/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.9/:/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTryCompileExec2320788553' '-rdynamic' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-linux-gnu/4.9/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/4.9/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/4.9/lto-wrapper -plugin-opt=-fresolution=/tmp/ccG6czY7.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --sysroot=/ --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -z relro -o cmTryCompileExec2320788553 /usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crt1.o /usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/4.9/crtbegin.o -L/usr/lib/gcc/x86_64-linux-gnu/4.9 -L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../.. CMakeFiles/cmTryCompileExec2320788553.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/lib/gcc/x86_64-linux-gnu/4.9/crtend.o /usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crtn.o
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command:/usr/bin/make "cmTryCompileExec2320788553/fast"]
+  ignore line: [make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp']
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTryCompileExec2320788553.dir/build.make CMakeFiles/cmTryCompileExec2320788553.dir/build]
+  ignore line: [make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp']
+  ignore line: [/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1]
+  ignore line: [Building C object CMakeFiles/cmTryCompileExec2320788553.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/cc    -o CMakeFiles/cmTryCompileExec2320788553.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-2.8/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTryCompileExec2320788553]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2320788553.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/cc     -v CMakeFiles/cmTryCompileExec2320788553.dir/CMakeCCompilerABI.c.o  -o cmTryCompileExec2320788553 -rdynamic  ]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/usr/bin/cc]
+  ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/4.9/lto-wrapper]
+  ignore line: [Target: x86_64-linux-gnu]
+  ignore line: [Configured with: ../src/configure -v --with-pkgversion='Ubuntu 4.9.2-0ubuntu1~14.04' --with-bugurl=file:///usr/share/doc/gcc-4.9/README.Bugs --enable-languages=c,c++,java,go,d,fortran,objc,obj-c++ --prefix=/usr --program-suffix=-4.9 --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --with-gxx-include-dir=/usr/include/c++/4.9 --libdir=/usr/lib --enable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-gnu-unique-object --disable-vtable-verify --enable-plugin --with-system-zlib --disable-browser-plugin --enable-java-awt=gtk --enable-gtk-cairo --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-4.9-amd64/jre --enable-java-home --with-jvm-root-dir=/usr/lib/jvm/java-1.5.0-gcj-4.9-amd64 --with-jvm-jar-dir=/usr/lib/jvm-exports/java-1.5.0-gcj-4.9-amd64 --with-arch-directory=amd64 --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --enable-objc-gc --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --enable-multilib --with-tune=generic --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 4.9.2 (Ubuntu 4.9.2-0ubuntu1~14.04) ]
+  ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.9/:/usr/lib/gcc/x86_64-linux-gnu/4.9/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.9/:/usr/lib/gcc/x86_64-linux-gnu/]
+  ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.9/:/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../:/lib/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTryCompileExec2320788553' '-rdynamic' '-mtune=generic' '-march=x86-64']
+  link line: [ /usr/lib/gcc/x86_64-linux-gnu/4.9/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/4.9/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/4.9/lto-wrapper -plugin-opt=-fresolution=/tmp/ccG6czY7.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --sysroot=/ --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -z relro -o cmTryCompileExec2320788553 /usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crt1.o /usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/4.9/crtbegin.o -L/usr/lib/gcc/x86_64-linux-gnu/4.9 -L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../.. CMakeFiles/cmTryCompileExec2320788553.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/lib/gcc/x86_64-linux-gnu/4.9/crtend.o /usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crtn.o]
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.9/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.9/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/4.9/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccG6czY7.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [--sysroot=/] ==> ignore
+    arg [--build-id] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [--hash-style=gnu] ==> ignore
+    arg [--as-needed] ==> ignore
+    arg [-export-dynamic] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+    arg [-zrelro] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTryCompileExec2320788553] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crt1.o] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crti.o] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.9/crtbegin.o] ==> ignore
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/4.9] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/4.9]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../../lib] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../../lib]
+    arg [-L/lib/x86_64-linux-gnu] ==> dir [/lib/x86_64-linux-gnu]
+    arg [-L/lib/../lib] ==> dir [/lib/../lib]
+    arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
+    arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/4.9/../../..]
+    arg [CMakeFiles/cmTryCompileExec2320788553.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [-lc] ==> lib [c]
+    arg [-lgcc] ==> lib [gcc]
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--no-as-needed] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.9/crtend.o] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crtn.o] ==> ignore
+  remove lib [gcc]
+  remove lib [gcc_s]
+  remove lib [gcc]
+  remove lib [gcc_s]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/4.9] ==> [/usr/lib/gcc/x86_64-linux-gnu/4.9]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../../lib] ==> [/usr/lib]
+  collapse library dir [/lib/x86_64-linux-gnu] ==> [/lib/x86_64-linux-gnu]
+  collapse library dir [/lib/../lib] ==> [/lib]
+  collapse library dir [/usr/lib/x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
+  collapse library dir [/usr/lib/../lib] ==> [/usr/lib]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/4.9/../../..] ==> [/usr/lib]
+  implicit libs: [c]
+  implicit dirs: [/usr/lib/gcc/x86_64-linux-gnu/4.9;/usr/lib/x86_64-linux-gnu;/usr/lib;/lib/x86_64-linux-gnu;/lib]
+  implicit fwks: []
+
+
+Determining if the CXX compiler works passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3930194840/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3930194840.dir/build.make CMakeFiles/cmTryCompileExec3930194840.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec3930194840.dir/testCXXCompiler.cxx.o
+/usr/bin/c++     -o CMakeFiles/cmTryCompileExec3930194840.dir/testCXXCompiler.cxx.o -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTryCompileExec3930194840
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3930194840.dir/link.txt --verbose=1
+/usr/bin/c++        CMakeFiles/cmTryCompileExec3930194840.dir/testCXXCompiler.cxx.o  -o cmTryCompileExec3930194840 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec4107496420/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec4107496420.dir/build.make CMakeFiles/cmTryCompileExec4107496420.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec4107496420.dir/CMakeCXXCompilerABI.cpp.o
+/usr/bin/c++     -o CMakeFiles/cmTryCompileExec4107496420.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-2.8/Modules/CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTryCompileExec4107496420
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec4107496420.dir/link.txt --verbose=1
+/usr/bin/c++      -v CMakeFiles/cmTryCompileExec4107496420.dir/CMakeCXXCompilerABI.cpp.o  -o cmTryCompileExec4107496420 -rdynamic  
+Using built-in specs.
+COLLECT_GCC=/usr/bin/c++
+COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/4.9/lto-wrapper
+Target: x86_64-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion='Ubuntu 4.9.2-0ubuntu1~14.04' --with-bugurl=file:///usr/share/doc/gcc-4.9/README.Bugs --enable-languages=c,c++,java,go,d,fortran,objc,obj-c++ --prefix=/usr --program-suffix=-4.9 --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --with-gxx-include-dir=/usr/include/c++/4.9 --libdir=/usr/lib --enable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-gnu-unique-object --disable-vtable-verify --enable-plugin --with-system-zlib --disable-browser-plugin --enable-java-awt=gtk --enable-gtk-cairo --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-4.9-amd64/jre --enable-java-home --with-jvm-root-dir=/usr/lib/jvm/java-1.5.0-gcj-4.9-amd64 --with-jvm-jar-dir=/usr/lib/jvm-exports/java-1.5.0-gcj-4.9-amd64 --with-arch-directory=amd64 --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --enable-objc-gc --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --enable-multilib --with-tune=generic --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
+Thread model: posix
+gcc version 4.9.2 (Ubuntu 4.9.2-0ubuntu1~14.04) 
+COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.9/:/usr/lib/gcc/x86_64-linux-gnu/4.9/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.9/:/usr/lib/gcc/x86_64-linux-gnu/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.9/:/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTryCompileExec4107496420' '-rdynamic' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-linux-gnu/4.9/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/4.9/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/4.9/lto-wrapper -plugin-opt=-fresolution=/tmp/cctuK3aj.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --sysroot=/ --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -z relro -o cmTryCompileExec4107496420 /usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crt1.o /usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/4.9/crtbegin.o -L/usr/lib/gcc/x86_64-linux-gnu/4.9 -L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../.. CMakeFiles/cmTryCompileExec4107496420.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/4.9/crtend.o /usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crtn.o
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Parsed CXX implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command:/usr/bin/make "cmTryCompileExec4107496420/fast"]
+  ignore line: [make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp']
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTryCompileExec4107496420.dir/build.make CMakeFiles/cmTryCompileExec4107496420.dir/build]
+  ignore line: [make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp']
+  ignore line: [/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1]
+  ignore line: [Building CXX object CMakeFiles/cmTryCompileExec4107496420.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/bin/c++     -o CMakeFiles/cmTryCompileExec4107496420.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-2.8/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Linking CXX executable cmTryCompileExec4107496420]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec4107496420.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/c++      -v CMakeFiles/cmTryCompileExec4107496420.dir/CMakeCXXCompilerABI.cpp.o  -o cmTryCompileExec4107496420 -rdynamic  ]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/usr/bin/c++]
+  ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/4.9/lto-wrapper]
+  ignore line: [Target: x86_64-linux-gnu]
+  ignore line: [Configured with: ../src/configure -v --with-pkgversion='Ubuntu 4.9.2-0ubuntu1~14.04' --with-bugurl=file:///usr/share/doc/gcc-4.9/README.Bugs --enable-languages=c,c++,java,go,d,fortran,objc,obj-c++ --prefix=/usr --program-suffix=-4.9 --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --with-gxx-include-dir=/usr/include/c++/4.9 --libdir=/usr/lib --enable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --enable-gnu-unique-object --disable-vtable-verify --enable-plugin --with-system-zlib --disable-browser-plugin --enable-java-awt=gtk --enable-gtk-cairo --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-4.9-amd64/jre --enable-java-home --with-jvm-root-dir=/usr/lib/jvm/java-1.5.0-gcj-4.9-amd64 --with-jvm-jar-dir=/usr/lib/jvm-exports/java-1.5.0-gcj-4.9-amd64 --with-arch-directory=amd64 --with-ecj-jar=/usr/share/java/eclipse-ecj.jar --enable-objc-gc --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --enable-multilib --with-tune=generic --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 4.9.2 (Ubuntu 4.9.2-0ubuntu1~14.04) ]
+  ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.9/:/usr/lib/gcc/x86_64-linux-gnu/4.9/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.9/:/usr/lib/gcc/x86_64-linux-gnu/]
+  ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.9/:/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../:/lib/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTryCompileExec4107496420' '-rdynamic' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  link line: [ /usr/lib/gcc/x86_64-linux-gnu/4.9/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/4.9/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/4.9/lto-wrapper -plugin-opt=-fresolution=/tmp/cctuK3aj.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --sysroot=/ --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -z relro -o cmTryCompileExec4107496420 /usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crt1.o /usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/4.9/crtbegin.o -L/usr/lib/gcc/x86_64-linux-gnu/4.9 -L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../.. CMakeFiles/cmTryCompileExec4107496420.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/4.9/crtend.o /usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crtn.o]
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.9/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.9/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/4.9/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/cctuK3aj.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [--sysroot=/] ==> ignore
+    arg [--build-id] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [--hash-style=gnu] ==> ignore
+    arg [--as-needed] ==> ignore
+    arg [-export-dynamic] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+    arg [-zrelro] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTryCompileExec4107496420] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crt1.o] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crti.o] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.9/crtbegin.o] ==> ignore
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/4.9] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/4.9]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../../lib] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../../lib]
+    arg [-L/lib/x86_64-linux-gnu] ==> dir [/lib/x86_64-linux-gnu]
+    arg [-L/lib/../lib] ==> dir [/lib/../lib]
+    arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
+    arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/4.9/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/4.9/../../..]
+    arg [CMakeFiles/cmTryCompileExec4107496420.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [-lstdc++] ==> lib [stdc++]
+    arg [-lm] ==> lib [m]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [-lc] ==> lib [c]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.9/crtend.o] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu/crtn.o] ==> ignore
+  remove lib [gcc_s]
+  remove lib [gcc]
+  remove lib [gcc_s]
+  remove lib [gcc]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/4.9] ==> [/usr/lib/gcc/x86_64-linux-gnu/4.9]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/4.9/../../../../lib] ==> [/usr/lib]
+  collapse library dir [/lib/x86_64-linux-gnu] ==> [/lib/x86_64-linux-gnu]
+  collapse library dir [/lib/../lib] ==> [/lib]
+  collapse library dir [/usr/lib/x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
+  collapse library dir [/usr/lib/../lib] ==> [/usr/lib]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/4.9/../../..] ==> [/usr/lib]
+  implicit libs: [stdc++;m;c]
+  implicit dirs: [/usr/lib/gcc/x86_64-linux-gnu/4.9;/usr/lib/x86_64-linux-gnu;/usr/lib;/lib/x86_64-linux-gnu;/lib]
+  implicit fwks: []
+
+
+Determining if the include file sys/types.h exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1672372751/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1672372751.dir/build.make CMakeFiles/cmTryCompileExec1672372751.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1672372751.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec1672372751.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec1672372751
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1672372751.dir/link.txt --verbose=1
+/usr/bin/cc    -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec1672372751.dir/CheckIncludeFile.c.o  -o cmTryCompileExec1672372751 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file stdint.h exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3563054481/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3563054481.dir/build.make CMakeFiles/cmTryCompileExec3563054481.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3563054481.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec3563054481.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec3563054481
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3563054481.dir/link.txt --verbose=1
+/usr/bin/cc    -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec3563054481.dir/CheckIncludeFile.c.o  -o cmTryCompileExec3563054481 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file stddef.h exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1092524566/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1092524566.dir/build.make CMakeFiles/cmTryCompileExec1092524566.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1092524566.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec1092524566.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec1092524566
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1092524566.dir/link.txt --verbose=1
+/usr/bin/cc    -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec1092524566.dir/CheckIncludeFile.c.o  -o cmTryCompileExec1092524566 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining size of long passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1599428355/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1599428355.dir/build.make CMakeFiles/cmTryCompileExec1599428355.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1599428355.dir/SIZEOF_LONG.c.o
+/usr/bin/cc   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec1599428355.dir/SIZEOF_LONG.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CheckTypeSize/SIZEOF_LONG.c
+Linking C executable cmTryCompileExec1599428355
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1599428355.dir/link.txt --verbose=1
+/usr/bin/cc    -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec1599428355.dir/SIZEOF_LONG.c.o  -o cmTryCompileExec1599428355 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining size of long long passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2960935401/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2960935401.dir/build.make CMakeFiles/cmTryCompileExec2960935401.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2960935401.dir/SIZEOF_LONG_LONG.c.o
+/usr/bin/cc   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec2960935401.dir/SIZEOF_LONG_LONG.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CheckTypeSize/SIZEOF_LONG_LONG.c
+Linking C executable cmTryCompileExec2960935401
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2960935401.dir/link.txt --verbose=1
+/usr/bin/cc    -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec2960935401.dir/SIZEOF_LONG_LONG.c.o  -o cmTryCompileExec2960935401 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Performing C SOURCE FILE Test HAVE_STD_C99 succeded with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec4177539994/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec4177539994.dir/build.make CMakeFiles/cmTryCompileExec4177539994.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec4177539994.dir/src.c.o
+/usr/bin/cc   -DHAVE_STD_C99  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -std=c99 -o CMakeFiles/cmTryCompileExec4177539994.dir/src.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec4177539994
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec4177539994.dir/link.txt --verbose=1
+/usr/bin/cc   -DHAVE_STD_C99  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec4177539994.dir/src.c.o  -o cmTryCompileExec4177539994 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test INLINE_IS_C99 succeded with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1511426727/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1511426727.dir/build.make CMakeFiles/cmTryCompileExec1511426727.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1511426727.dir/src.c.o
+/usr/bin/cc   -std=c99  -DINLINE_IS_C99  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -fno-inline   -o CMakeFiles/cmTryCompileExec1511426727.dir/src.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec1511426727
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1511426727.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DINLINE_IS_C99  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -fno-inline    CMakeFiles/cmTryCompileExec1511426727.dir/src.c.o  -o cmTryCompileExec1511426727 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source file was:
+extern inline int foo() { return 0; }
+                             int main() {return foo();}
+Performing C SOURCE FILE Test HAVE_C99_VLA succeded with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec329044816/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec329044816.dir/build.make CMakeFiles/cmTryCompileExec329044816.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec329044816.dir/src.c.o
+/usr/bin/cc   -std=c99  -DHAVE_C99_VLA  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec329044816.dir/src.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec329044816
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec329044816.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DHAVE_C99_VLA  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec329044816.dir/src.c.o  -o cmTryCompileExec329044816 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(int argc, char *argv[])
+ {
+     volatile int tmp[argc];
+     tmp[0] = argv[0][0];
+     return tmp[0];
+ }
+Performing C SOURCE FILE Test HAVE_C99_BOOL succeded with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3589112863/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3589112863.dir/build.make CMakeFiles/cmTryCompileExec3589112863.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3589112863.dir/src.c.o
+/usr/bin/cc   -std=c99  -DHAVE_C99_BOOL  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec3589112863.dir/src.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec3589112863
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3589112863.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DHAVE_C99_BOOL  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec3589112863.dir/src.c.o  -o cmTryCompileExec3589112863 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(int argc, char *argv[])
+ {
+     volatile _Bool ret;
+     ret = (argc > 1) ? 1 : 0;
+     return ret ? -1 : 0;
+ }
+Performing C SOURCE FILE Test HAVE_C11_STATIC_ASSERT succeded with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2657435934/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2657435934.dir/build.make CMakeFiles/cmTryCompileExec2657435934.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2657435934.dir/src.c.o
+/usr/bin/cc   -std=c99  -DHAVE_C11_STATIC_ASSERT  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec2657435934.dir/src.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec2657435934
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2657435934.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DHAVE_C11_STATIC_ASSERT  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec2657435934.dir/src.c.o  -o cmTryCompileExec2657435934 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main()
+ {
+     _Static_assert(sizeof(int) == sizeof(int), "What");
+     return 0;
+ }
+Performing C SOURCE FILE Test HAVE_C11_ALIGNAS succeded with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec39910277/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec39910277.dir/build.make CMakeFiles/cmTryCompileExec39910277.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec39910277.dir/src.c.o
+/usr/bin/cc   -std=c99  -DHAVE_C11_ALIGNAS  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec39910277.dir/src.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec39910277
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec39910277.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DHAVE_C11_ALIGNAS  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec39910277.dir/src.c.o  -o cmTryCompileExec39910277 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source file was:
+_Alignas(16) int foo;
+ int main()
+ {
+     return 0;
+ }
+Performing C SOURCE FILE Test HAVE_W_EXTRA succeded with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec723783104/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec723783104.dir/build.make CMakeFiles/cmTryCompileExec723783104.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec723783104.dir/src.c.o
+/usr/bin/cc   -std=c99  -DHAVE_W_EXTRA  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -Wextra -o CMakeFiles/cmTryCompileExec723783104.dir/src.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec723783104
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec723783104.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DHAVE_W_EXTRA  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec723783104.dir/src.c.o  -o cmTryCompileExec723783104 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_FPIC_SWITCH succeded with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2751762254/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2751762254.dir/build.make CMakeFiles/cmTryCompileExec2751762254.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2751762254.dir/src.c.o
+/usr/bin/cc   -std=c99  -DHAVE_FPIC_SWITCH  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -fPIC -o CMakeFiles/cmTryCompileExec2751762254.dir/src.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec2751762254
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2751762254.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DHAVE_FPIC_SWITCH  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec2751762254.dir/src.c.o  -o cmTryCompileExec2751762254 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_GCC_DESTRUCTOR succeded with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec160617826/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec160617826.dir/build.make CMakeFiles/cmTryCompileExec160617826.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec160617826.dir/src.c.o
+/usr/bin/cc   -std=c99  -DHAVE_GCC_DESTRUCTOR  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec160617826.dir/src.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec160617826
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec160617826.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DHAVE_GCC_DESTRUCTOR  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec160617826.dir/src.c.o  -o cmTryCompileExec160617826 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int foo() __attribute__((destructor));
+                             int main() {return 0;}
+Performing C SOURCE FILE Test HAVE_GCC_PROTECTED_VISIBILITY succeded with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec294150250/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec294150250.dir/build.make CMakeFiles/cmTryCompileExec294150250.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec294150250.dir/src.c.o
+/usr/bin/cc   -std=c99  -DHAVE_GCC_PROTECTED_VISIBILITY  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -Wattributes -Werror   -o CMakeFiles/cmTryCompileExec294150250.dir/src.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec294150250
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec294150250.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DHAVE_GCC_PROTECTED_VISIBILITY  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -Wattributes -Werror    CMakeFiles/cmTryCompileExec294150250.dir/src.c.o  -o cmTryCompileExec294150250 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int foo() __attribute__((visibility("protected")));
+                             int main() {return 0;}
+Performing C SOURCE FILE Test HAVE_VISIBILITY_INTERNAL_SWITCH succeded with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1868498135/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1868498135.dir/build.make CMakeFiles/cmTryCompileExec1868498135.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1868498135.dir/src.c.o
+/usr/bin/cc   -std=c99  -DHAVE_VISIBILITY_INTERNAL_SWITCH  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -Wattributes -Werror   -fvisibility=internal -o CMakeFiles/cmTryCompileExec1868498135.dir/src.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec1868498135
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1868498135.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DHAVE_VISIBILITY_INTERNAL_SWITCH  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -Wattributes -Werror    CMakeFiles/cmTryCompileExec1868498135.dir/src.c.o  -o cmTryCompileExec1868498135 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_ATTRIBUTE_ALIGNED succeded with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3935578850/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3935578850.dir/build.make CMakeFiles/cmTryCompileExec3935578850.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3935578850.dir/src.c.o
+/usr/bin/cc   -std=c99  -DHAVE_ATTRIBUTE_ALIGNED  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -Wattributes -Werror   -o CMakeFiles/cmTryCompileExec3935578850.dir/src.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec3935578850
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3935578850.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DHAVE_ATTRIBUTE_ALIGNED  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -Wattributes -Werror    CMakeFiles/cmTryCompileExec3935578850.dir/src.c.o  -o cmTryCompileExec3935578850 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int foo __attribute__((aligned(16)));
+                             int main() {return 0;}
+Performing C SOURCE FILE Test HAVE_MSSE_SWITCH succeded with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2887206698/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2887206698.dir/build.make CMakeFiles/cmTryCompileExec2887206698.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2887206698.dir/src.c.o
+/usr/bin/cc   -std=c99  -DHAVE_MSSE_SWITCH  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -msse -o CMakeFiles/cmTryCompileExec2887206698.dir/src.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec2887206698
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2887206698.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DHAVE_MSSE_SWITCH  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec2887206698.dir/src.c.o  -o cmTryCompileExec2887206698 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_MSSE2_SWITCH succeded with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec272917105/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec272917105.dir/build.make CMakeFiles/cmTryCompileExec272917105.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec272917105.dir/src.c.o
+/usr/bin/cc   -std=c99  -DHAVE_MSSE2_SWITCH  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -msse2 -o CMakeFiles/cmTryCompileExec272917105.dir/src.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec272917105
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec272917105.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DHAVE_MSSE2_SWITCH  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec272917105.dir/src.c.o  -o cmTryCompileExec272917105 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_MSSE4_1_SWITCH succeded with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3793420871/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3793420871.dir/build.make CMakeFiles/cmTryCompileExec3793420871.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3793420871.dir/src.c.o
+/usr/bin/cc   -std=c99  -DHAVE_MSSE4_1_SWITCH  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -msse4.1 -o CMakeFiles/cmTryCompileExec3793420871.dir/src.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec3793420871
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3793420871.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DHAVE_MSSE4_1_SWITCH  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec3793420871.dir/src.c.o  -o cmTryCompileExec3793420871 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_GCC_FORMAT succeded with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3535926641/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3535926641.dir/build.make CMakeFiles/cmTryCompileExec3535926641.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3535926641.dir/src.c.o
+/usr/bin/cc   -std=c99  -DHAVE_GCC_FORMAT  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec3535926641.dir/src.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec3535926641
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3535926641.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DHAVE_GCC_FORMAT  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec3535926641.dir/src.c.o  -o cmTryCompileExec3535926641 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int foo(const char *str, ...) __attribute__((format(printf, 1, 2)));
+                         int main() {return 0;}
+Determining if the include file stdbool.h exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2542080856/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2542080856.dir/build.make CMakeFiles/cmTryCompileExec2542080856.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2542080856.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec2542080856.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec2542080856
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2542080856.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec2542080856.dir/CheckIncludeFile.c.o  -o cmTryCompileExec2542080856 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file stdalign.h exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec46771430/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec46771430.dir/build.make CMakeFiles/cmTryCompileExec46771430.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec46771430.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec46771430.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec46771430
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec46771430.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec46771430.dir/CheckIncludeFile.c.o  -o cmTryCompileExec46771430 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file malloc.h exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec692315272/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec692315272.dir/build.make CMakeFiles/cmTryCompileExec692315272.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec692315272.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec692315272.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec692315272
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec692315272.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec692315272.dir/CheckIncludeFile.c.o  -o cmTryCompileExec692315272 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file ftw.h exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2717290934/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2717290934.dir/build.make CMakeFiles/cmTryCompileExec2717290934.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2717290934.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec2717290934.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec2717290934
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2717290934.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec2717290934.dir/CheckIncludeFile.c.o  -o cmTryCompileExec2717290934 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file strings.h exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2340727480/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2340727480.dir/build.make CMakeFiles/cmTryCompileExec2340727480.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2340727480.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec2340727480.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec2340727480
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2340727480.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec2340727480.dir/CheckIncludeFile.c.o  -o cmTryCompileExec2340727480 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file cpuid.h exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3478927372/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3478927372.dir/build.make CMakeFiles/cmTryCompileExec3478927372.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3478927372.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec3478927372.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec3478927372
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3478927372.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec3478927372.dir/CheckIncludeFile.c.o  -o cmTryCompileExec3478927372 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file fenv.h exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2458263911/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2458263911.dir/build.make CMakeFiles/cmTryCompileExec2458263911.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2458263911.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec2458263911.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec2458263911
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2458263911.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec2458263911.dir/CheckIncludeFile.c.o  -o cmTryCompileExec2458263911 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file float.h exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1697690713/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1697690713.dir/build.make CMakeFiles/cmTryCompileExec1697690713.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1697690713.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec1697690713.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec1697690713
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1697690713.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec1697690713.dir/CheckIncludeFile.c.o  -o cmTryCompileExec1697690713 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function pow exists in the m passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1464297314/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1464297314.dir/build.make CMakeFiles/cmTryCompileExec1464297314.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1464297314.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=c99  -DCHECK_FUNCTION_EXISTS=pow  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec1464297314.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+<command-line>:0:23: warning: conflicting types for built-in function ‘pow’
+/usr/share/cmake-2.8/Modules/CheckFunctionExists.c:3:6: note: in expansion of macro ‘CHECK_FUNCTION_EXISTS’
+ char CHECK_FUNCTION_EXISTS();
+      ^
+Linking C executable cmTryCompileExec1464297314
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1464297314.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DCHECK_FUNCTION_EXISTS=pow  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec1464297314.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1464297314 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the aligned_alloc exist passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2979622666/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2979622666.dir/build.make CMakeFiles/cmTryCompileExec2979622666.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2979622666.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec2979622666.dir/CheckSymbolExists.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec2979622666
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2979622666.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec2979622666.dir/CheckSymbolExists.c.o  -o cmTryCompileExec2979622666 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+File /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <stdlib.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef aligned_alloc
+  return ((int*)(&aligned_alloc))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the posix_memalign exist passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec108454893/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec108454893.dir/build.make CMakeFiles/cmTryCompileExec108454893.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec108454893.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec108454893.dir/CheckSymbolExists.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec108454893
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec108454893.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec108454893.dir/CheckSymbolExists.c.o  -o cmTryCompileExec108454893 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+File /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <stdlib.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef posix_memalign
+  return ((int*)(&posix_memalign))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the lrintf exist passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2753619599/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2753619599.dir/build.make CMakeFiles/cmTryCompileExec2753619599.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2753619599.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec2753619599.dir/CheckSymbolExists.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec2753619599
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2753619599.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec2753619599.dir/CheckSymbolExists.c.o  -o cmTryCompileExec2753619599 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+File /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <math.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef lrintf
+  return ((int*)(&lrintf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the ftw exist passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1830588737/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1830588737.dir/build.make CMakeFiles/cmTryCompileExec1830588737.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1830588737.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec1830588737.dir/CheckSymbolExists.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec1830588737
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1830588737.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec1830588737.dir/CheckSymbolExists.c.o  -o cmTryCompileExec1830588737 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+File /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <ftw.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef ftw
+  return ((int*)(&ftw))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function strtof exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec4287410052/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec4287410052.dir/build.make CMakeFiles/cmTryCompileExec4287410052.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec4287410052.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=c99  -DCHECK_FUNCTION_EXISTS=strtof  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec4287410052.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec4287410052
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec4287410052.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DCHECK_FUNCTION_EXISTS=strtof  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec4287410052.dir/CheckFunctionExists.c.o  -o cmTryCompileExec4287410052 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function stat exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1511655297/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1511655297.dir/build.make CMakeFiles/cmTryCompileExec1511655297.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1511655297.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=c99  -DCHECK_FUNCTION_EXISTS=stat  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec1511655297.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1511655297
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1511655297.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DCHECK_FUNCTION_EXISTS=stat  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec1511655297.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1511655297 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function strcasecmp exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2598236243/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2598236243.dir/build.make CMakeFiles/cmTryCompileExec2598236243.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2598236243.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=c99  -DCHECK_FUNCTION_EXISTS=strcasecmp  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec2598236243.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec2598236243
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2598236243.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DCHECK_FUNCTION_EXISTS=strcasecmp  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec2598236243.dir/CheckFunctionExists.c.o  -o cmTryCompileExec2598236243 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function strncasecmp exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2397298532/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2397298532.dir/build.make CMakeFiles/cmTryCompileExec2397298532.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2397298532.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=c99  -DCHECK_FUNCTION_EXISTS=strncasecmp  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec2397298532.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec2397298532
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2397298532.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DCHECK_FUNCTION_EXISTS=strncasecmp  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec2397298532.dir/CheckFunctionExists.c.o  -o cmTryCompileExec2397298532 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function snprintf exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3747530909/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3747530909.dir/build.make CMakeFiles/cmTryCompileExec3747530909.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3747530909.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=c99  -DCHECK_FUNCTION_EXISTS=snprintf  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec3747530909.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+<command-line>:0:23: warning: conflicting types for built-in function ‘snprintf’
+/usr/share/cmake-2.8/Modules/CheckFunctionExists.c:3:6: note: in expansion of macro ‘CHECK_FUNCTION_EXISTS’
+ char CHECK_FUNCTION_EXISTS();
+      ^
+Linking C executable cmTryCompileExec3747530909
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3747530909.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DCHECK_FUNCTION_EXISTS=snprintf  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec3747530909.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3747530909 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the isfinite exist passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3100872069/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3100872069.dir/build.make CMakeFiles/cmTryCompileExec3100872069.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3100872069.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec3100872069.dir/CheckSymbolExists.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec3100872069
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3100872069.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec3100872069.dir/CheckSymbolExists.c.o  -o cmTryCompileExec3100872069 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+File /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <math.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef isfinite
+  return ((int*)(&isfinite))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the isnan exist passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec900685249/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec900685249.dir/build.make CMakeFiles/cmTryCompileExec900685249.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec900685249.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec900685249.dir/CheckSymbolExists.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec900685249
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec900685249.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec900685249.dir/CheckSymbolExists.c.o  -o cmTryCompileExec900685249 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+File /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <math.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef isnan
+  return ((int*)(&isnan))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the include file dlfcn.h exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec4159946421/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec4159946421.dir/build.make CMakeFiles/cmTryCompileExec4159946421.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec4159946421.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec4159946421.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec4159946421
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec4159946421.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec4159946421.dir/CheckIncludeFile.c.o  -o cmTryCompileExec4159946421 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function dlopen exists in the dl passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2433249738/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2433249738.dir/build.make CMakeFiles/cmTryCompileExec2433249738.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2433249738.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=c99  -DCHECK_FUNCTION_EXISTS=dlopen  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec2433249738.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec2433249738
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2433249738.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DCHECK_FUNCTION_EXISTS=dlopen  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec2433249738.dir/CheckFunctionExists.c.o  -o cmTryCompileExec2433249738 -rdynamic -ldl -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function gettimeofday exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3899421274/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3899421274.dir/build.make CMakeFiles/cmTryCompileExec3899421274.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3899421274.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=c99  -DCHECK_FUNCTION_EXISTS=gettimeofday  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec3899421274.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec3899421274
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3899421274.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DCHECK_FUNCTION_EXISTS=gettimeofday  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec3899421274.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3899421274 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function nanosleep exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3475271367/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3475271367.dir/build.make CMakeFiles/cmTryCompileExec3475271367.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3475271367.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=c99  -DCHECK_FUNCTION_EXISTS=nanosleep  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec3475271367.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec3475271367
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3475271367.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DCHECK_FUNCTION_EXISTS=nanosleep  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec3475271367.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3475271367 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file pthread.h exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec4029388453/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec4029388453.dir/build.make CMakeFiles/cmTryCompileExec4029388453.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec4029388453.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec4029388453.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec4029388453
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec4029388453.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec4029388453.dir/CheckIncludeFile.c.o  -o cmTryCompileExec4029388453 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Performing C SOURCE FILE Test HAVE_PTHREAD succeded with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1539507350/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1539507350.dir/build.make CMakeFiles/cmTryCompileExec1539507350.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1539507350.dir/src.c.o
+/usr/bin/cc   -std=c99  -DHAVE_PTHREAD  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -pthread -o CMakeFiles/cmTryCompileExec1539507350.dir/src.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTryCompileExec1539507350
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1539507350.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DHAVE_PTHREAD  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700    CMakeFiles/cmTryCompileExec1539507350.dir/src.c.o  -o cmTryCompileExec1539507350 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Determining if the function pthread_create exists in the pthread passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1944139026/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1944139026.dir/build.make CMakeFiles/cmTryCompileExec1944139026.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1944139026.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=c99  -DCHECK_FUNCTION_EXISTS=pthread_create  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread   -o CMakeFiles/cmTryCompileExec1944139026.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1944139026
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1944139026.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DCHECK_FUNCTION_EXISTS=pthread_create  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread    CMakeFiles/cmTryCompileExec1944139026.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1944139026 -rdynamic -lpthread -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_setschedparam exist passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec136504972/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec136504972.dir/build.make CMakeFiles/cmTryCompileExec136504972.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec136504972.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread   -o CMakeFiles/cmTryCompileExec136504972.dir/CheckSymbolExists.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec136504972
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec136504972.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread    CMakeFiles/cmTryCompileExec136504972.dir/CheckSymbolExists.c.o  -o cmTryCompileExec136504972 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+File /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_setschedparam
+  return ((int*)(&pthread_setschedparam))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the pthread_setname_np exist passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1783289425/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1783289425.dir/build.make CMakeFiles/cmTryCompileExec1783289425.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1783289425.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread   -o CMakeFiles/cmTryCompileExec1783289425.dir/CheckSymbolExists.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec1783289425
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1783289425.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread    CMakeFiles/cmTryCompileExec1783289425.dir/CheckSymbolExists.c.o  -o cmTryCompileExec1783289425 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+File /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_setname_np
+  return ((int*)(&pthread_setname_np))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the pthread_mutex_timedlock exist passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1439951002/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1439951002.dir/build.make CMakeFiles/cmTryCompileExec1439951002.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1439951002.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread   -o CMakeFiles/cmTryCompileExec1439951002.dir/CheckSymbolExists.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec1439951002
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1439951002.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread    CMakeFiles/cmTryCompileExec1439951002.dir/CheckSymbolExists.c.o  -o cmTryCompileExec1439951002 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+File /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_mutex_timedlock
+  return ((int*)(&pthread_mutex_timedlock))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function clock_gettime exists in the rt passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3814800917/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3814800917.dir/build.make CMakeFiles/cmTryCompileExec3814800917.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3814800917.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=c99  -DCHECK_FUNCTION_EXISTS=clock_gettime  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread   -o CMakeFiles/cmTryCompileExec3814800917.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec3814800917
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3814800917.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -DCHECK_FUNCTION_EXISTS=clock_gettime  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread    CMakeFiles/cmTryCompileExec3814800917.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3814800917 -rdynamic -lrt -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file xmmintrin.h exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2340794583/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2340794583.dir/build.make CMakeFiles/cmTryCompileExec2340794583.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2340794583.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99  -msse  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread   -o CMakeFiles/cmTryCompileExec2340794583.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec2340794583
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2340794583.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -msse  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread    CMakeFiles/cmTryCompileExec2340794583.dir/CheckIncludeFile.c.o  -o cmTryCompileExec2340794583 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file emmintrin.h exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2759762830/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2759762830.dir/build.make CMakeFiles/cmTryCompileExec2759762830.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2759762830.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99  -msse2  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread   -o CMakeFiles/cmTryCompileExec2759762830.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec2759762830
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2759762830.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -msse2  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread    CMakeFiles/cmTryCompileExec2759762830.dir/CheckIncludeFile.c.o  -o cmTryCompileExec2759762830 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file smmintrin.h exists passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1931935418/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1931935418.dir/build.make CMakeFiles/cmTryCompileExec1931935418.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1931935418.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99  -msse4.1  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread   -o CMakeFiles/cmTryCompileExec1931935418.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTryCompileExec1931935418
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1931935418.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99  -msse4.1  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread    CMakeFiles/cmTryCompileExec1931935418.dir/CheckIncludeFile.c.o  -o cmTryCompileExec1931935418 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2050259577/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2050259577.dir/build.make CMakeFiles/cmTryCompileExec2050259577.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2050259577.dir/CheckIncludeFiles.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread   -o CMakeFiles/cmTryCompileExec2050259577.dir/CheckIncludeFiles.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec2050259577
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2050259577.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread    CMakeFiles/cmTryCompileExec2050259577.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec2050259577 -rdynamic 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist passed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1887510254/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1887510254.dir/build.make CMakeFiles/cmTryCompileExec1887510254.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1887510254.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread   -o CMakeFiles/cmTryCompileExec1887510254.dir/CheckSymbolExists.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec1887510254
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1887510254.dir/link.txt --verbose=1
+/usr/bin/cc  -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread    CMakeFiles/cmTryCompileExec1887510254.dir/CheckSymbolExists.c.o  -o cmTryCompileExec1887510254 -rdynamic -lm 
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+File /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+

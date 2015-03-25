@@ -1,4 +1,4 @@
-#include <GeKo_Gameplay/Questsystem/Goal_Escort.h>
+#include "GeKo_Gameplay/Questsystem/Goal_Escort.h"
 
 Goal_Escort::Goal_Escort(int id){
 	m_id = id;

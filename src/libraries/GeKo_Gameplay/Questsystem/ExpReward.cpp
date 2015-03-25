@@ -1,4 +1,4 @@
-#include <GeKo_Gameplay/Questsystem/ExpReward.h>
+#include "GeKo_Gameplay/Questsystem/ExpReward.h"
 
 ExpReward::ExpReward(int id)
 {

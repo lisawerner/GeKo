@@ -5,14 +5,14 @@
 #include <iostream>
 #include <string>
 
-#include <GeKo_Gameplay/AI_Pathfinding/Graph.h>
-#include <GeKo_Gameplay/AI_Pathfinding/AStarNode.h>
-#include <GeKo_Gameplay/AI_Pathfinding/AStarAlgorithm.h>
+#include "GeKo_Gameplay/AI_Pathfinding/Graph.h"
+#include "GeKo_Gameplay/AI_Pathfinding/AStarNode.h"
+#include "GeKo_Gameplay/AI_Pathfinding/AStarAlgorithm.h"
 
-#include <GeKo_Graphics/Scenegraph/BoundingSphere.h>
+#include "GeKo_Graphics/Scenegraph/BoundingSphere.h"
 
-#include <GeKo_Gameplay/AI_Decisiontree/DecisionTree.h>
-#include <GeKo_Gameplay/AI_Decisiontree/TreeOutput.h>
+#include "GeKo_Gameplay/AI_Decisiontree/DecisionTree.h"
+#include "GeKo_Gameplay/AI_Decisiontree/TreeOutput.h"
 
 #include "Object.h"
 #include "States.h"

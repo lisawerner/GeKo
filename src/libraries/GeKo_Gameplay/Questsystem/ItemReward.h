@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
-#include  <GeKo_Gameplay/Questsystem/Reward.h>
+#include  "GeKo_Gameplay/Questsystem/Reward.h"
 
 
 class ItemReward: public Reward

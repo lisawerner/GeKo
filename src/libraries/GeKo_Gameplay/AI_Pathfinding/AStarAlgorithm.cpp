@@ -1,4 +1,4 @@
-# include <GeKo_Gameplay/AI_Pathfinding/AStarAlgorithm.h>
+# include "GeKo_Gameplay/AI_Pathfinding/AStarAlgorithm.h"
 
 AStarAlgorithm::AStarAlgorithm(std::string name) : Algorithm(name)
 {

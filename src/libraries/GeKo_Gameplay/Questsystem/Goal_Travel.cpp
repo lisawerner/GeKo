@@ -1,4 +1,4 @@
-#include <GeKo_Gameplay/Questsystem/Goal_Travel.h>
+#include "GeKo_Gameplay/Questsystem/Goal_Travel.h"
 
 Goal_Travel::Goal_Travel(int id){
 	m_id = id;

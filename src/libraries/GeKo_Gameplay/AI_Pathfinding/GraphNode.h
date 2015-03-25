@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <glm/ext.hpp>
-#include <GeKo_Gameplay/AI_Pathfinding/Path.h>
+#include "GeKo_Gameplay/AI_Pathfinding/Path.h"
 #include "GraphNodeType.h"
 
 /** A GraphNode-class provides the possibility to create waypoints, which can be used by AI-Units and Pathfinding algorithms.

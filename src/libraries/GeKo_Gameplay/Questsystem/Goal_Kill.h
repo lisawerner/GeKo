@@ -6,8 +6,8 @@
 #include <string>
 
 #include "Goal.h"
-#include <GeKo_Gameplay/Object/AI.h>
-#include <GeKo_Gameplay/Object/ObjectType.h>
+#include "GeKo_Gameplay/Object/AI.h"
+#include "GeKo_Gameplay/Object/ObjectType.h"
 
 
 class Goal_Kill : public Goal

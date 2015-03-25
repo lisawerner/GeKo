@@ -1,0 +1,2 @@
+/usr/bin/ar cr ../../../lib/libGeKo_Physics.a  CMakeFiles/GeKo_Physics.dir/CollisionTest.cpp.o CMakeFiles/GeKo_Physics.dir/Gravity.cpp.o CMakeFiles/GeKo_Physics.dir/Acceleration.cpp.o
+/usr/bin/ranlib ../../../lib/libGeKo_Physics.a

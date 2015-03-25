@@ -6,7 +6,7 @@
 #include <string>
 
 #include "Goal.h"
-#include <GeKo_Gameplay/Object/ObjectType.h>
+#include "GeKo_Gameplay/Object/ObjectType.h"
 
 class Goal_Eaten : public Goal
 {

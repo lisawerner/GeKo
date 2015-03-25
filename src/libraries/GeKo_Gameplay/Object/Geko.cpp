@@ -1,4 +1,4 @@
-#include <GeKo_Gameplay/Object/Geko.h>
+#include "GeKo_Gameplay/Object/Geko.h"
 
 Geko::Geko(std::string gekoName){
 	Geko(gekoName, glm::vec3(0.0f));

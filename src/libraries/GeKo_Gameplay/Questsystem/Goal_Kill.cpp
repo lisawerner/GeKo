@@ -1,4 +1,4 @@
-#include <GeKo_Gameplay/Questsystem/Goal_Kill.h>
+#include "GeKo_Gameplay/Questsystem/Goal_Kill.h"
 
 Goal_Kill::Goal_Kill(int id){
 	m_id = id;

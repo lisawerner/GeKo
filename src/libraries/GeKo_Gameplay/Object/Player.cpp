@@ -1,4 +1,4 @@
-#include <GeKo_Gameplay/Object/Player.h>
+#include "GeKo_Gameplay/Object/Player.h"
 
 Player::Player(std::string playerName)
 {

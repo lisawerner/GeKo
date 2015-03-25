@@ -1,4 +1,4 @@
-#include <GeKo_Gameplay/Object/StaticObject.h>
+#include "GeKo_Gameplay/Object/StaticObject.h"
 
 StaticObject::StaticObject(){
 	m_type = ObjectType::DEFAULTOBJECT;

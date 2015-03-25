@@ -6,7 +6,7 @@
 #include <string>
 
 #include "Quest.h"
-#include <GeKo_Gameplay/Questsystem/QuestGraph.h>
+#include "GeKo_Gameplay/Questsystem/QuestGraph.h"
 
 #include "Goal.h"
 

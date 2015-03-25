@@ -1,4 +1,4 @@
-#include <GeKo_Gameplay/Questsystem/Goal_Eaten.h>
+#include "GeKo_Gameplay/Questsystem/Goal_Eaten.h"
 
 Goal_Eaten::Goal_Eaten(int id){
 	m_id = id;

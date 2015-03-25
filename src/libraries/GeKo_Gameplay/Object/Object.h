@@ -7,9 +7,9 @@
 
 //#include <GeKo_Graphics/Scenegraph/Node.h>
 //#include <GeKo_Graphics/Scenegraph/CollisionTest.h>
-#include <GeKo_Graphics/Observer/Subject.h>
-#include <GeKo_Gameplay/Item/Inventory.h>
-#include <GeKo_Sound/SoundFileHandler.h>
+#include "GeKo_Graphics/Observer/Subject.h"
+#include "GeKo_Gameplay/Item/Inventory.h"
+#include "GeKo_Sound/SoundFileHandler.h"
 
 #include "ObjectType.h"
 #include "ClassType.h"

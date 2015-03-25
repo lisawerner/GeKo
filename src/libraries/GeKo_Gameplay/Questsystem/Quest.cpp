@@ -1,4 +1,4 @@
-#include <GeKo_Gameplay/Questsystem/Quest.h>
+#include "GeKo_Gameplay/Questsystem/Quest.h"
 
 Quest::Quest(int id){
 	//m_next = new Quest();

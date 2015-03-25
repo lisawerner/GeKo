@@ -1,0 +1,41 @@
+FILE(REMOVE_RECURSE
+  "CMakeFiles/GeKo_Gameplay.dir/AI_Decisiontree/DecisionTree.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/AI_Decisiontree/DecisionTreeNode.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Item/Item.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Item/Inventory.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Input/InputMap.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Input/MapPlayerview.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Input/MapPilotview.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Input/MapStrategyCamera.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Input/InputHandler.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Input/MapTrackball.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/AI_Pathfinding/AStarAlgorithm.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/AI_Pathfinding/AStarNode.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/FightSystem/FightSystem.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Object/Player.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Object/Object.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Object/Geko.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Object/StaticObject.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Object/AI.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Questsystem/Goal_Travel.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Questsystem/Goal.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Questsystem/QuestGraph.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Questsystem/Goal_Eaten.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Questsystem/Goal_Kill.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Questsystem/Goal_Collect.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Questsystem/Goal_Escort.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Questsystem/Counter.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Questsystem/ItemReward.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Questsystem/QuestHandler.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Questsystem/ExpReward.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Questsystem/Reward.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Questsystem/QuestGraphNode.cpp.o"
+  "CMakeFiles/GeKo_Gameplay.dir/Questsystem/Quest.cpp.o"
+  "../../../lib/libGeKo_Gameplay.pdb"
+  "../../../lib/libGeKo_Gameplay.a"
+)
+
+# Per-language clean rules from dependency scanning.
+FOREACH(lang CXX)
+  INCLUDE(CMakeFiles/GeKo_Gameplay.dir/cmake_clean_${lang}.cmake OPTIONAL)
+ENDFOREACH(lang)

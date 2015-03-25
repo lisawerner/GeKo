@@ -5,9 +5,9 @@
 #include <iostream>
 #include <string>
 
-#include <GeKo_Graphics/Observer/Subject.h>
+#include "GeKo_Graphics/Observer/Subject.h"
 #include "Goal.h"
-#include <GeKo_Gameplay/Questsystem/Reward.h>
+#include "GeKo_Gameplay/Questsystem/Reward.h"
 
 class Quest: public Subject<Quest, Quest_Event>
 {

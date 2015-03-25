@@ -1,4 +1,4 @@
-#include <GeKo_Gameplay/AI_DecisionTree/DecisionTree.h>
+#include "DecisionTree.h"
 
 DecisionTree::DecisionTree(){}
 

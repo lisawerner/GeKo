@@ -1,0 +1,319 @@
+Determining if the include file io.h exists failed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2444736996/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2444736996.dir/build.make CMakeFiles/cmTryCompileExec2444736996.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2444736996.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec2444736996.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:16: fatal error: io.h: No such file or directory
+ #include <io.h>
+                ^
+compilation terminated.
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[4]: *** [CMakeFiles/cmTryCompileExec2444736996.dir/CheckIncludeFile.c.o] Error 1
+make[3]: *** [cmTryCompileExec2444736996/fast] Error 2
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file sys/sysconf.h exists failed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec635433669/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec635433669.dir/build.make CMakeFiles/cmTryCompileExec635433669.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec635433669.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec635433669.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:25: fatal error: sys/sysconf.h: No such file or directory
+ #include <sys/sysconf.h>
+                         ^
+compilation terminated.
+make[4]: *** [CMakeFiles/cmTryCompileExec635433669.dir/CheckIncludeFile.c.o] Error 1
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: *** [cmTryCompileExec635433669/fast] Error 2
+
+
+Determining if the include file ieeefp.h exists failed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3832141092/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3832141092.dir/build.make CMakeFiles/cmTryCompileExec3832141092.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3832141092.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec3832141092.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:20: fatal error: ieeefp.h: No such file or directory
+ #include <ieeefp.h>
+                    ^
+compilation terminated.
+make[4]: *** [CMakeFiles/cmTryCompileExec3832141092.dir/CheckIncludeFile.c.o] Error 1
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: *** [cmTryCompileExec3832141092/fast] Error 2
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file guiddef.h exists failed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1843617534/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1843617534.dir/build.make CMakeFiles/cmTryCompileExec1843617534.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1843617534.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec1843617534.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:21: fatal error: guiddef.h: No such file or directory
+ #include <guiddef.h>
+                     ^
+compilation terminated.
+make[4]: *** [CMakeFiles/cmTryCompileExec1843617534.dir/CheckIncludeFile.c.o] Error 1
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: *** [cmTryCompileExec1843617534/fast] Error 2
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file initguid.h exists failed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1538676501/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1538676501.dir/build.make CMakeFiles/cmTryCompileExec1538676501.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1538676501.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec1538676501.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:22: fatal error: initguid.h: No such file or directory
+ #include <initguid.h>
+                      ^
+compilation terminated.
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[4]: *** [CMakeFiles/cmTryCompileExec1538676501.dir/CheckIncludeFile.c.o] Error 1
+make[3]: *** [cmTryCompileExec1538676501/fast] Error 2
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the _aligned_malloc exist failed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2227378802/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2227378802.dir/build.make CMakeFiles/cmTryCompileExec2227378802.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2227378802.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec2227378802.dir/CheckSymbolExists.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function ‘main’:
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: error: ‘_aligned_malloc’ undeclared (first use in this function)
+   return ((int*)(&_aligned_malloc))[argc];
+                   ^
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: note: each undeclared identifier is reported only once for each function it appears in
+make[4]: *** [CMakeFiles/cmTryCompileExec2227378802.dir/CheckSymbolExists.c.o] Error 1
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: *** [cmTryCompileExec2227378802/fast] Error 2
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+File /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <malloc.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef _aligned_malloc
+  return ((int*)(&_aligned_malloc))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the _controlfp exist failed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1863858958/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1863858958.dir/build.make CMakeFiles/cmTryCompileExec1863858958.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1863858958.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec1863858958.dir/CheckSymbolExists.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function ‘main’:
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: error: ‘_controlfp’ undeclared (first use in this function)
+   return ((int*)(&_controlfp))[argc];
+                   ^
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: note: each undeclared identifier is reported only once for each function it appears in
+make[4]: *** [CMakeFiles/cmTryCompileExec1863858958.dir/CheckSymbolExists.c.o] Error 1
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: *** [cmTryCompileExec1863858958/fast] Error 2
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+File /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef _controlfp
+  return ((int*)(&_controlfp))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the __control87_2 exist failed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec665412259/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec665412259.dir/build.make CMakeFiles/cmTryCompileExec665412259.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec665412259.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec665412259.dir/CheckSymbolExists.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function ‘main’:
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: error: ‘__control87_2’ undeclared (first use in this function)
+   return ((int*)(&__control87_2))[argc];
+                   ^
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: note: each undeclared identifier is reported only once for each function it appears in
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[4]: *** [CMakeFiles/cmTryCompileExec665412259.dir/CheckSymbolExists.c.o] Error 1
+make[3]: *** [cmTryCompileExec665412259/fast] Error 2
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+File /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef __control87_2
+  return ((int*)(&__control87_2))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the include file android/api-level.h exists failed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1029453073/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1029453073.dir/build.make CMakeFiles/cmTryCompileExec1029453073.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1029453073.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec1029453073.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:31: fatal error: android/api-level.h: No such file or directory
+ #include <android/api-level.h>
+                               ^
+compilation terminated.
+make[4]: *** [CMakeFiles/cmTryCompileExec1029453073.dir/CheckIncludeFile.c.o] Error 1
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: *** [cmTryCompileExec1029453073/fast] Error 2
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file windows.h exists failed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2854936280/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2854936280.dir/build.make CMakeFiles/cmTryCompileExec2854936280.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2854936280.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99  -D_WIN32_WINNT=0x0502  -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec2854936280.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:21: fatal error: windows.h: No such file or directory
+ #include <windows.h>
+                     ^
+compilation terminated.
+make[4]: *** [CMakeFiles/cmTryCompileExec2854936280.dir/CheckIncludeFile.c.o] Error 1
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: *** [cmTryCompileExec2854936280/fast] Error 2
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if files pthread.h;pthread_np.h exist failed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2528379470/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2528379470.dir/build.make CMakeFiles/cmTryCompileExec2528379470.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2528379470.dir/CheckIncludeFiles.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700   -o CMakeFiles/cmTryCompileExec2528379470.dir/CheckIncludeFiles.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFiles.c:3:24: fatal error: pthread_np.h: No such file or directory
+ #include <pthread_np.h>
+                        ^
+compilation terminated.
+make[4]: *** [CMakeFiles/cmTryCompileExec2528379470.dir/CheckIncludeFiles.c.o] Error 1
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: *** [cmTryCompileExec2528379470/fast] Error 2
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source:
+/* */
+#include <pthread.h>
+#include <pthread_np.h>
+
+
+int main(){return 0;}
+
+Determining if the include file arm_neon.h exists failed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2601085400/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2601085400.dir/build.make CMakeFiles/cmTryCompileExec2601085400.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2601085400.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread   -o CMakeFiles/cmTryCompileExec2601085400.dir/CheckIncludeFile.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:22: fatal error: arm_neon.h: No such file or directory
+ #include <arm_neon.h>
+                      ^
+compilation terminated.
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[4]: *** [CMakeFiles/cmTryCompileExec2601085400.dir/CheckIncludeFile.c.o] Error 1
+make[3]: *** [cmTryCompileExec2601085400/fast] Error 2
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+
+Determining if files SLES/OpenSLES.h;SLES/OpenSLES_Android.h exist failed with the following output:
+Change Dir: /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec985349574/fast"
+make[3]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec985349574.dir/build.make CMakeFiles/cmTryCompileExec985349574.dir/build
+make[4]: Entering directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec985349574.dir/CheckIncludeFiles.c.o
+/usr/bin/cc   -std=c99   -D_GNU_SOURCE=1 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -pthread   -o CMakeFiles/cmTryCompileExec985349574.dir/CheckIncludeFiles.c.o   -c /home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp/CheckIncludeFiles.c:2:27: fatal error: SLES/OpenSLES.h: No such file or directory
+ #include <SLES/OpenSLES.h>
+                           ^
+compilation terminated.
+make[4]: *** [CMakeFiles/cmTryCompileExec985349574.dir/CheckIncludeFiles.c.o] Error 1
+make[4]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+make[3]: *** [cmTryCompileExec985349574/fast] Error 2
+make[3]: Leaving directory `/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/CMakeTmp'
+
+Source:
+/* */
+#include <SLES/OpenSLES.h>
+#include <SLES/OpenSLES_Android.h>
+
+
+int main(){return 0;}
+

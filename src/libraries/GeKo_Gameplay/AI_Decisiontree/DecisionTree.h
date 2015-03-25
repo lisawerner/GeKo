@@ -2,9 +2,9 @@
 
 #include "DecisionTreeNode.h"
 #include "TreeOutput.h"
-#include <GeKo_Gameplay/Object/States.h>
+#include "GeKo_Gameplay/Object/States.h"
 
-#include <GeKo_Gameplay/AI_Pathfinding/Graph.h>
+#include "GeKo_Gameplay/AI_Pathfinding/Graph.h"
 
 #include <vector>
 #include <glm/glm.hpp>

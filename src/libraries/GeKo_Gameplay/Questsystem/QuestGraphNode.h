@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-#include <GeKo_Gameplay/Questsystem/Quest.h>
+#include "GeKo_Gameplay/Questsystem/Quest.h"
 
 class QuestGraphNode
 {

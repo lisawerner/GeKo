@@ -1,4 +1,4 @@
-#include <GeKo_Gameplay/Questsystem/Goal_Collect.h>
+#include "GeKo_Gameplay/Questsystem/Goal_Collect.h"
 
 Goal_Collect::Goal_Collect(int id){
 	m_id = id;

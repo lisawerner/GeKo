@@ -6,7 +6,7 @@
 #include <string>
 
 #include "Goal.h"
-#include <GeKo_Gameplay/Item/Item.h>
+#include "GeKo_Gameplay/Item/Item.h"
 
 
 class Goal_Collect : public Goal

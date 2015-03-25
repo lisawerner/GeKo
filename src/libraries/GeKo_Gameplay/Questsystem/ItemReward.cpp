@@ -1,4 +1,4 @@
-#include <GeKo_Gameplay/Questsystem/ItemReward.h>
+#include "GeKo_Gameplay/Questsystem/ItemReward.h"
 
 ItemReward::ItemReward(int id)
 {

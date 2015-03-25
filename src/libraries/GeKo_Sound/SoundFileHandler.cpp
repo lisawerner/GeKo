@@ -1,4 +1,5 @@
 #include "SoundFileHandler.h"
+#include <cstdio>
 
 
 /**
@@ -65,7 +66,7 @@ SoundFileHandler::~SoundFileHandler(){
 
 }
 
-int SoundFileHandler::endWithError(char* msg){
+int SoundFileHandler::endWithError(const char* msg){
 	std::cout << msg << "\n";
 	system("PAUSE");
 	return 0;
@@ -81,7 +82,7 @@ void SoundFileHandler::generateSource(ALfloat position[3], const char *filepath)
 		return;
 	}
 
-	fopen_s(&fp, filepath, "rb");
+	fopen(filepath, "rb");
 
 	if (NULL == fp)
 	{
@@ -146,7 +147,7 @@ void SoundFileHandler::generateSource(std::string name, ALfloat position[3], con
 			return;
 		}
 
-		fopen_s(&fp, filepath, "rb");
+		fopen(filepath, "rb");
 
 		if (NULL == fp)
 		{
@@ -468,17 +469,17 @@ void SoundFileHandler::pauseAllSources(){
 int SoundFileHandler::generateBufferData(const char *filepath, int numberOfSources){
 	
 	/*char type[4];
-	DWORD size, chunkSize;
+	int size, chunkSize;
 	short formatType, channels;
-	DWORD sampleRate, avgBytesPerSec;
+	int sampleRate, avgBytesPerSec;
 	short bytesPerSample, bitsPerSample;
-	DWORD dataSize;
+	int dataSize;
 	ALuint frequency;
 	ALenum format;
 	FILE *fp = NULL;*/
 	//unsigned char* buf;
 
-	//fopen_s(&fp, filepath, "rb");
+	//fopen(&fp, filepath, "rb");
 
 	
 
@@ -490,7 +491,7 @@ int SoundFileHandler::generateBufferData(const char *filepath, int numberOfSourc
 
 	}
 
-	fread(&size, sizeof(DWORD), 1, fp);
+	fread(&size, sizeof(int), 1, fp);
 	fread(type, sizeof(char), 4, fp);
 	if (type[0] != 'W' || type[1] != 'A' || type[2] != 'V' || type[3] != 'E')
 		return endWithError("Not Wave");
@@ -499,11 +500,11 @@ int SoundFileHandler::generateBufferData(const char *filepath, int numberOfSourc
 	if (type[0] != 'f' || type[1] != 'm' || type[2] != 't' || type[3] != ' ')
 		return endWithError("Not fmt ");
 
-	fread(&chunkSize, sizeof(DWORD), 1, fp);
+	fread(&chunkSize, sizeof(int), 1, fp);
 	fread(&formatType, sizeof(short), 1, fp);
 	fread(&channels, sizeof(short), 1, fp);
-	fread(&sampleRate, sizeof(DWORD), 1, fp);
-	fread(&avgBytesPerSec, sizeof(DWORD), 1, fp);
+	fread(&sampleRate, sizeof(int), 1, fp);
+	fread(&avgBytesPerSec, sizeof(int), 1, fp);
 	fread(&bytesPerSample, sizeof(short), 1, fp);
 	fread(&bitsPerSample, sizeof(short), 1, fp);
 
@@ -511,10 +512,10 @@ int SoundFileHandler::generateBufferData(const char *filepath, int numberOfSourc
 	if (type[0] != 'd' || type[1] != 'a' || type[2] != 't' || type[3] != 'a')
 		return endWithError("Missing Data");
 
-	fread(&dataSize, sizeof(DWORD), 1, fp);
+	fread(&dataSize, sizeof(int), 1, fp);
 
 	buf = new unsigned char[dataSize];
-	fread(buf, sizeof(BYTE), dataSize, fp);
+	fread(buf, sizeof(unsigned char), dataSize, fp);
 
 
 

@@ -1,7 +1,8 @@
 #pragma once
-#include <GeKo_Gameplay/AI_Pathfinding/GraphNode.h>
-#include <GeKo_Gameplay/AI_Pathfinding/Algorithm.h>
-#include <GeKo_Gameplay/AI_Pathfinding/AStarNode.h>
+#include "GeKo_Gameplay/AI_Pathfinding/GraphNode.h"
+#include "GeKo_Gameplay/AI_Pathfinding/Algorithm.h"
+#include "GeKo_Gameplay/AI_Pathfinding/AStarNode.h"
+#include "GeKo_Gameplay/AI_Pathfinding/AStarAlgorithm.h"
 #include "GraphNodeType.h"
 #include <sstream>
 #include <vector>
@@ -118,7 +119,7 @@ public:
 		 AStarNode* defaultNode = new AStarNode();
 		 AStarNode* spawn = new AStarNode("Spawn", defaultNode);
 		/* spawn->setDefault(defaultNode);*/
-		 AStarNode* A = new AStarNode("A", defaultNode);
+		 AStarNode* a = new AStarNode("A", defaultNode);
 		 //A->setDefault(defaultNode);
 		 AStarNode* B = new AStarNode("B", defaultNode);
 		 //B->setDefault(defaultNode);
@@ -133,7 +134,7 @@ public:
 
 		 //Position of the nodes
 		 spawn->setPosition(glm::vec3(0.0));
-		 A->setPosition(glm::vec3(1.0));
+		 a->setPosition(glm::vec3(1.0));
 		 B->setPosition(glm::vec3(3.0));
 		 Food->setPosition(glm::vec3(10.0, 10.0, 0.0));
 		 player->setPosition(posPlayer);
@@ -146,9 +147,9 @@ public:
 		 player->setVisitor(defaultNode);*/
 
 		 //path creation //
-		 Path<AStarNode>* spawnA = new Path<AStarNode>(2, spawn, A);
-		 Path<AStarNode>* Aspawn = new Path<AStarNode>(2, A, spawn);
-		 A->addPath(Aspawn);
+		 Path<AStarNode>* spawnA = new Path<AStarNode>(2, spawn, a);
+		 Path<AStarNode>* Aspawn = new Path<AStarNode>(2, a, spawn);
+		 a->addPath(Aspawn);
 		 spawn->addPath(spawnA);
 
 		 Path<AStarNode>* spawnB = new Path<AStarNode>(3, spawn, B);
@@ -156,9 +157,9 @@ public:
 		 B->addPath(Bspawn);
 		 spawn->addPath(spawnB);
 
-		 Path<AStarNode>* AFood = new Path<AStarNode>(2, A, Food);
-		 Path<AStarNode>* FoodA = new Path<AStarNode>(2, Food, A);
-		 A->addPath(AFood);
+		 Path<AStarNode>* AFood = new Path<AStarNode>(2, a, Food);
+		 Path<AStarNode>* FoodA = new Path<AStarNode>(2, Food, a);
+		 a->addPath(AFood);
 		 Food->addPath(FoodA);
 
 		 Path<AStarNode>* BFood = new Path<AStarNode>(15, B, Food);
@@ -166,14 +167,14 @@ public:
 		 B->addPath(BFood);
 		 Food->addPath(FoodB);
 
-		 Path<AStarNode>* AB = new Path<AStarNode>(1, A, B);
-		 Path<AStarNode>* BA = new Path<AStarNode>(5, B, A);
-		 A->addPath(AB);
+		 Path<AStarNode>* AB = new Path<AStarNode>(1, a, B);
+		 Path<AStarNode>* BA = new Path<AStarNode>(5, B, a);
+		 a->addPath(AB);
 		 B->addPath(BA);
 
 		 //Nodes will be add to the graph
 		 addGraphNode(spawn);
-		 addGraphNode(A);
+		 addGraphNode(a);
 		 addGraphNode(B);
 		 addGraphNode(Food);
 		 addGraphNode(player);

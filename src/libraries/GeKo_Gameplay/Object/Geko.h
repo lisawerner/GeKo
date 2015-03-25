@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GeKo_Gameplay/Object/Player.h>
+#include "GeKo_Gameplay/Object/Player.h"
 
 /**This class is a first generalisation of the Player class. A Geko has a view direction and a movement vector, so it can be moved over the playground. 
 The Geko-class also has its own movement Methods and each frame it will be updatet, so the player can move*/

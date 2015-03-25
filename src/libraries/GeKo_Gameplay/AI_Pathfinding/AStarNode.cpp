@@ -1,4 +1,4 @@
-#include <GeKo_Gameplay/AI_Pathfinding/AStarNode.h>
+#include "GeKo_Gameplay/AI_Pathfinding/AStarNode.h"
 
 AStarNode::AStarNode(std::string name, AStarNode *defaultNode) :
 GraphNode(name)	

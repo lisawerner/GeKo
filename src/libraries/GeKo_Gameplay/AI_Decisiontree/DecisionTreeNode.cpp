@@ -1,4 +1,4 @@
-#include <GeKo_Gameplay/AI_DecisionTree/DecisionTreeNode.h>
+#include "DecisionTreeNode.h"
 
 DecisionTreeNode::DecisionTreeNode(int nodeID, DecisionTreeNode* defaultNode){
 	m_idNode = nodeID;

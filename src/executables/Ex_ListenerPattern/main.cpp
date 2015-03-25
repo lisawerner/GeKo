@@ -10,7 +10,7 @@
 #include <GeKo_Graphics/ShaderInclude.h>
 
 #include <GeKo_Graphics/AIInclude.h>
-#include <GeKo_Gameplay/AI_DecisionTree/DecisionTree.h>
+#include "GeKo_Gameplay/AI_Decisiontree/DecisionTree.h"
 #include <GeKo_Gameplay/Object/Geko.h>
 #include <GeKo_Gameplay/Object/AI.h>
 
@@ -30,8 +30,8 @@
 
 #include <GeKo_Gameplay/Questsystem/ItemReward.h>
 #include <GeKo_Gameplay/Questsystem/ExpReward.h>
-#include <Geko_Gameplay/Questsystem/Goal_Kill.h>
-#include <Geko_Gameplay/Questsystem/Goal_Eaten.h>
+#include <GeKo_Gameplay/Questsystem/Goal_Kill.h>
+#include <GeKo_Gameplay/Questsystem/Goal_Eaten.h>
 
 //===================================================================//
 //==================Things you need globally==========================//

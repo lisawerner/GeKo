@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-#include  <GeKo_Gameplay/Item/Item.h>
+#include  "GeKo_Gameplay/Item/Item.h"
 
 enum Type {
 	REWARD, REWARD_ITEM, REWARD_EXP

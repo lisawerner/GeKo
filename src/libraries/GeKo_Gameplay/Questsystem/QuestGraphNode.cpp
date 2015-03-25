@@ -1,4 +1,4 @@
-#include <GeKo_Gameplay/Questsystem/QuestGraphNode.h>
+#include "GeKo_Gameplay/Questsystem/QuestGraphNode.h"
 
 QuestGraphNode::QuestGraphNode(){
 }
