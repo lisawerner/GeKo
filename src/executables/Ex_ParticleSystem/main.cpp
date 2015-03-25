@@ -10,14 +10,16 @@
 #include <GeKo_Graphics/ScenegraphInclude.h>
 
 InputHandler iH;
-Pilotview cam("PilotviewCam");
+Pilotview cam("Pilotview");
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
+	// The active InputMap is fetched
 	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
 
+	// You go over the active InputMap, if it's the key that is pressed, the mapped action is executed else the key is ignored
 	for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
 		if (it->first == key)
-			iH.getActiveInputMap()->checkMultipleMappedKeys(key, *window);
+			activeMap.at(key)();
 		if (it == activeMap.end())
 			std::cout << "Key is not mapped to an action" << std::endl;
 	}
@@ -28,6 +30,8 @@ enum FLOW { UNUSED = -1, CONSTANT = 0, ONCE = 1 } output;
 
 int main()
 {
+	//////////////////////////////////////////BASICS///////////////////////////////////////////
+
 	glfwInit();
 
 	//WINDOW
@@ -36,9 +40,14 @@ int main()
 	glfwMakeContextCurrent(window);
 
 	//CAM
-	cam.setPosition(glm::vec4(0.0, 0.0, 2.5, 1.0));
-	cam.setKeySpeed(2.0);
+	cam.setPosition(glm::vec4(0.0, 0.0, 7.0, 1.0));
+	cam.setNearFar(0.1f, 100.0f);
+	cam.setLookAt(glm::vec3(0.0, 0.0, 0.0));
+	cam.setKeySpeed(8.0);
 	iH.setAllInputMaps(cam);
+	iH.changeActiveInputMap("Pilotview");
+
+	// Callback
 	glfwSetKeyCallback(window, key_callback);
 
 	glewInit();
@@ -46,6 +55,15 @@ int main()
 	//?
 	//OpenGL3Context context;
 	//Renderer renderer(context);
+
+	//SHADER
+	VertexShader vsSkybox(loadShaderSource(SHADERS_PATH + std::string("/SkyboxShader/SkyboxShader.vert")));
+	FragmentShader fsSkybox(loadShaderSource(SHADERS_PATH + std::string("/SkyboxShader/SkyboxShader.frag")));
+	ShaderProgram shaderSkybox(vsSkybox, fsSkybox);
+
+	VertexShader vsObject(loadShaderSource(SHADERS_PATH + std::string("/TextureShader3D/TextureShader3D.vert")));
+	FragmentShader fsObject(loadShaderSource(SHADERS_PATH + std::string("/TextureShader3D/TextureShader3D.frag")));
+	ShaderProgram shaderObject(vsObject, fsObject);
 
 	/////////////////////////////////////////TEXTURES//////////////////////////////////////////
 
@@ -85,8 +103,11 @@ int main()
 	Texture* particleBlackTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/virus.png");
 	Texture* particleWhiteTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/particle.png");
 	Texture* snowTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/snowflake.png"); //TODO better Resolution
-	Texture* glowwormTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/glowworm2.png");
+	Texture* glowwormTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/glowworm.png");
+	Texture* energyTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/energy.png");
 	Texture* fireflyTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/firefly.png");
+	Texture* fireSparkTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/sparkOrange.png");
+	Texture* fireSparkTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/sparkRed.png");
 
 	//RAIN
 	Texture* rainTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/rain/rain.png");
@@ -127,7 +148,7 @@ int main()
 	snowStrong->useTexture(true, 0.8, 1.0, 3.0);
 
 	//FINAL EMITTER WHITE SMOKE
-	Emitter* smokeWhite = new Emitter(0, glm::vec3(0, -1.0, 0.0), 0.0, 0.4, 1, 8.0, true);
+	Emitter* smokeWhite = new Emitter(0, glm::vec3(3.0, -1.0, 1.0), 0.0, 0.4, 1, 8.0, true);
 	smokeWhite->setVelocity(2);
 	smokeWhite->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.8), 0.3f);
 	smokeWhite->addTexture(smokeWhiteTex1, 1.0);
@@ -138,7 +159,7 @@ int main()
 	smokeWhite->switchToGeometryShader();
 
 	//FINAL EMITTER BLACK SMOKE
-	Emitter* smokeBlack = new Emitter(0, glm::vec3(0, -1.0, 0.0), 0.0, 0.4, 1, 8.0, true);
+	Emitter* smokeBlack = new Emitter(0, glm::vec3(6.0, -1.0, 1.0), 0.0, 0.4, 1, 8.0, true);
 	smokeBlack->setVelocity(2);
 	smokeBlack->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.8), 0.3f);
 	smokeBlack->addTexture(smokeBlackTex1, 1.0);
@@ -165,8 +186,23 @@ int main()
 	fruitFlies->useTexture(true, 0.04, 3.0, 3.0, true, 1.0);
 	fruitFlies->switchToGeometryShader();
 
+	//FINAL EMITTER GLOWWORM
+	Emitter* glowworm = new Emitter(0, glm::vec3(-3.0, 0.0, 1.0), 0.0, 0.2, 1, 10.0, true);
+	glowworm->setVelocity(0);
+	glowworm->usePhysicSwarmCircleMotion(true, true, true);
+	glowworm->setAreaEmitting(true, false, 0.4, 1000);
+	glowworm->addTexture(glowwormTex, 0.0);
+	glowworm->useTexture(true, 0.1, 1.0, 1.5);
+
+	//FINAL EMITTER ENERGYBALL
+	Emitter* energyBall = new Emitter(0, glm::vec3(-12.0, -1.0, 1.0), 0.0, 0.01, 5, 15.0, true);
+	energyBall->setVelocity(5);
+	energyBall->usePhysicPointGravity(glm::vec4(-10.0, 1.0, 1.0, 3.0), 8.0, 2, 1.8);
+	energyBall->addTexture(energyTex, 1.0);
+	energyBall->useTexture(true, 0.04);
+
 	//FINAL EMITTER COMIC CLOUD
-	Emitter* cloud01 = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 1.5, 1, 10.0, true);
+	Emitter* cloud01 = new Emitter(0, glm::vec3(-6.0, 0.5, 1.0), 0.0, 1.5, 1, 10.0, true);
 	cloud01->setVelocity(4);
 	cloud01->usePhysicPointGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.0, 0, 0.62);
 	cloud01->addTexture(comicCloudTex1, 0.0);
@@ -175,7 +211,7 @@ int main()
 	cloud01->useTexture(true, cloudSize1, cloudTime1, 0.4, 4.0, false, 0.3);
 	cloud01->switchToGeometryShader();
 
-	Emitter* cloud02 = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 2.1, 1, 10.0, true);
+	Emitter* cloud02 = new Emitter(0, glm::vec3(-6.0, 0.5, 1.0), 0.0, 2.1, 1, 10.0, true);
 	cloud02->setVelocity(4);
 	cloud02->usePhysicPointGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.0, 0, 0.5);
 	cloud02->addTexture(comicCloudTex3, 0.0);
@@ -184,55 +220,55 @@ int main()
 	cloud02->useTexture(true, cloudSize2, cloudTime2, 0.4, 4.0, false, 0.3);
 	cloud02->switchToGeometryShader();
 
-	Emitter* cloud03 = new Emitter(0, glm::vec3(-0.35, 0.45, 0.0), 0.0, 0.0, 1, 0.0, false);
+	Emitter* cloud03 = new Emitter(0, glm::vec3(-7.0, 1.0, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud03->setVelocity(0);
 	cloud03->addTexture(comicBalloonTex4, 1.0);
 	cloud03->useTexture(true, 0.8, 2.0);
 	cloud03->switchToGeometryShader();
 
-	Emitter* cloud04 = new Emitter(0, glm::vec3(1.2, 1.0, 0.0), 0.0, 0.0, 1, 0.0, false);
+	Emitter* cloud04 = new Emitter(0, glm::vec3(-4.8, 2.0, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud04->setVelocity(0);
 	cloud04->addTexture(comicStarTex2, 1.0);
 	cloud04->useTexture(true, 0.3, 2.0, 0.0, false, 0.6);
 	cloud04->switchToGeometryShader();
 
-	Emitter* cloud05 = new Emitter(0, glm::vec3(-1.0, -1.0, 0.0), 0.0, 0.0, 1, 0.0, false);
+	Emitter* cloud05 = new Emitter(0, glm::vec3(-7.0, -1.0, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud05->setVelocity(0);
 	cloud05->addTexture(comicStarTex2, 1.0);
 	cloud05->useTexture(true, 0.5, 2.0, 0.0, true, 0.4);
 	cloud05->switchToGeometryShader();
 
-	Emitter* cloud06 = new Emitter(0, glm::vec3(1.7, -0.8, 0.0), 0.0, 0.0, 1, 0.0, false);
+	Emitter* cloud06 = new Emitter(0, glm::vec3(-4.3, 0.2, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud06->setVelocity(0);
 	cloud06->addTexture(comicSpiralTex5, 1.0);
 	cloud06->useTexture(true, 0.3, 2.0);
 	cloud06->switchToGeometryShader();
 
-	Emitter* cloud07 = new Emitter(0, glm::vec3(-2.0, -0.3, 0.0), 0.0, 0.0, 1, 0.0, false);
+	Emitter* cloud07 = new Emitter(0, glm::vec3(-8.0, 0.7, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud07->setVelocity(0);
 	cloud07->addTexture(comicSpiralTex3, 1.0);
 	cloud07->useTexture(true, 0.3, 2.0);
 	cloud07->switchToGeometryShader();
 
-	Emitter* cloud08 = new Emitter(0, glm::vec3(-1.9, 1.1, 0.0), 0.0, 0.0, 1, 0.0, false);
+	Emitter* cloud08 = new Emitter(0, glm::vec3(-7.9, 2.1, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud08->setVelocity(0);
 	cloud08->addTexture(comicLightningTex1, 1.0);
 	cloud08->useTexture(true, 0.6, 2.0);
 	cloud08->switchToGeometryShader();
 
-	Emitter* cloud09 = new Emitter(0, glm::vec3(2.0, 0.4, 0.0), 0.0, 0.0, 1, 0.0, false);
+	Emitter* cloud09 = new Emitter(0, glm::vec3(-4.0, 1.4, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud09->setVelocity(0);
 	cloud09->addTexture(comicLightningTex4, 1.0);
 	cloud09->useTexture(true, 0.5, 2.0);
 	cloud09->switchToGeometryShader();
 
-	Emitter* cloud10 = new Emitter(0, glm::vec3(2.3, -0.2, 0.0), 0.0, 0.0, 1, 0.0, false);
+	Emitter* cloud10 = new Emitter(0, glm::vec3(-3.7, 0.8, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud10->setVelocity(0);
 	cloud10->addTexture(comicExclamationMarkTex3, 1.0);
 	cloud10->useTexture(true, 0.3, 2.0);
 	cloud10->switchToGeometryShader();
 
-	Emitter* cloud11 = new Emitter(0, glm::vec3(-0.5, 1.4, 0.0), 0.0, 0.0, 1, 0.0, false);
+	Emitter* cloud11 = new Emitter(0, glm::vec3(-6.5, 2.4, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud11->setVelocity(0);
 	cloud11->addTexture(comicExclamationMarkTex2, 1.0);
 	cloud11->useTexture(true, 0.5, 2.0);
@@ -240,17 +276,8 @@ int main()
 
 	////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////
 
-	//!EMITTER GLÜHWÜRMCHEN
-	Emitter* glowworm = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.4, 2, 6.0, true);
-	glowworm->setVelocity(0);
-	glowworm->usePhysicSwarmCircleMotion(true, true, true);
-	glowworm->setAreaEmitting(true, false, 0.4, 1000);
-	glowworm->addTexture(glowwormTex, 0.0);
-	glowworm->useTexture(true, 0.4, 1.0, 2.0);
-	glowworm->switchToGeometryShader();
-
 	//!EMITTER FIRE
-	Emitter* fireMiddle = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 1.0, 3.0, 4.0, true);
+	Emitter* fireMiddle = new Emitter(0, glm::vec3(9.0, 0.0, 1.0), 0.0, 1.0, 3.0, 4.0, true);
 	fireMiddle->setVelocity(3);
 	fireMiddle->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.5), 0.2);
 	fireMiddle->addTexture(fireTex1, 1.0);
@@ -259,7 +286,7 @@ int main()
 	fireMiddle->useTexture(true, 0.5, 1.0, 2.0);
 	fireMiddle->switchToGeometryShader();
 
-	Emitter* fireSmoke = new Emitter(0, glm::vec3(0, -1.0, 0.0), 0.0, 0.4, 1, 8.0, true);
+	Emitter* fireSmoke = new Emitter(0, glm::vec3(9.0, -1.0, 1.0), 0.0, 0.4, 1, 8.0, true);
 	fireSmoke->setVelocity(2);
 	fireSmoke->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.8), 0.3f);
 	fireSmoke->addTexture(smokeBlackTex1, 1.0);
@@ -269,11 +296,23 @@ int main()
 	fireSmoke->useTexture(true, fireSmokeSize, fireSmokeTime, 1.0, 4.0, false, 0.3);
 	fireSmoke->switchToGeometryShader();
 
-	Emitter* fireParticle = new Emitter(0, glm::vec3(0.1, -0.9, 0.0), 0.0, 1.3, 1, 9.0, true);
-	fireParticle->setVelocity(3);
-	fireParticle->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.5), 0.13f);
-	fireParticle->addTexture(fireflyTex, 1.0);
-	fireParticle->useTexture(true, 0.4, 0.4, 2.0, false, 0.3);
+	Emitter* firefly = new Emitter(0, glm::vec3(9.1, -0.9, 1.0), 0.0, 1.3, 1, 9.0, true);
+	firefly->setVelocity(3);
+	firefly->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.5), 0.13f);
+	firefly->addTexture(fireflyTex, 1.0);
+	firefly->useTexture(true, 0.04, 2.0, 2.0, false, 0.3);
+
+	Emitter* fireSparkOrange = new Emitter(0, glm::vec3(9.1, -0.9, 1.0), 0.0, 0.1, 1, 0.8, true);
+	fireSparkOrange->setVelocity(3);
+	fireSparkOrange->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.0), 1.5f);
+	fireSparkOrange->addTexture(fireSparkTex1, 1.0);
+	fireSparkOrange->useTexture(true, 0.02, 0.4, 0.3, false, 0.3);
+
+	Emitter* fireSparkRed = new Emitter(0, glm::vec3(9.1, -0.9, 1.0), 0.0, 0.1, 1, 1.0, true);
+	fireSparkRed->setVelocity(3);
+	fireSparkRed->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.5), 1.5f);
+	fireSparkRed->addTexture(fireSparkTex2, 1.0);
+	fireSparkRed->useTexture(true, 0.02, 0.4, 0.3, false, 0.3);
 
 	//!EMITTER FIREWORK
 	Emitter* firework = new Emitter(0, glm::vec3(0.6, 0.6, 0.0), 0.0, 0.5, 5, 1.0, true);
@@ -287,10 +326,7 @@ int main()
 	//firework2->addTexture(*fireWorkOrangeTex, 0.0);
 	//firework2->useTexture(true, 0.8, 0.1, 0.2);
 
-	//SHADER
-	VertexShader vsSkybox(loadShaderSource(SHADERS_PATH + std::string("/SkyboxShader/SkyboxShader.vert")));
-	FragmentShader fsSkybox(loadShaderSource(SHADERS_PATH + std::string("/SkyboxShader/SkyboxShader.frag")));
-	ShaderProgram shaderSkybox(vsSkybox, fsSkybox);
+	//////////////////////////////////////OUR SCENE///////////////////////////////////////////////
 
 	//SKYBOX
 	Cube cube;
@@ -301,31 +337,82 @@ int main()
 		(char*)RESOURCES_PATH "/PereaBeach1/negy.jpg",
 		(char*)RESOURCES_PATH "/PereaBeach1/posz.jpg",
 		(char*)RESOURCES_PATH "/PereaBeach1/negz.jpg"*/
-		(char*)RESOURCES_PATH "/ParticleSystem/testTex.png",
-		(char*)RESOURCES_PATH "/ParticleSystem/testTex.png",
-		(char*)RESOURCES_PATH "/ParticleSystem/testTex.png",
-		(char*)RESOURCES_PATH "/ParticleSystem/testTex.png",
-		(char*)RESOURCES_PATH "/ParticleSystem/testTex.png",
-		(char*)RESOURCES_PATH "/ParticleSystem/testTex.png" };
+		(char*)RESOURCES_PATH "/testTex.png",
+		(char*)RESOURCES_PATH "/testTex.png",
+		(char*)RESOURCES_PATH "/testTex.png",
+		(char*)RESOURCES_PATH "/testTex.png",
+		(char*)RESOURCES_PATH "/testTex.png",
+		(char*)RESOURCES_PATH "/testTex.png" };
 	Skybox skybox(textureNames);
 	Node skyboxNode("skybox");
 	skyboxNode.addGeometry(&cube);
 
-	//SCENE 
+	//OBJECTS
+	Teapot teapot;
+	teapot.loadBufferData();
+	Sphere sphere;
+	sphere.loadBufferData();
+	Rect plane;
+	plane.loadBufferData();
+
+	//TEXTURES
+	Texture chrome((char*)RESOURCES_PATH "/chrome.jpg");
+	Texture marble((char*)RESOURCES_PATH "/seamless_marble.png"); //TODO JPG
+	Texture cvLogo((char*)RESOURCES_PATH "/cv_logo.bmp");
+	Texture bricks((char*)RESOURCES_PATH "/brick.bmp");
+
+	//CREATING NODES
 	Level testLevel("testLevel");
 	Scene testScene("testScene");
 	testLevel.addScene(testScene);
 	testLevel.changeScene("testScene");
-	testScene.getScenegraph()->addCamera(&cam);
-	testScene.getScenegraph()->getCamera("PilotviewCam");
-	testScene.getScenegraph()->setActiveCamera("PilotviewCam");
-	iH.setAllInputMaps(*(testScene.getScenegraph()->getActiveCamera()));
-	iH.changeActiveInputMap("Pilotview");
+
+	Node cube1("cube1");
+	cube1.addGeometry(&cube);
+	cube1.addTexture(&chrome);
+	cube1.setModelMatrix(glm::translate(cube1.getModelMatrix(), glm::vec3(-0.3, 0.25, 0.4)));
+	cube1.setModelMatrix(glm::scale(cube1.getModelMatrix(), glm::vec3(0.3, 0.3, 0.3)));
+
+	Node cube2("cube2");
+	cube2.addGeometry(&cube);
+	cube2.addTexture(&chrome);
+	cube2.setModelMatrix(glm::translate(cube2.getModelMatrix(), glm::vec3(0.7, 0.25, 0.4)));
+	cube2.setModelMatrix(glm::scale(cube2.getModelMatrix(), glm::vec3(0.3, 0.3, 0.3)));
+
+	Node wallNode1("wall1");
+	wallNode1.addGeometry(&plane);
+	wallNode1.addTexture(&marble);
+	wallNode1.setModelMatrix(glm::translate(wallNode1.getModelMatrix(), glm::vec3(0.0, -1.0, 0.0)));
+	wallNode1.setModelMatrix(glm::rotate(wallNode1.getModelMatrix(), 90.0f, glm::vec3(1.0, 0.0, 0.0)));
+	wallNode1.setModelMatrix(glm::scale(wallNode1.getModelMatrix(), glm::vec3(13.0, 2.0, 1.0)));
+
+	Node wallNode2("wall2");
+	wallNode2.addGeometry(&plane);
+	wallNode2.addTexture(&bricks);
+	wallNode2.setModelMatrix(glm::translate(wallNode2.getModelMatrix(), glm::vec3(0.0, 0.0, 0.0)));
+	wallNode2.setModelMatrix(glm::scale(wallNode2.getModelMatrix(), glm::vec3(13.0, 2.5, 1.0)));
+
+	Node teaNode("teaNode");
+	teaNode.addGeometry(&teapot);
+	teaNode.addTexture(&cvLogo);
+	teaNode.setModelMatrix(glm::translate(teaNode.getModelMatrix(), glm::vec3(0.2, 0.3, 1.0)));
+	teaNode.setModelMatrix(glm::scale(teaNode.getModelMatrix(), glm::vec3(0.3, 0.3, 0.3)));
+
+	//CREATING A SCENEGRAPH
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&wallNode1);
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&wallNode2);
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube1);
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube2);
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&teaNode);
 
 	double startCamTime = glfwGetTime();
 
 	while (!glfwWindowShouldClose(window))
 	{
+		//CAM
+		cam.setSensitivity((float)(glfwGetTime() - startCamTime));
+		startCamTime = glfwGetTime();
+
 		//SKYBOX
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shaderSkybox.bind();
@@ -336,7 +423,20 @@ int main()
 		skyboxNode.render();
 		shaderSkybox.unbind();
 
+		glEnable(GL_DEPTH_TEST);
+		shaderObject.bind();
+		shaderObject.sendMat4("viewMatrix", cam.getViewMatrix());
+		shaderObject.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+		shaderObject.sendInt("useTexture", 1);
+		teaNode.setModelMatrix(glm::rotate(teaNode.getModelMatrix(), 3.0f, glm::vec3(0.0, 1.0, 0.0)));
+		cube1.setModelMatrix(glm::rotate(cube1.getModelMatrix(), 3.0f, glm::vec3(0.0, 1.0, 0.0)));
+		cube2.setModelMatrix(glm::rotate(cube2.getModelMatrix(), 3.0f, glm::vec3(0.0, 1.0, 0.0)));
+		testScene.render(shaderObject);
+		shaderObject.unbind();
+
 		///////////////////////////////////////FINAL EMITTER///////////////////////////////////////
+		glDisable(GL_DEPTH_TEST);
+
 		snow->generateParticle(glm::vec3(cam.getPosition()));
 		snow->update(glm::vec3(cam.getPosition()));
 		//snow->render(cam);
@@ -344,13 +444,14 @@ int main()
 		snowStrong->generateParticle(glm::vec3(cam.getPosition()));
 		snowStrong->update(glm::vec3(cam.getPosition()));
 		//snowStrong->render(cam);
+		
 		smokeWhite->generateParticle();
 		smokeWhite->update();
-		//smokeWhite->render(cam);
+		smokeWhite->render(cam);
 
 		smokeBlack->generateParticle();
 		smokeBlack->update();
-		//smokeBlack->render(cam);
+		smokeBlack->render(cam);
 
 		rain->generateParticle(glm::vec3(cam.getPosition()));
 		rain->update(glm::vec3(cam.getPosition()));
@@ -360,64 +461,71 @@ int main()
 		fruitFlies->update(glm::vec3(cam.getPosition()));
 		//fruitFlies->render(cam);
 
+		glowworm->generateParticle();
+		glowworm->update();
+		glowworm->render(cam);
+
+		energyBall->generateParticle();
+		energyBall->update();
+		energyBall->render(cam);
+
 		cloud01->generateParticle();
 		cloud01->update();
-		//cloud01->render(cam);
+		cloud01->render(cam);
 		cloud02->generateParticle();
 		cloud02->update();
-		//cloud02->render(cam);
+		cloud02->render(cam);
 		cloud03->generateParticle();
 		cloud03->update();
-		//cloud03->render(cam);
+		cloud03->render(cam);
 		cloud04->generateParticle();
 		cloud04->update();
-		//cloud04->render(cam);
+		cloud04->render(cam);
 		cloud05->generateParticle();
 		cloud05->update();
-		//cloud05->render(cam);
+		cloud05->render(cam);
 		cloud06->generateParticle();
 		cloud06->update();
-		//cloud06->render(cam);
+		cloud06->render(cam);
 		cloud07->generateParticle();
 		cloud07->update();
-		//cloud07->render(cam);
+		cloud07->render(cam);
 		cloud08->generateParticle();
 		cloud08->update();
-		//cloud08->render(cam);
+		cloud08->render(cam);
 		cloud09->generateParticle();
 		cloud09->update();
-		//cloud09->render(cam);
+		cloud09->render(cam);
 		cloud10->generateParticle();
 		cloud10->update();
-		//cloud10->render(cam);
+		cloud10->render(cam);
 		cloud11->generateParticle();
 		cloud11->update();
-		//cloud11->render(cam);
+		cloud11->render(cam);
 
 		////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////
 
-		glowworm->generateParticle();
-		glowworm->update();
-		//glowworm->render(cam);
-
-		//todo: funken & flamme
+		//todo: flamme
 		fireMiddle->generateParticle();
 		fireMiddle->update();
 		//fireMiddle->render(cam);
 		fireSmoke->generateParticle();
 		fireSmoke->update();
 		fireSmoke->render(cam);
-		fireParticle->generateParticle();
-		fireParticle->update();
-		fireParticle->render(cam);
+		firefly->generateParticle();
+		firefly->update();
+		firefly->render(cam);
+		fireSparkOrange->generateParticle();
+		fireSparkOrange->update();
+		fireSparkOrange->render(cam);
+		fireSparkRed->generateParticle();
+		fireSparkRed->update();
+		fireSparkRed->render(cam);
 
+		// todo all
 		firework->generateParticle();
 		firework->update();
 		//firework->render(cam);
-
-		//CAM
-		cam.setSensitivity((float)(glfwGetTime() - startCamTime));
-		startCamTime = glfwGetTime();
 
 		//WINDOW
 		glfwSwapBuffers(window);
