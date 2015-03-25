@@ -66,7 +66,7 @@ void initGUI()
 	useFruitFliesButton = new GuiElement::Checkbox("Fruitflies");
 	screenParticleHeader->addElement(useFruitFliesButton);
 	screenParticleHeader->addElement(new GuiElement::Spacing);
-	
+
 	gui->addElement(moveableParticleHeader);
 	gui->addElement(screenParticleHeader);
 
@@ -151,7 +151,7 @@ int main()
 	Texture* fireSparkTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/sparkRed.png");
 
 	//RAIN
-	Texture* rainTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/rain/rain.png");
+	Texture* rainTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/rain/rain.png"); //TODO darker
 
 	//SMOKE
 	Texture* drawSmokeTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/drawSmoke/smoke01_L.png");
@@ -465,12 +465,15 @@ int main()
 
 	double startCamTime = glfwGetTime();
 
+	int outputFrames = 0;
+	float dTime;
+
 	while (!glfwWindowShouldClose(window.getWindow()))
 	{
-		//TODO FPS
 
 		//CAM
-		cam.setSensitivity((float)(glfwGetTime() - startCamTime));
+		dTime = glfwGetTime() - startCamTime;
+		cam.setSensitivity(dTime);
 		startCamTime = glfwGetTime();
 
 		//SKYBOX
@@ -615,11 +618,16 @@ int main()
 
 		renderer->renderGUI(*gui, window);
 
-//		renderer->renderScene(testScene, window);
-
 		//WINDOW
 		glfwSwapBuffers(window.getWindow());
 		glfwPollEvents();
+
+		//FPS
+		if (!(outputFrames % 30)){
+			outputFrames = 1;
+			std::cout << "FPS: " << static_cast<int> (1 / dTime) << std::endl;
+		}
+		outputFrames++;
 	}
 	glfwDestroyWindow(window.getWindow());
 	glfwTerminate();
