@@ -84,20 +84,24 @@ void main() {
 	vec4 up = vec4( cross( right.xyz, look.xyz),0.0);
 	
 	//creating the 4 billboard points depending on the scaling
+	//down right
 	uv = vec2(0,0);
-	gl_Position = projectionMatrix * (pos + vec4(-right-up)*s);
-	EmitVertex();
-
-	uv = vec2( 1,0);
 	gl_Position = projectionMatrix* (pos +  vec4(right-up)*s);
 	EmitVertex();
 
-	uv = vec2(0, 1);
-	gl_Position = projectionMatrix *  (pos + vec4(-right+up)*s);
+	//down left
+	uv = vec2( 1,0);
+	gl_Position = projectionMatrix * (pos + vec4(-right-up)*s);
 	EmitVertex();
 
-	uv = vec2( 1, 1);
+	//up right
+	uv = vec2(0, 1);
 	gl_Position = projectionMatrix * (pos + vec4(right+up)*s);
+	EmitVertex();
+
+	//up left
+	uv = vec2( 1, 1);
+	gl_Position = projectionMatrix *  (pos + vec4(-right+up)*s);
 	EmitVertex();
 
 	EndPrimitive();
