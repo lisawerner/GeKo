@@ -85,6 +85,7 @@ void Geometry::renderGeometry()
 	}
 
 	glBindVertexArray(0);
+
 }
 
 

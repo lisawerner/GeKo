@@ -10,14 +10,29 @@ public:
 	///Each Bounding Box needs a Object to wrap
 	/**/
 	BoundingBox(Node* object);
+	BoundingBox(Geometry* object, glm::mat4 modelMatrix);
 	~BoundingBox();
 
 	///Returns all points of the Box
 	/**/
-	std::vector<glm::vec4> boundingBox(Node* object);
+	void boundingBox(Node* object);
+
+	///Returns the Points in a vector
+	/**/
+	std::vector<glm::vec4> getBox();
+
+	///Will be used to set the boolean for a collision
+	/**/
+	void setCollisionDetected(bool collision);
+	///return m_collisionDetected, true if a collision happened, false if not
+	/**/
+	bool getCollisionDetected();
 
 private:
-    std::vector<glm::vec4> vertices;
+    std::vector<glm::vec4> m_vertices;
+	std::vector<glm::vec4> m_box;
+
+	bool m_collisionDetected;
 
 
 

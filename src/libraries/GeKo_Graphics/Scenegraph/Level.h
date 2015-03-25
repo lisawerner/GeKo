@@ -1,12 +1,14 @@
 #pragma once
-#include <GeKo_Graphics/Scenegraph/Scenegraph.h>
+
 #include <GeKo_Graphics/Scenegraph/Scene.h>
+#include <GeKo_Gameplay/Questsystem/QuestHandler.h>
+#include <GeKo_Gameplay/FightSystem/FightSystem.h>
 #include <iostream>
 
 ///A Level is the necessary unit to create a game
 /**
 The class "Level" has a unique name and can be identified with this name. 
-A level manages his scenes, can change them, add and remove them
+A level manages his scenes, can change them, add and remove them. It provides a Quest-Handler and a Fight-System Object.
 */
 class Level
 {
@@ -23,7 +25,7 @@ public:
 
 	///This method adds a Scene to the level
 	/**/
-	void addScene(Scene scene);
+	void addScene(Scene* scene);
 
 	///This method deletes a specific Scene by its name
 	/**/
@@ -33,11 +35,36 @@ public:
 	/**Need a Scenename to find a Scene. Returns NULL if the Scene does not exist*/
 	Scene* getScene(std::string sceneName);
 
+	///Changes the active Scene to the given scene
+	/**/
 	void changeScene(std::string sceneName);
+
+	///Returns the m_activeScene
+	/**/
+	Scene* getActiveScene();
+
+	///Return the m_questHandler
+	/**The Quest-Handler is managing all the Quests of one level and is unique for every level*/
+	QuestHandler* getQuestHandler();
+
+	///Returns the m_fightSystem
+	/**The FightSystem is unique for every level and handles all the fights of KI and Player*/
+	FightSystem* getFightSystem();
+
+	/////Returns the m_sfh
+	///**This Handler manages all the sounds of an object like the movement of a Player etc.*/
+	//SoundFileHandler* getSoundHandler();
+	//void setSoundHandler(SoundFileHandler* soundHandler);
 
 protected:
 	const char* m_levelName;
-	std::vector<Scene> m_sceneSet;
-	Scene m_activeScene;
+
+	std::vector<Scene*> m_sceneSet;
+	Scene* m_activeScene;
+
+	QuestHandler* m_questHandler;
+
+	FightSystem* m_fightSystem;
+
 };
 

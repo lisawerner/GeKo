@@ -1,5 +1,5 @@
 #pragma once
-#include <GeKo_Graphics/Object/Geometry.h>
+#include <GeKo_Graphics/Geometry/Geometry.h>
 
 class Teapot : public Geometry
 {

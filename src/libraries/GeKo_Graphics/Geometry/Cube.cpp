@@ -1,10 +1,10 @@
-#include <GeKo_Graphics/Object/Skybox.h>
+#include <GeKo_Graphics/Geometry/Cube.h>
 
-Skybox::Skybox(const char **fileNames)
+Cube::Cube()
 {
+	//m_vaoBuffer = 0;
 	m_points = 36;
 	m_indices = 36;
-	//setIndexTrue();
 	setIndexFalse();
 	setNormalsTrue();
 	setUVTrue();
@@ -62,7 +62,7 @@ Skybox::Skybox(const char **fileNames)
 
 	for (int i = 0; i<m_points; i++)
 	{
-		m_vertices.push_back(glm::vec4(vertices[i * 3] * 1, vertices[i * 3 + 1] * 1, vertices[i * 3 + 2] * 1, 1.0f));
+		m_vertices.push_back(glm::vec4(vertices[i * 3]*0.5, vertices[i * 3 + 1]*0.5, vertices[i * 3 + 2]*0.5, 1.0f));
 		m_normals.push_back(glm::vec3(normals[i * 3], normals[i * 3 + 1], normals[i * 3 + 2]));
 		m_uvs.push_back(glm::vec2(texCoords[i * 2], texCoords[i * 2 + 1]));
 	}
@@ -71,11 +71,9 @@ Skybox::Skybox(const char **fileNames)
 	{
 		m_index.push_back(i);
 	}
-
-	Init(fileNames);
 }
 
-Skybox::~Skybox()
+Cube::~Cube()
 {
 	m_vertices.clear();
 	m_normals.clear();
@@ -83,73 +81,34 @@ Skybox::~Skybox()
 	m_index.clear();
 }
 
-bool Skybox::Init(const char **fileNames)
-{
-	glGenTextures(1, &m_textureID);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, m_textureID);
-	glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-	load(fileNames);
-
-	return true;
-}
+//void Cube::loadBufferData()
+//{
+//	m_vertexBuffer = new Buffer<glm::vec4>(m_vertices, STATIC_DRAW);
+//	m_normalBuffer = new Buffer<glm::vec3>(m_normals, STATIC_DRAW);
+//	//m_uvBuffer = new Buffer<glm::vec2>(m_uvs, STATIC_DRAW);	
+//	//m_indexBuffer = new Buffer<GLuint>(m_index, STATIC_DRAW);
 //
-//#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
-bool Skybox::load(const char **fileNames)
-{
-	GLint types[6] = {
-		GL_TEXTURE_CUBE_MAP_POSITIVE_X,
-		GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
-		GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
-		GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
-		GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
-		GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
-	};
+//	glGenVertexArrays(1, &m_vaoBuffer);
+//	glBindVertexArray(m_vaoBuffer);
+//	m_vertexBuffer->bind();
+//	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+//
+//	m_normalBuffer->bind();
+//	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+//	/*m_uvBuffer->bind();
+//	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);*/
+//
+//	glEnableVertexAttribArray(0);
+//	glEnableVertexAttribArray(1);
+//	//glEnableVertexAttribArray(2);
+//
+//	glBindVertexArray(0);
+//
+//}
 
-	for (unsigned int i = 0; i<6; i++)
-	{
-		const char* fileName = fileNames[i];
-
-		int bytesPerPixel = 0;
-
-		unsigned char *data = stbi_load(fileName, &m_width, &m_height, &bytesPerPixel, 0);
-
-		//send image data to the new texture
-		GLint internalFormat;
-		if (bytesPerPixel < 3)
-		{
-			printf("ERROR: Unable to load texture image %s\n", fileName);
-			return false;
-		}
-		else if (bytesPerPixel == 3)
-		{
-			internalFormat = GL_RGB;
-		}
-		else if (bytesPerPixel == 4)
-		{
-			internalFormat = GL_RGBA;
-		}
-		else
-		{
-			printf("RESOLVED: Unknown format for bytes per pixel in texture image %s, changed to 4\n", fileName);
-			internalFormat = GL_RGBA;
-		}
-
-		glTexImage2D(types[i], 0, internalFormat, m_width, m_height, 0, internalFormat, GL_UNSIGNED_BYTE, data);
-
-		stbi_image_free(data);
-
-		printf("SUCCESS: Texture image %s loaded\n", fileName);
-	}
-	return true;
-}
-
-unsigned int Skybox::getSkyboxTexture()
-{
-	return m_textureID;
-}
+//void Cube::renderGeometry()
+//{
+//
+//	glBindVertexArray(m_vaoBuffer);
+//	glDrawArrays(GL_TRIANGLES, 0, 3*6*2);
+//}

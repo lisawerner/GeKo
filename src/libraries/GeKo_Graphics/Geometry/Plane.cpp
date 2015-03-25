@@ -1,4 +1,4 @@
-#include <GeKo_Graphics/Object/Plane.h>
+#include <GeKo_Graphics/Geometry/Plane.h>
 
 Plane::Plane()
 {

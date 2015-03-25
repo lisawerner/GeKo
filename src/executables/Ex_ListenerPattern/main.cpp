@@ -156,8 +156,8 @@ int main()
 	//===================================================================//
 	//==================Shaders for your program========================//
 	//==================================================================//
-	VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/TextureShader3D/TextureShader3D.vert")));
-	FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/TextureShader3D/TextureShader3D.frag")));
+	VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/Vertex-Shaders/TextureShader3D.vert")));
+	FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/Fragment-Shaders/TextureShader3D.frag")));
 	ShaderProgram shader(vs, fs);
 
 
@@ -184,10 +184,10 @@ int main()
 
 	Teapot teaAnt;
 
-	Texture texPlayer((char*)RESOURCES_PATH "/Snake.jpg");
+	//Texture texPlayer((char*)RESOURCES_PATH "/Snake.jpg");
 	SoundFileHandler sfh = SoundFileHandler(1000);
 
-	AStarNode defaultASNode("Default");
+	AStarNode defaultASNode();
 	//AI ant_Flick(&defaultTree, &defaultASNode, &aiNode);
 	AI ant_Flick;
 	ant_Flick.setAntAfraid();
@@ -200,7 +200,7 @@ int main()
 
 	Node aiNode("Flick");
 	aiNode.addGeometry(&ant);
-	aiNode.addTexture(&texPlayer);
+	//aiNode.addTexture(&texPlayer);
 //	aiNode.addScale(0.3, 0.3, 0.3);
 	//aiNode.addTranslation(ant_Flick.getPosition().x, ant_Flick.getPosition().y, ant_Flick.getPosition().z);
 	aiNode.setObject(&ant_Flick);
@@ -214,7 +214,7 @@ int main()
 	//==================Object declarations - Geometry, Texture, Node=== //
 	//==========================Object: Player===========================//
 	Teapot teaPlayer;
-	Texture texCV((char*)RESOURCES_PATH "/cv_logo.bmp");
+	//Texture texCV((char*)RESOURCES_PATH "/cv_logo.bmp");
 
 	GekoMesh gekoMesh;
 	geko.setExp(0.0);
@@ -225,7 +225,7 @@ int main()
 
 	playerNode.addGeometry(&gekoMesh);
 	playerNode.setObject(&geko);
-	playerNode.addTexture(&texCV);
+	//playerNode.addTexture(&texCV);
 //	playerNode.addScale(0.5, 0.5, 0.5);
 //	playerNode.addTranslation(20.0, 0.0, 20.0);
 
@@ -287,11 +287,11 @@ int main()
 	//==========================Object: Plane===========================//
 
 	Plane terrain;
-	Texture terrainTex((char*)RESOURCES_PATH "/Grass.jpg");
+	//Texture terrainTex((char*)RESOURCES_PATH "/Grass.jpg");
 
 	Node terrainNode("Plane");
 	terrainNode.addGeometry(&terrain);
-	terrainNode.addTexture(&terrainTex);
+	//terrainNode.addTexture(&terrainTex);
 	terrainNode.addTranslation(0.0, -0.75, 0.0);
 	terrainNode.addRotation(90.0f, glm::vec3(1.0, 0.0, 0.0));
 	terrainNode.addScale(20.0, 20.0, 20.0);

@@ -1,5 +1,5 @@
 #pragma once
-#include <GeKo_Graphics/Object/Geometry.h>
+#include <GeKo_Graphics/Geometry/Geometry.h>
 
 ///A Skybox Object which will show a Texture of 6 piece-textures
 class Skybox : public Geometry 
