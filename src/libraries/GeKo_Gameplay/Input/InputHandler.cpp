@@ -6,6 +6,7 @@ InputHandler::InputHandler()
 
 InputHandler::~InputHandler()
 {
+	m_allInputMaps.clear();
 }
 
 void InputHandler::setAllInputMaps(Camera &activeCam){
@@ -34,7 +35,7 @@ void InputHandler::changeActiveInputMap(std::string name){
 // TODO maybe an exception 
 InputMap* InputHandler::getInputMap(std::string name) {
 
-	InputMap* instance = new InputMap();
+	InputMap* instance;
 
 	for (int i = 0; i < m_allInputMaps.size(); i++)
 	{
@@ -51,7 +52,7 @@ InputMap* InputHandler::getInputMap(std::string name) {
 InputMap* InputHandler::getActiveInputMap() {
 
 	int i = 0;
-	InputMap* activeInputMap = new InputMap();
+	InputMap* activeInputMap;
 
 	for (int j = 0; j < m_allInputMaps.size(); j++)
 	{
