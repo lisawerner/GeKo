@@ -8,7 +8,7 @@
 #include "GoalType.h"
 #include <GeKo_Gameplay/Item/ItemType.h>
 #include <GeKo_Gameplay/Object/ObjectType.h>
-#include <Geko_Graphics/Observer/Subject.h>
+#include "Geko_Graphics/Observer/Subject.h"
 
 class Goal : public Subject<Goal, Quest_Event>
 {
