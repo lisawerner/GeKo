@@ -104,6 +104,7 @@ int main()
 	Texture* particleWhiteTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/particle.png");
 	Texture* snowTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/snowflake.png"); //TODO better Resolution
 	Texture* glowwormTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/glowworm.png");
+	Texture* energyTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/energy.png");
 	Texture* fireflyTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/firefly.png");
 	Texture* fireSparkTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/sparkOrange.png");
 	Texture* fireSparkTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/sparkRed.png");
@@ -192,6 +193,13 @@ int main()
 	glowworm->setAreaEmitting(true, false, 0.4, 1000);
 	glowworm->addTexture(glowwormTex, 0.0);
 	glowworm->useTexture(true, 0.1, 1.0, 1.5);
+
+	//FINAL EMITTER ENERGYBALL
+	Emitter* energyBall = new Emitter(0, glm::vec3(-12.0, -1.0, 1.0), 0.0, 0.01, 5, 15.0, true);
+	energyBall->setVelocity(5);
+	energyBall->usePhysicPointGravity(glm::vec4(-10.0, 1.0, 1.0, 3.0), 8.0, 2, 1.8);
+	energyBall->addTexture(energyTex, 1.0);
+	energyBall->useTexture(true, 0.04);
 
 	//FINAL EMITTER COMIC CLOUD
 	Emitter* cloud01 = new Emitter(0, glm::vec3(-6.0, 0.5, 1.0), 0.0, 1.5, 1, 10.0, true);
@@ -292,19 +300,19 @@ int main()
 	firefly->setVelocity(3);
 	firefly->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.5), 0.13f);
 	firefly->addTexture(fireflyTex, 1.0);
-	firefly->useTexture(true, 0.04, 0.4, 2.0, false, 0.3);
+	firefly->useTexture(true, 0.04, 2.0, 2.0, false, 0.3);
 
-	Emitter* fireSparkOrange = new Emitter(0, glm::vec3(9.1, -0.9, 1.0), 0.0, 0.8, 3, 2.0, true);
+	Emitter* fireSparkOrange = new Emitter(0, glm::vec3(9.1, -0.9, 1.0), 0.0, 0.1, 1, 0.8, true);
 	fireSparkOrange->setVelocity(3);
-	fireSparkOrange->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.0), 0.6f);
+	fireSparkOrange->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.0), 1.5f);
 	fireSparkOrange->addTexture(fireSparkTex1, 1.0);
-	fireSparkOrange->useTexture(true, 0.015, 0.4, 0.9, false, 0.3);
+	fireSparkOrange->useTexture(true, 0.02, 0.4, 0.3, false, 0.3);
 
-	Emitter* fireSparkRed = new Emitter(0, glm::vec3(9.1, -0.9, 1.0), 0.0, 0.8, 3, 2.5, true);
+	Emitter* fireSparkRed = new Emitter(0, glm::vec3(9.1, -0.9, 1.0), 0.0, 0.1, 1, 1.0, true);
 	fireSparkRed->setVelocity(3);
-	fireSparkRed->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.5), 0.6f);
+	fireSparkRed->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.5), 1.5f);
 	fireSparkRed->addTexture(fireSparkTex2, 1.0);
-	fireSparkRed->useTexture(true, 0.015, 0.4, 0.9, false, 0.3);
+	fireSparkRed->useTexture(true, 0.02, 0.4, 0.3, false, 0.3);
 
 	//!EMITTER FIREWORK
 	Emitter* firework = new Emitter(0, glm::vec3(0.6, 0.6, 0.0), 0.0, 0.5, 5, 1.0, true);
@@ -376,13 +384,13 @@ int main()
 	wallNode1.addTexture(&marble);
 	wallNode1.setModelMatrix(glm::translate(wallNode1.getModelMatrix(), glm::vec3(0.0, -1.0, 0.0)));
 	wallNode1.setModelMatrix(glm::rotate(wallNode1.getModelMatrix(), 90.0f, glm::vec3(1.0, 0.0, 0.0)));
-	wallNode1.setModelMatrix(glm::scale(wallNode1.getModelMatrix(), glm::vec3(10.0, 2.0, 1.0)));
+	wallNode1.setModelMatrix(glm::scale(wallNode1.getModelMatrix(), glm::vec3(13.0, 2.0, 1.0)));
 
 	Node wallNode2("wall2");
 	wallNode2.addGeometry(&plane);
 	wallNode2.addTexture(&bricks);
 	wallNode2.setModelMatrix(glm::translate(wallNode2.getModelMatrix(), glm::vec3(0.0, 0.0, 0.0)));
-	wallNode2.setModelMatrix(glm::scale(wallNode2.getModelMatrix(), glm::vec3(10.0, 2.5, 1.0)));
+	wallNode2.setModelMatrix(glm::scale(wallNode2.getModelMatrix(), glm::vec3(13.0, 2.5, 1.0)));
 
 	Node teaNode("teaNode");
 	teaNode.addGeometry(&teapot);
@@ -457,6 +465,10 @@ int main()
 		glowworm->update();
 		glowworm->render(cam);
 
+		energyBall->generateParticle();
+		energyBall->update();
+		energyBall->render(cam);
+
 		cloud01->generateParticle();
 		cloud01->update();
 		cloud01->render(cam);
@@ -514,8 +526,6 @@ int main()
 		firework->generateParticle();
 		firework->update();
 		//firework->render(cam);
-
-		//energyball
 
 		//WINDOW
 		glfwSwapBuffers(window);
