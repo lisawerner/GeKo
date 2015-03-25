@@ -1,12 +1,40 @@
 #include <GeKo_Gameplay/AI_Pathfinding/AStarNode.h>
 
-AStarNode::AStarNode(std::string name) :
+AStarNode::AStarNode(std::string name, AStarNode *defaultNode) :
 GraphNode(name)	
 {
-	m_name = name;
+	//m_name = name;
+	//AStarNode* defaultNode = new AStarNode();
+	setVisitor(defaultNode);
+	setDefault(defaultNode);
 	m_distanceToGoal = 0;
 	m_distanceTravelled = 0;
+	//m_type = GraphNodeType::DEFAULT;
 }
+
+AStarNode::AStarNode() :
+GraphNode("Default")
+{
+	m_name = "Default";
+	m_distanceToGoal = 0;
+	m_distanceTravelled = 0;
+	//m_type = GraphNodeType::DEFAULT;
+}
+
+AStarNode::AStarNode(std::string name,AStarNode *defaultNode, glm::vec3 position, GraphNodeType type) :
+GraphNode(name)
+{
+	//m_name = name;
+	setVisitor(defaultNode);
+	setDefault(defaultNode);
+	setNodeType(type);
+	setPosition(position);
+	m_distanceToGoal = 0;
+	m_distanceTravelled = 0;
+
+	//m_type = GraphNodeType::DEFAULT;
+}
+
 AStarNode::~AStarNode()
 {
 
@@ -50,4 +78,13 @@ void AStarNode::setTemporary(float temp)
 float AStarNode::getTemporary()
 {
 	return m_temporaryTravelled;
+}
+
+AStarNode* AStarNode::getDefault()
+{
+	return m_default;
+}
+
+void AStarNode::setDefault(AStarNode* d){
+	m_default = d;
 }

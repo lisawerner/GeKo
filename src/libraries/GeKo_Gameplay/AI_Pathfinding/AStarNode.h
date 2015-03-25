@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <iostream>
 #include <vector>
 #include <glm/ext.hpp>
 #include <GeKo_Gameplay/AI_Pathfinding/GraphNode.h>
@@ -15,7 +16,9 @@ class AStarNode : public GraphNode<AStarNode>
 public: 
 	///Every GraphNode needs a name
 	/**/
-	AStarNode(std::string name);
+	AStarNode(std::string name, AStarNode *defaultNode);
+	AStarNode();
+	AStarNode(std::string name, AStarNode *defaultNode, glm::vec3 position, GraphNodeType type);
 	~AStarNode();
 	
 	///Sets the m_distanceToGoal to distance
@@ -45,6 +48,9 @@ public:
 	///Returns m_temporaryTravelled 
 	/**/
 	float getTemporary();
+
+	AStarNode* getDefault();
+	void setDefault(AStarNode* d);
 	
 protected:
 	float m_distanceToGoal;
@@ -53,5 +59,7 @@ protected:
 	float m_temporaryTravelled;
 
 	AStarNode* m_wasVisitedBy;
+
+	AStarNode* m_default;
 	
 };
