@@ -85,9 +85,10 @@ int main()
 	Texture* particleBlackTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/virus.png");
 	Texture* particleWhiteTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/particle.png");
 	Texture* snowTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/snowflake.png"); //TODO better Resolution
-	Texture* glowwormTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/glowworm2.png");
+	Texture* glowwormTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/glowworm.png");
 	Texture* fireflyTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/firefly.png");
-	Texture* fireSparkTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/spark.png");
+	Texture* fireSparkTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/sparkOrange.png");
+	Texture* fireSparkTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/particle/sparkRed.png");
 
 	//RAIN
 	Texture* rainTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/rain/rain.png");
@@ -166,6 +167,14 @@ int main()
 	fruitFlies->useTexture(true, 0.04, 3.0, 3.0, true, 1.0);
 	fruitFlies->switchToGeometryShader();
 
+	//FINAL EMITTER GLOWWORM
+	Emitter* glowworm = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.2, 1, 10.0, true);
+	glowworm->setVelocity(0);
+	glowworm->usePhysicSwarmCircleMotion(true, true, true);
+	glowworm->setAreaEmitting(true, false, 0.4, 1000);
+	glowworm->addTexture(glowwormTex, 0.0);
+	glowworm->useTexture(true, 0.6, 1.0, 1.5);
+
 	//FINAL EMITTER COMIC CLOUD
 	Emitter* cloud01 = new Emitter(0, glm::vec3(0, -0.5, 0.0), 0.0, 1.5, 1, 10.0, true);
 	cloud01->setVelocity(4);
@@ -241,15 +250,6 @@ int main()
 
 	////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////
 
-	//!EMITTER GLÜHWÜRMCHEN
-	Emitter* glowworm = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.4, 2, 6.0, true);
-	glowworm->setVelocity(0);
-	glowworm->usePhysicSwarmCircleMotion(true, true, true);
-	glowworm->setAreaEmitting(true, false, 0.4, 1000);
-	glowworm->addTexture(glowwormTex, 0.0);
-	glowworm->useTexture(true, 0.4, 1.0, 2.0);
-	glowworm->switchToGeometryShader();
-
 	//!EMITTER FIRE
 	Emitter* fireMiddle = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 1.0, 3.0, 4.0, true);
 	fireMiddle->setVelocity(3);
@@ -260,7 +260,7 @@ int main()
 	fireMiddle->useTexture(true, 0.5, 1.0, 2.0);
 	fireMiddle->switchToGeometryShader();
 
-	Emitter* fireSmoke = new Emitter(0, glm::vec3(0, -1.0, 0.0), 0.0, 0.4, 1, 8.0, true);
+	Emitter* fireSmoke = new Emitter(0, glm::vec3(0, -0.75, 0.0), 0.0, 0.4, 1, 8.0, true);
 	fireSmoke->setVelocity(2);
 	fireSmoke->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.8), 0.3f);
 	fireSmoke->addTexture(smokeBlackTex1, 1.0);
@@ -276,13 +276,17 @@ int main()
 	firefly->addTexture(fireflyTex, 1.0);
 	firefly->useTexture(true, 0.4, 0.4, 2.0, false, 0.3);
 
-	Emitter* fireSpark = new Emitter(0, glm::vec3(0.1, -0.9, 0.0), 0.0, 0.8, 3, 2.0, true);
-	fireSpark->setVelocity(3);
-	fireSpark->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.0), 0.5f);
-	fireSpark->addTexture(fireSparkTex, 1.0);
-	fireSpark->useTexture(true, 0.1, 0.4, 0.9, false, 0.3);
+	Emitter* fireSparkOrange = new Emitter(0, glm::vec3(0.1, -0.9, 0.0), 0.0, 0.8, 3, 2.0, true);
+	fireSparkOrange->setVelocity(3);
+	fireSparkOrange->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.0), 0.6f);
+	fireSparkOrange->addTexture(fireSparkTex1, 1.0);
+	fireSparkOrange->useTexture(true, 0.1, 0.4, 0.9, false, 0.3);
 
-	//second red
+	Emitter* fireSparkRed = new Emitter(0, glm::vec3(0.1, -0.9, 0.0), 0.0, 0.8, 3, 2.5, true);
+	fireSparkRed->setVelocity(3);
+	fireSparkRed->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.5), 0.6f);
+	fireSparkRed->addTexture(fireSparkTex2, 1.0);
+	fireSparkRed->useTexture(true, 0.1, 0.4, 0.9, false, 0.3);
 
 	//!EMITTER FIREWORK
 	Emitter* firework = new Emitter(0, glm::vec3(0.6, 0.6, 0.0), 0.0, 0.5, 5, 1.0, true);
@@ -369,6 +373,10 @@ int main()
 		fruitFlies->update(glm::vec3(cam.getPosition()));
 		//fruitFlies->render(cam);
 
+		glowworm->generateParticle();
+		glowworm->update();
+		//glowworm->render(cam);
+
 		cloud01->generateParticle();
 		cloud01->update();
 		//cloud01->render(cam);
@@ -405,24 +413,24 @@ int main()
 
 		////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////
 
-		glowworm->generateParticle();
-		glowworm->update();
-		//glowworm->render(cam);
-
-		//todo: funken & flamme
+		//todo: flamme
 		fireMiddle->generateParticle();
 		fireMiddle->update();
 		//fireMiddle->render(cam);
 		fireSmoke->generateParticle();
 		fireSmoke->update();
-		fireSmoke->render(cam);
+		//fireSmoke->render(cam);
 		firefly->generateParticle();
 		firefly->update();
-		firefly->render(cam);
-		fireSpark->generateParticle();
-		fireSpark->update();
-		fireSpark->render(cam);
+		//firefly->render(cam);
+		fireSparkOrange->generateParticle();
+		fireSparkOrange->update();
+		//fireSparkOrange->render(cam);
+		fireSparkRed->generateParticle();
+		fireSparkRed->update();
+		//fireSparkRed->render(cam);
 
+		// todo all
 		firework->generateParticle();
 		firework->update();
 		//firework->render(cam);
