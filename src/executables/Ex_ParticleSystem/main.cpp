@@ -244,11 +244,14 @@ int main()
 	particleCount += (3 * 2.0 / 0.05);
 
 	//FINAL EMITTER CIRCLE
+	Emitter* circle = new Emitter(0, glm::vec3(-18.0, 0.0, 1.0), 0.0, 0.4, 50, 4.0, true);
 	circle->setVelocity(4);
 	circle->addTexture(fireSparkTex1, 1.0);
+	circle->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.3f);
 	circle->addTexture(fireSparkTex2 ,0.3);
 	circle->useTexture(true, 0.03, 0.0, 2.0, 1.0, true, 0.0);
 	circle->switchToGeometryShader();
+	particleCount += (50 * 4.0 / 0.4);
 
 	//FINAL EMITTER QUAD
 	Emitter* quad = new Emitter(0, glm::vec3(-21.0, 0.0, 1.0), 0.0, 1.0, 50, 1.0, true);
