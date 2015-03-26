@@ -1,6 +1,6 @@
 #include "SoundFileHandler.h"
 #include <cstdio>
-
+#include <stdexcept>
 
 /**
 Creates a Soundfilehandler with the max number of Sources = maxSources
