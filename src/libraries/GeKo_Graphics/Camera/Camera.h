@@ -75,6 +75,8 @@ public:
 
 	/// This method sets m_mouseSpeed
 	void setMouseSpeed(float speed);
+
+	glm::vec4 getCenter();
 	
 	// Implemented in the specific cameras
 	virtual void moveForward();
@@ -87,6 +89,8 @@ public:
 	virtual void turnRight();
 	virtual void turnUp();
 	virtual void turnDown();
+	virtual void increaseRadius();
+	virtual void decreaseRadius();
 
 protected:
 	// The name identifies the camera

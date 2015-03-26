@@ -6,7 +6,6 @@ InputHandler::InputHandler()
 
 InputHandler::~InputHandler()
 {
-	m_allInputMaps.clear();
 }
 
 void InputHandler::setAllInputMaps(Camera &activeCam){
@@ -15,11 +14,13 @@ void InputHandler::setAllInputMaps(Camera &activeCam){
 	MapTrackball* contextTrackball = new MapTrackball(activeCam);
 	MapPilotview* contextPilotview = new MapPilotview(activeCam);
 	MapPlayerview* contextPlayerview = new MapPlayerview(activeCam);
+	MapStrategyCamera* contextStrategy = new MapStrategyCamera(activeCam);
 
 	// The Maps are stored in a vector
 	m_allInputMaps.push_back(contextTrackball);
 	m_allInputMaps.push_back(contextPilotview);
 	m_allInputMaps.push_back(contextPlayerview);
+	m_allInputMaps.push_back(contextStrategy);
 }
 
 void InputHandler::changeActiveInputMap(std::string name){
@@ -35,7 +36,7 @@ void InputHandler::changeActiveInputMap(std::string name){
 // TODO maybe an exception 
 InputMap* InputHandler::getInputMap(std::string name) {
 
-	InputMap* instance;
+	InputMap* instance = new InputMap();
 
 	for (int i = 0; i < m_allInputMaps.size(); i++)
 	{
@@ -52,7 +53,7 @@ InputMap* InputHandler::getInputMap(std::string name) {
 InputMap* InputHandler::getActiveInputMap() {
 
 	int i = 0;
-	InputMap* activeInputMap;
+	InputMap* activeInputMap = new InputMap();
 
 	for (int j = 0; j < m_allInputMaps.size(); j++)
 	{

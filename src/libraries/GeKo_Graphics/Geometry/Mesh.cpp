@@ -1,18 +1,11 @@
 #include <GeKo_Graphics/Geometry/Mesh.h>
-#include <assimp/scene.h>
-#include <assimp/mesh.h>
-#include <assimp/Importer.hpp>
-#include <assimp/postprocess.h>
 
 Mesh::Mesh(const char *filename)
 {
-
-	std::string path = RESOURCES_PATH + std::string("/") + filename;
-
 	Assimp::Importer importer;
 
 	//const aiScene *scene = importer.ReadFile(filename, 0);
-	const aiScene *scene = importer.ReadFile(path,
+	const aiScene *scene = importer.ReadFile(filename,
 		aiProcess_Triangulate |
 		aiProcess_SplitLargeMeshes |
 		aiProcess_ImproveCacheLocality);
@@ -24,7 +17,6 @@ Mesh::Mesh(const char *filename)
 		meshEntries.push_back(scene->mMeshes[i]);
 	}
 	initializeData();
-
 }
 
 Mesh::~Mesh()

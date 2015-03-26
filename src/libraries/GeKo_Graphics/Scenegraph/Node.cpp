@@ -1,30 +1,26 @@
 #include "Node.h"
 
-Node::Node()
-{
-	m_nodeName = "Default";
-	setIdentityMatrix_ModelMatrix();
-	
-	m_hasTexture = false;
-  m_hasNormalMap = false;
-  m_hasHeightMap = false;
-	m_hasCamera = false;
-	m_hasGeometry = false;
-  m_heightScale = 0.0f;
-  m_heightBias = 0.0f;
-}
 
 Node::Node(std::string nodeName)
 {
 	m_nodeName = nodeName;
-	setIdentityMatrix_ModelMatrix();
+
+	m_modelMatrix = glm::mat4(1.0);
+	m_scaleMatrix = glm::mat4(1.0);
+	m_rotationMatrix = glm::mat4(1.0);
+
 	m_hasTexture = false;
-  m_hasNormalMap = false;
-  m_hasHeightMap = false;
+	m_hasNormalMap = false;
+	m_hasHeightMap = false;
 	m_hasCamera = false;
 	m_hasGeometry = false;
-  m_heightScale = 0.0f;
-  m_heightBias = 0.0f;
+	m_hasBoundingSphere = false;
+	m_hasGravity = false;
+	m_hasObject = false; 
+	m_hasSound = false;
+	
+
+	m_type = ClassType::OBJECT;
 }
 
 
@@ -75,86 +71,35 @@ void Node::addChildrenNode(Node* node)
 
 void Node::deleteChildrenNode(std::string nodeName)
 {
+	bool success = false;
+
 	for (int i = 0; i < m_childrenSet.size(); i++)
 	{
 		if (m_childrenSet.at(i)->getNodeName() == nodeName)
 		{
-			m_childrenSet.erase(m_childrenSet.begin()+i);
-			std::cout << "SUCESS: The Node with the name " << nodeName << " was deleted!" << std::endl;
+			m_childrenSet.erase(m_childrenSet.begin() + i);
+			success = true;
 		}
+	}
+
+	if (success)
+	{
+		std::cout << "SUCESS: The Node with the name " << nodeName << " was deleted!" << std::endl;
+	}
+	else{
+		std::cout << "ERROR: The Node with the name " << nodeName << " was not found!" << std::endl;
 	}
 }
 
+std::vector<Node*>* Node::getChildrenSet()
+{
+	return &m_childrenSet;
+}
 
 void Node::clearChildrenSet()
 {
 	m_childrenSet.clear();
 }
-
-
-Geometry* Node::getGeometry()
-{
-	return m_geometry;
-}
-
-void Node::addGeometry(Geometry* geometry)
-{
-	m_geometry = geometry;
-	m_hasGeometry = true;
-	if (!m_geometry->isLoaded())
-	{
-		m_geometry->loadBufferData();
-		m_geometry->setLoaded();
-	}
-}
-
-Texture* Node::getTexture()
-{
-	return m_texture;
-}
-
-void Node::addTexture(Texture* texture)
-{
-	m_texture = texture;
-	m_hasTexture = true;
-}
-
-Texture* Node::getNormalMap()
-{
-	return m_normalmap;
-}
-
-void Node::addNormalMap(Texture* normalmap)
-{
-	m_normalmap = normalmap;
-	m_hasNormalMap = true;
-}
-
-Texture* Node::getHeightMap()
-{
-  return m_heightmap;
-}
-
-void Node::addHeightMap(Texture* heightmap, float heightScale, float heightBias, bool useHeightmapShadows)
-{
-  m_heightScale = heightScale;
-  m_heightBias = heightBias;
-  m_heightmap = heightmap;
-  m_useHeightMapShadows = useHeightmapShadows;
-  m_hasHeightMap = true;
-}
-
-Camera* Node::getCamera()
-{
-	return m_camera;
-}
-
-void Node::setCamera(Camera* camera)
-{
-	m_camera = camera;
-	m_hasCamera = true;
-}
-
 
 glm::mat4 Node::getModelMatrix()
 {
@@ -166,16 +111,6 @@ void Node::setModelMatrix(glm::mat4 modelMatrix)
 	m_modelMatrix = modelMatrix;
 }
 
-glm::mat4 Node::getPrevModelMatrix()
-{
-	return m_PrevModelMatrix;
-}
-
-void Node::setPrevModelMatrix(glm::mat4 modelMatrix)
-{
-	m_PrevModelMatrix = modelMatrix;
-}
-
 glm::mat4 Node::getRotationMatrix()
 {
 	return m_rotationMatrix;
@@ -183,10 +118,11 @@ glm::mat4 Node::getRotationMatrix()
 
 void Node::addRotation(float angle, glm::vec3 axis)
 {
-	glm::mat4 newRotationMatrix = glm::rotate(getRotationMatrix(), angle, axis);
+	glm::mat4 newRotationMatrix = glm::rotate(glm::mat4(1.0), angle, axis);
 	m_rotationMatrix = newRotationMatrix;
 
-	updateModelMatrix(m_rotationMatrix);
+	updateModelMatrix();
+
 }
 
 glm::mat4 Node::getTranslationMatrix()
@@ -197,10 +133,30 @@ glm::mat4 Node::getTranslationMatrix()
 void Node::addTranslation(float x, float y, float z)
 {
 	glm::vec3 transfer = glm::vec3(x, y, z);
-	glm::mat4 newTranslationMatrix = glm::translate(getTranslationMatrix(), transfer);
-	m_translateMatrix = newTranslationMatrix;
 
-	updateModelMatrix(m_translateMatrix);
+	m_translateMatrix = (glm::translate(glm::mat4(1.0), transfer));
+
+	updateModelMatrix();
+
+	for (int i = 0; i < m_boundingList.size(); i++)
+	{
+		m_boundingList.at(i)->update(m_modelMatrix);
+	}
+
+}
+
+void Node::addTranslation(glm::vec3 position)
+{
+	glm::vec3 transfer = position;
+
+	m_translateMatrix = (glm::translate(glm::mat4(1.0), transfer));
+
+	updateModelMatrix();
+
+	for (int i = 0; i < m_boundingList.size(); i++)
+	{
+		m_boundingList.at(i)->update(m_modelMatrix);
+	}
 }
 
 
@@ -211,33 +167,39 @@ glm::mat4 Node::getScaleMatrix()
 
 void Node::addScale(float x, float y, float z)
 {
-	glm::vec3 scale = glm::vec3(x, y, z);
-	glm::mat4 newScaleMatrix = glm::scale(getScaleMatrix(), scale);
-	m_scaleMatrix = newScaleMatrix;
+	glm::vec3 scaleVector = glm::vec3(x, y, z);
+	m_scaleMatrix = glm::scale(glm::mat4(1.0), scaleVector);
 
-	updateModelMatrix(m_scaleMatrix);
+	for (int i = 0; i < m_boundingList.size(); i++)
+	{
+		m_boundingList.at(i)->radius = m_boundingList.at(i)->radius * x;
+	}
+
+	updateModelMatrix();
 }
-
 
 void Node::setIdentityMatrix_Translate()
 {
 	glm::mat4 inverseMatrix = glm::inverse(m_translateMatrix);
-	m_modelMatrix = inverseMatrix * m_modelMatrix;
 	m_translateMatrix = inverseMatrix * m_translateMatrix;
+
+	updateModelMatrix();
 }
 
 void Node::setIdentityMatrix_Scale()
 {
 	glm::mat4 inverseMatrix = glm::inverse(m_scaleMatrix);
-	m_modelMatrix = inverseMatrix * m_modelMatrix;
 	m_scaleMatrix = inverseMatrix * m_scaleMatrix;
+
+	updateModelMatrix();
 }
 
 void Node::setIdentityMatrix_Rotation()
 {
 	glm::mat4 inverseMatrix = glm::inverse(m_rotationMatrix);
-	m_modelMatrix = inverseMatrix * m_modelMatrix;
 	m_rotationMatrix = inverseMatrix * m_rotationMatrix;
+
+	updateModelMatrix();
 }
 
 void Node::setIdentityMatrix_ModelMatrix()
@@ -245,97 +207,9 @@ void Node::setIdentityMatrix_ModelMatrix()
 	m_modelMatrix = glm::mat4(1);
 }
 
-void Node::setIdentityMatrix_PrevModelMatrix()
+void Node::updateModelMatrix()
 {
-	m_PrevModelMatrix = glm::mat4(1);
-}
-
-void Node::render()
-{
-  if (hasGeometry())
-  {
-    m_geometry->renderGeometry();
-  }
-
-  for (int i = 0; i < m_childrenSet.size(); i++)
-  {
-    m_childrenSet.at(i)->render();
-  }
-}
-
-void Node::render(ShaderProgram &shader)
-{
-	if (!(m_nodeName == "Root"))
-	{
-		glm::mat4 modelMatrix = getParentNode()->getModelMatrix() * m_modelMatrix;
-		shader.sendMat4("modelMatrix", modelMatrix);
-		shader.sendMat4("previousModelMatrix", m_PrevModelMatrix);
-		m_PrevModelMatrix = modelMatrix;
-	}
-
-	if (m_hasTexture)
-	{
-		shader.sendSampler2D("testTexture", getTexture()->getTexture(),0);
-    shader.sendInt("useTexture", 1);
-  }
-  else
-    shader.sendInt("useTexture", 0);
-
-  if (m_hasNormalMap)
-  {
-    shader.sendSampler2D("normalMap", getNormalMap()->getTexture(),1);
-    shader.sendInt("useNormalMap", 1);
-  }
-
-  else
-    shader.sendInt("useNormalMap", 0);
-
-  if (m_hasHeightMap)
-  {
-    shader.sendSampler2D("heightMap", getHeightMap()->getTexture(), 2);
-    shader.sendInt("useHeightMap", 1);
-    shader.sendFloat("parallaxScale", m_heightScale);
-    shader.sendFloat("parallaxBias", m_heightBias);
-
-    if (m_useHeightMapShadows)
-      shader.sendInt("useHeightMapShadows", 1);
-    else
-      shader.sendInt("useHeightMapShadows", 0);
-  }
-  
-  else
-  {
-    shader.sendInt("useHeightMap", 0);
-    shader.sendInt("useHeightMapShadows", 0);
-  }
-
-	if (hasGeometry())
-	{
-		m_geometry->renderGeometry();
-	}
-
-	for (int i = 0; i < m_childrenSet.size(); i++)
-	{
-		m_childrenSet.at(i)->render(shader);
-	}
-
-}
-
-void Node::updateModelMatrix(glm::mat4 updateMatrix)
-{
-	m_modelMatrix = updateMatrix * m_modelMatrix;
-}
-
-glm::mat4 Node::updateModelMatrix()
-{
-	glm::mat4 modelMatrix = getParentNode()->getModelMatrix() * m_modelMatrix;
-	//TODO: An dieser Stelle sollte die Matrix an den Shader gesendet werden als Uniform-Variable
-	return modelMatrix;
-}
-
-std::vector<Node*>* Node::getChildrenSet()
-{
-	return &m_childrenSet;
+	m_modelMatrix = m_translateMatrix *  m_rotationMatrix * m_scaleMatrix  * glm::mat4(1.0);
 }
 
 bool Node::hasTexture()
@@ -356,4 +230,439 @@ bool Node::hasCamera()
 bool Node::hasGeometry()
 {
 	return m_hasGeometry;
+}
+
+bool Node::hasBoundingSphere()
+{
+	return m_hasBoundingSphere;
+}
+
+bool Node::hasObject()
+{
+	return m_hasObject;
+}
+
+bool Node::hasSoundFile()
+{
+	return m_hasSound;
+}
+
+bool Node::hasGravity()
+{
+	return m_hasGravity;
+}
+
+Geometry* Node::getGeometry()
+{
+	if (m_hasGeometry)
+	{
+		return m_geometry;
+	}
+	else{
+		std::cout << "ERROR: The Node has no geometry!" << std::endl;
+		return 0;
+	}
+	;
+}
+
+void Node::addGeometry(Geometry* geometry)
+{
+	m_geometry = geometry;
+	m_hasGeometry = true;
+
+	if (!m_geometry->isLoaded())
+	{
+		m_geometry->loadBufferData();
+		m_geometry->setLoaded();
+	}
+
+	if (!m_hasBoundingSphere)
+	{
+		m_hasBoundingSphere = true;
+		setBoundingSphere();
+	}
+
+}
+
+Texture* Node::getTexture()
+{
+	if (m_hasTexture)
+	{
+		return m_texture;
+	}
+	else
+	{
+		std::cout << "ERROR: The Node has no texture!" << std::endl;
+		return 0;
+	}
+
+}
+
+void Node::addTexture(Texture* texture)
+{
+	m_texture = texture;
+	m_hasTexture = true;
+}
+
+Texture* Node::getNormalMap()
+{
+	if (m_hasNormalMap)
+	{
+		return m_normalmap;
+	}
+	else
+	{
+		std::cout << "ERROR: The Node has no normal-map!" << std::endl;
+		return 0;
+	}
+}
+
+void Node::addNormalMap(Texture* normalmap)
+{
+	m_normalmap = normalmap;
+	m_hasNormalMap = true;
+}
+
+StrategyCamera* Node::getCamera()
+{
+	if (m_hasCamera)
+	{
+		return m_camera;
+	}
+	else
+	{
+		std::cout << "ERROR: The Node has no camera!" << std::endl;
+		return 0;
+	}
+}
+
+void Node::setCamera(StrategyCamera* camera)
+{
+	m_camera = camera;
+	m_hasCamera = true;
+
+	if (m_hasObject)
+	{
+		if (m_type == ClassType::PLAYER)
+		{
+			m_player->setPosition(glm::vec3(m_camera->getCenter().x, 0.0f, m_camera->getCenter().z));
+			addTranslation(m_player->getPosition());
+		}	
+	}
+
+}
+
+BoundingSphere* Node::getBoundingSphere()
+{
+	if (m_hasGeometry)
+	{
+		return m_sphere;
+	}
+	else
+	{
+		std::cout << "ERROR: The Node has no bounding-sphere!" << std::endl;
+		return 0;
+	}
+}
+
+std::vector<BoundingSphere*>* Node::getBoundingList()
+{
+	return &m_boundingList;
+}
+
+void Node::setBoundingSphere()
+{
+	if (m_hasGeometry)
+	{
+		m_sphere = new BoundingSphere(getGeometry(), glm::mat4(1.0));
+		m_boundingList.push_back(m_sphere);
+		std::cout << "SUCCESS: A Bounding Sphere was created!" << std::endl;
+	}
+	else
+	{
+		std::cout << "ERROR: No geometry was set, yet. Cannot create a Bounding-Sphere!" << std::endl;
+	}
+
+}
+
+void Node::setBoundingSphere(double radius, glm::vec3 center)
+{
+	m_sphere = new BoundingSphere(radius, center);
+	m_boundingList.push_back(m_sphere);
+	std::cout << "SUCCESS: A Bounding Sphere was created!" << std::endl;
+}
+
+
+AI* Node::getAI()
+{
+	if (m_hasObject && m_type == ClassType::AI)
+	{
+		return m_ai;
+	}
+	else
+	{
+		std::cout << "ERROR: The Node is no AI-Unit!" << std::endl;
+		return 0;
+	}
+
+}
+
+void Node::setObject(AI* object)
+{
+	object->setNodeName(m_nodeName);
+
+	m_type = object->getClassType();
+	m_ai = object;
+	m_hasObject = true;
+
+	m_viewArea = new BoundingSphere(m_sphere->radius, m_sphere->center);
+	m_viewArea->center += object->getViewDirection() * glm::vec3(m_sphere->radius, m_sphere->radius, m_sphere->radius);
+	m_boundingList.push_back(m_viewArea);
+
+	addTranslation(object->getPosition());
+}
+
+Player* Node::getPlayer()
+{
+	if (m_hasObject && (m_type == ClassType::PLAYER))
+	{
+		return m_player;
+	}
+	else
+	{
+		std::cout << "ERROR: The Node is no Player-Unit!" << std::endl;
+		return 0;
+	}
+}
+
+void Node::setObject(Player* object)
+{
+	object->setNodeName(m_nodeName);
+
+	m_type = object->getClassType();
+	m_player = object;
+	m_hasObject = true;
+
+	if (m_hasCamera)
+	{
+		m_player->setPosition(glm::vec3(m_camera->getCenter().x, 0.0f, m_camera->getCenter().z));
+	}
+
+	addTranslation(m_player->getPosition());
+}
+
+
+StaticObject* Node::getStaticObject()
+{
+	if (m_hasObject && m_type == ClassType::STATIC)
+	{
+		return m_staticObject;
+	}
+	else
+	{
+		std::cout << "ERROR: The Node is no Static-Unit!" << std::endl;
+		return 0;
+	}
+}
+
+void Node::setObject(StaticObject* object)
+{
+	object->setNodeName(m_nodeName);
+
+	m_type = object->getClassType();
+	m_hasObject = true;
+	m_staticObject = object;
+
+	addTranslation(object->getPosition());
+}
+
+ClassType Node::getType()
+{
+	if (m_hasObject)
+	{
+		return m_type;
+	}
+	else
+	{
+		std::cout << "ERROR: The Node is no Object-Unit and has no specific ClassType!" << std::endl;
+		return ClassType::OBJECT;
+	}
+}
+
+SoundFileHandler* Node::getSoundHandler()
+{
+	if (m_hasSound)
+	{
+		return m_sfh;
+	}
+	else
+	{
+		std::cout << "ERROR: The Node has no SoundFileHandler attached!" << std::endl;
+		return 0;
+	}
+}
+
+void Node::setSoundHandler(SoundFileHandler* soundHandler)
+{
+	m_hasSound = true;
+	m_sfh = soundHandler;
+}
+
+std::string Node::getSourceName()
+{
+	return m_sourceName;
+}
+
+void Node::setSourceName(std::string sourceName, const char* filepath)
+{
+		m_sourceName = sourceName;
+
+		if (m_type == ClassType::PLAYER)
+		{
+			m_sfh->generateSource(m_sourceName, getPlayer()->getPosition(), filepath);
+		}
+		else if (m_type == ClassType::AI)
+		{
+			m_sfh->generateSource(m_sourceName, getAI()->getPosition(), filepath);
+		}
+
+}
+
+void Node::addGravity(Gravity* gravity)
+{
+	m_hasGravity = true;
+	m_Gravity = gravity;
+}
+
+void Node::setGravity(bool grav)
+{
+	m_hasGravity = grav;
+}
+
+void Node::render()
+{
+  if (hasGeometry())
+  {
+    m_geometry->renderGeometry();
+  }
+
+  for (int i = 0; i < m_childrenSet.size(); i++)
+  {
+    m_childrenSet.at(i)->render();
+  }
+}
+
+void Node::render(ShaderProgram &shader)
+{
+	if (!(m_nodeName == "Root"))
+	{
+		glm::mat4 modelMatrix(1.0);
+
+		if (m_hasGravity){
+			if ((m_type == ClassType::PLAYER | m_type == ClassType::PLAYER) & m_type != ClassType::OBJECT)
+			{
+				m_player->setPosition(m_player->getPosition() + m_Gravity->getGravity());
+				addTranslation(m_player->getPosition());
+			}
+			else if ((m_type == ClassType::AI))
+			{
+				m_ai->setPosition(m_ai->getPosition() + m_Gravity->getGravity());
+				addTranslation(m_ai->getPosition());
+			}
+			else if (m_type == ClassType::OBJECT)
+			{
+				m_modelMatrix = m_Gravity->addGravity(m_modelMatrix);
+			}
+		}
+
+		if ((m_type == ClassType::PLAYER) & m_type != ClassType::OBJECT)
+		{
+			if (m_hasCamera)
+			{
+				addRotation(-(m_camera->getXAngle()), glm::vec3(0.0, 1.0, 0.0));
+				m_player->rotateView((m_camera->getXAngle()), 0.0f);
+			}
+		}
+		
+		
+		modelMatrix = getParentNode()->getModelMatrix() * m_modelMatrix;
+		shader.sendMat4("modelMatrix", modelMatrix);
+		shader.sendMat4("previousModelMatrix", m_PrevModelMatrix);
+		m_PrevModelMatrix = modelMatrix;
+	}
+
+	if (m_hasTexture)
+	{
+		shader.sendSampler2D("testTexture", getTexture()->getTexture(),0);
+    		shader.sendInt("useTexture", 1);
+	} else
+   		shader.sendInt("useTexture", 0);
+
+	if (m_hasNormalMap)
+	  {
+	    shader.sendSampler2D("normalMap", getNormalMap()->getTexture(),1);
+	    shader.sendInt("useNormalMap", 1);
+	  } else
+	    shader.sendInt("useNormalMap", 0);
+
+  	if (m_hasHeightMap)
+  	{
+  	  shader.sendSampler2D("heightMap", getHeightMap()->getTexture(), 2);
+  	  shader.sendInt("useHeightMap", 1);
+  	  shader.sendFloat("parallaxScale", m_heightScale);
+  	  shader.sendFloat("parallaxBias", m_heightBias);
+
+	    if (m_useHeightMapShadows)
+	      shader.sendInt("useHeightMapShadows", 1);
+	    else
+	      shader.sendInt("useHeightMapShadows", 0);
+	  }
+	  
+	  else
+	  {
+	    shader.sendInt("useHeightMap", 0);
+	    shader.sendInt("useHeightMapShadows", 0);
+	  }
+
+
+	if (m_hasGeometry)
+	{
+		m_geometry->renderGeometry();
+	}
+
+	for (int i = 0; i < m_childrenSet.size(); i++)
+	{
+		m_childrenSet.at(i)->render(shader);
+	}
+}
+
+
+//Ab hier neu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+Texture* Node::getHeightMap()
+{
+  return m_heightmap;
+}
+
+void Node::addHeightMap(Texture* heightmap, float heightScale, float heightBias, bool useHeightmapShadows)
+{
+  m_heightScale = heightScale;
+  m_heightBias = heightBias;
+  m_heightmap = heightmap;
+  m_useHeightMapShadows = useHeightmapShadows;
+  m_hasHeightMap = true;
+}
+
+glm::mat4 Node::getPrevModelMatrix()
+{
+	return m_PrevModelMatrix;
+}
+void Node::setPrevModelMatrix(glm::mat4 modelMatrix)
+{
+	m_PrevModelMatrix = modelMatrix;
+}
+void Node::setIdentityMatrix_PrevModelMatrix()
+{
+	m_PrevModelMatrix = glm::mat4(1);
 }

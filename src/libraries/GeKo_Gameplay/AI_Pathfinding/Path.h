@@ -16,6 +16,8 @@ public:
 		m_timeToTravel = timeToTravel;
 		m_endNode = endNode;
 		m_startNode = startNode;
+		glm::vec3 temp = startNode->getPosition() - endNode->getPosition();
+		m_distance = sqrt((temp.x * temp.x) + (temp.y * temp.y) + (temp.z * temp.z));
 	}
 	~Path(){};
 	
@@ -36,10 +38,14 @@ public:
 		return m_startNode;
 	}
 
+	float getDistance(){
+		return m_distance;
+	}
+
 	
 protected:
 	int m_timeToTravel;
+	float m_distance;
 	T* m_endNode;
-	T* m_startNode	;
-
+	T* m_startNode;
 };

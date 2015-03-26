@@ -120,6 +120,10 @@ void Camera::setMouseSpeed(float speed){
 	m_mouseSpeed = speed;
 }
 
+glm::vec4 Camera::getCenter(){
+	return m_center;
+}
+
 void Camera::moveForward(){}
 void Camera::moveBackward(){}
 void Camera::moveLeft(){}
@@ -130,3 +134,5 @@ void Camera::turnLeft(){}
 void Camera::turnRight(){}
 void Camera::turnUp(){}
 void Camera::turnDown(){}
+void Camera::increaseRadius(){}
+void Camera::decreaseRadius(){}

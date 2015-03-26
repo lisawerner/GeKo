@@ -1,7 +1,7 @@
 #pragma once
 #include "GeKo_Graphics/Shader/Shader.h"
 #include "GeKo_Graphics/Camera/Camera.h"
-#include "GeKo_Graphics/ObjectInclude.h"
+#include "GeKo_Graphics/GeometryInclude.h"
 #include "GeKo_Graphics/Material/Texture.h"
 
 /*
