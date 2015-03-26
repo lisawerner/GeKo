@@ -1,1 +1,0 @@
-/usr/bin/cc      CMakeFiles/glewinfo.dir/src/glewinfo.c.o  -o bin/glewinfo -rdynamic lib/libglew.a -lGL -lX11 -ldl -lXext 

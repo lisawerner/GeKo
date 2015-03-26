@@ -1,2 +1,0 @@
-/usr/bin/ar cr ../../../lib/libGeKo_Sound.a  CMakeFiles/GeKo_Sound.dir/SoundFileHandler.cpp.o
-/usr/bin/ranlib ../../../lib/libGeKo_Sound.a

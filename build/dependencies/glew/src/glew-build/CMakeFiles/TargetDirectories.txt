@@ -1,4 +1,0 @@
-/home/maik/projects/lisa_geko/GeKo/build/dependencies/glew/src/glew-build/CMakeFiles/glewinfo.dir
-/home/maik/projects/lisa_geko/GeKo/build/dependencies/glew/src/glew-build/CMakeFiles/libglew_shared.dir
-/home/maik/projects/lisa_geko/GeKo/build/dependencies/glew/src/glew-build/CMakeFiles/libglew_static.dir
-/home/maik/projects/lisa_geko/GeKo/build/dependencies/glew/src/glew-build/CMakeFiles/visualinfo.dir

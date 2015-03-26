@@ -1,3 +1,0 @@
-repository='https://github.com/fungos/glew-cmake'
-module=''
-tag=''

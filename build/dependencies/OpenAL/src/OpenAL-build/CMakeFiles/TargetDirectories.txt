@@ -1,4 +1,0 @@
-/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/common.dir
-/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/makehrtf.dir
-/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/openal.dir
-/home/maik/projects/lisa_geko/GeKo/build/dependencies/OpenAL/src/OpenAL-build/CMakeFiles/openal-info.dir

@@ -1,2 +1,0 @@
-/usr/bin/ar cr ../../../lib/libLogging.a  CMakeFiles/Logging.dir/Utility.cpp.o CMakeFiles/Logging.dir/Log.cpp.o
-/usr/bin/ranlib ../../../lib/libLogging.a

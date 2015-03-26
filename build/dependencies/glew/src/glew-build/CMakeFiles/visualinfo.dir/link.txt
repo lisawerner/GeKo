@@ -1,1 +1,0 @@
-/usr/bin/cc      CMakeFiles/visualinfo.dir/src/visualinfo.c.o  -o bin/visualinfo -rdynamic lib/libglew.a -lGL -lX11 -ldl -lXext 

@@ -1,2 +1,0 @@
-/usr/bin/ar cr ../../../lib/libGeKo_Debugger.a  CMakeFiles/GeKo_Debugger.dir/Debugger.cpp.o
-/usr/bin/ranlib ../../../lib/libGeKo_Debugger.a
