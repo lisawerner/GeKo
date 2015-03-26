@@ -9,9 +9,9 @@
 #include "GeKo_Graphics/Shader/Shader.h"
 #include "GeKo_Graphics/Buffer.h"
 #include "GeKo_Graphics/Shader/FBO.h"
-#include "GeKo_Graphics/Object/Rect.h"
-#include "GeKo_Graphics/Object/Teapot.h"
-#include "GeKo_Graphics/Object/Cube.h"
+#include "GeKo_Graphics/Geometry/Rect.h"
+#include "GeKo_Graphics/Geometry/Teapot.h"
+#include "GeKo_Graphics/Geometry/Cube.h"
 
 /*
 if you want to use lights, you just must create them with PointLight, DirectionLight or ConeLight class

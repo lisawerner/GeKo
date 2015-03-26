@@ -45,7 +45,7 @@ int main()
 	//SCENE 
 	Level testLevel("testLevel");
 	Scene testScene("testScene");
-	testLevel.addScene(testScene);
+	testLevel.addScene(&testScene);
 	testLevel.changeScene("testScene");
 	testScene.getScenegraph()->addCamera(&cam);
 	testScene.getScenegraph()->getCamera("PilotviewCam");

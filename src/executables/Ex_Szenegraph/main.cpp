@@ -69,7 +69,7 @@ int main()
 	//Scene creation 
 	Level testLevel("testLevel");
 	Scene testScene("testScene");
-	testLevel.addScene(testScene);
+	testLevel.addScene(&testScene);
 	testLevel.changeScene("testScene");
 
 	//Add Camera to scenegraph
