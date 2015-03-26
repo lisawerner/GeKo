@@ -1,25 +1,5 @@
 #include "Camera.h"
 
-Camera::Camera(){
-	m_name = "Camera";
-
-	m_position = glm::vec4(0.0f, 0.0f, 5.0f, 1.0f);
-	m_center = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-	m_up = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
-
-	m_fov = 60.0f;
-	m_near = 0.01f;
-	m_far = 10.0f;
-
-	m_width = 800;
-	m_height = 600;
-
-	m_direction = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
-
-	m_viewMatrix = glm::lookAt(glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
-	m_projectionMatrix = glm::perspective(m_fov, m_width / (float)m_height, m_near, m_far);
-}
-
 Camera::Camera(std::string name){
 	m_name = name;
 
@@ -53,7 +33,7 @@ void Camera::setFOV(float fov){
 
 void Camera::setLookAt(glm::vec3 lookAt){
 	m_center = glm::vec4(lookAt, 1.0);
-	m_projectionMatrix = glm::perspective(m_fov, (float)m_width / (float)m_height, m_near, m_far);
+	m_viewMatrix = glm::lookAt(glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
 }
 
 
