@@ -154,10 +154,10 @@ int main()
 	Texture* rainTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/rain/rain.png"); //TODO darker
 
 	//SMOKE
-	Texture* drawSmokeTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/drawSmoke/smoke01_L.png");
-	Texture* drawSmokeTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/drawSmoke/smoke02_L.png");
-	Texture* drawSmokeTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/drawSmoke/smoke03_L.png");
-	Texture* drawSmokeTex4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/drawSmoke/smoke04_L.png");
+	Texture* drawSmokeTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/smokeDraw/smoke01_L.png");
+	Texture* drawSmokeTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/smokeDraw/smoke02_L.png");
+	Texture* drawSmokeTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/smokeDraw/smoke03_L.png");
+	Texture* drawSmokeTex4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/smokeDraw/smoke04_L.png");
 	Texture* smokeWhiteTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/smokeWhite/smokeWhite01.png");
 	Texture* smokeWhiteTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/smokeWhite/smokeWhite02.png");
 	Texture* smokeBlackTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/smokeBlack/smokeBlack01.png");
@@ -210,6 +210,17 @@ int main()
 	smokeBlack->useTexture(true, smokeBlackSize, smokeBlackTime, 1.0, 4.0, 4.0, false, 0.3);
 	smokeBlack->switchToGeometryShader();
 
+	//FINAL EMITTER CLOUD SMOKE
+	Emitter* smokeCloud = new Emitter(0, glm::vec3(15.0, -1.0, 1.0), 0.0, 0.3, 1, 10.0, true);
+	smokeCloud->setVelocity(3);
+	smokeCloud->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.1), 0.15f);
+	smokeCloud->addTexture(smokeWhiteTex1, 1.0);
+	smokeCloud->addTexture(smokeWhiteTex2, 0.08);
+	std::vector<float> smokeCloudSize{ 0.1f, 0.4f, 0.8f, 1.2f };
+	std::vector<float> smokeCloudTime{ 0.0f, 0.2f, 0.75f, 1.0f };
+	smokeCloud->useTexture(true, smokeBlackSize, smokeBlackTime, 1.0, 2.0, 8.0, false, 0.3);
+	smokeCloud->switchToGeometryShader();
+
 	//FINAL EMITTER RAIN
 	Emitter* rain = new Emitter(0, glm::vec3(0.0, 3.0, 0.0), 0.0, 0.0166, 50, 5.0, true);
 	rain->setVelocity(0);
@@ -219,7 +230,7 @@ int main()
 	rain->useTexture(true, 0.03, 1.0, 0.0);
 
 	//FINAL EMITTER FRUITFLIES
-	Emitter* fruitFlies = new Emitter(0, glm::vec3(11.0, 0.0, 1.0), 0.0, 0.166, 2, 10.0, true);
+	Emitter* fruitFlies = new Emitter(0, glm::vec3(11.5, 0.0, 1.0), 0.0, 0.166, 2, 10.0, true);
 	fruitFlies->setVelocity(0);
 	fruitFlies->usePhysicSwarmCircleMotion(true, true, true);
 	fruitFlies->setAreaEmitting(true, true, 0.5, 100);
@@ -387,12 +398,12 @@ int main()
 		(char*)RESOURCES_PATH "/PereaBeach1/negy.jpg",
 		(char*)RESOURCES_PATH "/PereaBeach1/posz.jpg",
 		(char*)RESOURCES_PATH "/PereaBeach1/negz.jpg"*/
-		(char*)RESOURCES_PATH "/testTex.png",
-		(char*)RESOURCES_PATH "/testTex.png",
-		(char*)RESOURCES_PATH "/testTex.png",
-		(char*)RESOURCES_PATH "/testTex.png",
-		(char*)RESOURCES_PATH "/testTex.png",
-		(char*)RESOURCES_PATH "/testTex.png" };
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png" };
 	Skybox skybox(textureNames);
 	Node skyboxNode("skybox");
 	skyboxNode.addGeometry(&cube);
@@ -406,10 +417,10 @@ int main()
 	plane.loadBufferData();
 
 	//TEXTURES
-	Texture chrome((char*)RESOURCES_PATH "/chrome.jpg");
-	Texture marble((char*)RESOURCES_PATH "/seamless_marble.png"); //TODO JPG
-	Texture cvLogo((char*)RESOURCES_PATH "/cv_logo.bmp");
-	Texture bricks((char*)RESOURCES_PATH "/brick.bmp");
+	Texture chrome((char*)RESOURCES_PATH "/Metal/chrome.jpg");
+	Texture marble((char*)RESOURCES_PATH "/Wall/seamless_marble.png"); //TODO JPG
+	Texture cvLogo((char*)RESOURCES_PATH "/Symbol/cv_logo.bmp");
+	Texture bricks((char*)RESOURCES_PATH "/Wall/brick.bmp");
 
 	//CREATING NODES
 	Level testLevel("testLevel");
@@ -434,13 +445,13 @@ int main()
 	wallNode1.addTexture(&marble);
 	wallNode1.setModelMatrix(glm::translate(wallNode1.getModelMatrix(), glm::vec3(0.0, -1.0, 0.0)));
 	wallNode1.setModelMatrix(glm::rotate(wallNode1.getModelMatrix(), 90.0f, glm::vec3(1.0, 0.0, 0.0)));
-	wallNode1.setModelMatrix(glm::scale(wallNode1.getModelMatrix(), glm::vec3(13.0, 2.0, 1.0)));
+	wallNode1.setModelMatrix(glm::scale(wallNode1.getModelMatrix(), glm::vec3(16.0, 2.0, 1.0)));
 
 	Node wallNode2("wall2");
 	wallNode2.addGeometry(&plane);
 	wallNode2.addTexture(&bricks);
 	wallNode2.setModelMatrix(glm::translate(wallNode2.getModelMatrix(), glm::vec3(0.0, 0.0, 0.0)));
-	wallNode2.setModelMatrix(glm::scale(wallNode2.getModelMatrix(), glm::vec3(13.0, 2.5, 1.0)));
+	wallNode2.setModelMatrix(glm::scale(wallNode2.getModelMatrix(), glm::vec3(16.0, 2.5, 1.0)));
 
 	Node teaNode("teaNode");
 	teaNode.addGeometry(&teapot);
@@ -470,7 +481,6 @@ int main()
 
 	while (!glfwWindowShouldClose(window.getWindow()))
 	{
-
 		//CAM
 		dTime = glfwGetTime() - startCamTime;
 		cam.setSensitivity(dTime);
@@ -615,6 +625,11 @@ int main()
 		firework->generateParticle();
 		firework->update();
 		//firework->render(cam);
+
+		//smokeCloud
+		smokeCloud->generateParticle();
+		smokeCloud->update();
+		smokeCloud->render(cam);
 
 		renderer->renderGUI(*gui, window);
 
