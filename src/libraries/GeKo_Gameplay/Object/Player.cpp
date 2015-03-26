@@ -1,4 +1,5 @@
 #include "GeKo_Gameplay/Object/Player.h"
+#include <stdexcept>
 
 Player::Player(std::string playerName)
 {
@@ -95,6 +96,6 @@ void Player::setSourceName(Soundtype type , std::string sourceName, const char* 
 {
 
 		m_sfh->generateSource(sourceName, m_position, filepath);
-		m_soundMap.emplace(type, sourceName);
-
+	//	m_soundMap.emplace(type, sourceName);
+		m_soundMap.insert(std::pair<Soundtype, std::string>(type, sourceName));
 }

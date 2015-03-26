@@ -1,11 +1,12 @@
 #include <GL/glew.h>
 #include <GeKo_Graphics/InputInclude.h>
 #include <GeKo_Graphics/MaterialInclude.h>
-#include <GeKo_Graphics/ObjectInclude.h>
+#include <GeKo_Graphics/GeometryInclude.h>
 #include <GeKo_Graphics/ShaderInclude.h>
 #include <GeKo_Graphics/ScenegraphInclude.h>
 #include "GeKo_Graphics/Camera/Pilotview.h"
 #include "GeKo_Graphics/GUI/GUI.h"
+#include <GeKo_Graphics/Geometry/Sphere.h>
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
@@ -94,7 +95,7 @@ int main()
   //Scene creation 
   Level testLevel("testLevel");
   Scene testScene("testScene");
-  testLevel.addScene(testScene);
+  testLevel.addScene(&testScene);
   testLevel.changeScene("testScene");
 
   //Add Camera to scenegraph

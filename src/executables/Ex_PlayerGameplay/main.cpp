@@ -22,7 +22,7 @@
 #include <GeKo_Graphics/Geometry/AntMesh.h>
 #include <GeKo_Graphics/Geometry/AntHomeMesh.h>
 
-#include <GeKo_Gameplay/AI_DecisionTree/DecisionTree.h>
+#include <GeKo_Gameplay/AI_Decisiontree/DecisionTree.h>
 #include <GeKo_Gameplay/FightSystem/FightSystem.h>
 
 #include <GeKo_Gameplay/Item/Item.h>

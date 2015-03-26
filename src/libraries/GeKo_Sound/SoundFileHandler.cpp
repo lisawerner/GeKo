@@ -1,6 +1,6 @@
 #include "SoundFileHandler.h"
 #include <cstdio>
-
+#include <stdexcept>
 
 /**
 Creates a Soundfilehandler with the max number of Sources = maxSources
@@ -174,7 +174,8 @@ void SoundFileHandler::generateSource(std::string name, ALfloat position[3], con
 			alSourcefv(sources[numberOfSources], AL_POSITION, position);
 			alSourcefv(sources[numberOfSources], AL_VELOCITY, vel);
 			alSourcei(sources[numberOfSources], AL_LOOPING, AL_TRUE);
-			sourceMap.emplace(name, numberOfSources);
+			//sourceMap.emplace(name, numberOfSources);
+			sourceMap.insert(std::pair<std::string, int>(name, numberOfSources));
 			numberOfSources++;
 		}
 	}

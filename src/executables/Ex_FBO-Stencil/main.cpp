@@ -64,7 +64,7 @@ int main()
 	//Scene creation 
 	Level level("level");
 	Scene scene("scene");
-	level.addScene(scene);
+	level.addScene(&scene);
 	level.changeScene("scene");
 
 	//Add Camera to scenegraph

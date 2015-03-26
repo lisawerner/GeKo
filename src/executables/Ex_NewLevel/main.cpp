@@ -10,7 +10,7 @@
 #include <GeKo_Graphics/ShaderInclude.h>
 
 #include <GeKo_Graphics/AIInclude.h>
-#include <GeKo_Gameplay/AI_DecisionTree/DecisionTree.h>
+#include <GeKo_Gameplay/AI_Decisiontree/DecisionTree.h>
 #include <GeKo_Gameplay/Object/Geko.h>
 #include <GeKo_Gameplay/Object/AI.h>
 

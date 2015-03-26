@@ -3,7 +3,7 @@
 #include "GeKo_Graphics/Light/PointLight.h"
 #include "GeKo_Graphics/Scenegraph/Scene.h"
 #include "GeKo_Graphics/Scenegraph/Node.h"
-#include "GeKo_Graphics/Object/Cube.h"
+#include "GeKo_Graphics/Geometry/Cube.h"
 #include "GeKo_Graphics/Material/Texture.h"
 
 #include "GeKo_Graphics/Camera/Pilotview.h"
@@ -67,7 +67,7 @@ int main()
 	PointLight plight(glm::vec4(0.0f, 1.0, 10.0f, 1.0f), glm::vec4(0.6, 0.6, 0.6, 1.0), true, 0);
 
 	//our Node
-	Scene scene;
+	Scene* scene;
 	Node cubeNode("cubeNode");
 	cubeNode.addGeometry(&cube);
 	cubeNode.addTexture(&diffusemap);

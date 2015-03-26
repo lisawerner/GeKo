@@ -5,7 +5,7 @@
 #include <GL/glew.h>
 #include <GeKo_Graphics/InputInclude.h>
 #include <GeKo_Graphics/MaterialInclude.h>
-#include <GeKo_Graphics/ObjectInclude.h>
+#include <GeKo_Graphics/GeometryInclude.h>
 #include <GeKo_Graphics/ShaderInclude.h>
 #include <GeKo_Graphics/ScenegraphInclude.h>
 #include "GeKo_Graphics/GUI/GUI.h"
@@ -414,7 +414,7 @@ int main()
 	//CREATING NODES
 	Level testLevel("testLevel");
 	Scene testScene("testScene");
-	testLevel.addScene(testScene);
+	testLevel.addScene(&testScene);
 	testLevel.changeScene("testScene");
 
 	Node cube1("cube1");
