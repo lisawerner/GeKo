@@ -13,8 +13,7 @@ class Camera{
 
 public:
 	/// Standard constructor: Camera is set and a standard name is given
-	Camera();
-	Camera(std::string name);
+	Camera(std::string name = "Camera");
 	~Camera();
 
 	void update(GLFWwindow* window);
