@@ -18,6 +18,7 @@ Node::Node(std::string nodeName)
 	m_hasGravity = false;
 	m_hasObject = false; 
 	m_hasSound = false;
+	m_hasParticleSystem = false;
 	
 
 	m_type = ClassType::OBJECT;
@@ -109,6 +110,15 @@ glm::mat4 Node::getModelMatrix()
 void Node::setModelMatrix(glm::mat4 modelMatrix)
 {
 	m_modelMatrix = modelMatrix;
+}
+
+glm::mat4 Node::getPrevModelMatrix()
+{
+	return m_PrevModelMatrix;
+}
+void Node::setPrevModelMatrix(glm::mat4 modelMatrix)
+{
+	m_PrevModelMatrix = modelMatrix;
 }
 
 glm::mat4 Node::getRotationMatrix()
@@ -207,6 +217,11 @@ void Node::setIdentityMatrix_ModelMatrix()
 	m_modelMatrix = glm::mat4(1);
 }
 
+void Node::setIdentityMatrix_PrevModelMatrix()
+{
+	m_PrevModelMatrix = glm::mat4(1);
+}
+
 void Node::updateModelMatrix()
 {
 	m_modelMatrix = m_translateMatrix *  m_rotationMatrix * m_scaleMatrix  * glm::mat4(1.0);
@@ -250,6 +265,11 @@ bool Node::hasSoundFile()
 bool Node::hasGravity()
 {
 	return m_hasGravity;
+}
+
+bool Node::hasParticleSystem()
+{
+	return m_hasParticleSystem;
 }
 
 Geometry* Node::getGeometry()
@@ -321,6 +341,20 @@ void Node::addNormalMap(Texture* normalmap)
 {
 	m_normalmap = normalmap;
 	m_hasNormalMap = true;
+}
+
+Texture* Node::getHeightMap()
+{
+	return m_heightmap;
+}
+
+void Node::addHeightMap(Texture* heightmap, float heightScale, float heightBias, bool useHeightmapShadows)
+{
+	m_heightScale = heightScale;
+	m_heightBias = heightBias;
+	m_heightmap = heightmap;
+	m_useHeightMapShadows = useHeightmapShadows;
+	m_hasHeightMap = true;
 }
 
 StrategyCamera* Node::getCamera()
@@ -528,6 +562,25 @@ void Node::setSourceName(std::string sourceName, const char* filepath)
 
 }
 
+ParticleSystem* Node::getParticleSystem()
+{
+	if (m_hasParticleSystem)
+	{
+		return m_particleSystem;
+	}
+	else
+	{
+		std::cout << "ERROR: The Node has no Particle-System attached!" << std::endl;
+		return 0;
+	}
+}
+
+void Node::addParticleSystem(ParticleSystem* particleSystem)
+{
+	m_particleSystem = particleSystem;
+	m_hasParticleSystem = true;
+}
+
 void Node::addGravity(Gravity* gravity)
 {
 	m_hasGravity = true;
@@ -554,115 +607,105 @@ void Node::render()
 
 void Node::render(ShaderProgram &shader)
 {
-	if (!(m_nodeName == "Root"))
+
+	if (m_hasParticleSystem)
 	{
-		glm::mat4 modelMatrix(1.0);
-
-		if (m_hasGravity){
-			if ((m_type == ClassType::PLAYER | m_type == ClassType::PLAYER) & m_type != ClassType::OBJECT)
-			{
-				m_player->setPosition(m_player->getPosition() + m_Gravity->getGravity());
-				addTranslation(m_player->getPosition());
-			}
-			else if ((m_type == ClassType::AI))
-			{
-				m_ai->setPosition(m_ai->getPosition() + m_Gravity->getGravity());
-				addTranslation(m_ai->getPosition());
-			}
-			else if (m_type == ClassType::OBJECT)
-			{
-				m_modelMatrix = m_Gravity->addGravity(m_modelMatrix);
-			}
-		}
-
-		if ((m_type == ClassType::PLAYER) & m_type != ClassType::OBJECT)
+		//Extra Render-Methode für ein Partikel-System
+		renderParticle(shader);
+	}else{
+		//Normale Render-Routine, ohne Partikel-System
+		if (!(m_nodeName == "Root"))
 		{
-			if (m_hasCamera)
-			{
-				addRotation(-(m_camera->getXAngle()), glm::vec3(0.0, 1.0, 0.0));
-				m_player->rotateView((m_camera->getXAngle()), 0.0f);
+			glm::mat4 modelMatrix(1.0);
+
+			if (m_hasGravity){
+				if ((m_type == ClassType::PLAYER | m_type == ClassType::PLAYER) & m_type != ClassType::OBJECT)
+				{
+					m_player->setPosition(m_player->getPosition() + m_Gravity->getGravity());
+					addTranslation(m_player->getPosition());
+				}
+				else if ((m_type == ClassType::AI))
+				{
+					m_ai->setPosition(m_ai->getPosition() + m_Gravity->getGravity());
+					addTranslation(m_ai->getPosition());
+				}
+				else if (m_type == ClassType::OBJECT)
+				{
+					m_modelMatrix = m_Gravity->addGravity(m_modelMatrix);
+				}
 			}
+
+			if ((m_type == ClassType::PLAYER) & m_type != ClassType::OBJECT)
+			{
+				if (m_hasCamera)
+				{
+					addRotation(-(m_camera->getXAngle()), glm::vec3(0.0, 1.0, 0.0));
+					m_player->rotateView((m_camera->getXAngle()), 0.0f);
+				}
+			}
+
+
+			modelMatrix = getParentNode()->getModelMatrix() * m_modelMatrix;
+			shader.sendMat4("modelMatrix", modelMatrix);
+			shader.sendMat4("previousModelMatrix", m_PrevModelMatrix);
+			m_PrevModelMatrix = modelMatrix;
 		}
-		
-		
-		modelMatrix = getParentNode()->getModelMatrix() * m_modelMatrix;
-		shader.sendMat4("modelMatrix", modelMatrix);
-		shader.sendMat4("previousModelMatrix", m_PrevModelMatrix);
-		m_PrevModelMatrix = modelMatrix;
-	}
 
-	if (m_hasTexture)
-	{
-		shader.sendSampler2D("testTexture", getTexture()->getTexture(),0);
-    		shader.sendInt("useTexture", 1);
-	} else
-   		shader.sendInt("useTexture", 0);
+		if (m_hasTexture)
+		{
+			shader.sendSampler2D("testTexture", getTexture()->getTexture(), 0);
+			shader.sendInt("useTexture", 1);
+		}
+		else
+			shader.sendInt("useTexture", 0);
 
-	if (m_hasNormalMap)
-	  {
-	    shader.sendSampler2D("normalMap", getNormalMap()->getTexture(),1);
-	    shader.sendInt("useNormalMap", 1);
-	  } else
-	    shader.sendInt("useNormalMap", 0);
+		if (m_hasNormalMap)
+		{
+			shader.sendSampler2D("normalMap", getNormalMap()->getTexture(), 1);
+			shader.sendInt("useNormalMap", 1);
+		}
+		else
+			shader.sendInt("useNormalMap", 0);
 
-  	if (m_hasHeightMap)
-  	{
-  	  shader.sendSampler2D("heightMap", getHeightMap()->getTexture(), 2);
-  	  shader.sendInt("useHeightMap", 1);
-  	  shader.sendFloat("parallaxScale", m_heightScale);
-  	  shader.sendFloat("parallaxBias", m_heightBias);
+		if (m_hasHeightMap)
+		{
+			shader.sendSampler2D("heightMap", getHeightMap()->getTexture(), 2);
+			shader.sendInt("useHeightMap", 1);
+			shader.sendFloat("parallaxScale", m_heightScale);
+			shader.sendFloat("parallaxBias", m_heightBias);
 
-	    if (m_useHeightMapShadows)
-	      shader.sendInt("useHeightMapShadows", 1);
-	    else
-	      shader.sendInt("useHeightMapShadows", 0);
-	  }
-	  
-	  else
-	  {
-	    shader.sendInt("useHeightMap", 0);
-	    shader.sendInt("useHeightMapShadows", 0);
-	  }
+			if (m_useHeightMapShadows)
+				shader.sendInt("useHeightMapShadows", 1);
+			else
+				shader.sendInt("useHeightMapShadows", 0);
+		}
+
+		else
+		{
+			shader.sendInt("useHeightMap", 0);
+			shader.sendInt("useHeightMapShadows", 0);
+		}
 
 
-	if (m_hasGeometry)
-	{
-		m_geometry->renderGeometry();
-	}
+		if (m_hasGeometry)
+		{
+			m_geometry->renderGeometry();
+		}
 
-	for (int i = 0; i < m_childrenSet.size(); i++)
-	{
-		m_childrenSet.at(i)->render(shader);
+		for (int i = 0; i < m_childrenSet.size(); i++)
+		{
+			m_childrenSet.at(i)->render(shader);
+		}
+
 	}
 }
 
+void Node::renderParticle(ShaderProgram &shader)
 
-//Ab hier neu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-Texture* Node::getHeightMap()
 {
-  return m_heightmap;
+	//TODO: Particle-System muss gerendert werden!
 }
 
-void Node::addHeightMap(Texture* heightmap, float heightScale, float heightBias, bool useHeightmapShadows)
-{
-  m_heightScale = heightScale;
-  m_heightBias = heightBias;
-  m_heightmap = heightmap;
-  m_useHeightMapShadows = useHeightmapShadows;
-  m_hasHeightMap = true;
-}
 
-glm::mat4 Node::getPrevModelMatrix()
-{
-	return m_PrevModelMatrix;
-}
-void Node::setPrevModelMatrix(glm::mat4 modelMatrix)
-{
-	m_PrevModelMatrix = modelMatrix;
-}
-void Node::setIdentityMatrix_PrevModelMatrix()
-{
-	m_PrevModelMatrix = glm::mat4(1);
-}
+
+

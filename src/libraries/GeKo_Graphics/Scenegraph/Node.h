@@ -11,6 +11,8 @@
 
 #include <GeKo_Physics/Gravity.h>
 
+#include <GeKo_Graphics/ParticleSystem/ParticleSystem.h>
+
 #include <GeKo_Gameplay/Object/AI.h>
 #include <GeKo_Gameplay/Object/Player.h>
 #include <GeKo_Gameplay/Object/StaticObject.h>
@@ -138,6 +140,8 @@ public:
 	bool hasSoundFile();
 	///Returns true, if a gravity unit has been attached
 	bool hasGravity();
+	///Returns true, if a partice system has been attached
+	bool hasParticleSystem();
 
 //==================Functions to add Units to the Node===========================//
 
@@ -163,7 +167,6 @@ public:
 	/**/
 	Texture* getHeightMap();
 	void addHeightMap(Texture* heightmap, float heightScale = 0.07f, float heightBias = 0.1f, bool useHeightmapShadows = false);
-
 
 	///Returns m_Camera as a Camera Object
 	/**If the node does not have a camera an error will be thrown!*/
@@ -229,6 +232,14 @@ public:
 	/**This method uses the sfh to generate a new sound-source which can be played with the sfh later ingame!*/
 	void setSourceName(std::string sourceName, const char* filepath);
 	
+	///Returns the m_particleSystem object 
+	/**If the node does not have a Particle-unit an error will be thrown!*/
+	ParticleSystem* getParticleSystem();
+	///Adds a Particle-System to the node
+	/**The Node will not render geometry or other thing. It will be only function as a source for a particle system!*/
+	void addParticleSystem(ParticleSystem* particleSystem);
+
+
 	///Adds a Gravity-Module to the node
 	/**The Node will react to gravitational effects from now on!*/
 	void addGravity(Gravity* gravity);
@@ -245,6 +256,10 @@ public:
 	///A method to tell the Node to draw itself
 	/**The Node will take this call and forward it to the geometry, so the geometry will be drawed*/
 	void render(ShaderProgram &shader);
+
+	///A method to tell the Node to render its Particle-System
+	/**This Method will be used by the Node if a Particle system was attached to it, only!*/
+	void renderParticle(ShaderProgram &shader);
 
 protected:
 	std::string m_nodeName;
@@ -268,6 +283,7 @@ protected:
 	bool m_hasObject;
 	bool m_hasSound;
 	bool m_hasGravity;
+	bool m_hasParticleSystem;
 
 	Geometry* m_geometry;
 	Texture* m_texture;
@@ -290,6 +306,8 @@ protected:
 	SoundFileHandler* m_sfh;
 	std::string m_sourceName;
 	//std::vector<std::string> m_sourceName;
+
+	ParticleSystem* m_particleSystem;
 
 	Gravity* m_Gravity;
 
