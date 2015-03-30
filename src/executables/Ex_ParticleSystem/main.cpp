@@ -16,6 +16,7 @@ GuiElement::Checkbox *useSnowButton;
 GuiElement::Checkbox *useStrongSnowButton;
 GuiElement::Checkbox *useRainButton;
 GuiElement::Checkbox *useFruitFliesButton;
+GuiElement::Checkbox *useMaximumParticle;
 int particleCount = 0;
 
 //CAM
@@ -68,8 +69,14 @@ void initGUI()
 	screenParticleHeader->addElement(useFruitFliesButton);
 	screenParticleHeader->addElement(new GuiElement::Spacing);
 
+	GuiElement::Header *maxParticleHeader = new GuiElement::Header("Maximum Particlenumber");
+	useMaximumParticle = new GuiElement::Checkbox("300 000 Particles without Texture");
+	maxParticleHeader->addElement(useMaximumParticle);
+	maxParticleHeader->addElement(new GuiElement::Spacing);
+
 	gui->addElement(moveableParticleHeader);
 	gui->addElement(screenParticleHeader);
+	gui->addElement(maxParticleHeader);
 
 	renderer = new Renderer(context);
 	renderer->addGui(gui);
@@ -86,14 +93,14 @@ int main()
 	glfwMakeContextCurrent(window.getWindow());
 
 	//CAM
-	cam.setPosition(glm::vec4(-17.0, 0.0, 7.0, 1.0));
+	cam.setPosition(glm::vec4(-21.0, 0.0, 7.0, 1.0));
 	cam.setNearFar(0.1f, 100.0f);
-	cam.setLookAt(glm::vec3(0.0, 0.0, 0.0));
+	cam.setLookAt(glm::vec3(cam.getPosition().x, cam.getPosition().y, cam.getPosition().z - 1.0));
 	cam.setKeySpeed(8.0);
 	iH.setAllInputMaps(cam);
 	iH.changeActiveInputMap("Pilotview");
 
-	// Callback
+	//Callback
 	glfwSetKeyCallback(window.getWindow(), key_callback);
 
 	glewInit();
@@ -199,7 +206,7 @@ int main()
 	smokeWhite->addTexture(smokeWhiteTex2, 0.25);
 	std::vector<float> smokeWhiteSize{ 0.05f, 0.5f, 0.75f, 1.2f };
 	std::vector<float> smokeWhiteTime{ 0.0f, 0.4f, 0.75f, 1.0f };
-	smokeWhite->useTexture(true, smokeWhiteSize, smokeWhiteTime, 1.0, 4.0, 4.0, false, 0.3);
+	smokeWhite->useTexture(true, smokeWhiteSize, smokeWhiteTime, 1.0, 4.0, 3.0, false, 0.3);
 	smokeWhite->switchToGeometryShader();
 	particleCount += (1 * 8.0 / 0.4);
 
@@ -211,7 +218,7 @@ int main()
 	smokeBlack->addTexture(smokeBlackTex2, 0.08);
 	std::vector<float> smokeBlackSize{ 0.1f, 0.4f, 0.8f, 1.2f };
 	std::vector<float> smokeBlackTime{ 0.0f, 0.2f, 0.75f, 1.0f };
-	smokeBlack->useTexture(true, smokeBlackSize, smokeBlackTime, 1.0, 4.0, 4.0, false, 0.3);
+	smokeBlack->useTexture(true, smokeBlackSize, smokeBlackTime, 1.0, 4.0, 3.0, false, 0.3);
 	smokeBlack->switchToGeometryShader();
 	particleCount += (1 * 8 / 0.4);
 
@@ -223,7 +230,7 @@ int main()
 	smokeCloud->addTexture(smokeWhiteTex2, 0.08);
 	std::vector<float> smokeCloudSize{ 0.1f, 0.4f, 0.8f, 1.2f };
 	std::vector<float> smokeCloudTime{ 0.0f, 0.2f, 0.75f, 1.0f };
-	smokeCloud->useTexture(true, smokeBlackSize, smokeBlackTime, 1.0, 2.0, 8.0, false, 0.3);
+	smokeCloud->useTexture(true, smokeBlackSize, smokeBlackTime, 1.0, 2.0, 4.0, false, 0.3);
 	smokeCloud->switchToGeometryShader();
 	particleCount += (1 * 10.0 / 0.3);
 
@@ -248,7 +255,7 @@ int main()
 	circle->setVelocity(4);
 	circle->addTexture(fireSparkTex1, 1.0);
 	circle->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.3f);
-	circle->addTexture(fireSparkTex2 ,0.3);
+	circle->addTexture(fireSparkTex2 ,0.1);
 	circle->useTexture(true, 0.03, 0.0, 2.0, 1.0, true, 0.0);
 	circle->switchToGeometryShader();
 	particleCount += (50 * 4.0 / 0.4);
@@ -271,12 +278,12 @@ int main()
 	particleCount += (2 * 10.0 / 0.166);
 
 	//FINAL SCREEN EMITTER FRUITFLIES
-	Emitter* screenFruitFlies = new Emitter(0, glm::vec3(cam.getPosition()), 0.0, 0.166, 3, 10.0, true);
+	Emitter* screenFruitFlies = new Emitter(0, glm::vec3(-0.2, 0.2, 7.0), 0.0, 0.1, 2, 10.0, true);
 	screenFruitFlies->setVelocity(0);
 	screenFruitFlies->usePhysicSwarmCircleMotion(true, true, true);
-	screenFruitFlies->setAreaEmitting(true, false, 3.0, 1000);
+	screenFruitFlies->setAreaEmitting(true, false, 2.5, 1000);
 	screenFruitFlies->addTexture(particleBlackTex, 0.0);
-	screenFruitFlies->useTexture(true, 0.04, 1.0, 3.0, 0.0, true, 1.0);
+	screenFruitFlies->useTexture(true, 0.02, 1.0, 3.0, 0.0, true, 1.0);
 	screenFruitFlies->switchToGeometryShader();
 	particleCount += (3 * 10.0 / 0.166);
 
@@ -324,7 +331,6 @@ int main()
 	cloud03->useTexture(true, 0.8, 2.0);
 	cloud03->switchToGeometryShader();
 	particleCount += 1;
-
 
 	Emitter* cloud04 = new Emitter(0, glm::vec3(-4.8, 2.0, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud04->setVelocity(0);
@@ -382,7 +388,16 @@ int main()
 	cloud11->switchToGeometryShader();
 	particleCount += 1;
 
-	////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////
+	////////////////////////////////NOT FINAL EMITTER////////////////////////////////
+
+	//FINAL EMITTER MAXIMUM; SET POSITION
+	Emitter* maximumParticle = new Emitter(0, glm::vec3(-21.0, -3.0, 0.0), 0.0, 0.2, 5000, 12.0, true);
+	maximumParticle->setVelocity(3);
+	maximumParticle->usePhysicDirectionGravity(glm::vec4(0.0, 1.0, 0.0, 0.2), 0.5);
+	maximumParticle->useTexture(false, 0.01);
+	int particleCountMax = 5000 * 12 / 0.2;
+
+	//particleMax with Texture
 
 	//!EMITTER FIRE
 	Emitter* fireMiddle = new Emitter(0, glm::vec3(9.0, 0.0, 1.0), 0.0, 1.0, 3.0, 4.0, true);
@@ -533,97 +548,118 @@ int main()
 		cam.setSensitivity(dTime);
 		startCamTime = glfwGetTime();
 
-		//SKYBOX
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shaderSkybox.bind();
-		glDisable(GL_DEPTH_TEST);
-		shaderSkybox.sendMat4("viewMatrix", cam.getViewMatrix());
-		shaderSkybox.sendMat4("projectionMatrix", cam.getProjectionMatrix());
-		shaderSkybox.sendSkyboxTexture("testTexture", skybox.getSkyboxTexture());
-		skyboxNode.render();
-		shaderSkybox.unbind();
+		//Maximum Particle
+		if (!useMaximumParticle->isActive()){
 
-		glEnable(GL_DEPTH_TEST);
-		shaderObject.bind();
-		shaderObject.sendMat4("viewMatrix", cam.getViewMatrix());
-		shaderObject.sendMat4("projectionMatrix", cam.getProjectionMatrix());
-		shaderObject.sendInt("useTexture", 1);
-		teaNode.setModelMatrix(glm::rotate(teaNode.getModelMatrix(), 3.0f, glm::vec3(0.0, 1.0, 0.0)));
-		cube1.setModelMatrix(glm::rotate(cube1.getModelMatrix(), 3.0f, glm::vec3(0.0, 1.0, 0.0)));
-		cube2.setModelMatrix(glm::rotate(cube2.getModelMatrix(), 3.0f, glm::vec3(0.0, 1.0, 0.0)));
-		testScene.render(shaderObject);
-		shaderObject.unbind();
+			//SKYBOX
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			shaderSkybox.bind();
+			glDisable(GL_DEPTH_TEST);
+			shaderSkybox.sendMat4("viewMatrix", cam.getViewMatrix());
+			shaderSkybox.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+			shaderSkybox.sendSkyboxTexture("testTexture", skybox.getSkyboxTexture());
+			skyboxNode.render();
+			shaderSkybox.unbind();
 
-		///////////////////////////////////////FINAL EMITTER///////////////////////////////////////
-		glDisable(GL_DEPTH_TEST);
-		
-		smokeWhite->generateParticle();
-		smokeWhite->update();
-		smokeWhite->render(cam);
+			glEnable(GL_DEPTH_TEST);
+			shaderObject.bind();
+			shaderObject.sendMat4("viewMatrix", cam.getViewMatrix());
+			shaderObject.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+			shaderObject.sendInt("useTexture", 1);
+			teaNode.setModelMatrix(glm::rotate(teaNode.getModelMatrix(), 3.0f, glm::vec3(0.0, 1.0, 0.0)));
+			cube1.setModelMatrix(glm::rotate(cube1.getModelMatrix(), 3.0f, glm::vec3(0.0, 1.0, 0.0)));
+			cube2.setModelMatrix(glm::rotate(cube2.getModelMatrix(), 3.0f, glm::vec3(0.0, 1.0, 0.0)));
+			testScene.render(shaderObject);
+			shaderObject.unbind();
 
-		smokeBlack->generateParticle();
-		smokeBlack->update();
-		smokeBlack->render(cam);
+			///////////////////////////////////////FINAL EMITTER///////////////////////////////////////
+			glDisable(GL_DEPTH_TEST);
 
-		fontaine->generateParticle();
-		fontaine->update();
-		fontaine->render(cam);
+			smokeWhite->generateParticle();
+			smokeWhite->update();
+			smokeWhite->render(cam);
 
-		circle->generateParticle();
-		circle->update();
-		circle->render(cam);
+			smokeBlack->generateParticle();
+			smokeBlack->update();
+			smokeBlack->render(cam);
 
-		quad->generateParticle();
-		quad->update();
-		quad->render(cam);
+			fontaine->generateParticle();
+			fontaine->update();
+			fontaine->render(cam);
 
-		glowworm->generateParticle();
-		glowworm->update();
-		glowworm->render(cam);
+			circle->generateParticle();
+			circle->update();
+			circle->render(cam);
 
-		fruitFlies->generateParticle();
-		fruitFlies->update();
-		fruitFlies->render(cam);
+			quad->generateParticle();
+			quad->update();
+			quad->render(cam);
 
-		energyBall->generateParticle();
-		energyBall->update();
-		energyBall->render(cam);
+			glowworm->generateParticle();
+			glowworm->update();
+			glowworm->render(cam);
 
-		cloud01->generateParticle();
-		cloud01->update();
-		cloud01->render(cam);
-		cloud02->generateParticle();
-		cloud02->update();
-		cloud02->render(cam);
-		cloud03->generateParticle();
-		cloud03->update();
-		cloud03->render(cam);
-		cloud04->generateParticle();
-		cloud04->update();
-		cloud04->render(cam);
-		cloud05->generateParticle();
-		cloud05->update();
-		cloud05->render(cam);
-		cloud06->generateParticle();
-		cloud06->update();
-		cloud06->render(cam);
-		cloud07->generateParticle();
-		cloud07->update();
-		cloud07->render(cam);
-		cloud08->generateParticle();
-		cloud08->update();
-		cloud08->render(cam);
-		cloud09->generateParticle();
-		cloud09->update();
-		cloud09->render(cam);
-		cloud10->generateParticle();
-		cloud10->update();
-		cloud10->render(cam);
-		cloud11->generateParticle();
-		cloud11->update();
-		cloud11->render(cam);
+			fruitFlies->generateParticle();
+			fruitFlies->update();
+			fruitFlies->render(cam);
 
-		////////////////////////////////FINAL GUI EMITTER///////////////////////////////////////////
+			energyBall->generateParticle();
+			energyBall->update();
+			energyBall->render(cam);
+
+			cloud01->generateParticle();
+			cloud01->update();
+			cloud01->render(cam);
+			cloud02->generateParticle();
+			cloud02->update();
+			cloud02->render(cam);
+			cloud03->generateParticle();
+			cloud03->update();
+			cloud03->render(cam);
+			cloud04->generateParticle();
+			cloud04->update();
+			cloud04->render(cam);
+			cloud05->generateParticle();
+			cloud05->update();
+			cloud05->render(cam);
+			cloud06->generateParticle();
+			cloud06->update();
+			cloud06->render(cam);
+			cloud07->generateParticle();
+			cloud07->update();
+			cloud07->render(cam);
+			cloud08->generateParticle();
+			cloud08->update();
+			cloud08->render(cam);
+			cloud09->generateParticle();
+			cloud09->update();
+			cloud09->render(cam);
+			cloud10->generateParticle();
+			cloud10->update();
+			cloud10->render(cam);
+			cloud11->generateParticle();
+			cloud11->update();
+			cloud11->render(cam);
+		}
+		////////////////////////////////FINAL SCREEN EMITTER//////////////////////////////////////////////////
+		else{
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			maximumParticle->generateParticle();
+			maximumParticle->update();
+			maximumParticle->render(cam);
+			particleCount = particleCountMax;
+		}
+
+		if (useFruitFliesButton->isActive()){
+			screenFruitFlies->generateParticle();
+			screenFruitFlies->update();
+			screenFruitFlies->render(screen);
+		}
+		else{
+			screenFruitFlies->startTime();
+		}
+
+			////////////////////////////////FINAL GUI EMITTER///////////////////////////////////////////
 		if (useSnowButton->isActive()){
 			snow->generateParticle(glm::vec3(cam.getPosition()));
 			snow->update(glm::vec3(cam.getPosition()));
@@ -648,17 +684,6 @@ int main()
 			rain->render(cam);
 		}{
 			rain->startTime();
-		}
-
-		////////////////////////////////FINAL SCREEN EMITTER//////////////////////////////////////////////////
-
-		if (useFruitFliesButton->isActive()){
-			screenFruitFlies->generateParticle();
-			screenFruitFlies->update();
-			screenFruitFlies->render(screen);
-		}
-		else{
-			screenFruitFlies->startTime();
 		}
 
 		////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////
@@ -689,6 +714,8 @@ int main()
 		smokeCloud->generateParticle();
 		smokeCloud->update();
 		smokeCloud->render(cam);
+
+		////////////////////////////////BASICS///////////////////////////////////////////////////////
 
 		renderer->renderGUI(*gui, window);
 
