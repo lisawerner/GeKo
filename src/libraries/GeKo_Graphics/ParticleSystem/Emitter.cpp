@@ -504,10 +504,20 @@ void Emitter::render(Camera &cam)
 			emitterShader->sendFloat("size", particleDefaultSize);
 		}
 
-		if (useTexture)
-			emitterShader->sendSampler2D("tex", m_textureList.at(0)->getTexture());
+		if (m_useTexture){
+			std::string s = "tex";
+			for (int i = 0; i < textureCount; i++){
+				std::string i2 = std::to_string(i);
+				s += i2;
+				emitterShader->sendSampler2D(s, m_textureList.at(i)->getTexture(), i + 1);
+				s = "tex";
+			}
+			emitterShader->sendInt("textureCount", textureCount);
+		}
 		emitterShader->sendInt("useTexture", useTexture);
 
+		emitterShader->sendFloat("blendingTime", m_blendingTime);
+		emitterShader->sendFloatArray("time", 4, blendingTime);
 
 		glVertexPointer(4, GL_FLOAT, 0, (void*)0);
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -542,15 +552,19 @@ void Emitter::render(Camera &cam)
 		emitterShader->sendInt("rotateLeft", m_rotateLeft);
 		emitterShader->sendFloat("rotationSpeed", m_rotationSpeed);
 
-		std::string s = "tex";
-		for (int i = 0; i < textureCount; i++){
-			std::string i2 = std::to_string(i);
-			s += i2;
-			emitterShader->sendSampler2D(s, m_textureList.at(i)->getTexture(), i + 1);
-			s = "tex";
+		if (m_useTexture){
+			std::string s = "tex";
+			for (int i = 0; i < textureCount; i++){
+				std::string i2 = std::to_string(i);
+				s += i2;
+				emitterShader->sendSampler2D(s, m_textureList.at(i)->getTexture(), i + 1);
+				s = "tex";
+			}
+			emitterShader->sendInt("textureCount", textureCount);
 		}
-		emitterShader->sendInt("textureCount", textureCount);
-		emitterShader->sendInt("blendingTime", m_blendingTime);
+		emitterShader->sendInt("useTexture", useTexture);
+		
+		emitterShader->sendFloat("blendingTime", m_blendingTime);
 		emitterShader->sendFloatArray("time", 4, blendingTime);
 
 		if (m_useScaling){
@@ -587,7 +601,7 @@ void Emitter::updateSize()
 		m_deathTime = 0.0;
 	}
 	else
-		numMaxParticle = (int)((particlesPerEmit * particleLifetime) / emitFrequency);
+		numMaxParticle = (int)((particlesPerEmit * particleLifetime) / emitFrequency) + 1; //+1 for comma numbers
 	computeGroupCount = numMaxParticle / 16 + 1; //+1 to kill the Point. 16 is the local_size_x in the CS
 
 	loadBuffer();
