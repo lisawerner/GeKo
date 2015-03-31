@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 
+/**A class which provides a counter which can be used as a time trigger.*/
 class Counter 
 {
 public: 
@@ -12,13 +13,17 @@ public:
 	Counter(float time);
 	~Counter();
 
+	///The time which has to be passed will be set
 	void setTime(float time);
 	float getTime();
 
+	///The counter will be started
 	void start();
 
+	///The counter will be ended
 	void end();
 
+	///The counter will be updated per second (60 frames!)
 	void update();
 
 protected:

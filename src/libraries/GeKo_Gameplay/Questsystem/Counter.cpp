@@ -25,12 +25,6 @@ float Counter::getTime(){
 }
 
 void Counter::start(){
-	//float delta = 0.0001;
-	//for (float i = m_time; i >= 0; i -= delta){
-	//	m_time -= delta;
-	//}
-
-	//end();
 	m_started = true;
 }
 

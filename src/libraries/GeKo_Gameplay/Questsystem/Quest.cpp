@@ -1,7 +1,6 @@
 #include "GeKo_Gameplay/Questsystem/Quest.h"
 
 Quest::Quest(int id){
-	//m_next = new Quest();
 	m_id = id;
 	m_active = false;
 	m_finished = false;

@@ -7,7 +7,4 @@ public:
 
 	Teapot();
 	~Teapot();
-
-	//void loadBufferData();
-	//void renderGeometry();
 };

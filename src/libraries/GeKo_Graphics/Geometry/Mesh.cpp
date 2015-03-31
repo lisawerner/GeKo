@@ -4,7 +4,6 @@ Mesh::Mesh(const char *filename)
 {
 	Assimp::Importer importer;
 
-	//const aiScene *scene = importer.ReadFile(filename, 0);
 	const aiScene *scene = importer.ReadFile(filename,
 		aiProcess_Triangulate |
 		aiProcess_SplitLargeMeshes |
