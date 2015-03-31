@@ -205,8 +205,13 @@ int main()
 //	aiNode.addScale(0.3, 0.3, 0.3);
 	aiNode.addTranslation(ant_Flick.getPosition().x, ant_Flick.getPosition().y, ant_Flick.getPosition().z);
 	aiNode.setObject(&ant_Flick);
-	aiNode.setSoundHandler(&sfh);
-	aiNode.setSourceName("Ameise1", RESOURCES_PATH "/Sound/Footsteps.wav");
+	//aiNode.setSoundHandler(&sfh);
+	ant_Flick.setSoundHandler(&sfh);
+//	aiNode.setSourceName("Ameise1", RESOURCES_PATH "/Sound/Footsteps.wav");
+	
+	ant_Flick.setSourceName(MOVESOUND_AI, "AIFootsteps", RESOURCES_PATH "/Sound/Footsteps.wav");
+	ant_Flick.setSourceName(EATSOUND_AI, "AIEssen", RESOURCES_PATH "/Sound/Munching.wav");
+	sfh.disableLooping("AIEssen");
 
 
 

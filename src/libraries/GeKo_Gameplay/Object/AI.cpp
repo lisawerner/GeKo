@@ -441,3 +441,32 @@ void AI::setAntAggressiv(){
 	m_foodNodes.pop_back(); //Delete DefaultNode
 	m_foodNodes.push_back(antGraph->searchNode(GraphNodeType::FOOD));
 }
+
+std::string AI::getSourceName(SoundtypeAI type)
+{
+	try{
+		return m_soundMap.at(type);
+	}
+	catch (const std::out_of_range& oor)
+	{
+		std::cout << "No Sound with this type was set!" << std::endl;
+		return "oor";
+	}
+
+}
+
+void AI::setSourceName(SoundtypeAI type, std::string sourceName, const char* filepath)
+{
+
+	m_sfh->generateSource(sourceName, m_position, filepath);
+	//	m_soundMap.emplace(type, sourceName);
+	m_soundMap.insert(std::pair<SoundtypeAI, std::string>(type, sourceName));
+}
+
+void AI::updateSourcesInMap()
+{
+	for (std::map<SoundtypeAI, std::string>::iterator i = m_soundMap.begin(); i != m_soundMap.end(); ++i)
+	{
+		m_sfh->updateSourcePosition(i->second, m_position);
+	}
+}

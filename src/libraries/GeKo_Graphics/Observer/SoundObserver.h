@@ -14,24 +14,32 @@ public:
 	void  onNotify(AI& node, Object_Event event)
 	 {
 		std::string name = node.getNodeName();
+		std::string soundName;
 		Node* tmp = m_level->getActiveScene()->getScenegraph()->searchNode(name);
 		 switch (event)
 		 {
 	
 		 case Object_Event::OBJECT_MOVED:
-			 tmp->getSoundHandler()->updateSourcePosition(tmp->getSourceName(), node.getPosition());
-
-
-			 if (!(tmp->getSoundHandler()->sourceIsPlaying(tmp->getSourceName())))
+			 soundName = node.getSourceName(MOVESOUND_AI);
+			 node.getSoundHandler()->updateListenerPosition(node.getPosition());
+			 node.updateSourcesInMap();
+			 if (soundName != "oor")
 			 {
-				 tmp->getSoundHandler()->playSource(tmp->getSourceName());
+				 if (!(node.getSoundHandler()->sourceIsPlaying(soundName)))
+				 {
+					 node.getSoundHandler()->playSource(soundName);
+				 }
 			 }
 			 break;
 
 		 case Object_Event::OBJECT_STOPPED:
-			 if (tmp->getSoundHandler()->sourceIsPlaying(tmp->getSourceName()))
+			 soundName = node.getSourceName(MOVESOUND_AI);
+			 if (soundName != "oor")
 			 {
-				 tmp->getSoundHandler()->stopSource(tmp->getSourceName());
+				 if ((node.getSoundHandler()->sourceIsPlaying(soundName)))
+				 {
+					 node.getSoundHandler()->pauseSource(soundName);
+				 }
 			 }
 			 break;
 		 }

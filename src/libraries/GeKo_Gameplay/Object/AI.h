@@ -17,6 +17,10 @@
 #include "Object.h"
 #include "States.h"
 
+enum SoundtypeAI{
+	MOVESOUND_AI, EATSOUND_AI
+};
+
 class AI : public Object, public Subject<AI, Object_Event>
 {
 public: 
@@ -71,6 +75,15 @@ public:
 
 	void setAntAfraid();
 	void setAntAggressiv();
+
+	///Returns the m_sourceName string
+	/**If a Sound-File-Handler was attached, the m_sourceName contains the name of the source which should be played!*/
+	std::string getSourceName(SoundtypeAI type);
+	///Sets a specific source-file to the node
+	/**This method uses the sfh to generate a new sound-source which can be played with the sfh later ingame!*/
+	void setSourceName(SoundtypeAI type, std::string sourceName, const char* filepath);
+	
+	void updateSourcesInMap();
 	
 protected:
 	float m_epsilon;
@@ -99,9 +112,12 @@ protected:
 
 	TreeOutput m_targetType;
 
-	//Weis wo es wohnt
+	//Weiﬂ wo es wohnt
 	//GraphNode<AStarNode>* m_homeNodes;
 	AStarNode* m_homeNode;
 	std::vector<AStarNode*> m_foodNodes;
+
+
+	std::map<SoundtypeAI, std::string> m_soundMap;
 
 };
