@@ -33,15 +33,10 @@ class FBO
 {
 public:
 	/*
-	Constructor - create a color texture
-	you can get this with getColorTexture(0)??
-	*/
-	FBO(int width, int height);
-	/*
 	Constructor - create a certain number of color textures and depth and stencil texture if wanted.
 	you can get the textures this e.g. with getColorTexture(0), getDepthTexture() & getSzencilTexture()??
 	*/
-	FBO(int width, int height, int numColorTextures, bool depthTexture, bool stencilTexture);
+	FBO(int width, int height, int numColorTextures = 1, bool depthTexture = false, bool stencilTexture = false);
 	/*
 	Destructor - if object getting destroyed, the texture should be removed
 	*/
