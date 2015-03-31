@@ -15,7 +15,7 @@
 
 class SoundFileHandler{
 	public:
-		SoundFileHandler::SoundFileHandler(int maxNumberOfSources);
+		SoundFileHandler(int maxNumberOfSources);
 		~SoundFileHandler();
 
 		void generateSource(ALfloat position[3], const char *filepath);
@@ -42,10 +42,10 @@ class SoundFileHandler{
 		void disableLooping(std::string name);
 		void updateListenerPosition(ALfloat position[3]);
 		void updateListenerPosition(glm::vec3 position);
-		glm::vec3 SoundFileHandler::getListenerPosition();
+		glm::vec3 getListenerPosition();
 		void updateListenerVelocity(ALfloat velocity[3]);
 		void updateListenerVelocity(glm::vec3 velocity);
-		glm::vec3 SoundFileHandler::getListenerVelocity();
+		glm::vec3 getListenerVelocity();
 		void updateListenerOrientation(ALfloat orientation[6]);
 		void updateListenerOrientation(glm::vec3 at, glm::vec3 up);
 		void playSource(int i);
