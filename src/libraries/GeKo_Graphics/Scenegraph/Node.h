@@ -136,8 +136,6 @@ public:
 	bool hasBoundingSphere();
 	///Returns true, if a object(Player, Static, AI) has been attached
 	bool hasObject();
-	///Returns true, if a sound-file-handler unit has been attached
-	bool hasSoundFile();
 	///Returns true, if a gravity unit has been attached
 	bool hasGravity();
 	///Returns true, if a partice system has been attached
@@ -219,18 +217,6 @@ public:
 	It is helpfull to determine which type of Object the Node is!
 	Returns a OBJECT ClassType if no Player, AI or Static object was added!*/
 	ClassType getType();
-
-	///Returns the m_sfh
-	/**This Handler manages all the sounds of an object like the movement of a Player etc.*/
-	SoundFileHandler* getSoundHandler();
-	void setSoundHandler(SoundFileHandler* soundHandler);
-
-	///Returns the m_sourceName string
-	/**If a Sound-File-Handler was attached, the m_sourceName contains the name of the source which should be played!*/
-	std::string getSourceName();
-	///Sets a specific source-file to the node
-	/**This method uses the sfh to generate a new sound-source which can be played with the sfh later ingame!*/
-	void setSourceName(std::string sourceName, const char* filepath);
 	
 	///Returns the m_particleSystem object 
 	/**If the node does not have a Particle-unit an error will be thrown!*/
@@ -281,7 +267,6 @@ protected:
 	bool m_hasGeometry;
 	bool m_hasBoundingSphere;
 	bool m_hasObject;
-	bool m_hasSound;
 	bool m_hasGravity;
 	bool m_hasParticleSystem;
 
@@ -302,10 +287,6 @@ protected:
 	Player* m_player;
 	StaticObject* m_staticObject;
 	ClassType m_type;
-
-	SoundFileHandler* m_sfh;
-	std::string m_sourceName;
-	//std::vector<std::string> m_sourceName;
 
 	ParticleSystem* m_particleSystem;
 
