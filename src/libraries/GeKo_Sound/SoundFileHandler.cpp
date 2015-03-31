@@ -179,7 +179,8 @@ void SoundFileHandler::generateSource(std::string name, ALfloat position[3], con
 			alSourcefv(m_sources[m_numberOfSources], AL_POSITION, position);
 			alSourcefv(m_sources[m_numberOfSources], AL_VELOCITY, vel);
 			alSourcei(m_sources[m_numberOfSources], AL_LOOPING, AL_TRUE);
-			m_sourceMap.emplace(name, m_numberOfSources);
+			//m_sourceMap.emplace(name, m_numberOfSources);
+			m_sourceMap.insert(std::pair<std::string, int>(name, m_numberOfSources));
 			m_numberOfSources++;
 		}
 	}
