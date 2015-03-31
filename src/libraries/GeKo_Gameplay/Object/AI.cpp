@@ -1,4 +1,5 @@
 #include "GeKo_Gameplay/Object/AI.h"
+#include <stdexcept>
 
 AI::AI(){
 	//TODO: ID noch richtig setzten. Am besten beim setzten durch iterieren...
