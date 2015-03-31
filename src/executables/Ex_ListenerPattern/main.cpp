@@ -210,6 +210,8 @@ int main()
 //	aiNode.setSourceName("Ameise1", RESOURCES_PATH "/Sound/Footsteps.wav");
 	
 	ant_Flick.setSourceName(MOVESOUND_AI, "AIFootsteps", RESOURCES_PATH "/Sound/Footsteps.wav");
+	ant_Flick.setSourceName(DEATHSOUND_AI, "AIDeath", RESOURCES_PATH "/Sound/death.wav");
+	sfh.disableLooping("AIDeath");
 	ant_Flick.setSourceName(EATSOUND_AI, "AIEssen", RESOURCES_PATH "/Sound/Munching.wav");
 	sfh.disableLooping("AIEssen");
 
@@ -238,12 +240,12 @@ int main()
 	geko.setSoundHandler(&sfh);
 	geko.setSourceName(MOVESOUND, "SpielerFootsteps", RESOURCES_PATH "/Sound/Rascheln.wav");
 	geko.setSourceName(BACKGROUNDMUSIC, "Hintergrund", RESOURCES_PATH "/Sound/jingle2.wav");
-	geko.setSourceName(FIGHTSOUND, "Kampfsound", RESOURCES_PATH "/Sound/Cookies kurz.wav");
+	geko.setSourceName(FIGHTSOUND, "Kampfsound", RESOURCES_PATH "/Sound/punch.wav");
 	geko.setSourceName(EATSOUND, "Essen", RESOURCES_PATH "/Sound/Munching.wav");
 	geko.setSourceName(QUESTSOUND, "Quest", RESOURCES_PATH "/Sound/jingle.wav");
 	geko.setSourceName(ITEMSOUND, "Item", RESOURCES_PATH "/Sound/itempickup.wav");
 	sfh.disableLooping("Essen");
-	sfh.disableLooping("Kampfsound");
+	//sfh.disableLooping("Kampfsound");
 	sfh.disableLooping("Quest");
 	sfh.disableLooping("Item");
 	sfh.generateSource("Feuer",posFood, RESOURCES_PATH "/Sound/Feuer kurz.wav");

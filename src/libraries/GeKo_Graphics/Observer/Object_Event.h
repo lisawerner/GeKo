@@ -10,7 +10,11 @@ enum class Object_Event
 
 	OBJECT_ROTATED,
 
+	OBJECT_DIED,
+
 	PLAYER_COLLECT
+
+
 };
 
 

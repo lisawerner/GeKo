@@ -18,7 +18,7 @@
 #include "States.h"
 
 enum SoundtypeAI{
-	MOVESOUND_AI, EATSOUND_AI
+	MOVESOUND_AI, EATSOUND_AI, DEATHSOUND_AI
 };
 
 class AI : public Object, public Subject<AI, Object_Event>
@@ -84,6 +84,8 @@ public:
 	void setSourceName(SoundtypeAI type, std::string sourceName, const char* filepath);
 	
 	void updateSourcesInMap();
+
+	bool hasDied();
 	
 protected:
 	float m_epsilon;
@@ -119,5 +121,6 @@ protected:
 
 
 	std::map<SoundtypeAI, std::string> m_soundMap;
+	bool m_hasDied;
 
 };

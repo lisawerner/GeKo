@@ -13,6 +13,7 @@ AI::AI(){
 	m_health = 10;
 	m_healthMax = 10;
 	m_strength = 0.5;
+	m_hasDied = false;
 
 	m_decisionTree = new DecisionTree();
 
@@ -95,8 +96,15 @@ void AI::addFoodNodes(){
 void AI::update(){
 	if (m_health <= 0){
 		//TODO:: Delete Object after a time and a lot of particles
-		std::cout << "Object" << m_name << ": Died" << std::endl;
-		notify(*this, Object_Event::OBJECT_STOPPED);
+		std::cout << "Object" << m_name << ": is dead!" << std::endl;
+
+		if (!m_hasDied)
+		{
+			notify(*this, Object_Event::OBJECT_STOPPED);
+			notify(*this, Object_Event::OBJECT_DIED);
+			m_hasDied = true;
+		}
+		
 		setStates(States::HEALTH, false);
 	}
 
@@ -469,4 +477,9 @@ void AI::updateSourcesInMap()
 	{
 		m_sfh->updateSourcePosition(i->second, m_position);
 	}
+}
+
+bool AI::hasDied()
+{
+	return m_hasDied;
 }

@@ -17,7 +17,6 @@ Node::Node(std::string nodeName)
 	m_hasBoundingSphere = false;
 	m_hasGravity = false;
 	m_hasObject = false; 
-	m_hasSound = false;
 	m_hasParticleSystem = false;
 	
 
@@ -255,11 +254,6 @@ bool Node::hasBoundingSphere()
 bool Node::hasObject()
 {
 	return m_hasObject;
-}
-
-bool Node::hasSoundFile()
-{
-	return m_hasSound;
 }
 
 bool Node::hasGravity()
@@ -523,44 +517,6 @@ ClassType Node::getType()
 	}
 }
 
-SoundFileHandler* Node::getSoundHandler()
-{
-	if (m_hasSound)
-	{
-		return m_sfh;
-	}
-	else
-	{
-		std::cout << "ERROR: The Node has no SoundFileHandler attached!" << std::endl;
-		return 0;
-	}
-}
-
-void Node::setSoundHandler(SoundFileHandler* soundHandler)
-{
-	m_hasSound = true;
-	m_sfh = soundHandler;
-}
-
-std::string Node::getSourceName()
-{
-	return m_sourceName;
-}
-
-void Node::setSourceName(std::string sourceName, const char* filepath)
-{
-		m_sourceName = sourceName;
-
-		if (m_type == ClassType::PLAYER)
-		{
-			m_sfh->generateSource(m_sourceName, getPlayer()->getPosition(), filepath);
-		}
-		else if (m_type == ClassType::AI)
-		{
-			m_sfh->generateSource(m_sourceName, getAI()->getPosition(), filepath);
-		}
-
-}
 
 ParticleSystem* Node::getParticleSystem()
 {

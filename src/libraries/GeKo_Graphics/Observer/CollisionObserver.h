@@ -4,12 +4,13 @@
 #include <GeKo_Graphics/Scenegraph/Node.h>
 #include <GeKo_Gameplay/Object/ObjectType.h>
 #include <GeKo_Gameplay/Questsystem/Goal_Collect.h>
+#include <GeKo_Gameplay/Questsystem/Counter.h>
 
 
 class CollisionObserver : public Observer<Node, Collision_Event>
 {
 public:
-	CollisionObserver(Level* level){ m_level = level; }
+	CollisionObserver(Level* level){ m_level = level; m_counter = new Counter(0); }
 
 	~CollisionObserver(){}
 
@@ -72,14 +73,24 @@ public:
 		 case Collision_Event::COLLISION_AI_FIGHT_PLAYER:
 			 if (nodeA.getAI()->getHealth() > 0)
 			 {
-					m_level->getFightSystem()->objectVSobject(nodeA.getAI(), nodeB.getPlayer());
-					if (nodeA.getAI()->getHealth()<=0){
-						std::vector<Goal*> tmp = m_level->getQuestHandler()->getQuests(GoalType::KILL);
-						for (int i = 0; i < tmp.size(); i++)
-						{
-							tmp.at(i)->increase();
-						}
-					}
+				 if (m_counter->getTime() <= 0)
+				 {
+					 m_level->getFightSystem()->objectVSobject(nodeA.getAI(), nodeB.getPlayer());
+					 if (nodeA.getAI()->getHealth() <= 0){
+		
+						 std::vector<Goal*> tmp = m_level->getQuestHandler()->getQuests(GoalType::KILL);
+						 for (int i = 0; i < tmp.size(); i++)
+						 {
+							 tmp.at(i)->increase();
+						 }
+					 }
+					 m_counter->setTime(20);
+					 m_counter->start();
+				 }
+				 else{
+					 m_counter->update();
+				 }
+					
 			 } 
 			 break;
 
@@ -148,5 +159,7 @@ public:
 
 	protected:
 		Level* m_level;
+		
+		Counter* m_counter;
 };
 
