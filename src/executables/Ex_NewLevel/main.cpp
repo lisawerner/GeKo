@@ -201,8 +201,8 @@ int main()
 //	aiNode.addScale(0.3, 0.3, 0.3);
 	//aiNode.addTranslation(ant_Flick.getPosition().x, ant_Flick.getPosition().y, ant_Flick.getPosition().z);
 	aiNode.setObject(&ant_Flick);
-	aiNode.setSoundHandler(&sfh);
-	aiNode.setSourceName("Ameise1", RESOURCES_PATH "/Sound/Footsteps.wav");
+	//aiNode.setSoundHandler(&sfh);
+//	aiNode.setSourceName("Ameise1", RESOURCES_PATH "/Sound/Footsteps.wav");
 
 
 
