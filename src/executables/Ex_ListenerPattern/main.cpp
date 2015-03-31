@@ -39,6 +39,7 @@
 InputHandler iH;
 StrategyCamera cam("StrategyCam");
 Geko geko("Geko", glm::vec3(10.0, 3.0, -5.0));
+Renderer *renderer;
 
 //===================================================================//
 //==================Callbacks for the Input==========================//
@@ -143,7 +144,7 @@ int main()
 	cam.setCenter(glm::vec4(0.0, 10.0, 20.0, 1.0));
 	cam.setName("StrategyCam");
 	cam.setKeySpeed(2.0);
-	cam.setNearFar(0.0001, 100);
+	cam.setNearFar(0.01, 100);
 
 	glfwSetKeyCallback(testWindow.getWindow(), key_callback);
 	glfwSetScrollCallback(testWindow.getWindow(), mouseScroll_callback);
@@ -151,7 +152,7 @@ int main()
 	glewInit();
 
 	OpenGL3Context context;
-	Renderer renderer(context);
+	renderer = new Renderer(context);
 
 	//===================================================================//
 	//==================Shaders for your program========================//
@@ -184,7 +185,7 @@ int main()
 
 	Teapot teaAnt;
 
-	//Texture texPlayer((char*)RESOURCES_PATH "/Snake.jpg");
+	Texture texPlayer((char*)RESOURCES_PATH "/Snake.jpg");
 	SoundFileHandler sfh = SoundFileHandler(1000);
 
 	AStarNode defaultASNode();
@@ -200,12 +201,12 @@ int main()
 
 	Node aiNode("Flick");
 	aiNode.addGeometry(&ant);
-	//aiNode.addTexture(&texPlayer);
+	aiNode.addTexture(&texPlayer);
 //	aiNode.addScale(0.3, 0.3, 0.3);
-	//aiNode.addTranslation(ant_Flick.getPosition().x, ant_Flick.getPosition().y, ant_Flick.getPosition().z);
+	aiNode.addTranslation(ant_Flick.getPosition().x, ant_Flick.getPosition().y, ant_Flick.getPosition().z);
 	aiNode.setObject(&ant_Flick);
 	aiNode.setSoundHandler(&sfh);
-//	aiNode.setSourceName("Ameise1", RESOURCES_PATH "/Sound/Footsteps.wav");
+	aiNode.setSourceName("Ameise1", RESOURCES_PATH "/Sound/Footsteps.wav");
 
 
 
@@ -214,7 +215,7 @@ int main()
 	//==================Object declarations - Geometry, Texture, Node=== //
 	//==========================Object: Player===========================//
 	Teapot teaPlayer;
-	//Texture texCV((char*)RESOURCES_PATH "/cv_logo.bmp");
+	Texture texCV((char*)RESOURCES_PATH "/cv_logo.bmp");
 
 	GekoMesh gekoMesh;
 	geko.setExp(0.0);
@@ -225,12 +226,12 @@ int main()
 
 	playerNode.addGeometry(&gekoMesh);
 	playerNode.setObject(&geko);
-	//playerNode.addTexture(&texCV);
+	playerNode.addTexture(&texCV);
 //	playerNode.addScale(0.5, 0.5, 0.5);
 //	playerNode.addTranslation(20.0, 0.0, 20.0);
-
-	/*geko.setSoundHandler(&sfh);
-	geko.setSourceName(MOVESOUND, "SpielerFootsteps", RESOURCES_PATH "/Sound/rascheln.wav");
+	sfh.generateSource(posFood, RESOURCES_PATH "/Sound/Rascheln.wav");
+	geko.setSoundHandler(&sfh);
+	geko.setSourceName(MOVESOUND, "SpielerFootsteps", RESOURCES_PATH "/Sound/Rascheln.wav");
 	geko.setSourceName(BACKGROUNDMUSIC, "Hintergrund", RESOURCES_PATH "/Sound/jingle2.wav");
 	geko.setSourceName(FIGHTSOUND, "Kampfsound", RESOURCES_PATH "/Sound/Cookies kurz.wav");
 	geko.setSourceName(EATSOUND, "Essen", RESOURCES_PATH "/Sound/Munching.wav");
@@ -239,7 +240,7 @@ int main()
 	sfh.disableLooping("Essen");
 	sfh.disableLooping("Kampfsound");
 	sfh.disableLooping("Quest");
-	sfh.disableLooping("Item");*/
+	sfh.disableLooping("Item");
 	sfh.generateSource("Feuer",posFood, RESOURCES_PATH "/Sound/Feuer kurz.wav");
 
 
@@ -249,16 +250,16 @@ int main()
 	// ==============================================================
 	// == Items =====================================================
 	// ==============================================================
-	/*Item cookie(1);
-	cookie.setName("Cookie");
-	cookie.setTypeId(ItemType::COOKIE);
-	Item cookie2(2);
-	cookie.setName("Cookie");
-	cookie.setTypeId(ItemType::COOKIE);
-	Item branch(3);
-	branch.setName("Branch");
-	branch.setTypeId(ItemType::BRANCH);
-*/
+	//Item cookie(1);
+	//cookie.setName("Cookie");
+	//cookie.setTypeId(ItemType::COOKIE);
+	//Item cookie2(2);
+	//cookie.setName("Cookie");
+	//cookie.setTypeId(ItemType::COOKIE);
+	//Item branch(3);
+	//branch.setName("Branch");
+	//branch.setTypeId(ItemType::BRANCH);
+
 
 
 	//===================================================================//
@@ -287,11 +288,11 @@ int main()
 	//==========================Object: Plane===========================//
 
 	Plane terrain;
-	//Texture terrainTex((char*)RESOURCES_PATH "/Grass.jpg");
+	Texture terrainTex((char*)RESOURCES_PATH "/Grass.jpg");
 
 	Node terrainNode("Plane");
 	terrainNode.addGeometry(&terrain);
-	//terrainNode.addTexture(&terrainTex);
+	terrainNode.addTexture(&terrainTex);
 	terrainNode.addTranslation(0.0, -0.75, 0.0);
 	terrainNode.addRotation(90.0f, glm::vec3(1.0, 0.0, 0.0));
 	terrainNode.addScale(20.0, 20.0, 20.0);
@@ -429,10 +430,6 @@ int main()
 	testLevel.getQuestHandler()->setGraph(&questGraph);
 	
 
-
-
-
-
 	//===================================================================//
 	//==================Setting up the Collision=========================//
 	//==================================================================//
@@ -503,7 +500,7 @@ int main()
 
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		float currentTime = glfwGetTime();
 		float deltaTime = currentTime - lastTime;
@@ -531,18 +528,19 @@ int main()
 		//===================================================================//
 		//==================Render your Objects==============================//
 		//==================================================================//
-		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_DEPTH_TEST);
 
-		shader.bind();
-		shader.sendMat4("viewMatrix", cam.getViewMatrix());
+	//	shader.bind();
+		/*shader.sendMat4("viewMatrix", cam.getViewMatrix());
 		shader.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+*/
+		//testScene.render(shader);
+		renderer->renderScene(testScene, testWindow);
+	//	shader.unbind();
 
-		testScene.render(shader);
-		shader.unbind();
 
-
-		glfwSwapBuffers(testWindow.getWindow());
-		glfwPollEvents();
+		/*glfwSwapBuffers(testWindow.getWindow());
+		glfwPollEvents();*/
 
 	}
 
