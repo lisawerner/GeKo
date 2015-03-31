@@ -16,7 +16,7 @@ public:
 	Camera(std::string name = "Camera");
 	~Camera();
 
-	void update(GLFWwindow* window);
+	void virtual update(GLFWwindow* window);
 
 	/// This method sets the FOV
 	void setFOV(float fov);
