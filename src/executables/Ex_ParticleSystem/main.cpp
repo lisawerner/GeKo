@@ -103,6 +103,9 @@ int main()
 	//Callback
 	glfwSetKeyCallback(window.getWindow(), key_callback);
 
+	//More then just 60 fps, vsync off
+	glfwSwapInterval(0);
+
 	glewInit();
 
 	//SHADER
