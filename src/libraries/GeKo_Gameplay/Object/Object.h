@@ -48,6 +48,9 @@ public:
 	void setObjectType(ObjectType type);
 	ObjectType getObjectType();
 
+	void setClassType(ClassType type);
+	ClassType getClassType();
+
 	glm::vec3 getViewDirection();
 
 	bool getStates(States state);
@@ -66,7 +69,7 @@ public:
 
 	void collectItem(ItemType typeId, int count);
 
-	ClassType getClassType();
+
 
 	virtual void heal();
 

@@ -19,6 +19,7 @@
 #include <GeKo_Graphics/Geometry/GekoMesh.h>
 #include <GeKo_Graphics/Geometry/Plane.h>
 
+#include <GeKo_Graphics/Geometry/Terrain.h>
 
 #include <GeKo_Physics/CollisionTest.h>
 
@@ -267,15 +268,20 @@ int main()
 	//==================Object declarations - Geometry, Texture, Node=== //
 	//==========================Object: Plane===========================//
 
+	StaticObject terrainObject;
+	terrainObject.setClassType(ClassType::TERRAIN);
+	
 	Plane terrain;
 	Texture terrainTex((char*)RESOURCES_PATH "/Grass.jpg");
 
 	Node terrainNode("Plane");
 	terrainNode.addGeometry(&terrain);
 	terrainNode.addTexture(&terrainTex);
+	terrainNode.setObject(&terrainObject);
 	terrainNode.addTranslation(0.0, -0.75, 0.0);
 	terrainNode.addRotation(90.0f, glm::vec3(1.0, 0.0, 0.0));
 	terrainNode.addScale(20.0, 20.0, 20.0);
+
 
 	//===================================================================//
 	//==================Setting up the Level and Scene==================//
@@ -475,9 +481,13 @@ int main()
 	sfh.playSource("Hintergrund");
 	sfh.setGain("Hintergrund", 0.5f);
 
+
+	
+	
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
-		
+	
+
 		float currentTime = glfwGetTime();
 		float deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
@@ -491,7 +501,6 @@ int main()
 		collision.update();
 
 		ant_Flick.update();
-
 
 		//===================================================================//
 		//==================Input and update for the Player==================//

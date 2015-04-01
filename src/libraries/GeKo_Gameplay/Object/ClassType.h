@@ -3,5 +3,5 @@
 
 enum class ClassType
 {
-	OBJECT, AI, PLAYER, STATIC
+	OBJECT, AI, PLAYER, STATIC, TERRAIN
 };

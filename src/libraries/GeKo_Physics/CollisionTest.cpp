@@ -74,7 +74,11 @@ void CollisionTest::update()
 						{
 							//Wir schauen uns an, mit welchem Objekt das aktuelle Objekt kollidiert
 							//Handelt es sich um das Terrain, hier als Plane bezeichnet, dann wird ein anderes Event ausgerufen
-							if (objects.at(j)->getNodeName() == "Plane")
+							/*if (objects.at(j)->getNodeName() == "Plane" )
+							{
+								notify(*objects.at(i), Collision_Event::PLANE_COLLISION);
+							}*/
+							if (objects.at(j)->getType() == ClassType::TERRAIN)
 							{
 								notify(*objects.at(i), Collision_Event::PLANE_COLLISION);
 							}
@@ -88,7 +92,7 @@ void CollisionTest::update()
 							}*/
 							else if (objects.at(i)->getType() == ClassType::AI & objects.at(j)->getType() == ClassType::PLAYER)
 							{
-								//HIERRRRRRRRRRRRRRRRRR
+								
 								notify(*objects.at(i), *objects.at(j), Collision_Event::COLLISION_KI_PLAYER);
 								notify(*objects.at(i), *objects.at(j), Collision_Event::COLLISION_AI_FIGHT_PLAYER);
 							}
