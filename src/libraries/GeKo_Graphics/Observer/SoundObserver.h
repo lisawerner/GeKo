@@ -109,20 +109,32 @@ public:
 		{
 		case Collision_Event::COLLISION_AI_FIGHT_PLAYER:
 			tmp = nodeB.getPlayer()->getSourceName(FIGHTSOUND);
-			if (nodeA.getAI()->getHealth() > 0)
-			{
-				if (tmp != "oor")
-				{
-					if (!nodeB.getPlayer()->getSoundHandler()->sourceIsPlaying(tmp))
-					{
-						nodeB.getPlayer()->getSoundHandler()->playSource(tmp);
-					}
-					
-				}
 
+			if (glm::length(nodeA.getBoundingSphere()->center - nodeB.getBoundingSphere()->center) <= 4.5)
+			{
+
+				if (nodeA.getAI()->getHealth() > 0)
+				{
+					if (tmp != "oor")
+					{
+						if (!nodeB.getPlayer()->getSoundHandler()->sourceIsPlaying(tmp))
+						{
+							nodeB.getPlayer()->getSoundHandler()->playSource(tmp);
+						}
+
+					}
+
+				}
+				else{
+					nodeB.getPlayer()->getSoundHandler()->stopSource(tmp);
+				}
 			}
+
 			else{
-				nodeB.getPlayer()->getSoundHandler()->stopSource(tmp);
+				if (nodeB.getPlayer()->getSoundHandler()->sourceIsPlaying(tmp))
+				{
+					nodeB.getPlayer()->getSoundHandler()->stopSource(tmp);
+				}
 			}
 			break;
 

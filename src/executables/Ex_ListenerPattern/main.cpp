@@ -169,7 +169,6 @@ int main()
 	glm::vec3 posFood(10.0, 0.0, -5.0);
 	glm::vec3 posSpawn(3.0, 0.0, 3.0);
 	Graph<AStarNode, AStarAlgorithm> testGraph;
-//	testGraph.setExampleGraph2(posSpawn, posFood, geko.getPosition());
 
 	//===================================================================//
 	//==================A Decision-Tree for the AI-Unit==================//
@@ -189,25 +188,17 @@ int main()
 	SoundFileHandler sfh = SoundFileHandler(1000);
 
 	AStarNode defaultASNode();
-	//AI ant_Flick(&defaultTree, &defaultASNode, &aiNode);
 	AI ant_Flick;
 	ant_Flick.setAntAfraid();
-	/*ant_Flick.setGraph(&testGraph);
-	ant_Flick.setPosition(posSpawn);
-	ant_Flick.setPosHome(testGraph.searchNode("Spawn"));*/
-	//ant_Flick.addFoodNodes(testGraph.searchNode("Food"));
 
 	AntMesh ant;
 
 	Node aiNode("Flick");
 	aiNode.addGeometry(&ant);
 	aiNode.addTexture(&texPlayer);
-//	aiNode.addScale(0.3, 0.3, 0.3);
 	aiNode.addTranslation(ant_Flick.getPosition().x, ant_Flick.getPosition().y, ant_Flick.getPosition().z);
 	aiNode.setObject(&ant_Flick);
-	//aiNode.setSoundHandler(&sfh);
 	ant_Flick.setSoundHandler(&sfh);
-//	aiNode.setSourceName("Ameise1", RESOURCES_PATH "/Sound/Footsteps.wav");
 	
 	ant_Flick.setSourceName(MOVESOUND_AI, "AIFootsteps", RESOURCES_PATH "/Sound/Footsteps.wav");
 	ant_Flick.setSourceName(DEATHSOUND_AI, "AIDeath", RESOURCES_PATH "/Sound/death.wav");
@@ -234,8 +225,7 @@ int main()
 	playerNode.addGeometry(&gekoMesh);
 	playerNode.setObject(&geko);
 	playerNode.addTexture(&texCV);
-//	playerNode.addScale(0.5, 0.5, 0.5);
-//	playerNode.addTranslation(20.0, 0.0, 20.0);
+
 	sfh.generateSource(posFood, RESOURCES_PATH "/Sound/Rascheln.wav");
 	geko.setSoundHandler(&sfh);
 	geko.setSourceName(MOVESOUND, "SpielerFootsteps", RESOURCES_PATH "/Sound/Rascheln.wav");
@@ -244,28 +234,18 @@ int main()
 	geko.setSourceName(EATSOUND, "Essen", RESOURCES_PATH "/Sound/Munching.wav");
 	geko.setSourceName(QUESTSOUND, "Quest", RESOURCES_PATH "/Sound/jingle.wav");
 	geko.setSourceName(ITEMSOUND, "Item", RESOURCES_PATH "/Sound/itempickup.wav");
+
 	sfh.disableLooping("Essen");
-	//sfh.disableLooping("Kampfsound");
 	sfh.disableLooping("Quest");
 	sfh.disableLooping("Item");
 	sfh.generateSource("Feuer",posFood, RESOURCES_PATH "/Sound/Feuer kurz.wav");
-
-
 
 	playerNode.setCamera(&cam);
 
 	// ==============================================================
 	// == Items =====================================================
 	// ==============================================================
-	//Item cookie(1);
-	//cookie.setName("Cookie");
-	//cookie.setTypeId(ItemType::COOKIE);
-	//Item cookie2(2);
-	//cookie.setName("Cookie");
-	//cookie.setTypeId(ItemType::COOKIE);
-	//Item branch(3);
-	//branch.setName("Branch");
-	//branch.setTypeId(ItemType::BRANCH);
+
 
 
 
@@ -275,20 +255,13 @@ int main()
 
 	StaticObject treeStatic;
 	treeStatic.setTree();
-//	treeStatic.setObjectType(ObjectType::TREE);
 
 	TreeMesh tree;
 	Node treeNode("Tree");
 	treeNode.addGeometry(&tree);
 	treeNode.setObject(&treeStatic);
-
-	//treeNode.addScale(10.0, 10.0, 10.0);
 	treeNode.addTranslation(posFood);
-
 	treeNode.getBoundingSphere()->radius = 3.0;
-
-	//treeStatic.getInventory()->addItem(&cookie, 25);
-	//treeStatic.getInventory()->addItem(&branch, 10);
 
 	//===================================================================//
 	//==================Object declarations - Geometry, Texture, Node=== //
@@ -498,16 +471,12 @@ int main()
 	//==================================================================//
 	float lastTime = glfwGetTime();
 
-	Node* tmp = testLevel.getActiveScene()->getScenegraph()->searchNode("Plane");
-	tmp->getNodeName();
-
 	sfh.playSource("Feuer");
 	sfh.playSource("Hintergrund");
 	sfh.setGain("Hintergrund", 0.5f);
 
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		float currentTime = glfwGetTime();
 		float deltaTime = currentTime - lastTime;
@@ -521,7 +490,6 @@ int main()
 		//==================================================================//
 		collision.update();
 
-		//ant_Flick.updateState();
 		ant_Flick.update();
 
 
@@ -535,19 +503,8 @@ int main()
 		//===================================================================//
 		//==================Render your Objects==============================//
 		//==================================================================//
-		//glEnable(GL_DEPTH_TEST);
-
-	//	shader.bind();
-		/*shader.sendMat4("viewMatrix", cam.getViewMatrix());
-		shader.sendMat4("projectionMatrix", cam.getProjectionMatrix());
-*/
-		//testScene.render(shader);
+	
 		renderer->renderScene(testScene, testWindow);
-	//	shader.unbind();
-
-
-		/*glfwSwapBuffers(testWindow.getWindow());
-		glfwPollEvents();*/
 
 	}
 

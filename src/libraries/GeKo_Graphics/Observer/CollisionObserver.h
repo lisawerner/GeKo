@@ -71,27 +71,34 @@ public:
 			 break;
 
 		 case Collision_Event::COLLISION_AI_FIGHT_PLAYER:
-			 if (nodeA.getAI()->getHealth() > 0)
+			 if (glm::length(nodeA.getBoundingSphere()->center - nodeB.getBoundingSphere()->center) <= 4.5)
 			 {
-				 if (m_counter->getTime() <= 0)
+
+	
+
+				 if (nodeA.getAI()->getHealth() > 0)
 				 {
-					 m_level->getFightSystem()->objectVSobject(nodeA.getAI(), nodeB.getPlayer());
-					 if (nodeA.getAI()->getHealth() <= 0){
-		
-						 std::vector<Goal*> tmp = m_level->getQuestHandler()->getQuests(GoalType::KILL);
-						 for (int i = 0; i < tmp.size(); i++)
-						 {
-							 tmp.at(i)->increase();
+					 if (m_counter->getTime() <= 0)
+					 {
+						 m_level->getFightSystem()->objectVSobject(nodeA.getAI(), nodeB.getPlayer());
+						 if (nodeA.getAI()->getHealth() <= 0){
+
+							 std::vector<Goal*> tmp = m_level->getQuestHandler()->getQuests(GoalType::KILL);
+							 for (int i = 0; i < tmp.size(); i++)
+							 {
+								 tmp.at(i)->increase();
+							 }
 						 }
+						 m_counter->setTime(20);
+						 m_counter->start();
 					 }
-					 m_counter->setTime(20);
-					 m_counter->start();
+					 else{
+						 m_counter->update();
+					 }
+
 				 }
-				 else{
-					 m_counter->update();
-				 }
-					
-			 } 
+
+			 }
 			 break;
 
 
