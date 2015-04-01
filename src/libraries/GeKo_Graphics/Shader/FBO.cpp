@@ -1,10 +1,5 @@
 #include "FBO.h"
 
-FBO::FBO(int width, int height)
-{
-	generateTextures(width, height, 1, false, false);
-}
-
 FBO::FBO(int width, int height, int numColorTextures, bool depthTexture, bool stencilTexture)
 {
 	if (depthTexture)
