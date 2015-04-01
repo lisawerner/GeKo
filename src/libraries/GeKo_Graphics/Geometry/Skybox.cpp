@@ -97,8 +97,7 @@ bool Skybox::Init(const char **fileNames)
 
 	return true;
 }
-//
-//#define STB_IMAGE_IMPLEMENTATION
+
 #include <stb_image.h>
 bool Skybox::load(const char **fileNames)
 {
