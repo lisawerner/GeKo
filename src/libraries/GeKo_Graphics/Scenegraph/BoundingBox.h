@@ -9,6 +9,7 @@ class BoundingBox {
 public:
 	///Each Bounding Box needs a Object to wrap
 	/**/
+	BoundingBox();
 	BoundingBox(Node* object);
 	BoundingBox(Geometry* object, glm::mat4 modelMatrix);
 	~BoundingBox();
@@ -16,6 +17,8 @@ public:
 	///Returns all points of the Box
 	/**/
 	void boundingBox(Node* object);
+
+	void boundingBox(Geometry* geometry);
 
 	///Returns the Points in a vector
 	/**/

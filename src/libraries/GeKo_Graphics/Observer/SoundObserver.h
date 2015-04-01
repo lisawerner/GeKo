@@ -12,30 +12,49 @@ public:
 	~SoundObserver(){}
 
 	void  onNotify(AI& node, Object_Event event)
-	 {
+	{
 		std::string name = node.getNodeName();
+		std::string soundName;
 		Node* tmp = m_level->getActiveScene()->getScenegraph()->searchNode(name);
-		 switch (event)
-		 {
-	
-		 case Object_Event::OBJECT_MOVED:
-			 tmp->getSoundHandler()->updateSourcePosition(tmp->getSourceName(), node.getPosition());
+		switch (event)
+		{
 
+		case Object_Event::OBJECT_MOVED:
+			soundName = node.getSourceName(MOVESOUND_AI);
+			node.getSoundHandler()->updateListenerPosition(node.getPosition());
+			node.updateSourcesInMap();
+			if (soundName != "oor")
+			{
+				if (!(node.getSoundHandler()->sourceIsPlaying(soundName)))
+				{
+					node.getSoundHandler()->playSource(soundName);
+				}
+			}
+			break;
 
-			 if (!(tmp->getSoundHandler()->sourceIsPlaying(tmp->getSourceName())))
-			 {
-				 tmp->getSoundHandler()->playSource(tmp->getSourceName());
-			 }
-			 break;
+		case Object_Event::OBJECT_STOPPED:
+			soundName = node.getSourceName(MOVESOUND_AI);
+			if (soundName != "oor")
+			{
+				if ((node.getSoundHandler()->sourceIsPlaying(soundName)))
+				{
+					node.getSoundHandler()->pauseSource(soundName);
+				}
+			}
+			break;
 
-		 case Object_Event::OBJECT_STOPPED:
-			 if (tmp->getSoundHandler()->sourceIsPlaying(tmp->getSourceName()))
-			 {
-				 tmp->getSoundHandler()->stopSource(tmp->getSourceName());
-			 }
-			 break;
-		 }
-	 }
+		case Object_Event::OBJECT_DIED:
+			soundName = node.getSourceName(DEATHSOUND_AI);
+			if (soundName != "oor")
+			{
+				if (!(node.getSoundHandler()->sourceIsPlaying(soundName)))
+				{
+					node.getSoundHandler()->playSource(soundName);
+				}
+			}
+			break;
+		}
+	}
 
 	void onNotify(Player& node, Object_Event event)
 	 {
@@ -85,17 +104,37 @@ public:
 
 	void onNotify(Node& nodeA, Node& nodeB, Collision_Event event)
 	{
+		std::string tmp;
 		switch (event)
 		{
 		case Collision_Event::COLLISION_AI_FIGHT_PLAYER:
-			if (nodeA.getAI()->getHealth() > 0)
-			{
-				std::string tmp = nodeB.getPlayer()->getSourceName(FIGHTSOUND);
-				if (tmp != "oor")
-				{
-					nodeB.getPlayer()->getSoundHandler()->playSource(tmp);
-				}
+			tmp = nodeB.getPlayer()->getSourceName(FIGHTSOUND);
 
+			if (glm::length(nodeA.getBoundingSphere()->center - nodeB.getBoundingSphere()->center) <= 4.5)
+			{
+
+				if (nodeA.getAI()->getHealth() > 0)
+				{
+					if (tmp != "oor")
+					{
+						if (!nodeB.getPlayer()->getSoundHandler()->sourceIsPlaying(tmp))
+						{
+							nodeB.getPlayer()->getSoundHandler()->playSource(tmp);
+						}
+
+					}
+
+				}
+				else{
+					nodeB.getPlayer()->getSoundHandler()->stopSource(tmp);
+				}
+			}
+
+			else{
+				if (nodeB.getPlayer()->getSoundHandler()->sourceIsPlaying(tmp))
+				{
+					nodeB.getPlayer()->getSoundHandler()->stopSource(tmp);
+				}
 			}
 			break;
 
@@ -138,7 +177,6 @@ public:
 	}
 protected: 
 	Level* m_level;
-
 
 	
 };

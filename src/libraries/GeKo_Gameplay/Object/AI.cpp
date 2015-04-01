@@ -1,4 +1,5 @@
 #include "GeKo_Gameplay/Object/AI.h"
+#include <stdexcept>
 
 AI::AI(){
 	//TODO: ID noch richtig setzten. Am besten beim setzten durch iterieren...
@@ -13,6 +14,7 @@ AI::AI(){
 	m_health = 10;
 	m_healthMax = 10;
 	m_strength = 0.5;
+	m_hasDied = false;
 
 	m_decisionTree = new DecisionTree();
 
@@ -95,8 +97,15 @@ void AI::addFoodNodes(){
 void AI::update(){
 	if (m_health <= 0){
 		//TODO:: Delete Object after a time and a lot of particles
-		std::cout << "Object" << m_name << ": Died" << std::endl;
-		notify(*this, Object_Event::OBJECT_STOPPED);
+		std::cout << "Object" << m_name << ": is dead!" << std::endl;
+
+		if (!m_hasDied)
+		{
+			notify(*this, Object_Event::OBJECT_STOPPED);
+			notify(*this, Object_Event::OBJECT_DIED);
+			m_hasDied = true;
+		}
+		
 		setStates(States::HEALTH, false);
 	}
 
@@ -440,4 +449,38 @@ void AI::setAntAggressiv(){
 	m_homeNode = antGraph->searchNode(GraphNodeType::FOOD);
 	m_foodNodes.pop_back(); //Delete DefaultNode
 	m_foodNodes.push_back(antGraph->searchNode(GraphNodeType::FOOD));
+}
+
+std::string AI::getSourceName(SoundtypeAI type)
+{
+	try{
+		return m_soundMap.at(type);
+	}
+	catch (const std::out_of_range& oor)
+	{
+		std::cout << "No Sound with this type was set!" << std::endl;
+		return "oor";
+	}
+
+}
+
+void AI::setSourceName(SoundtypeAI type, std::string sourceName, const char* filepath)
+{
+
+	m_sfh->generateSource(sourceName, m_position, filepath);
+	//	m_soundMap.emplace(type, sourceName);
+	m_soundMap.insert(std::pair<SoundtypeAI, std::string>(type, sourceName));
+}
+
+void AI::updateSourcesInMap()
+{
+	for (std::map<SoundtypeAI, std::string>::iterator i = m_soundMap.begin(); i != m_soundMap.end(); ++i)
+	{
+		m_sfh->updateSourcePosition(i->second, m_position);
+	}
+}
+
+bool AI::hasDied()
+{
+	return m_hasDied;
 }

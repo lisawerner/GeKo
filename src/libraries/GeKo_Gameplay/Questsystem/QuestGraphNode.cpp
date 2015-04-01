@@ -16,7 +16,6 @@ QuestGraphNode* QuestGraphNode::getParent(){
 
 void QuestGraphNode::addChild(QuestGraphNode* c){
 	m_children.push_back(c);
-	//c->setParent(this);
 }
 
 std::vector<QuestGraphNode*> QuestGraphNode::getChildren(){

@@ -9,9 +9,6 @@ Rect::Rect()
 		create(glm::vec4(1.0, -1.0, 0, 1.0), glm::vec4(-1.0, -1.0, 0, 1.0), glm::vec4(1.0, 1.0, 0, 1.0), glm::vec4(-1.0, 1.0, 0, 1.0),
 		glm::vec2(1.0, 0.0), glm::vec2(0.0, 0.0), glm::vec2(1.0, 1.0), glm::vec2(0.0, 1.0));
 
-		/*
-	create(glm::vec3(1.0, -1.0, 0), glm::vec3(-1.0, -1.0, 0), glm::vec3(1.0, 1.0, 0), glm::vec3(-1.0, 1.0, 0),
-		glm::vec2(1.0, 0), glm::vec2(0, 0), glm::vec2(1.0, 1.0), glm::vec2(0, 1.0));*/
 }
 
 Rect::Rect(glm::vec4 dright, glm::vec4 dleft, glm::vec4 uright, glm::vec4 uleft, glm::vec2 tca, glm::vec2 tcb, glm::vec2 tcc, glm::vec2 tcd)

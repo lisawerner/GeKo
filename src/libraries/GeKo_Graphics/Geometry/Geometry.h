@@ -73,8 +73,12 @@ public:
 	/**/
 	bool hasIndex();
 
+	///If the Geometry has Normals, m_hasNormals will be set to true
+	/**/
 	void setNormalsTrue();
 
+	///If the Geometry has UVs, m_hasUVs will be set to true
+	/**/
 	void setUVTrue();
 
 protected:
@@ -101,8 +105,3 @@ private:
 	bool m_hasNormals;
 	bool m_hasUV;
 };
-
-/*Questions and TODOS:
-	1. virtual methods shouldnt be used, maybe theres another way to do it?
-	2. Should reconsider to have the Buffer as a Pointer
-*/

@@ -81,7 +81,7 @@ void Geometry::renderGeometry()
 	}
 	else
 	{
-		glDrawArrays(GL_TRIANGLES, 0, m_indices);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, m_indices);
 	}
 
 	glBindVertexArray(0);
@@ -93,7 +93,7 @@ void Geometry::computeTangents()
 {
 	m_tangents.resize(m_vertices.size());
 
-	for (int i = 0; i <m_indices; i += 3)
+	for (int i = 0; i <m_indices-4; i += 3)
 	{
 		// Edges of the triangle : postion delta
 		int index_v0 = m_index[i];
@@ -110,6 +110,7 @@ void Geometry::computeTangents()
 		float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
 		glm::vec4 tmp = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y)*r;
 		glm::vec3 tangent = glm::vec3(tmp.x, tmp.y, tmp.z);
+
 
 		// Set the same tangent for all three vertices of the triangle
 		m_tangents[index_v0] = tangent;

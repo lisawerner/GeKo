@@ -143,6 +143,11 @@ void Object::collectItem(ItemType typeId, int count){
 	}
 }
 
+void Object::setClassType(ClassType type)
+{
+	m_class = type;
+}
+
 ClassType Object::getClassType()
 {
 	return m_class;

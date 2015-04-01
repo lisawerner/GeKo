@@ -57,32 +57,30 @@ class SoundFileHandler{
 		void playAllSources();
 		void pauseAllSources();
 		void stopAllSources();
-
 		bool sourceIsPlaying(std::string name);
 
-	//	std::map<Node, std::string> sourceMap;
 
 	protected:
-		ALenum tempformat;
-		int maxNumberOfSources;
-		int numberOfSources;
-		ALint iState;
-		ALuint* buffers;
-		ALuint* sources;
+		ALenum m_tempformat;
+		int m_maxNumberOfSources;
+		int m_numberOfSources;
+		ALint m_iState;
+		ALuint* m_buffers;
+		ALuint* m_sources;
 		int generateBufferData(const char *filepath, int numberOfSources);
-		int endWithError(const char* msg);
+		int endWithError(char* msg);
 
-		std::map<std::string, int> sourceMap;
-		char type[4];
-		int size, chunkSize;
-		short formatType, channels;
-		int sampleRate, avgBytesPerSec;
-		short bytesPerSample, bitsPerSample;
-		int dataSize;
-		ALuint frequency;
-		ALenum format; 
-		FILE *fp = NULL;
-		unsigned char* buf;
+		std::map<std::string, int> m_sourceMap;
+		char m_type[4];
+		int m_size, m_chunkSize;
+		short m_formatType, m_channels;
+		int m_sampleRate, m_avgBytesPerSec;
+		short m_bytesPerSample, m_bitsPerSample;
+		int m_dataSize;
+		ALuint m_frequency;
+		ALenum m_format;
+		FILE *m_fp = NULL;
+		unsigned char* m_buf;
 
 
 };
