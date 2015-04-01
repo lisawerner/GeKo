@@ -94,7 +94,7 @@ void StrategyCamera::setRadius(float radius)
 
 void StrategyCamera::moveForward()
 {
-// Center muss geupdated werden, aber in view direction! Die View Direction muss mitgedreht werden (s.o.) 
+
 	m_movementVector += m_viewDirection;
 	glm::vec2 newPos = glm::vec2(m_center.x, m_center.z) + glm::normalize(glm::vec2(m_movementVector.x, m_movementVector.z));
 	m_movementVector = glm::vec3(0.0);
