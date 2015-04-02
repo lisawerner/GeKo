@@ -3,9 +3,10 @@
 #include "GeKo_Graphics/Window.h"
 
 #include<iostream>
-#include<imgui.cpp>
+
 #include<GL/glew.h>
 #include<GLFW/glfw3.h>
+#include<imgui.cpp>
 
 // Shader variables
 static int shader_handle, vert_handle, frag_handle;
@@ -23,7 +24,16 @@ GUI::GUI(std::string windowName, int windowWidth, int windowHeight) :
   m_windowName(windowName),
   m_windowWidth(windowWidth),
   m_windowHeight(windowHeight),
-  m_guiElements(new std::vector<GuiElement::Element*>())
+  m_guiElements(new std::vector<GuiElement::Element*>()),
+  m_nestedWindows(new std::vector<GuiElement::NestedWindow*>()),
+  m_windowPosX(windowWidth-200), m_windowPosY(windowHeight/2),
+  m_bgAlpha(0.65),
+  m_titlebar(true),
+  m_border(false),
+  m_resize(true),
+  m_move(true),
+  m_scrollbar(true),
+  m_collapse(true)
 {
 
 }
@@ -55,26 +65,29 @@ void GUI::render(Window& window)
   if (!m_visible)
     return;
 
-
-  ImGuiIO& io = ImGui::GetIO();
-
   mousePressed[0] = static_cast<bool>(glfwGetKey(window.getWindow(), GLFW_MOUSE_BUTTON_1));
   mousePressed[1] = static_cast<bool>(glfwGetKey(window.getWindow(), GLFW_MOUSE_BUTTON_2));
-  
+
   update(window);
-    
-  static float f;
-  bool t = true;
 
-  ImGui::SetNextWindowSize(ImVec2(m_windowWidth, m_windowHeight));
+  ImGuiWindowFlags window_flags = 0;
+  if (!m_titlebar)  window_flags |= ImGuiWindowFlags_NoTitleBar;
+  if (m_border)     window_flags |= ImGuiWindowFlags_ShowBorders;
+  if (!m_resize)    window_flags |= ImGuiWindowFlags_NoResize;
+  if (!m_move)      window_flags |= ImGuiWindowFlags_NoMove;
+  if (!m_scrollbar) window_flags |= ImGuiWindowFlags_NoScrollbar;
+  if (!m_collapse)  window_flags |= ImGuiWindowFlags_NoCollapse;
 
-  ImGui::Begin(m_windowName.c_str(), &t);
-  
+  ImGui::SetNextWindowPos(ImVec2(m_windowPosX, m_windowPosY));
+  ImGui::SetNextWindowSize(ImVec2(m_windowWidth,m_windowHeight));
+  ImGui::Begin(m_windowName.c_str(), &m_visible, ImVec2(m_windowWidth, m_windowHeight), m_bgAlpha, window_flags);
+
   for (std::vector<GuiElement::Element*>::iterator it = m_guiElements->begin(); it != m_guiElements->end(); ++it)
-    (*it)->render();
- 
+  {
+      (*it)->render();
+  }
   ImVec2 newSize = ImGui::GetWindowSize();
-    
+
   if (newSize.y >= 35)
   {
     m_windowWidth  = newSize.x;
@@ -83,6 +96,13 @@ void GUI::render(Window& window)
 
   ImGui::End();
 
+  for (std::vector<GuiElement::NestedWindow*>::iterator it = m_nestedWindows->begin(); it != m_nestedWindows->end(); ++it)
+  {
+    if ((*it)->isVisible())
+      (*it)->render();
+  }
+
+  ImGuiIO& io = ImGui::GetIO();
   glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
   ImGui::Render();
 
@@ -91,6 +111,11 @@ void GUI::render(Window& window)
 void GUI::addElement(GuiElement::Element *comp)
 {
   m_guiElements->push_back(comp);
+}
+
+void GUI::addNestedWindow(GuiElement::NestedWindow *nestedWindow)
+{
+  m_nestedWindows->push_back(nestedWindow);
 }
 
 void GUI::show()
@@ -107,6 +132,15 @@ bool GUI::visible()
 {
   return m_visible;
 }
+
+void GUI::setBackgroundAlpha(float a)           { m_bgAlpha = a; }
+void GUI::setPosition(float posX, float posY)   { m_windowPosX = posX; m_windowPosY = posY; }
+void GUI::setTitleBarVisible(bool visible)      { m_titlebar = visible; }
+void GUI::setMoveable(bool moveable)            { m_move = moveable; }
+void GUI::setBorderVisible(bool visible)        { m_border = visible; }
+void GUI::setResizable(bool resize)             { m_resize  = resize; }
+void GUI::setUseScrollbar(bool scrollbar)       { m_scrollbar = scrollbar; }
+void GUI::setCollapsable(bool collapse)         { m_collapse = collapse; }
 
 void GUI::update(Window& window)
 {
@@ -291,7 +325,7 @@ void GUI::init()
   glVertexAttribPointer(uv_location, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), (GLvoid*)OFFSETOF(ImDrawVert, uv));
   glVertexAttribPointer(colour_location, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(ImDrawVert), (GLvoid*)OFFSETOF(ImDrawVert, col));
   glBindVertexArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);  
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
 
   ImGuiIO& io = ImGui::GetIO();
   io.DeltaTime = 1.0f / 60.0f;                                  // Time elapsed since last frame, in seconds (in this sample app we'll override this every frame because our timestep is variable)
@@ -328,8 +362,8 @@ void GUI::loadFonts()
   //FONT: http://www.1001fonts.com/aller-font.html
 
 
-  ImFont* my_font2 = io.Fonts->AddFontFromFileTTF(RESOURCES_PATH "\\Fonts\\Aller_Std_Rg.ttf", 15.0f);
-  
+  ImFont* my_font2 = io.Fonts->AddFontFromFileTTF(RESOURCES_PATH "/Fonts/Aller_Std_Rg.ttf", 15.0f);
+
 
   //ImFont* my_font1 = io.Fonts->AddFontFromFileTTF("..\\..\\..\\resources\\Fonts\\Karla-Regular.ttf", 15.0f);
   //ImFont* my_font4 = io.Fonts->AddFontFromFileTTF("extra_fonts/ProggyTiny.ttf", 10.0f); my_font4->DisplayOffset.y += 1;

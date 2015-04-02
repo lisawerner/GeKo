@@ -1,7 +1,9 @@
 #pragma once
-#include<string>
-#include<imgui.h>
-#include<glm/ext.hpp>
+
+#include "GeKo_Graphics/GUI/GUI.h"
+#include <imgui.h>
+#include <string>
+#include <glm/ext.hpp>
 
 ///These Classes are wrapper classes for the ImGui Render methods
 
@@ -23,14 +25,16 @@ namespace GuiElement
   {
   
   public:
-    Text(std::string text) : m_text(text) {}
-    inline void render() { ImGui::Text(m_text.c_str()); }
+    Text(std::string text, glm::fvec4 textColor = glm::fvec4(1.0f, 1.0f, 1.0f, 1.0f)) : m_text(text) { m_textColor = textColor; }
+    
+    inline void render() { ImGui::TextColored(ImVec4(m_textColor.r, m_textColor.g, m_textColor.b, m_textColor.a), m_text.c_str()); }
     inline void dispose() { delete this; }
 
   private:
     ~Text() {}
 
     std::string m_text;
+    glm::fvec4 m_textColor;
 
   };
 
@@ -118,7 +122,7 @@ namespace GuiElement
     inline void render() { m_isPushed = ImGui::Button(m_ID.c_str()); }
     inline bool isPushed() { return m_isPushed; }
     inline void dispose() { delete this; };
-
+    inline bool* getBooleanAdress() { return &m_isPushed; }
   private:
     ~PushButton() {}
 
@@ -144,6 +148,39 @@ namespace GuiElement
     bool m_bool;
     std::string m_ID;
 
+  };
+
+  class IntBox : public Element
+  {
+  public:
+    IntBox(int *number, glm::fvec4 textColor, glm::fvec4 borderColor) : m_number(number), m_textColor(textColor), m_borderColor(borderColor) {}
+
+    inline void render() 
+    {
+      
+      std::string strInteger = " ";
+      strInteger.append(std::to_string(*m_number));
+      strInteger.append(" ");
+
+      float wrapWidth = strInteger.size()*300;
+
+      ImVec2 pos = ImVec2(ImGui::GetCursorScreenPos().x + wrapWidth, ImGui::GetCursorScreenPos().y);
+      ImVec2 size = ImVec2(ImGui::GetCursorScreenPos().x + wrapWidth + 10, ImGui::GetCursorScreenPos().y + ImGui::GetTextLineHeight());
+
+      ImGui::GetWindowDrawList()->AddRectFilled(pos, size, ImGui::ColorConvertFloat4ToU32(ImVec4(m_borderColor.r, m_borderColor.g, m_borderColor.b, m_borderColor.a)));
+      ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + wrapWidth);
+      ImGui::TextColored(ImVec4(m_textColor.r, m_textColor.g, m_textColor.b, m_textColor.a), strInteger.c_str(), wrapWidth);
+      ImGui::GetWindowDrawList()->AddRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax(), ImGui::ColorConvertFloat4ToU32(ImVec4(m_borderColor.r, m_borderColor.g, m_borderColor.b, m_borderColor.a)));
+      ImGui::PopTextWrapPos();
+    }
+
+    inline void dispose(){ delete this; }
+
+  private:
+    ~IntBox() {}
+    glm::fvec4 m_textColor;
+    glm::fvec4 m_borderColor;
+    int *m_number;
   };
 
   class ColorEditRGB : public Element
@@ -178,4 +215,171 @@ namespace GuiElement
     glm::fvec4 *m_colorVec;
   };
 
+  const int width = 50;
+  static float arr[width];
+
+  class ProgressBar : public Element
+  {
+
+  public:
+    ProgressBar(int *hp, int hpMax, int hpBarWidth, glm::fvec4 color) : m_hp(hp), m_hpMax(hpMax), m_hpBarWidth(hpBarWidth), m_color(color){ }
+    inline void render()
+    {
+      int currentHP = *m_hp;
+      float restHP = static_cast<float>(currentHP) / static_cast<float>(m_hpMax);
+
+      if (restHP >= 0 && restHP <= 1)
+      {
+
+        restHP *= width;
+
+        for (int i = width - 1; i >= restHP; i--)
+        {
+          arr[i] = 0.0f;
+        }
+
+        for (int i = 0; i < restHP; i++)
+        {
+          arr[i] = 50.0f;
+        }
+
+      }
+
+      else if (restHP < 0)
+      {
+        for (int i = 0; i < width; i++)
+        {
+          arr[i] = 0.0f;
+        }
+
+      }
+
+      else
+      {
+        for (int i = 0; i < width; i++)
+        {
+          arr[i] = 50.0f;
+        }
+
+      }
+
+      //ImGui::Text(std::to_string(0).c_str());
+      //ImGui::SameLine();
+      
+      //ImGui::PushID(0);
+      //ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0, 0.0, 0.0, 0.0));
+      ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(m_color.r, m_color.g, m_color.b, m_color.a));
+      ImGui::PushStyleColor(ImGuiCol_PlotHistogramHovered, ImVec4(m_color.r, m_color.g, m_color.b, m_color.a));
+      ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.0f, 0.0f, 0.0f, 00.7f));
+      ImGui::PushStyleColor(ImGuiCol_TooltipBg, ImVec4(0.0, 0.0, 0.0, 0.0));
+      
+      ImGui::PlotHistogram("", arr, ((int)(sizeof(arr) / sizeof(*arr))), 0," ", 0.0f, 50.0f, ImVec2(m_hpBarWidth, 0));
+
+      if (ImGui::IsItemHovered())
+        ImGui::SetTooltip(" ");
+
+      //ImGui::PopStyleColor(5);
+      //ImGui::PopID();
+      //ImGui::SameLine();
+      //ImGui::Text(std::to_string(m_hpMax).c_str());
+
+      //ImGui::SliderInt(m_ID.c_str(), m_hp, m_hpMin, m_hpMax);
+    }
+    inline void dispose() { delete this; }
+
+  private:
+    ~ProgressBar() {}
+
+    std::string m_ID;
+    glm::fvec4 m_color;
+    int *m_hp, m_hpMax, m_hpBarWidth;
+  };
+  
+  class NestedWindow
+  {
+  public:
+    NestedWindow() : 
+      m_visible(true), 
+      m_guiElements(new std::vector<GuiElement::Element*>()),
+      m_windowName(" "),
+      m_windowWidth(100),
+      m_windowHeight(300),
+      m_windowPosX(300 - 200), m_windowPosY(100 / 2),
+      m_bgAlpha(0.65),
+      m_titlebar(true),
+      m_border(false),
+      m_resize(true),
+      m_move(true),
+      m_scrollbar(true),
+      m_collapse(true)
+    {}
+
+    inline void render()
+    { 
+      ImGuiWindowFlags window_flags = 0;
+      if (!m_titlebar)  window_flags |= ImGuiWindowFlags_NoTitleBar;
+      if (m_border)     window_flags |= ImGuiWindowFlags_ShowBorders;
+      if (!m_resize)    window_flags |= ImGuiWindowFlags_NoResize;
+      if (!m_move)      window_flags |= ImGuiWindowFlags_NoMove;
+      if (!m_scrollbar) window_flags |= ImGuiWindowFlags_NoScrollbar;
+      if (!m_collapse)  window_flags |= ImGuiWindowFlags_NoCollapse;
+
+      ImGui::SetNextWindowPos(ImVec2(m_windowPosX, m_windowPosY));
+      //ImGui::SetNextWindowSize(ImVec2(m_windowWidth,m_windowHeight));
+      ImGui::Begin(m_windowName.c_str(), &m_visible, ImVec2(m_windowWidth, m_windowHeight), m_bgAlpha, window_flags);
+      
+      //ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiSetCond_FirstUseEver);
+      //ImGui::Begin("Another Window", &m_visible);
+      for (std::vector<GuiElement::Element*>::iterator it = m_guiElements->begin(); it != m_guiElements->end(); ++it)
+        (*it)->render();
+
+      ImVec2 newSize = ImGui::GetWindowSize();
+
+      if (newSize.y >= 35)
+      {
+        m_windowWidth = newSize.x;
+        m_windowHeight = newSize.y;
+      }
+
+      ImVec2 newPos = ImGui::GetWindowPos();
+      m_windowPosX = newPos.x;
+      m_windowPosY = newPos.y;
+      
+      ImGui::End();
+    }
+    
+    inline void dispose(){ delete this; }
+    inline void addElement(GuiElement::Element *comp) { m_guiElements->push_back(comp); }
+    inline bool isVisible() { return m_visible; }
+    inline void show() { m_visible = true; }
+    inline void hide() { m_visible = false;}
+    inline void toggleVisibility() { m_visible = !m_visible; }
+
+    void setBackgroundAlpha(float a)         { m_bgAlpha = a; }
+    void setPosition(float posX, float posY) { m_windowPosX = posX; m_windowPosY = posY; }
+    void setTitleBarVisible(bool visible)    { m_titlebar = visible; }
+    void setMoveable(bool moveable)          { m_move = moveable; }
+    void setBorderVisible(bool visible)      { m_border = visible; }
+    void setResizable(bool resize)           { m_resize = resize; }
+    void setUseScrollbar(bool scrollbar)     { m_scrollbar = scrollbar; }
+    void setCollapsable(bool collapse)       { m_collapse = collapse; }
+    void setName(std::string name)           { m_windowName = name; }
+    void setSize(float width, float height)  { m_windowWidth = width; m_windowHeight = height; }
+  private:
+    ~NestedWindow() {}
+
+    bool m_visible;
+    std::vector<GuiElement::Element*> *m_guiElements;
+    std::string m_windowName;
+    int m_windowWidth, m_windowHeight;
+    float m_windowPosX, m_windowPosY;
+    float m_bgAlpha;
+    bool m_titlebar;
+    bool m_border;
+    bool m_resize;
+    bool m_move;
+    bool m_scrollbar;
+    bool m_collapse;
+
+  };
 };
