@@ -29,4 +29,3 @@ Teapot::~Teapot()
 	m_uvs.clear();
 	m_index.clear();
 }
-

@@ -1,6 +1,4 @@
 #pragma once 
-//#include <GeKo_Gameplay/AI_Pathfinding/GraphNode.h>
-//#include <GeKo_Gameplay/AI_Pathfinding/AStarNode.h>
 
 /** The Path-Class provides the possibility to connect waypoints, referred to as endNode and startNode. Each Path has a variable which determines how long it will take to
 travel this path!*/

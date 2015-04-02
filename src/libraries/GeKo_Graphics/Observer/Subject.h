@@ -29,8 +29,6 @@ public:
 	}
 
 protected:
-
-
 	void notify(Entity& node, Event event)
 	{
 		for (int i = 0; i < m_myObserver.size(); i++)
@@ -47,14 +45,7 @@ protected:
 		}
 	}
 
-
 private:
 	std::vector<Observer<Entity, Event>*> m_myObserver;
-
-
-protected:
-
-
 	
 };
-

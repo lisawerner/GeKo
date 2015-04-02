@@ -4,7 +4,6 @@ Skybox::Skybox(const char **fileNames)
 {
 	m_points = 36;
 	m_indices = 36;
-	//setIndexTrue();
 	setIndexFalse();
 	setNormalsTrue();
 	setUVTrue();

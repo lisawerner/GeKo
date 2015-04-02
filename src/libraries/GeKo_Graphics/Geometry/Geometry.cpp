@@ -13,11 +13,8 @@ Geometry::~Geometry()
 {
 }
 
-
 void Geometry::loadBufferData()
 {
-
-
 	m_vertexBuffer = new Buffer<glm::vec4>(m_vertices, STATIC_DRAW);
 	if (m_hasNormals){
 		m_normalBuffer = new Buffer<glm::vec3>(m_normals, STATIC_DRAW);
@@ -29,7 +26,6 @@ void Geometry::loadBufferData()
 	{
 		m_indexBuffer = new BufferIndex<GLuint>(m_index, STATIC_DRAW_INDEX);
 	}
-	
 
 	glGenVertexArrays(1, &m_vaoBuffer);
 	glBindVertexArray(m_vaoBuffer);
@@ -50,16 +46,12 @@ void Geometry::loadBufferData()
 		glEnableVertexAttribArray(2);
 	}
 
-
-
 	if (m_hasIndex){
 		m_indexBuffer->bind();
 	}
 
-	
 	glBindVertexArray(0);
 }
-
 
 void Geometry::renderGeometry()
 {
@@ -77,7 +69,6 @@ void Geometry::renderGeometry()
 	glBindVertexArray(0);
 
 }
-
 
 void Geometry::computeTangents()
 {
@@ -109,7 +100,6 @@ void Geometry::computeTangents()
 	}
 }
 
-
 std::vector<glm::vec4> Geometry::getVertices()
 {
 	return m_vertices;
@@ -140,12 +130,10 @@ void Geometry::setLoaded()
 	m_wasLoaded = true;
 }
 
-
 void Geometry::resetLoaded()
 {
 	m_wasLoaded = false;
 }
-
 
 bool Geometry::isLoaded()
 {

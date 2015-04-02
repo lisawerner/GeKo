@@ -12,18 +12,12 @@ DecisionTree::~DecisionTree(){
 }
 
 TreeOutput DecisionTree::decide(std::vector<std::pair<States, bool>> states){
-	//std::cout << "Current Node: " << m_currentNode->getID() << std::endl;
-	//Check current is not a leaf
+	//Check if current node is not a leaf
 	if (!m_currentNode->getIsLeaf()){
-		//is not a leaf
-		//std::cout << "In Tree: no Leaf" << std::endl;
-		//Hole aus dem Objekt True/False mit der StateID
 		bool stateCondition = NULL;
 		if (m_currentNode->getStateID() != States::DEFAULTSTATE){
 			stateCondition = getStates(states, m_currentNode->getStateID());
 		}
-		//std::cout << "Actual Condition: " << stateCondition << std::endl;
-		//Hole die Boolean für linkes und rechtes Kind
 		bool leftCondition = NULL;
 		if (m_currentNode->getLeftNode()->getCondition() != NULL){
 			leftCondition = m_currentNode->getLeftNode()->getCondition();
@@ -33,37 +27,19 @@ TreeOutput DecisionTree::decide(std::vector<std::pair<States, bool>> states){
 		if (m_currentNode->getRightNode()->getCondition() != NULL){
 			rightCondition = m_currentNode->getRightNode()->getCondition();
 		}
-		//Vergleiche State mit Kindern
 		if (stateCondition == leftCondition){
-			//std::cout << "In Tree: go to LeftNode" << std::endl;
-
 			m_currentNode = m_currentNode->getLeftNode();
 			return decide(states);
 		}
 		else if (stateCondition == rightCondition){
-
-			//std::cout << "In Tree: go to RightNode" << std::endl;
-
 			m_currentNode = m_currentNode->getRightNode();
 			return decide(states);
 		}
 		else {
-			//TODO: Fehlerausgabe
-			//Weder linkes, noch rechtes Kind
-			//std::cout << "FATAL ERROR: Neither left child, nor right child" << std::endl;
 		}
 	}
-		//is a Leaf
 		TreeOutput target = m_currentNode->getTarget();
-		//Baum ist durchlaufen. Methode ist aufgerufen. Also current wieder auf Anfang für nächstes Mal setzten
-		m_currentNode = m_rootNode;
-		/*std::cout << "Das aktuelle Ziel ist: ";
-		switch (target){
-		case TreeOutput::HOME: std::cout << " Home!" << std::endl; break;
-		case TreeOutput::FOOD: std::cout << " Food!" << std::endl; break;
-		case TreeOutput::PLAYER: std::cout << " Player!" << std::endl; break;
-		}*/
-		
+		m_currentNode = m_rootNode;		
 		return target;
 }
 
@@ -87,7 +63,7 @@ bool DecisionTree::getStates(std::vector<std::pair<States, bool>> list, States s
 	for (int i = 0; i < list.size(); i++){
 		if (list.at(i).first == state) {
 			return list.at(i).second;
-		};
+		}
 	}
 	return NULL;
 }
@@ -113,7 +89,7 @@ void DecisionTree::setAntTreeAfraid(){
 	m_rootNode->setLeftNode(lView);
 	lView->setCondition(true);
 	lView->setLeaf(true);
-	lView->setTarget(TreeOutput::HOME); //Spawn für Ängstlicher Flick, Player für aggressiver Flick
+	lView->setTarget(TreeOutput::HOME); 
 
 	m_rootNode->setRightNode(rView);
 	rView->setCondition(false);
@@ -145,7 +121,7 @@ void DecisionTree::setAntTreeAggressiv(){
 	m_rootNode->setLeftNode(lView);
 	lView->setCondition(true);
 	lView->setLeaf(true);
-	lView->setTarget(TreeOutput::PLAYER); //Spawn für Ängstlicher Flick, Player für aggressiver Flick
+	lView->setTarget(TreeOutput::PLAYER);
 
 	m_rootNode->setRightNode(rView);
 	rView->setCondition(false);

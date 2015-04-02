@@ -320,7 +320,7 @@ int main()
 
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&treeNode);
 
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&terrainNode2);
+	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&terrainNode2);
 
 	// ==============================================================
 	// == Questsystem ====================================================

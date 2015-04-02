@@ -34,6 +34,4 @@ protected:
 	float **m_heightMap;
 
 	float m_interval, m_resolution;
-
-
 };

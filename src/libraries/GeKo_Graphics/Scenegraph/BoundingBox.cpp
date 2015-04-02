@@ -46,7 +46,6 @@ void BoundingBox::boundingBox(Node* object){
 	}
 	
 	
-	//mir ist grad die Reihenfolge der Punkte nicht klar... entlang der negativen z-Achse?
 	m_box.push_back(glm::vec4(minX, minY, maxZ, 1.0));
 	m_box.push_back(glm::vec4(maxX, minY, maxZ, 1.0));
 
@@ -97,7 +96,6 @@ void BoundingBox::boundingBox(Geometry* geometry)
 	}
 
 
-	//mir ist grad die Reihenfolge der Punkte nicht klar... entlang der negativen z-Achse?
 	m_box.push_back(glm::vec4(minX, minY, maxZ, 1.0));
 	m_box.push_back(glm::vec4(maxX, minY, maxZ, 1.0));
 
@@ -116,13 +114,13 @@ std::vector<glm::vec4> BoundingBox::getBox()
 {
 	return m_box;
 }
-//dann müssen noch schnitttests gemacht werden bzgl. der Hierarchie. Allerdings muss diese mit dem Szenegraph geregelt werden ... ?
 
 void BoundingBox::setCollisionDetected(bool collision)
 {
 	m_collisionDetected = collision;
 
 }
+
 bool BoundingBox::getCollisionDetected()
 {
 	return m_collisionDetected;

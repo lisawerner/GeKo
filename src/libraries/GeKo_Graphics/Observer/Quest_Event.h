@@ -7,5 +7,3 @@ enum class Quest_Event
 	GOAL_FINISHED,
 	AI_KILLED
 };
-
-
