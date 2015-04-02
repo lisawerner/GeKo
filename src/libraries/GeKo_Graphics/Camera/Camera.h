@@ -13,11 +13,10 @@ class Camera{
 
 public:
 	/// Standard constructor: Camera is set and a standard name is given
-	Camera();
-	Camera(std::string name);
+	Camera(std::string name = "Camera");
 	~Camera();
 
-	void update(GLFWwindow* window);
+	void virtual update(GLFWwindow* window);
 
 	/// This method sets the FOV
 	void setFOV(float fov);
@@ -75,6 +74,8 @@ public:
 
 	/// This method sets m_mouseSpeed
 	void setMouseSpeed(float speed);
+
+	glm::vec4 getCenter();
 	
 	// Implemented in the specific cameras
 	virtual void moveForward();
@@ -87,6 +88,8 @@ public:
 	virtual void turnRight();
 	virtual void turnUp();
 	virtual void turnDown();
+	virtual void increaseRadius();
+	virtual void decreaseRadius();
 
 protected:
 	// The name identifies the camera

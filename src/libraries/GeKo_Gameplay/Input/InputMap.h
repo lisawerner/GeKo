@@ -37,6 +37,8 @@ public:
 	/// The method checks whether multiple keys are pressed to ensure performing the right action and it's implemented in the specific InputMaps
 	virtual void checkMultipleMappedKeys(int key, GLFWwindow &window);
 
+	void setGLFWwindow(GLFWwindow* window);
+	GLFWwindow* getWindow();
 protected:
 	// This map maps a key to a function
 	std::map<int, std::function<void()>> m_map;
@@ -46,6 +48,8 @@ protected:
 
 	// The naming of the InputMap ensures that a specific InputMap instance can be returned
 	std::string m_name;
+
+	GLFWwindow* m_usedWindow;
 
 };
 

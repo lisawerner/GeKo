@@ -1,6 +1,6 @@
 #include "GeKo_Graphics/Renderer/Renderer.h"
 #include "GeKo_Graphics/Shader/Shader.h"
-#include "GeKo_Graphics/Object/Teapot.h"
+#include "GeKo_Graphics/Geometry/Teapot.h"
 #include "GeKo_Graphics/Camera/Pilotview.h"
 #include "GeKo_Gameplay/Input/InputHandler.h"
 

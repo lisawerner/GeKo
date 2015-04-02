@@ -32,11 +32,7 @@
 #include <GeKo_Graphics/Light/DirectionLight.h>
 #include <GeKo_Graphics/Light/PointLight.h>
 
-#include <GeKo_Graphics/Object/Geometry.h>
-#include <GeKo_Graphics/Object/Cube.h>
-#include <GeKo_Graphics/Object/Teapot.h>
-#include <GeKo_Graphics/Object/Rect.h>
-#include <GeKo_Graphics/Object/Skybox.h>
+#include <GeKo_Graphics/GeometryInclude.h>
 
 #include <GeKo_Graphics/Scenegraph/Level.h>
 #include <GeKo_Graphics/Scenegraph/Scene.h>

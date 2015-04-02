@@ -14,11 +14,13 @@ void InputHandler::setAllInputMaps(Camera &activeCam){
 	MapTrackball* contextTrackball = new MapTrackball(activeCam);
 	MapPilotview* contextPilotview = new MapPilotview(activeCam);
 	MapPlayerview* contextPlayerview = new MapPlayerview(activeCam);
+	MapStrategyCamera* contextStrategy = new MapStrategyCamera(activeCam);
 
 	// The Maps are stored in a vector
 	m_allInputMaps.push_back(contextTrackball);
 	m_allInputMaps.push_back(contextPilotview);
 	m_allInputMaps.push_back(contextPlayerview);
+	m_allInputMaps.push_back(contextStrategy);
 }
 
 void InputHandler::changeActiveInputMap(std::string name){

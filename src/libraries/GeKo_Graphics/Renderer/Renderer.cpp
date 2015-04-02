@@ -195,7 +195,7 @@ void Renderer::renderScene(Scene& scene, Window& window)
   m_currentFBOIndex = 0;
 
   m_gBuffer->bind();
-  glClearColor(0, 0, 0, 0);
+  glClearColor(0.5, 0.5, 0.5, 1);
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   m_shaderGBuffer->bind();

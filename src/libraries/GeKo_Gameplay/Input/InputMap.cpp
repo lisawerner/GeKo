@@ -30,3 +30,13 @@ std::string InputMap::getName(){
 }
 
 void InputMap::checkMultipleMappedKeys(int key, GLFWwindow &window){}
+
+void InputMap::setGLFWwindow(GLFWwindow* window)
+{
+	m_usedWindow = window;
+}
+
+GLFWwindow* InputMap::getWindow()
+{
+	return m_usedWindow;
+}

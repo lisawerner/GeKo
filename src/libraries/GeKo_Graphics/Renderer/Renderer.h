@@ -6,6 +6,7 @@
 #include <GeKo_Graphics/Scenegraph/Scene.h>
 #include <GeKo_Graphics/Shader/FBO.h>
 #include <GeKo_Graphics/Scenegraph/Node.h>
+#include <GeKo_Graphics/Geometry/Rect.h>
 #include <GeKo_Graphics/Camera/Pilotview.h>
 #include <glm/glm.hpp>
 
@@ -142,6 +143,6 @@ private:
   ShaderProgram *m_shaderSSAOblur;
   ShaderProgram *m_shaderSSAOfinal;
   ShaderProgram *m_shaderShadowMapping;
-
+  
   Rect m_sfq;
 };

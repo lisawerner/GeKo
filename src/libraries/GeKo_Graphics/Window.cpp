@@ -10,7 +10,7 @@ int m_ypos;
 /*
 open a window with a certain size in a certain position and set the context to him
 */
-Window::Window(int xpos, int ypos, int width, int height, const char* name)
+Window::Window(int xpos, int ypos, int width, int height, const char* name, glm::vec3 color)
 {
 	this->m_name = name;
 	this->m_width = width;
@@ -21,7 +21,7 @@ Window::Window(int xpos, int ypos, int width, int height, const char* name)
 	m_window = glfwCreateWindow(width, height, name, NULL, NULL);
 	glfwSetWindowPos(m_window, xpos, ypos);
 	glfwMakeContextCurrent(m_window);
-	glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
+	glClearColor(color.x, color.y, color.z, 1.0f);
 }
 
 Window::~Window()

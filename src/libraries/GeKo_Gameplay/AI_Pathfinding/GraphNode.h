@@ -2,7 +2,8 @@
 #include <string>
 #include <vector>
 #include <glm/ext.hpp>
-#include <GeKo_Gameplay/AI_Pathfinding/Path.h>
+#include "GeKo_Gameplay/AI_Pathfinding/Path.h"
+#include "GraphNodeType.h"
 
 /** A GraphNode-class provides the possibility to create waypoints, which can be used by AI-Units and Pathfinding algorithms.
 Every Node has a Name and knows its distance to a goal-Waypoint. It knows, which paths are connected with it and will recognize when a AI-Unit passes over it.
@@ -18,6 +19,7 @@ public:
 	GraphNode(std::string name)
 	{
 		m_name = name;
+		m_type = GraphNodeType::DEFAULT;
 	}
 	~GraphNode(){}
 	
@@ -74,10 +76,20 @@ public:
 	{
 		return m_position;
 	}
+
+	GraphNodeType getNodeType(){
+		return m_type;
+	}
+
+	void setNodeType(GraphNodeType type){
+		m_type = type;
+	}
 	
 protected:
 	std::vector<Path<T>*> m_paths;
 	std::string m_name;
+	GraphNodeType m_type;
+	
 
 	glm::vec3 m_position;
 	float posX;

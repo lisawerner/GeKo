@@ -1,63 +1,129 @@
 #include "BoundingBox.h"
 
+BoundingBox::BoundingBox()
+{
+
+}
+
 BoundingBox::BoundingBox(Node* object){
-	for (int i = 0; i < object->getGeometry()->getVertices().size(); i++){
-		vertices.push_back(glm::vec4(object->getGeometry()->getVertices().at(i).x, object->getGeometry()->getVertices().at(i).y, object->getGeometry()->getVertices().at(i).z, 1.0));
-	}
+	m_vertices = object->getGeometry()->getVertices();
 }
 
 BoundingBox::~BoundingBox(){
-    vertices.clear();
+    m_vertices.clear();
 }
 
-std::vector<glm::vec4> BoundingBox::boundingBox(Node* object){
-	float maxX = object->getGeometry()->getVertices().at(0).x;
-	float minX = object->getGeometry()->getVertices().at(0).x;
+void BoundingBox::boundingBox(Node* object){
+	float maxX = m_vertices.at(0).x;
+	float minX = m_vertices.at(0).x;
 	
-	float maxY = object->getGeometry()->getVertices().at(0).y;
-	float minY = object->getGeometry()->getVertices().at(0).y;
+	float maxY = m_vertices.at(0).y;
+	float minY = m_vertices.at(0).y;
 
-	float maxZ = object->getGeometry()->getVertices().at(0).z;
-	float minZ = object->getGeometry()->getVertices().at(0).z;
+	float maxZ = m_vertices.at(0).z;
+	float minZ = m_vertices.at(0).z;
 	
-	for(int i = 1; i < vertices.size(); i++){
-		if (object->getGeometry()->getVertices().at(i).x > maxX){
-			maxX = object->getGeometry()->getVertices().at(i).x;
+	for (int i = 1; i < m_vertices.size(); i++){
+		if (m_vertices.at(i).x > maxX){
+			maxX = m_vertices.at(i).x;
 		}
-		if (object->getGeometry()->getVertices().at(i).y > maxY){
-			maxY = object->getGeometry()->getVertices().at(i).y;
+		if (m_vertices.at(i).y > maxY){
+			maxY = m_vertices.at(i).y;
 		}
-		if (object->getGeometry()->getVertices().at(i).z > maxZ){
-			maxZ = object->getGeometry()->getVertices().at(i).z;
+		if (m_vertices.at(i).z > maxZ){
+			maxZ = m_vertices.at(i).z;
 		}
 		
-		if (object->getGeometry()->getVertices().at(i).x < minX){
-			minX = object->getGeometry()->getVertices().at(i).x;
+		if (m_vertices.at(i).x < minX){
+			minX = m_vertices.at(i).x;
 		}
-		if (object->getGeometry()->getVertices().at(i).y < minY){
-			minY = object->getGeometry()->getVertices().at(i).y;
+		if (m_vertices.at(i).y < minY){
+			minY = m_vertices.at(i).y;
 		}
-		if (object->getGeometry()->getVertices().at(i).z < minZ){
-			minZ = object->getGeometry()->getVertices().at(i).z;
+		if (m_vertices.at(i).z < minZ){
+			minZ = m_vertices.at(i).z;
 		}
 	}
 	
-	std::vector<glm::vec4> box;
-	box.clear();
 	
 	//mir ist grad die Reihenfolge der Punkte nicht klar... entlang der negativen z-Achse?
-	box.push_back(glm::vec4(minX, minY, maxZ, 1.0));
-	box.push_back(glm::vec4(maxX, minY, maxZ, 1.0));
-	box.push_back(glm::vec4(maxX, minY, minZ, 1.0));
-	box.push_back(glm::vec4(minX, minY, minZ, 1.0));
-	box.push_back(glm::vec4(minX, maxY, maxZ, 1.0));
-	box.push_back(glm::vec4(maxX, maxY, maxZ, 1.0));
-	box.push_back(glm::vec4(maxX, maxY, minZ, 1.0));
-	box.push_back(glm::vec4(minX, maxY, minZ, 1.0));
-	
-	return box;
+	m_box.push_back(glm::vec4(minX, minY, maxZ, 1.0));
+	m_box.push_back(glm::vec4(maxX, minY, maxZ, 1.0));
+
+	m_box.push_back(glm::vec4(minX, minY, minZ, 1.0));
+	m_box.push_back(glm::vec4(maxX, minY, minZ, 1.0));
+
+	m_box.push_back(glm::vec4(minX, maxY, maxZ, 1.0));
+	m_box.push_back(glm::vec4(maxX, maxY, maxZ, 1.0));
+
+	m_box.push_back(glm::vec4(minX, maxY, minZ, 1.0));
+	m_box.push_back(glm::vec4(maxX, maxY, minZ, 1.0));
 	
 }
 
+void BoundingBox::boundingBox(Geometry* geometry)
+{
+	m_vertices = geometry->getVertices();
+
+	float maxX = m_vertices.at(0).x;
+	float minX = m_vertices.at(0).x;
+
+	float maxY = m_vertices.at(0).y;
+	float minY = m_vertices.at(0).y;
+
+	float maxZ = m_vertices.at(0).z;
+	float minZ = m_vertices.at(0).z;
+
+	for (int i = 1; i < m_vertices.size(); i++){
+		if (m_vertices.at(i).x > maxX){
+			maxX = m_vertices.at(i).x;
+		}
+		if (m_vertices.at(i).y > maxY){
+			maxY = m_vertices.at(i).y;
+		}
+		if (m_vertices.at(i).z > maxZ){
+			maxZ = m_vertices.at(i).z;
+		}
+
+		if (m_vertices.at(i).x < minX){
+			minX = m_vertices.at(i).x;
+		}
+		if (m_vertices.at(i).y < minY){
+			minY = m_vertices.at(i).y;
+		}
+		if (m_vertices.at(i).z < minZ){
+			minZ = m_vertices.at(i).z;
+		}
+	}
+
+
+	//mir ist grad die Reihenfolge der Punkte nicht klar... entlang der negativen z-Achse?
+	m_box.push_back(glm::vec4(minX, minY, maxZ, 1.0));
+	m_box.push_back(glm::vec4(maxX, minY, maxZ, 1.0));
+
+	m_box.push_back(glm::vec4(minX, minY, minZ, 1.0));
+	m_box.push_back(glm::vec4(maxX, minY, minZ, 1.0));
+
+	m_box.push_back(glm::vec4(minX, maxY, maxZ, 1.0));
+	m_box.push_back(glm::vec4(maxX, maxY, maxZ, 1.0));
+
+	m_box.push_back(glm::vec4(minX, maxY, minZ, 1.0));
+	m_box.push_back(glm::vec4(maxX, maxY, minZ, 1.0));
+
+}
+
+std::vector<glm::vec4> BoundingBox::getBox()
+{
+	return m_box;
+}
 //dann müssen noch schnitttests gemacht werden bzgl. der Hierarchie. Allerdings muss diese mit dem Szenegraph geregelt werden ... ?
 
+void BoundingBox::setCollisionDetected(bool collision)
+{
+	m_collisionDetected = collision;
+
+}
+bool BoundingBox::getCollisionDetected()
+{
+	return m_collisionDetected;
+}

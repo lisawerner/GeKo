@@ -8,7 +8,7 @@ Need more Information
 class Window
 {
 public:
-	Window(int xpos, int ypos, int height, int width, const char* name);
+	Window(int xpos, int ypos, int height, int width, const char* name, glm::vec3 color = glm::vec3(0.0,0.0,0.0));
 	~Window();
 	GLFWwindow* getWindow();
 	void update();
