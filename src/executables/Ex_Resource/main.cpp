@@ -15,22 +15,22 @@ using Vertex = glm::vec4;
 using Uv = glm::vec2;
 using Index = GLuint;
 
-struct Geometry3D{
+struct StaticMesh{
   std::vector<Vertex> vertices;
   std::vector<Normal> normals;
   std::vector<Uv> uvs;
   std::vector<Index> indicies;
 };
 struct ResourceManager{
-  HandleManager<Geometry3D> geometries;
+  HandleManager<StaticMesh> geometries;
 };
-Geometry3D load_geometry(std::string filepath){
+StaticMesh load_geometry(std::string filepath){
   Assimp::Importer importer;
   std::vector<aiMesh*> meshEntries;
   const aiScene *scene = importer.ReadFile(filepath.c_str(),
-      aiProcess_Triangulate |
-      aiProcess_SplitLargeMeshes |
-      aiProcess_ImproveCacheLocality);
+                                           aiProcess_Triangulate |
+                                           aiProcess_SplitLargeMeshes |
+                                           aiProcess_ImproveCacheLocality);
   std::vector<glm::vec4> vertices;
   std::vector<Index> indices;
   std::vector<Uv> uvs;
@@ -64,9 +64,11 @@ Geometry3D load_geometry(std::string filepath){
       }
     }
   }
-  return Geometry3D{vertices,normals,uvs,indices};
+  return StaticMesh{vertices,normals,uvs,indices};
 }
 int main(){
   auto r = ResourceManager();
-  auto antHandle = r.geometries.add(load_geometry("/home/maik/projects/GeKo/resources/Ant.ply"));
+  auto antHandle = r.geometries.add(load_geometry("/home/maik/Downloads/sponza_obj/sponza.obj"));
+  std::cout << antHandle.get().vertices.size();
+  std::cout << antHandle.get().uvs.size();
 }
