@@ -5,7 +5,7 @@
 Terrain::Terrain(std::string filename, float resolution, float interval) 
 {
 	setIndexFalse();
-	
+	setUVTrue();
 
 	loadHeightmap(filename);
 
@@ -37,9 +37,10 @@ Terrain::Terrain(std::string filename, float resolution, float interval)
 
 	for (int i = 0; i < m_vertices.size(); i++)
 	{
-		m_uvs.push_back(glm::vec2(0, 0));
+		//m_uvs.push_back(glm::vec2(0, 0));
 		m_index.push_back(1);
 	}
+		
 	m_indices = m_index.size();
 
 }
@@ -62,43 +63,6 @@ void Terrain::loadHeightmap(std::string fileName) {
 	}
 }
 
-//void Terrain::generateMesh() {
-//
-//	// Create vertices
-//	glm::vec4 vertex;
-//
-//	glm::vec3 normal;
-//
-//	for (int z = 1; z < m_resolutionY - 1; z++){
-//		for (int x = 1; x < m_resolutionX - 1; x++){
-//			normal = calculateNormal(x, z);
-//			vertex.x = x; vertex.y = getHeight(glm::vec2(x, z)); vertex.z = z;
-//			
-//			m_vertices.push_back(vertex);
-//			m_normals.push_back(normal);
-//			m_uvs.push_back(glm::vec2(vertex.x, vertex.z));
-//		}
-//	}
-//
-//	//Create indices
-//	int offset = 0;
-//	for (int z = 0; z < m_resolutionY - 3; z++){
-//		for (int x = 0; x < m_resolutionX - 3; x++){
-//			// 1. Triangle
-//		
-//			m_index.push_back(offset + x);
-//			m_index.push_back(offset + x + 1);
-//			m_index.push_back(offset + x + (m_resolutionY - 2));
-//
-//			// 2. Triangle
-//			m_index.push_back(offset + x + (m_resolutionY - 2));
-//			m_index.push_back(offset + x + 1);
-//			m_index.push_back(offset + x + (m_resolutionY - 2) + 1);
-//		}
-//		offset += (m_resolutionY - 2);
-//	}
-//
-//}
 
 glm::vec3 Terrain::calculateNormal(int x, int z)
 {
@@ -132,7 +96,23 @@ float Terrain::getHeight(glm::vec2 p) {
 
 float Terrain::getHeight(int x, int z)
 {
-	return m_height[z*m_resolution + x];
+	/*return m_height[z*m_resolution + x];*/
+
+	if (x < 0 || z < 0 || x >= m_resolutionX - 1 || z >= m_resolutionY - 1) {
+		return 0.0f;
+	}
+
+	float x0y1 = m_heightMap[(int)x][(int)z + 1];
+	float x0y0 = m_heightMap[(int)x][(int)z];
+	float x1y1 = m_heightMap[(int)x + 1][(int)z + 1];
+	float x1y0 = m_heightMap[(int)x + 1][(int)z];
+	float dx = x - (int)x;
+	float dy = z - (int)z;
+
+	float interpolateX0 = x0y0 * (1 - dx) + x1y0 * dx;
+	float interpolateX1 = x0y1 * (1 - dx) + x1y1 * dx;
+
+	return interpolateX0 * (1 - dy) + interpolateX1 * dy;
 }
 void Terrain::setHeight(int x, int z, float height)
 {
@@ -159,6 +139,12 @@ void Terrain::generate(int x1, int z1, int x2, int z2, float interval)
 		m_vertices.push_back(glm::vec4(x2, getHeight(x2, z1), z1, 1.0f));
 		m_vertices.push_back(glm::vec4(x2, getHeight(x2, z2), z2, 1.0f));
 
+		m_uvs.push_back(glm::vec2(x1 / (float)m_resolutionX, z1 / (float)m_resolutionY));
+		m_uvs.push_back(glm::vec2(x1 / (float)m_resolutionX, z2 / (float)m_resolutionY));
+		m_uvs.push_back(glm::vec2(x2 / (float)m_resolutionX, z1 / (float)m_resolutionY));
+		m_uvs.push_back(glm::vec2(x2 / (float)m_resolutionX, z2 / (float)m_resolutionY));
+
+
 	}
 	else{
 		//if z1%2 != 0, we push the new points onto the stack, but we change the order
@@ -166,6 +152,12 @@ void Terrain::generate(int x1, int z1, int x2, int z2, float interval)
 		m_vertices.push_back(glm::vec4(x2, getHeight(x2, z2), z2, 1.0f));
 		m_vertices.push_back(glm::vec4(x1, getHeight(x1, z1), z1, 1.0f));
 		m_vertices.push_back(glm::vec4(x1, getHeight(x1, z2), z2, 1.0f));
+
+		m_uvs.push_back(glm::vec2(x1 / (float)m_resolutionX, z1 / (float)m_resolutionY));
+		m_uvs.push_back(glm::vec2(x1 / (float)m_resolutionX, z2 / (float)m_resolutionY));
+		m_uvs.push_back(glm::vec2(x2 / (float)m_resolutionX, z1 / (float)m_resolutionY));
+		m_uvs.push_back(glm::vec2(x2 / (float)m_resolutionX, z2 / (float)m_resolutionY));
+
 	}
 	//std::cout << "THE POINTS : " << x1 << ", " << z1 << ", " << x2 << ", " << z2 << std::endl;
 	//if the width and height is lower than 2, we stop the method
