@@ -40,15 +40,11 @@ public:
 						 node.setGravity(true);
 					 }
 			 }
-			
 		 }
 	 }
 
-	
 	void  onNotify(AI& node, Collision_Event event) 
 	 {
 
 	 }
-	
 };
-

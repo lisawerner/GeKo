@@ -18,7 +18,6 @@ Node::Node(std::string nodeName)
 	m_hasGravity = false;
 	m_hasObject = false; 
 	m_hasParticleSystem = false;
-	
 
 	m_type = ClassType::OBJECT;
 }
@@ -37,7 +36,6 @@ void Node::setNodeName(std::string nodeName)
 {
 	m_nodeName = nodeName;
 }
-
 
 Node* Node::getParentNode()
 {
@@ -77,6 +75,7 @@ void Node::deleteChildrenNode(std::string nodeName)
 	{
 		if (m_childrenSet.at(i)->getNodeName() == nodeName)
 		{
+			m_childrenSet.at(i) = NULL;
 			m_childrenSet.erase(m_childrenSet.begin() + i);
 			success = true;
 		}
@@ -115,6 +114,7 @@ glm::mat4 Node::getPrevModelMatrix()
 {
 	return m_PrevModelMatrix;
 }
+
 void Node::setPrevModelMatrix(glm::mat4 modelMatrix)
 {
 	m_PrevModelMatrix = modelMatrix;
@@ -131,7 +131,6 @@ void Node::addRotation(float angle, glm::vec3 axis)
 	m_rotationMatrix = newRotationMatrix;
 
 	updateModelMatrix();
-
 }
 
 glm::mat4 Node::getTranslationMatrix()
@@ -167,7 +166,6 @@ void Node::addTranslation(glm::vec3 position)
 		m_boundingList.at(i)->update(m_modelMatrix);
 	}
 }
-
 
 glm::mat4 Node::getScaleMatrix()
 {
@@ -521,7 +519,6 @@ ClassType Node::getType()
 	}
 }
 
-
 ParticleSystem* Node::getParticleSystem()
 {
 	if (m_hasParticleSystem)
@@ -570,10 +567,8 @@ void Node::render(ShaderProgram &shader)
 
 	if (m_hasParticleSystem)
 	{
-		//Extra Render-Methode für ein Partikel-System
 		renderParticle(shader);
 	}else{
-		//Normale Render-Routine, ohne Partikel-System
 		if (!(m_nodeName == "Root"))
 		{
 			glm::mat4 modelMatrix(1.0);
@@ -603,7 +598,6 @@ void Node::render(ShaderProgram &shader)
 					m_player->rotateView((m_camera->getXAngle()), 0.0f);
 				}
 			}
-
 
 			modelMatrix = getParentNode()->getModelMatrix() * m_modelMatrix;
 			shader.sendMat4("modelMatrix", modelMatrix);
@@ -665,7 +659,3 @@ void Node::renderParticle(ShaderProgram &shader)
 {
 	//TODO: Particle-System muss gerendert werden!
 }
-
-
-
-

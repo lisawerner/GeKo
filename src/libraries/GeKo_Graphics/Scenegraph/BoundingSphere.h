@@ -8,7 +8,6 @@
 class BoundingSphere {
 public:
 
-
 	///Every Sphere needs exactly one object
 	/**/
     BoundingSphere(Geometry* object, glm::mat4 modelMatrix);
@@ -22,11 +21,9 @@ public:
 	///Will be used to set the boolean for a collision
 	/**/
 	void setCollisionDetected(bool collision);
-	///return m_collisionDetected, true if a collision happened, false if not
+	///returns true if a collision happened, false if not
 	/**/
 	bool getCollisionDetected();
-
-
 
 	bool m_collisionDetected;
 	glm::vec3 center;
@@ -34,8 +31,5 @@ public:
 	double radius;
 
 private:
-
 	void createSphere(Geometry* object, glm::mat4 modelMatrix);
-
-
 };

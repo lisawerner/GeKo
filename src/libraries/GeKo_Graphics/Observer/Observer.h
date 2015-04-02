@@ -14,14 +14,8 @@ public:
 
 	~Observer(){}
 
-
 	virtual void onNotify(Entity& node, Event event){}
 
 	virtual void onNotify(Entity& nodeA, Entity& nodeB, Event event){}
 
-protected:
-
-
-	
 };
-

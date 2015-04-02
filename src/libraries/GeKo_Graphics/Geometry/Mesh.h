@@ -10,13 +10,10 @@
 /**As imported meshes can consist of more than one model, this class has a vector named MeshEntry, where all the separate
  * meshes can be found.
  * To use the class you have to generate a new mesh via Mesh *name = new Mesh("dataname.format");
- *
  **/
 class Mesh : public Geometry {
 
-
 public:
-		
 		///Loads the file with the "filename" as a Mesh-Object
 		/***/
 		Mesh(const char *filename);

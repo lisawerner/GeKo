@@ -17,14 +17,12 @@ void Inventory::addItem(Item* item){
 void Inventory::addItem(ItemType typeId){
 	bool exist = false;
 
-	//Fall 1: Das Inventar ist noch leer
 	if (m_content.at(0).second == ItemType::DEFAULTITEM || m_content.empty()){
 		m_content.pop_back();
 		std::pair<int, ItemType> p(1, typeId);
 		m_content.push_back(p);
 	}
 	else {
-		//Fall 2: Das Item, welches hinzugefügt werden soll, ist bereits im Inventar
 		for (int i = 0; i < m_content.size(); i++){
 
 			if (m_content.at(i).second == typeId){
@@ -32,13 +30,11 @@ void Inventory::addItem(ItemType typeId){
 				exist = (m_content.at(i).second == typeId);
 			}
 		}
-		//Fall 3: Das Item ist noch nicht im Inventar
 		if (!exist){
 			std::pair<int, ItemType> p(1, typeId);
 			m_content.push_back(p);
 		}
 	}
-	//TODO: delete item;
 }
 
 void Inventory::addItem(Item* item, int count){
@@ -62,16 +58,13 @@ void Inventory::print(){
 }
 
 ItemType Inventory::getItemTypeIdAt(int position){
-	//Die Position existiert :)
 	if (position < m_content.size()){
-		//Nicht ein Default "Item" und m_inventory nicht leer
 		if (m_content.at(position).first != NULL && !m_content.empty()){
 			ItemType typeID = m_content.at(position).second;
 			reduceItem(position, 1);
 			return typeID;
 		}
 	}
-	//TODO Fehlerabbruch Bla
 	return ItemType::DEFAULTITEM;
 }
 
@@ -79,7 +72,7 @@ void Inventory::deleteItem(int position){
 	m_content.erase(m_content.begin() + position);
 }
 
-//Achtung, löscht ALLE Items mit der TypID
+/// Attention: Deletes all the items with the typeId!!!
 void Inventory::deleteItem(Item* item){
 	ItemType typeID = item->getTypeId();
 	for (int i = 0; i < m_content.size(); i++){

@@ -13,7 +13,4 @@ public:
 
 	void objectVSobject(Object* o1, Object* o2);
 
-protected:
-
 };
-

@@ -32,10 +32,7 @@ public:
 			 node.getAI()->viewArea(false);
 			 break;
 		 }
-		
-
 	 }
-
 
 	void onNotify(Node& nodeA, Node& nodeB, Collision_Event event)
 	 {
@@ -56,7 +53,6 @@ public:
 				 nodeB.getPlayer()->eat();
 
 				 nodeA.getAI()->getInventory()->clearInventory();
-				 //TODO: Ameise löschen, Partikel, Whuschhh-Sound //
 
 				 std::vector<Goal*> tmp = m_level->getQuestHandler()->getQuests(GoalType::EATEN);
 
@@ -64,8 +60,6 @@ public:
 				 {
 					 tmp.at(i)->increase();
 				 }
-
-
 			 }
 			 
 			 break;
@@ -73,9 +67,6 @@ public:
 		 case Collision_Event::COLLISION_AI_FIGHT_PLAYER:
 			 if (glm::length(nodeA.getBoundingSphere()->center - nodeB.getBoundingSphere()->center) <= 4.5)
 			 {
-
-	
-
 				 if (nodeA.getAI()->getHealth() > 0)
 				 {
 					 if (m_counter->getTime() <= 0)
@@ -95,12 +86,9 @@ public:
 					 else{
 						 m_counter->update();
 					 }
-
 				 }
-
 			 }
 			 break;
-
 
 		 case Collision_Event::NO_COLLISION_KI_PLAYER:
 			 nodeA.getBoundingSphere()->setCollisionDetected(false);
@@ -114,9 +102,7 @@ public:
 				 if (count >= 3)
 				 { 
 				 nodeA.getAI()->collectItem(ItemType::COOKIE, 2);
-				 //nodeA.getAI()->setStates(States::HUNGER, false);
 				 nodeA.getAI()->eat();
-	
 				 }
 				 else 
 				 {
@@ -124,14 +110,12 @@ public:
 					 {
 						 nodeA.getAI()->eat();
 						 nodeA.getAI()->setStates(States::HUNGER, false);
-						
 					 }
 					 else if (count == 2)
 					 {
 						 nodeA.getAI()->eat();
 						 nodeA.getAI()->setStates(States::HUNGER, false);
 						 nodeA.getAI()->collectItem(ItemType::COOKIE, 1);
-				
 					 }
 				 }
 				 nodeB.getStaticObject()->getInventory()->reduceItem(ItemType::COOKIE, 3);
@@ -143,7 +127,6 @@ public:
 			 {
 				 int count = nodeB.getStaticObject()->getInventory()->countItem(ItemType::BRANCH);
 				 nodeA.getPlayer()->collectItem(ItemType::BRANCH, count);
-				 //TODO: Kill the Tree
 				 nodeB.getStaticObject()->getInventory()->clearInventory();
 				 std::vector<Goal*> tmp = m_level->getQuestHandler()->getQuests(GoalType::COLLECT);
 				 for (int i = 0; i < tmp.size(); i++)
@@ -154,14 +137,10 @@ public:
 						 {
 							 tmp.at(i)->increase();
 						 }
-
 					 }
 				 }
-				 
 			 }
 		 }
-
-
 	 }
 
 	protected:
@@ -169,4 +148,3 @@ public:
 		
 		Counter* m_counter;
 };
-

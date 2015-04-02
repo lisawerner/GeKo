@@ -21,5 +21,3 @@ enum class Collision_Event
 	COLLISION_AI_FIGHT_PLAYER
 
 };
-
-

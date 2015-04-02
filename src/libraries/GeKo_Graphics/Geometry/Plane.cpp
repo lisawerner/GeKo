@@ -39,7 +39,6 @@ Plane::Plane()
 
 Plane::~Plane()
 {
-
 	m_vertices.clear();
 	m_normals.clear();
 	m_uvs.clear();

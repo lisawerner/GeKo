@@ -14,7 +14,4 @@ enum class Object_Event
 
 	PLAYER_COLLECT
 
-
 };
-
-

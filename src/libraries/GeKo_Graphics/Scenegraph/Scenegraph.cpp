@@ -3,7 +3,6 @@
 Scenegraph::Scenegraph(std::string scenegraphName)
 {
 	m_scenegraphName = scenegraphName;
-	//Node root("Root");
 	setRootNode(new Node("Root"));
 	getRootNode()->setIdentityMatrix_ModelMatrix();
 }
@@ -125,4 +124,3 @@ Node* Scenegraph::searchNode(std::vector<Node*>* list, std::string name)
 		}
 	}
 }
-

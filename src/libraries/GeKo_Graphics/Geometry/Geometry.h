@@ -11,7 +11,6 @@
 class Geometry
 {
 public:
-	
 	///Standard constructor, sets the m_wasLoaded boolean to false
 	/**/
 	Geometry();
@@ -97,7 +96,6 @@ protected:
 	Buffer<glm::vec2>* m_uvBuffer;
 	Buffer<glm::vec3>* m_tangentBuffer;
 	BufferIndex<GLuint>* m_indexBuffer;
-
 
 private:
 	bool m_wasLoaded;

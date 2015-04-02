@@ -14,7 +14,7 @@ class Level
 {
 public:
     ///The constructor for the level
-	/**The level needs a name, but do not consist of any scenes at the beginning*/
+	/**The level needs a name, but does not consist of any scenes at the beginning*/
 	Level(const char* levelName);
 	~Level();
 	
@@ -32,7 +32,7 @@ public:
 	void removeScene(std::string sceneName);
 
 	///Returns a Scene object
-	/**Need a Scenename to find a Scene. Returns NULL if the Scene does not exist*/
+	/**Needs a Scenename to find a Scene. Returns NULL if the Scene does not exist*/
 	Scene* getScene(std::string sceneName);
 
 	///Changes the active Scene to the given scene
@@ -51,11 +51,6 @@ public:
 	/**The FightSystem is unique for every level and handles all the fights of KI and Player*/
 	FightSystem* getFightSystem();
 
-	/////Returns the m_sfh
-	///**This Handler manages all the sounds of an object like the movement of a Player etc.*/
-	//SoundFileHandler* getSoundHandler();
-	//void setSoundHandler(SoundFileHandler* soundHandler);
-
 protected:
 	const char* m_levelName;
 
@@ -67,4 +62,3 @@ protected:
 	FightSystem* m_fightSystem;
 
 };
-

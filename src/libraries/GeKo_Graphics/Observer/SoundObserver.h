@@ -44,6 +44,7 @@ public:
 			break;
 
 		case Object_Event::OBJECT_DIED:
+
 			soundName = node.getSourceName(DEATHSOUND_AI);
 			if (soundName != "oor")
 			{
@@ -52,6 +53,8 @@ public:
 					node.getSoundHandler()->playSource(soundName);
 				}
 			}
+
+			m_level->getActiveScene()->getScenegraph()->getRootNode()->deleteChildrenNode(node.getNodeName());			
 			break;
 		}
 	}
@@ -96,9 +99,7 @@ public:
 			 if (soundName != "oor")
 			 {
 					 node.getSoundHandler()->playSource(soundName);
-
 			 }
-
 		 }
 	 }
 
@@ -177,7 +178,4 @@ public:
 	}
 protected: 
 	Level* m_level;
-
-	
 };
-

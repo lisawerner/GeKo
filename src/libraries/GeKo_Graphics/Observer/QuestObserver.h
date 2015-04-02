@@ -86,6 +86,4 @@ public:
 	}
 protected: 
 	Level* m_level;
-
 };
-

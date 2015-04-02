@@ -7,5 +7,4 @@ class Plane : public Geometry{
 public:
 	Plane();
 	~Plane();
-
 };

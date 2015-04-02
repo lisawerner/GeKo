@@ -25,7 +25,6 @@ Mesh::~Mesh()
 
 void Mesh::initializeData()
 {
-
 	setIndexTrue();
 	for (int i = 0; i < meshEntries.size(); i++)
 	{

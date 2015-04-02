@@ -19,7 +19,6 @@ void StaticObject::setTree(){
 	m_type = ObjectType::TREE;
 	m_name = "CookieTree";
 
-
 	Item cookie(1);
 	cookie.setName("Cookie");
 	cookie.setTypeId(ItemType::COOKIE);
