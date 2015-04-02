@@ -1,7 +1,6 @@
 #include <GL/glew.h>
 #include <GeKo_Graphics/InputInclude.h>
 #include <GeKo_Graphics/MaterialInclude.h>
-#include <GeKo_Graphics/ObjectInclude.h>
 #include <GeKo_Graphics/ShaderInclude.h>
 #include <GeKo_Graphics/ScenegraphInclude.h>
 #include "GeKo_Graphics/Camera/Pilotview.h"
@@ -90,7 +89,7 @@ int main()
 	//Scene creation 
 	Level testLevel("testLevel");
 	Scene testScene("testScene");
-	testLevel.addScene(testScene);
+	testLevel.addScene(&testScene);
 	testLevel.changeScene("testScene");
 
   //Add Camera to scenegraph
