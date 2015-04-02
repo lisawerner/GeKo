@@ -16,12 +16,6 @@ Geometry::~Geometry()
 
 void Geometry::loadBufferData()
 {
-	//temporary solution
-	if (m_tangents.empty())
-	{
-		computeTangents();
-	}
-	m_tangentBuffer = new Buffer<glm::vec3>(m_tangents, STATIC_DRAW);
 
 
 	m_vertexBuffer = new Buffer<glm::vec4>(m_vertices, STATIC_DRAW);
@@ -56,10 +50,6 @@ void Geometry::loadBufferData()
 		glEnableVertexAttribArray(2);
 	}
 
-	//temporary solution
-	m_tangentBuffer->bind();
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(3);
 
 
 	if (m_hasIndex){

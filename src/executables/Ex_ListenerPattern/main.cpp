@@ -34,6 +34,9 @@
 #include <GeKo_Gameplay/Questsystem/Goal_Kill.h>
 #include <GeKo_Gameplay/Questsystem/Goal_Eaten.h>
 
+#include <GeKo_Graphics/GUI/GUI.h>
+#include <GeKo_Graphics/GUI/GUIComponents.hpp>
+
 //===================================================================//
 //==================Things you need globally==========================//
 //==================================================================//
@@ -41,6 +44,7 @@ InputHandler iH;
 StrategyCamera cam("StrategyCam");
 Geko geko("Geko", glm::vec3(10.0, 3.0, -5.0));
 Renderer *renderer;
+GUI *gui;
 
 //===================================================================//
 //==================Callbacks for the Input==========================//
@@ -282,6 +286,12 @@ int main()
 	terrainNode.addRotation(90.0f, glm::vec3(1.0, 0.0, 0.0));
 	terrainNode.addScale(20.0, 20.0, 20.0);
 
+	Terrain terrain2((char*)RESOURCES_PATH "/heightmap.jpg", 200, 200);
+	Node terrainNode2("Terrain");
+	terrainNode2.addGeometry(&terrain2);
+	terrainNode2.addTexture(&terrainTex);
+	terrainNode2.setObject(&terrainObject);
+
 
 	//===================================================================//
 	//==================Setting up the Level and Scene==================//
@@ -310,6 +320,7 @@ int main()
 
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&treeNode);
 
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&terrainNode2);
 
 	// ==============================================================
 	// == Questsystem ====================================================
@@ -481,9 +492,21 @@ int main()
 	sfh.playSource("Hintergrund");
 	sfh.setGain("Hintergrund", 0.5f);
 
+	//===================================================================//
+	//==================The Particle-System==============================//
+	//==================================================================//
+	
 
-	
-	
+	//===================================================================//
+	//==================The GUI=========================================//
+	//==================================================================//
+
+
+
+	float testFloat = float(0.0f);
+	float testFloat2 = float(0.0f);
+	gui = new GUI("GUI Test", 200, 100);
+
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
 	
@@ -516,6 +539,8 @@ int main()
 		renderer->renderScene(testScene, testWindow);
 
 	}
+
+
 
 	glfwDestroyWindow(testWindow.getWindow());
 	glfwTerminate();
