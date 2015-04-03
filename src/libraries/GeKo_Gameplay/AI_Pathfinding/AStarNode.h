@@ -45,6 +45,8 @@ public:
 	/**/
 	float getTemporary();
 
+	///Returns m_default Node 
+	/**/
 	AStarNode* getDefault();
 	void setDefault(AStarNode* d);
 	

@@ -8,7 +8,7 @@ class Path
 {
 public: 
 	///Each Path needs a travel-time, a start- and end point
-	/**/
+	/**The distance will be calculated automatially*/
 	Path(int timeToTravel, T* startNode, T* endNode)
 	{
 		m_timeToTravel = timeToTravel;
@@ -36,6 +36,8 @@ public:
 		return m_startNode;
 	}
 
+	///Returns the distance between the two connected points
+	/**/
 	float getDistance(){
 		return m_distance;
 	}

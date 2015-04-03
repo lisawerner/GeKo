@@ -15,6 +15,9 @@ template<class T, class A>
 class Graph
 {
 public: 
+	///The constructor for a graph
+	/**A Player-Node will be set automatically. The position of this fake-player is (0,0) and will be
+	updated by the AI and observer classes*/
 	Graph(){
 		AStarNode* defaultNode = new AStarNode();
 
@@ -57,6 +60,8 @@ public:
 		 return returnNode;
 	 }
 
+	 ///Returns a Node, which can be found with the help of its type
+	 /**/
 	 T* searchNode(GraphNodeType type)
 	 {
 		 T* returnNode;
@@ -167,6 +172,9 @@ public:
 		 setAlgorithm(pathfindingFood);
 		 calculateDistanceToGoal(Food);
 	 }
+
+	 ///An Example-Graph for a AI which will react afraid while the player is nearby
+	 /***/
 	 void setExampleAntAfraid(glm::vec3 posSpawn, glm::vec3 posFood, glm::vec3 posPlayer)
 	 {
 		 //This graph contains one anthome, a few foodNodes and some waypoints in between
@@ -255,6 +263,30 @@ public:
 		 calculateDistanceToGoal(nodeSpawn);
 	 }
 
+	 ///Another Example-Graph for a AI which will react afraid while the player is nearby
+	 /***/
+	 void setExampleAntAfraid2(glm::vec3 posSpawn, glm::vec3 posPlayer)
+	 {
+		 AStarNode* defaultNode = new AStarNode();
+
+		 AStarNode* nodeSpawn = new AStarNode("Spawn", defaultNode, posSpawn, GraphNodeType::HOME);
+		 std::vector<glm::vec3> trees;
+		 trees.push_back(glm::vec3(16.0, 0.0, 76.0));
+		 trees.push_back(glm::vec3(23.0, 0.0, 74.0));
+		 trees.push_back(glm::vec3(21.5, 0.0, 78.5));
+		 trees.push_back(glm::vec3(15.0, 0.0, 81.5));
+		 trees.push_back(glm::vec3(27.5, 0.0, 88.5));
+		 generateForest(trees, nodeSpawn, defaultNode);
+
+		 addGraphNode(nodeSpawn);
+
+		 AStarAlgorithm* pathfinding = new AStarAlgorithm("pathfinding");
+		 setAlgorithm(pathfinding);
+		 calculateDistanceToGoal(nodeSpawn);
+	 }
+
+	 ///An Example-Graph for a AI which will react aggresive while the player is nearby
+	 /***/
 	 void setExampleAntAggressiv(glm::vec3 posSpawn, glm::vec3 posFood, glm::vec3 posPlayer)
 	 {
 		//This example just contains the FoodNode on the position of the anthome and four nodes, which let the ant patrol around the anthome
@@ -326,6 +358,8 @@ public:
 		 calculateDistanceToGoal(nodeFood);
 	 }
 
+	 ///A method to create a Forest
+	 /**This is just an example forest. It will contain paths and nodes for the trees.*/
 	 void generateForest(std::vector<glm::vec3> treePositions,AStarNode *nodeSpawn, AStarNode *defaultNode){
 		 //int i = 1;
 		 std::stringstream name;
@@ -341,25 +375,7 @@ public:
 		 }
 	 }
 
-	 void setExampleAntAfraid2(glm::vec3 posSpawn, glm::vec3 posPlayer)
-	 {
-		 AStarNode* defaultNode = new AStarNode();
-
-		 AStarNode* nodeSpawn = new AStarNode("Spawn", defaultNode, posSpawn, GraphNodeType::HOME);
-		 std::vector<glm::vec3> trees;
-		 trees.push_back(glm::vec3(16.0, 0.0, 76.0));
-		 trees.push_back(glm::vec3(23.0, 0.0, 74.0));
-		 trees.push_back(glm::vec3(21.5, 0.0, 78.5));
-		 trees.push_back(glm::vec3(15.0, 0.0, 81.5));
-		 trees.push_back(glm::vec3(27.5, 0.0, 88.5));
-		 generateForest(trees, nodeSpawn, defaultNode);
-
-		 addGraphNode(nodeSpawn);
-
-		 AStarAlgorithm* pathfinding = new AStarAlgorithm("pathfinding");
-		 setAlgorithm(pathfinding);
-		 calculateDistanceToGoal(nodeSpawn);
-	 }
+	
 
 protected:
 	  std::vector<T*> m_nodes;

@@ -75,10 +75,11 @@ public:
 		return m_position;
 	}
 
+	///Returns the type of the Node like Food or Home
+	/**/
 	GraphNodeType getNodeType(){
 		return m_type;
 	}
-
 	void setNodeType(GraphNodeType type){
 		m_type = type;
 	}

@@ -3,7 +3,7 @@
 #include "GeKo_Gameplay/AI_Pathfinding/AStarNode.h"
 #include <iostream>
 
-
+/**Provides the A*-Algorithm to calculate the shortest path between two given points.*/
 class AStarAlgorithm : public Algorithm<AStarNode>
 {
 public:
