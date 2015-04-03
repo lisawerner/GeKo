@@ -471,7 +471,7 @@ void Emitter::render(Camera &cam)
 
 	if (getUsePointSprites()){ //if we dont use a geometry shader..
 
-		glDepthFunc(GL_FALSE);
+		glDepthMask(GL_FALSE);
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //how we calculate transperancy
@@ -529,12 +529,13 @@ void Emitter::render(Camera &cam)
 
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glDepthFunc(GL_TRUE);
+		glDepthMask(GL_TRUE);
 		glDisable(GL_BLEND);
 		emitterShader->unbind();
 	}
 	else if (getUseGeometryShader() && useTexture){
-		glDepthFunc(GL_FALSE);
+		
+		glDepthMask(GL_FALSE);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -585,7 +586,7 @@ void Emitter::render(Camera &cam)
 
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glDepthFunc(GL_TRUE);
+		glDepthMask(GL_TRUE);
 		glDisable(GL_BLEND);
 		emitterShader->unbind();
 	}

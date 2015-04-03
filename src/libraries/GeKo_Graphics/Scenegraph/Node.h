@@ -170,6 +170,7 @@ public:
 	/**If the node does not have a camera an error will be thrown!*/
 	StrategyCamera* getCamera();
 	void setCamera(StrategyCamera* camera);
+	void setCamera(Camera* camera);
 
 	///Return m_boundingSphere of the Node
 	/**If the node does not have a bounding-sphere an error will be thrown!*/
@@ -277,6 +278,7 @@ protected:
 	float m_heightScale;
 	float m_heightBias;
 	StrategyCamera* m_camera;
+	Camera* m_otherCamera;
 
 	//Template sollte hier eingefügt werden, damit wir auch andere Formen ermöglichen könnnen!
 	BoundingSphere* m_sphere;
