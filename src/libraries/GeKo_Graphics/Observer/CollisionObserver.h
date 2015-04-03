@@ -6,7 +6,8 @@
 #include <GeKo_Gameplay/Questsystem/Goal_Collect.h>
 #include <GeKo_Gameplay/Questsystem/Counter.h>
 
-
+/**This Observer handles all the collisions between two objects. Espacially the fight between AI and Player will be started here
+and collisions with static objects like trees will be handled as well.*/
 class CollisionObserver : public Observer<Node, Collision_Event>
 {
 public:

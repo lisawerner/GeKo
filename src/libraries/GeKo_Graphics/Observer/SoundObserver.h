@@ -3,7 +3,7 @@
 #include <GeKo_Graphics/Observer/Observer.h>
 #include <GeKo_Graphics/Scenegraph/Level.h>
 
-
+/**This Observer handles all the sound actions like the move-sound or the fight-sounds.*/
 class SoundObserver : public Observer<AI, Object_Event>, public Observer<Player, Object_Event>, public Observer<Node, Collision_Event>, public Observer<Quest, Quest_Event>
 {
 public:

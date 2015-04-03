@@ -3,7 +3,7 @@
 #include <GeKo_Graphics/Observer/Observer.h>
 #include <GeKo_Graphics/Scenegraph/Level.h>
 
-
+/**An Obsever for the AI and Player which handles collision between them and lets the object move.*/
 class ObjectObserver : public Observer<AI, Object_Event>, public Observer<AI, Collision_Event>, public Observer<Player, Object_Event>
 {
 public:
