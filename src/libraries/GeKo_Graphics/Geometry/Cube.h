@@ -7,6 +7,4 @@ class Cube : public Geometry{
 public:
 	Cube();
 	~Cube();
-
-
 };

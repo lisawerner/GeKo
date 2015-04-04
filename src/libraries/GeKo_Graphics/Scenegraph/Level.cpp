@@ -9,7 +9,6 @@ Level::Level(const char* levelName)
 
 }
 
-
 Level::~Level()
 {
 }

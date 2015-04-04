@@ -5,11 +5,7 @@
 #include <glm/ext.hpp>
 #include "GeKo_Gameplay/AI_Pathfinding/GraphNode.h"
 
-//class Path;
-
-/** A GraphNode-class provides the possibility to create waypoints, which can be used by AI-Units and Pathfinding algorithms.
-Every Node has a Name and knows its distance to a goal-Waypoint. It knows, which paths are connected with it and will recognize when a AI-Unit passes over it.
-Over all it has a position on the playground.*/
+/** This class is for the AStarAlgorithm. It builds a whole new world of graphnodes which nobody needs.*/
 class AStarNode : public GraphNode<AStarNode>
 {
 
@@ -49,6 +45,8 @@ public:
 	/**/
 	float getTemporary();
 
+	///Returns m_default Node 
+	/**/
 	AStarNode* getDefault();
 	void setDefault(AStarNode* d);
 	
@@ -61,5 +59,4 @@ protected:
 	AStarNode* m_wasVisitedBy;
 
 	AStarNode* m_default;
-	
 };

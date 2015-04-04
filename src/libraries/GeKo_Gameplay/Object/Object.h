@@ -5,8 +5,6 @@
 #include <iostream>
 #include <string>
 
-//#include <GeKo_Graphics/Scenegraph/Node.h>
-//#include <GeKo_Graphics/Scenegraph/CollisionTest.h>
 #include "GeKo_Graphics/Observer/Subject.h"
 #include "GeKo_Gameplay/Item/Inventory.h"
 #include "GeKo_Sound/SoundFileHandler.h"
@@ -15,25 +13,15 @@
 #include "ClassType.h"
 #include "States.h"
 
-//class Node;
-
-//class AI;
-
-//template <class Entity>
-
 class Object
 {
 public: 
-	//Eine Position: Objekt startet zu Hause! (Weiterer Konstrutkor, falls Objekt woanders starten soll)
-	//Object(Node* defaultGeometry);
 	Object();
 	~Object();
 
 	void setPosition(glm::vec3 pos);
 
 	glm::vec3 getPosition();
-
-	//void setGeometry(Node* geom);
 
 	float getStrength();
 
@@ -56,20 +44,15 @@ public:
 	bool getStates(States state);
 	void setStates(States state, bool b);
 
-	//Per Frame
-	//Update: Individuell für jeden
 	virtual void update();
-	//Gleich (Hunger, Leben, etc)
 	void updateStates();
 
-	//Move Object on Terrain
+	///Moves Object on Terrain
 	virtual void move();
 
 	virtual void eat();
 
 	void collectItem(ItemType typeId, int count);
-
-
 
 	virtual void heal();
 
@@ -100,7 +83,6 @@ protected:
 
 	glm::vec3 m_viewDirection;
 
-	//Scala von 0 bis 10 oder so
 	std::vector<std::pair<States, bool>> m_states;
 	float m_hunger;
 	float m_hungerMax;

@@ -24,10 +24,10 @@ Player::Player(std::string playerName, glm::vec3 spawnPoint)
 	m_inventory = new Inventory();
 
 	std::pair<States, bool> s(States::HUNGER, false);
-	m_states.push_back(s); //Hunger = Position: 0
+	m_states.push_back(s); 
 	s.first = States::HEALTH;
 	s.second = true;
-	m_states.push_back(s); //Health = Position 2
+	m_states.push_back(s); 
 }
 
 Player::Player(){
@@ -41,7 +41,6 @@ glm::vec3 Player::getSpawnPoint()
 	return m_spawnPoint;
 }
 
-
 void Player::move(glm::vec3 newPosition)
 {
 	m_position = newPosition;
@@ -49,19 +48,17 @@ void Player::move(glm::vec3 newPosition)
 
 void Player::update(){
 	if (m_health == 0){
-		//TODO:: Delete Object after a time and a lot of particles
 		std::cout << "Player: Died" << std::endl;
 		notify(*this, Object_Event::OBJECT_STOPPED);
 		setStates(States::HEALTH, false);
 	}
-	if (getStates(States::HEALTH)){ //Leben
+	if (getStates(States::HEALTH)){ 
 		std::cout << "<<<<<<<< UpdateMethod <<<<<<<<" << std::endl;
 		updateStates();
-		//TODO: Move
 		std::cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
 	}
-	//TODO: Player tot
 }
+
 void Player::rotateView(float leftRight, float upDown)
 {
 	m_viewDirection = glm::vec3(0.0, 0.0, -1.0);
@@ -89,13 +86,10 @@ std::string Player::getSourceName(Soundtype type)
 		std::cout << "No Sound with this type was set!" <<std::endl;
 		return "oor";
 	}
-	
 }
 
 void Player::setSourceName(Soundtype type , std::string sourceName, const char* filepath)
 {
-
 		m_sfh->generateSource(sourceName, m_position, filepath);
-	//	m_soundMap.emplace(type, sourceName);
 		m_soundMap.insert(std::pair<Soundtype, std::string>(type, sourceName));
 }

@@ -6,15 +6,14 @@ Rect::Rect()
 	setIndexTrue();
 	setUVTrue();
 	
-		create(glm::vec4(1.0, -1.0, 0, 1.0), glm::vec4(-1.0, -1.0, 0, 1.0), glm::vec4(1.0, 1.0, 0, 1.0), glm::vec4(-1.0, 1.0, 0, 1.0),
-		glm::vec2(1.0, 0.0), glm::vec2(0.0, 0.0), glm::vec2(1.0, 1.0), glm::vec2(0.0, 1.0));
+	create(glm::vec4(1.0, -1.0, 0, 1.0), glm::vec4(-1.0, -1.0, 0, 1.0), glm::vec4(1.0, 1.0, 0, 1.0), glm::vec4(-1.0, 1.0, 0, 1.0),
+	glm::vec2(1.0, 0.0), glm::vec2(0.0, 0.0), glm::vec2(1.0, 1.0), glm::vec2(0.0, 1.0));
 
 }
 
 Rect::Rect(glm::vec4 dright, glm::vec4 dleft, glm::vec4 uright, glm::vec4 uleft, glm::vec2 tca, glm::vec2 tcb, glm::vec2 tcc, glm::vec2 tcd)
 {
 	create(dright, dleft, uright, uleft, tca, tcb, tcc, tcd);
-
 }
 
 Rect::~Rect()
@@ -38,13 +37,11 @@ void Rect::create(glm::vec4 dright, glm::vec4 dleft, glm::vec4 uright, glm::vec4
 	m_normals.push_back(n);
 	m_normals.push_back(n);
 
-	//fixMe?
 	m_uvs.push_back(tca);
 	m_uvs.push_back(tcb);
 	m_uvs.push_back(tcc);
 	m_uvs.push_back(tcd);
 
-	//fixMe?
 	m_index.push_back(0);
 	m_index.push_back(1);
 	m_index.push_back(2);
@@ -72,7 +69,6 @@ void Rect::setPoints(glm::vec4 dright, glm::vec4 dleft, glm::vec4 uright, glm::v
 	m_normals.push_back(n);
 }
 
-//fixMe?
 void Rect::setTcoords(glm::vec2 tca, glm::vec2 tcb, glm::vec2 tcc, glm::vec2 tcd)
 {
 	m_uvs.clear();

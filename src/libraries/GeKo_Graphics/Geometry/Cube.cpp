@@ -2,7 +2,6 @@
 
 Cube::Cube()
 {
-	//m_vaoBuffer = 0;
 	m_points = 36;
 	m_indices = 36;
 	setIndexFalse();

@@ -3,7 +3,7 @@
 #include <GeKo_Graphics/Observer/Observer.h>
 #include <GeKo_Graphics/Scenegraph/Node.h>
 
-
+/**Handles all the gravity-effects of the game.*/
 class GravityObserver : public Observer<Node, Collision_Event>
 {
 public:
@@ -22,6 +22,7 @@ public:
 				 break;
 			 }
 			 else if (node.getType() == ClassType::PLAYER){
+					//TODO: Wert aus der Heightmap holen bzw. dem Terrain
 					 if (node.getPlayer()->getPosition().y < 0.75){
 						 node.setGravity(false);
 					 }
@@ -40,15 +41,11 @@ public:
 						 node.setGravity(true);
 					 }
 			 }
-			
 		 }
 	 }
 
-	
 	void  onNotify(AI& node, Collision_Event event) 
 	 {
 
 	 }
-	
 };
-

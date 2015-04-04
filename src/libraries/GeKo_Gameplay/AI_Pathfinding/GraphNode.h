@@ -6,13 +6,12 @@
 #include "GraphNodeType.h"
 
 /** A GraphNode-class provides the possibility to create waypoints, which can be used by AI-Units and Pathfinding algorithms.
-Every Node has a Name and knows its distance to a goal-Waypoint. It knows, which paths are connected with it and will recognize when a AI-Unit passes over it.
-Over all it has a position on the playground.*/
+Every Node has a Name and knows its distance to a goal-Waypoint. It knows which paths are connected with it and it will recognize when a AI-Unit passes over it.
+Over all it has a position on the terrain.*/
 template<class T>
 
 class GraphNode
 {
-
 public: 
 	///Every GraphNode needs a name
 	/**/
@@ -29,7 +28,6 @@ public:
 	{
 		m_paths.push_back(path);
 	}
-	
 	
 	///Returns all the Paths of m_paths list
 	/**/
@@ -70,17 +68,18 @@ public:
 		m_position = position;
 	}
 
-	///Returns the position on the playground
+	///Returns the position on the terrain
 	/**/
 	glm::vec3 getPosition()
 	{
 		return m_position;
 	}
 
+	///Returns the type of the Node like Food or Home
+	/**/
 	GraphNodeType getNodeType(){
 		return m_type;
 	}
-
 	void setNodeType(GraphNodeType type){
 		m_type = type;
 	}
@@ -95,5 +94,4 @@ protected:
 	float posX;
 	float posY;
 	float posZ;
-	
 };
