@@ -382,6 +382,12 @@ void Node::setCamera(StrategyCamera* camera)
 
 }
 
+void Node::setCamera(Camera* camera)
+{
+	m_otherCamera = camera;
+	m_hasCamera = true;
+}
+
 BoundingSphere* Node::getBoundingSphere()
 {
 	if (m_hasGeometry)
@@ -565,10 +571,8 @@ void Node::render()
 void Node::render(ShaderProgram &shader)
 {
 
-	if (m_hasParticleSystem)
+	if (!m_hasParticleSystem)
 	{
-		renderParticle(shader);
-	}else{
 		if (!(m_nodeName == "Root"))
 		{
 			glm::mat4 modelMatrix(1.0);
@@ -652,10 +656,19 @@ void Node::render(ShaderProgram &shader)
 		}
 
 	}
+	else {
+		//Extra Render-Methode für ein Partikel-System
+		renderParticle(shader);
+	}
 }
 
 void Node::renderParticle(ShaderProgram &shader)
 
 {
+
 	//TODO: Particle-System muss gerendert werden!
+
+	m_particleSystem->update();
+	m_particleSystem->render(*m_otherCamera);
+
 }
