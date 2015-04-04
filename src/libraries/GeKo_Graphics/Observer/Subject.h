@@ -2,6 +2,7 @@
 #include <glm/ext.hpp>
 #include <vector>
 #include <GeKo_Graphics/Observer/Observer.h>
+#include <typeinfo>
 
 
 template <class Entity, class Event>
