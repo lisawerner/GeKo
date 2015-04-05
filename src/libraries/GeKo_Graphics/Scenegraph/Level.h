@@ -4,6 +4,7 @@
 #include <GeKo_Gameplay/Questsystem/QuestHandler.h>
 #include <GeKo_Gameplay/FightSystem/FightSystem.h>
 #include <iostream>
+#include <GeKo_Graphics/Geometry/Terrain.h>
 
 ///A Level is the necessary unit to create a game
 /**
@@ -51,6 +52,9 @@ public:
 	/**The FightSystem is unique for every level and handles all the fights of KI and Player*/
 	FightSystem* getFightSystem();
 
+	void setTerrain(Terrain* terrain);
+	Terrain* getTerrain();
+
 protected:
 	const char* m_levelName;
 
@@ -60,5 +64,7 @@ protected:
 	QuestHandler* m_questHandler;
 
 	FightSystem* m_fightSystem;
+
+	Terrain* m_terrain;
 
 };
