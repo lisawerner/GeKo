@@ -147,7 +147,7 @@ int main()
 	Window testWindow(500, 50, 800, 600, "testWindow");
 	glfwMakeContextCurrent(testWindow.getWindow());
 
-	cam.setCenter(glm::vec4(40.0, 100.0, 40.0, 1.0));
+	cam.setCenter(glm::vec4(40.0, 40.0, 40.0, 1.0));
 	cam.setName("StrategyCam");
 	cam.setKeySpeed(2.0);
 	cam.setNearFar(0.01, 100);
@@ -166,6 +166,11 @@ int main()
 	VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/Vertex-Shaders/TextureShader3D.vert")));
 	FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/Fragment-Shaders/TextureShader3D.frag")));
 	ShaderProgram shader(vs, fs);
+
+	//SHADER
+	VertexShader vsSkybox(loadShaderSource(SHADERS_PATH + std::string("/SkyboxShader/SkyboxShader.vert")));
+	FragmentShader fsSkybox(loadShaderSource(SHADERS_PATH + std::string("/SkyboxShader/SkyboxShader.frag")));
+	ShaderProgram shaderSkybox(vsSkybox, fsSkybox);
 
 
 	//===================================================================//
@@ -217,6 +222,26 @@ int main()
 	//terrainNode2.addTranslation(-50.0f, -50.0f, 35.0f);
 	/*terrainNode2.addRotation(180, glm::vec3(0.0, 1.0, 0.0));*/
 
+	//===================================================================//
+	//==================Object declarations - Geometry, Texture, Node=== //
+	//==========================Object: Skybox===========================//
+	Cube cube;
+	const char *textureNames[6] = {
+		(char*)RESOURCES_PATH "/Skybox/PereaBeach1/posx.jpg",
+		(char*)RESOURCES_PATH "/Skybox/PereaBeach1/negx.jpg",
+		(char*)RESOURCES_PATH "/Skybox/PereaBeach1/posy.jpg",
+		(char*)RESOURCES_PATH "/Skybox/PereaBeach1/negy.jpg",
+		(char*)RESOURCES_PATH "/Skybox/PereaBeach1/posz.jpg",
+		(char*)RESOURCES_PATH "/Skybox/PereaBeach1/negz.jpg"
+		/*(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png"*/ };
+	Skybox skybox(textureNames);
+	Node skyboxNode("skybox");
+	skyboxNode.addGeometry(&cube);
 
 	//===================================================================//
 	//==================Setting up the Level and Scene==================//
@@ -309,9 +334,23 @@ int main()
 		//===================================================================//
 		//==================Render your Objects==============================//
 		//==================================================================//
-	
+
+		//SKYBOX
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		shaderSkybox.bind();
+		glDisable(GL_DEPTH_TEST);
+		shaderSkybox.sendMat4("viewMatrix", cam.getViewMatrix());
+		shaderSkybox.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+		shaderSkybox.sendSkyboxTexture("testTexture", skybox.getSkyboxTexture());
+		skyboxNode.render();
+		shaderSkybox.unbind();
+
+		glEnable(GL_DEPTH_TEST);
 		renderer->renderScene(testScene, testWindow);
 
+		
+
+		//glEnable(GL_DEPTH_TEST);
 	}
 
 

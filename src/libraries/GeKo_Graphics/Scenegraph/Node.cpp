@@ -582,6 +582,10 @@ void Node::render(ShaderProgram &shader)
 				{
 					m_player->setPosition(m_player->getPosition() + m_Gravity->getGravity());
 					addTranslation(m_player->getPosition());
+					if (m_hasCamera)
+					{
+						m_camera->setCenter(glm::vec4(m_player->getPosition(), 1.0));
+					}
 				}
 				else if ((m_type == ClassType::AI))
 				{
