@@ -18,26 +18,25 @@ int main()
 	glfwInit();
 
 	//our window
-	GLFWwindow* window;
-	window = glfwCreateWindow(800, 600, "FBO Depth Test", NULL, NULL);
-	glfwMakeContextCurrent(window);
+	Window window(550, 50, 800, 600, "FBO-Depth", glm::vec3(0.2, 0.0, 0.0));
 
 	//Set Camera to another position
 	cam.setPosition(glm::vec4(0.0, 0.0, 10.0, 1.0));
 	cam.setName("TrackballCam");
+	cam.setNearFar(1.0,100);
 
 	//Set all InputMaps and set one InputMap active
 	iH.setAllInputMaps(cam);
 	iH.changeActiveInputMap("Trackball");
 
 	//Callback
-	glfwSetKeyCallback(window, key_callback);
+	glfwSetKeyCallback(window.getWindow(), key_callback);
 
 	glewInit();
 
 	//our shader
-	VertexShader vsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.vert")));
-	FragmentShader fsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.frag")));
+	VertexShader vsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/minimalGBuffer.vert")));
+	FragmentShader fsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/minimalGBuffer.frag")));
 	ShaderProgram shaderGBuffer(vsGBuffer, fsGBuffer);
 
 	VertexShader vsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.vert")));
@@ -58,8 +57,8 @@ int main()
 	rect.loadBufferData();
 
 	//our textures
-	Texture texCV((char*)RESOURCES_PATH "/cv_logo.bmp");
-	Texture texBrick((char*)RESOURCES_PATH "/brick.bmp");
+	Texture texCV((char*)RESOURCES_PATH "/Symbol/cv_logo.bmp");
+	Texture texBrick((char*)RESOURCES_PATH "/Wall/brick.bmp");
 
 	//Scene creation 
 	Level level("level");
@@ -88,7 +87,7 @@ int main()
 	teaNode.addChildrenNode(&brickNode);
 
 	//Gameloop
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(window.getWindow()))
 	{
 		//GBuffer Render Pass
 		fbo.bind();
@@ -109,10 +108,10 @@ int main()
 		rect.renderGeometry();
 		shaderSFQ.unbind();
 
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(window.getWindow());
 		glfwPollEvents();
 	}
-	glfwDestroyWindow(window);
+	glfwDestroyWindow(window.getWindow());
 	glfwTerminate();
 	return 0;
 }

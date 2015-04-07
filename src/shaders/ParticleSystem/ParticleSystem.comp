@@ -122,8 +122,4 @@ void main(){
 		positions[gid] = pos;
 		velocity[gid] = vel;
 	}
-	else
-	{
-		positions[gid] = vec4(emitterPos, -1.0);
-	}
 }
