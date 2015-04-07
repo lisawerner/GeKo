@@ -417,7 +417,7 @@ int main()
 	collision.addObserver(&colObserver);
 	collision.addObserver(&soundPlayerObserver);
 
-	GravityObserver gravityObserver;
+	GravityObserver gravityObserver(&testLevel);
 	collision.addObserver(&gravityObserver);
 
 	QuestObserver questObserver(&testLevel);
