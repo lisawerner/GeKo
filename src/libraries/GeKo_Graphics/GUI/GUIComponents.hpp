@@ -1,8 +1,10 @@
 #pragma once
 
 #include "GeKo_Graphics/GUI/GUI.h"
+#include "GeKo_Graphics/Material/Texture.h"
 #include <imgui.h>
 #include <string>
+#include <map>
 #include <glm/ext.hpp>
 
 ///These Classes are wrapper classes for the ImGui Render methods
@@ -215,6 +217,64 @@ namespace GuiElement
     glm::fvec4 *m_colorVec;
   };
 
+  class Inventory : public Element
+  {
+  public:
+    Inventory(std::map<std::string,Texture*> *inventory, int numberOfSlotsWidth) :
+        m_inventory(inventory),
+        m_numberOfSlotsWidth(numberOfSlotsWidth),
+        m_selectedItem("none")
+    {
+
+    }
+
+    inline void render()
+    {
+        int counter = 0;
+        for (std::map<std::string,Texture*>::iterator it = m_inventory->begin();it!=m_inventory->end();++it)
+        {
+            ImGui::PushID(counter);
+            int frame_padding = 1;
+            ImTextureID texId = ImTextureID((*it).second->getTexture());
+
+            //selected item gets a bigger frame
+            if(m_selectedItem == (*it).first)
+            {
+                frame_padding = 2;
+
+            }
+
+            if (ImGui::ImageButton(texId, ImVec2(40,40), ImVec2(0,0), ImVec2(1,1), frame_padding))
+            {
+                m_selectedItem = (*it).first;
+            }
+
+            //hovering reveals item name
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip((*it).first.c_str());
+
+            ImGui::PopID();
+            ImGui::NextColumn();
+
+            //Same line if width is not reached
+            if(counter % m_numberOfSlotsWidth != m_numberOfSlotsWidth-1)
+                ImGui::SameLine();
+
+            counter++;
+        }
+    }
+
+    inline std::string getSelectedItem() {return m_selectedItem;}
+
+    inline void dispose(){ delete this; }
+
+  private:
+    ~Inventory() {}
+    std::map<std::string,Texture*> *m_inventory;
+    int m_numberOfSlotsWidth;
+    std::string m_selectedItem;
+  };
+
   const int width = 50;
   static float arr[width];
 
@@ -382,4 +442,5 @@ namespace GuiElement
     bool m_collapse;
 
   };
+
 };
