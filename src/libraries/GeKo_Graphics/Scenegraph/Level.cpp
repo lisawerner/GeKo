@@ -84,3 +84,13 @@ FightSystem* Level::getFightSystem()
 {
 	return m_fightSystem;
 }
+
+void Level::setTerrain(Terrain* terrain)
+{
+	m_terrain = terrain;
+}
+
+Terrain* Level::getTerrain()
+{
+	return m_terrain;
+}

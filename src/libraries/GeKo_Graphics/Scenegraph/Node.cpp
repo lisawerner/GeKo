@@ -371,11 +371,11 @@ void Node::setCamera(StrategyCamera* camera)
 	{
 		if (m_type == ClassType::PLAYER)
 		{
-			m_player->setPosition(glm::vec3(m_camera->getCenter().x, 0.0f, m_camera->getCenter().z));
+			m_player->setPosition(glm::vec3(m_camera->getCenter().x, m_camera->getCenter().y, m_camera->getCenter().z));
 			addTranslation(m_player->getPosition());
 
 			//TODO: Abfrage, welche Kamera-Art benutzt werden soll
-			m_camera->setCenter(glm::vec4(m_camera->getCenter().x, 2.0f, m_camera->getCenter().z, 1.0));
+			m_camera->setCenter(glm::vec4(m_camera->getCenter().x, m_player->getPosition().y + 2.0f, m_camera->getCenter().z, 1.0));
 			m_camera->setRadius(2.5f);	
 		}	
 	}
@@ -582,6 +582,10 @@ void Node::render(ShaderProgram &shader)
 				{
 					m_player->setPosition(m_player->getPosition() + m_Gravity->getGravity());
 					addTranslation(m_player->getPosition());
+					if (m_hasCamera)
+					{
+						m_camera->setCenter(glm::vec4(m_player->getPosition(), 1.0));
+					}
 				}
 				else if ((m_type == ClassType::AI))
 				{
