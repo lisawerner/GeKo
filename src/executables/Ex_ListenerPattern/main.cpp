@@ -19,7 +19,7 @@
 #include <GeKo_Graphics/Geometry/GekoMesh.h>
 #include <GeKo_Graphics/Geometry/Plane.h>
 
-#include <GeKo_Graphics/Geometry/Terrain.h>
+
 
 #include <GeKo_Physics/CollisionTest.h>
 
@@ -286,11 +286,6 @@ int main()
 	terrainNode.addRotation(90.0f, glm::vec3(1.0, 0.0, 0.0));
 	terrainNode.addScale(20.0, 20.0, 20.0);
 
-	Terrain terrain2((char*)RESOURCES_PATH "/heightmap.jpg", 50.0f, 50.0f);
-	Node terrainNode2("Terrain");
-	terrainNode2.addGeometry(&terrain2);
-	terrainNode2.addTexture(&terrainTex);
-	terrainNode2.setObject(&terrainObject);
 
 
 	//===================================================================//
@@ -320,7 +315,6 @@ int main()
 
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&treeNode);
 
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&terrainNode2);
 
 	// ==============================================================
 	// == Questsystem ====================================================
