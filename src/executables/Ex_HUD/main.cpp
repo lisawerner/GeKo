@@ -215,10 +215,24 @@ int main()
     
   inventoryWindow->setName("Inventory");
   inventoryWindow->setCollapsable(false);
+  inventoryWindow->setResizable(false);
   inventoryWindow->setPosition(WINDOW_WIDTH - QUEST_WIDTH, (WINDOW_HEIGHT / 2) - (QUEST_HEIGHT / 2));
   inventoryWindow->setSize(QUEST_WIDTH, QUEST_HEIGHT);
   hud->addNestedWindow(inventoryWindow);
   
+  std::map<std::string, Texture*> *inventoryItems = new std::map<std::string, Texture*> ();
+  inventoryItems->insert(std::pair<std::string,Texture*>(std::string("bricksItem1"),&bricks));
+  inventoryItems->insert(std::pair<std::string,Texture*>(std::string("bricksItem2"),&bricks));
+  inventoryItems->insert(std::pair<std::string,Texture*>(std::string("bricksItem3"),&bricks));
+  inventoryItems->insert(std::pair<std::string,Texture*>(std::string("bricksItem4"),&bricks));
+  inventoryItems->insert(std::pair<std::string,Texture*>(std::string("bricksItem5"),&bricks));
+  inventoryItems->insert(std::pair<std::string,Texture*>(std::string("bricksItem6"),&bricks));
+  inventoryItems->insert(std::pair<std::string,Texture*>(std::string("bricksItem7"),&bricks));
+  inventoryItems->insert(std::pair<std::string,Texture*>(std::string("bricksItem8"),&bricks));
+  inventoryItems->insert(std::pair<std::string,Texture*>(std::string("bricksItem9"),&bricks));
+  GuiElement::Inventory *inventory = new GuiElement::Inventory(inventoryItems,6);
+  inventoryWindow->addElement(inventory);
+
   //========================================================================================================
 
 	double startTime = glfwGetTime();
@@ -235,9 +249,9 @@ int main()
 		
     if (!(outputFPS % 40))
     {
-      std::cout << "FPS: " << static_cast<int>(1 / (glfwGetTime() - startTime)) << std::endl;
       hp--;
       exp++;
+      std::cout << "Selected Item: " << inventory->getSelectedItem() << std::endl;
     }
    
     if (hp < 0)
