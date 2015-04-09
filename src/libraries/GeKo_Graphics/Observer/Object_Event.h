@@ -12,6 +12,10 @@ enum class Object_Event
 
 	OBJECT_DIED,
 
-	PLAYER_COLLECT
+	PLAYER_COLLECT,
+
+	PLAYER_EXP,
+
+	PLAYER_LVLUP
 
 };

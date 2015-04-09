@@ -10,7 +10,7 @@
 #include <GeKo_Graphics/ShaderInclude.h>
 
 #include <GeKo_Graphics/AIInclude.h>
-#include <GeKo_Gameplay/AI_Decisiontree/DecisionTree.h>
+#include <GeKo_Gameplay/AI_DecisionTree/DecisionTree.h>
 #include <GeKo_Gameplay/Object/Geko.h>
 #include <GeKo_Gameplay/Object/AI.h>
 
@@ -28,7 +28,7 @@
 #include <GeKo_Graphics/Observer/SoundObserver.h>
 #include <GeKo_Graphics/Observer/QuestObserver.h>
 
-#include <GeKo_Gameplay/Questsystem/ExpReward.h>
+#include <GeKo_Graphics/Geometry/ForestData.h>
 
 //===================================================================//
 //==================Things you need globally==========================//
@@ -40,6 +40,8 @@ Geko geko("Geko", glm::vec3(10.0, 3.0, -5.0));
 //===================================================================//
 //==================Callbacks for the Input==========================//
 //==================================================================//
+
+//void generateTrees()
 
 void playKey_callback(GLFWwindow* window)
 {
@@ -201,8 +203,12 @@ int main()
 //	aiNode.addScale(0.3, 0.3, 0.3);
 	//aiNode.addTranslation(ant_Flick.getPosition().x, ant_Flick.getPosition().y, ant_Flick.getPosition().z);
 	aiNode.setObject(&ant_Flick);
-	//aiNode.setSoundHandler(&sfh);
-//	aiNode.setSourceName("Ameise1", RESOURCES_PATH "/Sound/Footsteps.wav");
+	aiNode.setSoundHandler(&sfh);
+	aiNode.setSourceName("Ameise1", RESOURCES_PATH "/Sound/Footsteps.wav");
+	glm::vec3 testpos = {3.0, 0.0, 3.0};
+	sfh.generateSource("Ameise",testpos, RESOURCES_PATH "/Sound/rascheln.wav");
+	sfh.playSource("Ameise");
+
 
 
 
@@ -227,10 +233,10 @@ int main()
 //	playerNode.addTranslation(20.0, 0.0, 20.0);
 
 	geko.setSoundHandler(&sfh);
-	geko.setSourceName(MOVESOUND, "SpielerFootsteps", RESOURCES_PATH "/Sound/rascheln.wav");
-	geko.setSourceName(BACKGROUNDMUSIC, "Hintergrund", RESOURCES_PATH "/Sound/jingle2.wav");
+	//geko.setSourceName(MOVESOUND, "SpielerFootsteps", RESOURCES_PATH "/Sound/rascheln.wav");
+	//geko.setSourceName(BACKGROUNDMUSIC, "Hintergrund", RESOURCES_PATH "/Sound/jingle2.wav");
 	geko.setSourceName(FIGHTSOUND, "Kampfsound", RESOURCES_PATH "/Sound/Cookies kurz.wav");
-	geko.setSourceName(EATSOUND, "Essen", RESOURCES_PATH "/Sound/Munching.wav");
+	//geko.setSourceName(EATSOUND, "Essen", RESOURCES_PATH "/Sound/Munching.wav");
 	geko.setSourceName(QUESTSOUND, "Quest", RESOURCES_PATH "/Sound/jingle.wav");
 	geko.setSourceName(ITEMSOUND, "Item", RESOURCES_PATH "/Sound/itempickup.wav");
 	sfh.disableLooping("Essen");
@@ -257,76 +263,6 @@ int main()
 	branch.setTypeId(ItemType::BRANCH);
 */
 
-
-	//===================================================================//
-	//==================Object declarations - Geometry, Texture, Node=== //
-	//==========================Object: Tree===========================//
-
-	TreeMesh tree;
-
-	glm::vec3 trees[5] = { glm::vec3(16.0, 0.0, 76.0), glm::vec3(23.0, 0.0, 74.0), glm::vec3(21.5, 0.0, 78.5), glm::vec3(15.0, 0.0, 81.5), glm::vec3(27.5, 0.0, 88.5), };
-
-	StaticObject treeStatic;
-	treeStatic.setTree();
-//	treeStatic.setObjectType(ObjectType::TREE);
-	Node treeNode("Tree");
-	treeNode.addGeometry(&tree);
-	treeNode.setObject(&treeStatic);
-
-	//treeNode.addScale(10.0, 10.0, 10.0);
-	treeNode.addTranslation(trees[0]);
-
-	treeNode.getBoundingSphere()->radius = 3.0;
-
-	StaticObject treeStatic2;
-	treeStatic2.setTree();
-	Node treeNode2("Tree2");
-	treeNode2.addGeometry(&tree);
-	treeNode2.setObject(&treeStatic2);
-	treeNode2.addTranslation(trees[1]);
-	treeNode2.getBoundingSphere()->radius = 3.0;
-
-	StaticObject treeStatic3;
-	treeStatic3.setTree();
-	Node treeNode3("Tree3");
-	treeNode3.addGeometry(&tree);
-	treeNode3.setObject(&treeStatic3);
-	treeNode3.addTranslation(trees[2]);
-	treeNode3.getBoundingSphere()->radius = 3.0;
-
-	StaticObject treeStatic4;
-	treeStatic4.setTree();
-	Node treeNode4("Tree4");
-	treeNode4.addGeometry(&tree);
-	treeNode4.setObject(&treeStatic4);
-	treeNode4.addTranslation(trees[3]);
-	treeNode4.getBoundingSphere()->radius = 3.0;
-
-	StaticObject treeStatic5;
-	treeStatic5.setTree();
-	Node treeNode5("Tree5");
-	treeNode5.addGeometry(&tree);
-	treeNode5.setObject(&treeStatic5);
-	treeNode5.addTranslation(trees[4]);
-	treeNode5.getBoundingSphere()->radius = 3.0;
-
-	//treeStatic.getInventory()->addItem(&cookie, 25);
-	//treeStatic.getInventory()->addItem(&branch, 10);
-
-	//===================================================================//
-	//==================Object declarations - Geometry, Texture, Node=== //
-	//==========================Object: Plane===========================//
-
-	Plane terrain;
-	Texture terrainTex((char*)RESOURCES_PATH "/Grass.jpg");
-
-	Node terrainNode("Plane");
-	terrainNode.addGeometry(&terrain);
-	terrainNode.addTexture(&terrainTex);
-	terrainNode.addTranslation(0.0, -0.75, 0.0);
-	terrainNode.addRotation(90.0f, glm::vec3(1.0, 0.0, 0.0));
-	terrainNode.addScale(100.0, 100.0, 100.0);
-
 	//===================================================================//
 	//==================Setting up the Level and Scene==================//
 	//==================================================================//
@@ -347,16 +283,103 @@ int main()
 	//==================Add Objects to the Scene=======================//
 	//==================Update the Bounding-Sphere 1st time============//
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&aiNode);
-
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&playerNode);
 
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&terrainNode);
+	
 
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&treeNode);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&treeNode2);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&treeNode3);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&treeNode4);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&treeNode5);
+
+
+
+
+	//===================================================================//
+	//==================Object declarations - Geometry, Texture, Node=== //
+	//==========================Object: Tree===========================//
+
+	TreeMesh tree;
+
+	//glm::vec3 trees[11] = { glm::vec3(16.0, 0.0, 66.0), glm::vec3(23.0, 0.0, 64.0), glm::vec3(21.5, 0.0, 68.5), glm::vec3(15.0, 0.0, 71.5), glm::vec3(27.5, 0.0, 78.5), glm::vec3(28.0, 0.0, 67.0), glm::vec3(24.0, 0.0, 71.0), glm::vec3(29.0, 0.0, 74.0), glm::vec3(15.0, 0.0, 75.0), glm::vec3(8.0, 0.0, 76.0), glm::vec3(3.0, 0.0, 77.0) };
+	
+	
+	//std::vector<glm::vec3> trees;
+	/*trees.push_back(glm::vec3(16.0, 0.0, 76.0));
+	trees.push_back(glm::vec3(23.0, 0.0, 74.0));
+	trees.push_back(glm::vec3(21.5, 0.0, 78.5));
+	trees.push_back(glm::vec3(15.0, 0.0, 81.5));
+	trees.push_back(glm::vec3(27.5, 0.0, 88.5));
+	trees.push_back(glm::vec3(28.0, 0.0, 67.0));
+	trees.push_back(glm::vec3(24.0, 0.0, 71.0));
+	trees.push_back(glm::vec3(29.0, 0.0, 74.0));
+	trees.push_back(glm::vec3(15.0, 0.0, 75.0));
+	trees.push_back(glm::vec3(8.0, 0.0, 76.0));
+	trees.push_back(glm::vec3(3.0, 0.0, 77.0));*/
+
+	std::stringstream name;
+	for(int i = 0;i<TreeData::forest1.size();i++)
+	{
+		name << "Forest1Tree" << i;
+		std::string stringname = name.str() ;
+		StaticObject *treeStatic = new StaticObject();
+		treeStatic->setTree(50 / TreeData::forest1.size());
+		Node *treeNode = new Node(stringname);
+		treeNode->addGeometry(&tree);
+		treeNode->setObject(treeStatic);
+		treeNode->addTranslation(TreeData::forest1[i]);
+		treeNode->getBoundingSphere()->radius = 2.5;
+		testScene.getScenegraph()->getRootNode()->addChildrenNode(treeNode);
+		name.str("");
+	}
+	for (int i = 0; i<TreeData::forest2.size(); i++)
+	{
+		name << "Forest2Tree" << i;
+		std::string stringname = name.str();
+		StaticObject *treeStatic = new StaticObject();
+		treeStatic->setTree(50 / TreeData::forest2.size());
+		Node *treeNode = new Node(stringname);
+		treeNode->addGeometry(&tree);
+		treeNode->setObject(treeStatic);
+		treeNode->addTranslation(TreeData::forest2[i]);
+		treeNode->getBoundingSphere()->radius = 2.5;
+		testScene.getScenegraph()->getRootNode()->addChildrenNode(treeNode);
+		name.str("");
+	}
+	/*for (int i = 0; i<TreeData::forest2.size(); i++)
+	{
+		name << "Forest2Tree" << i;
+		std::string stringname = name.str();
+		StaticObject *treeStatic = new StaticObject();
+		treeStatic->setTree();
+		Node *treeNode = new Node(stringname);
+		treeNode->addGeometry(&tree);
+		treeNode->setObject(treeStatic);
+		treeNode->addTranslation(TreeData::forest2[i]);
+		treeNode->getBoundingSphere()->radius = 3.0;
+		testScene.getScenegraph()->getRootNode()->addChildrenNode(treeNode);
+		name.str("");
+	}*/
+
+
+
+
+	//treeStatic.getInventory()->addItem(&cookie, 25);
+	//treeStatic.getInventory()->addItem(&branch, 10);
+
+	//===================================================================//
+	//==================Object declarations - Geometry, Texture, Node=== //
+	//==========================Object: Plane===========================//
+
+	Plane terrain;
+	Texture terrainTex((char*)RESOURCES_PATH "/Grass.jpg");
+
+	Node terrainNode("Plane");
+	terrainNode.addGeometry(&terrain);
+	terrainNode.addTexture(&terrainTex);
+	terrainNode.addTranslation(0.0, -0.75, 0.0);
+	terrainNode.addRotation(90.0f, glm::vec3(1.0, 0.0, 0.0));
+	terrainNode.addScale(100.0, 100.0, 100.0);
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&terrainNode);
+	
+
+	
 
 
 
@@ -373,7 +396,7 @@ int main()
 	questCollect.addGoal(&goalCollect);
 	questCollect.addGoal(&goalCollect3);
 
-	ExpReward expReward(1);
+	Reward expReward(1);
 	expReward.setExp(100);
 	questCollect.addReward(&expReward);
 
@@ -417,7 +440,7 @@ int main()
 	collision.addObserver(&colObserver);
 	collision.addObserver(&soundPlayerObserver);
 
-	GravityObserver gravityObserver(&testLevel);
+	GravityObserver gravityObserver;
 	collision.addObserver(&gravityObserver);
 
 	QuestObserver questObserver(&testLevel);
@@ -449,7 +472,6 @@ int main()
 	Node* tmp = testLevel.getActiveScene()->getScenegraph()->searchNode("Plane");
 	tmp->getNodeName();
 
-	sfh.updateListenerPosition(glm::vec3(10.0, 3.0, -5.0));
 	sfh.playSource("Feuer");
 	sfh.playSource("Hintergrund");
 	sfh.setGain("Hintergrund", 0.5f);
