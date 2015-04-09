@@ -2,19 +2,21 @@
 
 ParticleSystem::ParticleSystem(glm::vec3 position)
 {
+	Effect* effect = new Effect();
+	setEffect(effect);
 	setPosition(position);
 }
 
 ParticleSystem::ParticleSystem(glm::vec3 position, Effect* effect)
 {
-	setPosition(position);
 	setEffect(effect);
+	setPosition(position);
 }
 
 ParticleSystem::ParticleSystem(glm::vec3 position, const char* filepath)
 {
-	setPosition(position);
 	loadEffect(filepath);
+	setPosition(position);
 }
 
 ParticleSystem::~ParticleSystem()
@@ -41,6 +43,7 @@ void ParticleSystem::render(Camera &cam)
 void ParticleSystem::setPosition(glm::vec3 newPosition)
 {
 	position = newPosition;
+	effect->setPosition(newPosition);
 }
 
 void ParticleSystem::setEffect(Effect* newEffect)

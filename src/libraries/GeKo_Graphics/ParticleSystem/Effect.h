@@ -9,7 +9,7 @@ class Effect{
 public:
 	Effect();
 	Effect(std::string name);
-	Effect(const char* filepath);	//TODO: gets an effect file
+	Effect(const char* filepath);
 	~Effect();
 
 	/*void active();*/
@@ -17,13 +17,13 @@ public:
 	void addEmitter(Emitter* emitter);
 	void removeEmitter(int arrayPosition);
 
-	void changePosition(glm::vec3 newPosition);	//updates the positions of every Emitter
 	void updateEmitters(glm::vec3 playerPosition = glm::vec3(0.0, 0.0, 0.0));	//compute Shader
 	void renderEmitters(Camera &cam);	//render Shader
 
 	int loadEffect(const char* filepath);	//TODO: change the currently loaded effect
 	int saveEffect(char* filepath);		//TODO: save the settings of this effect to a file (XML?)
 
+	void setPosition(glm::vec3 newPosition);	//updates the positions of every Emitter
 	void setName(std::string name);
 	std::string getName();
 
