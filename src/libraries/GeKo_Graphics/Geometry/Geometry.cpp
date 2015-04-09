@@ -174,11 +174,8 @@ void Geometry::setNormalsTrue()
 void Geometry::setUVTrue()
 {
 	m_hasUV = true;
-<<<<<<< HEAD
 }
-=======
 }
 Geometry StaticMesh::toGeometry(){
   return Geometry(*this);
 }
->>>>>>> resource
