@@ -37,6 +37,7 @@ public:
 
 	void onNotify(Node& nodeA, Node& nodeB, Collision_Event event)
 	 {
+		int tp = nodeA.getAI()->getInventory()->countItem(ItemType::COOKIE);
 		 switch (event)
 		 {
 		 case Collision_Event::COLLISION_DETECTED:
@@ -48,7 +49,8 @@ public:
 			 nodeA.getAI()->getGraph()->searchNode(GraphNodeType::OBJECT)->setPosition(nodeB.getPlayer()->getPosition());
 			 nodeA.getAI()->viewArea(true);
 
-			 if (!nodeA.getAI()->getStates(States::HEALTH))
+			
+			 if (!nodeA.getAI()->getStates(States::HEALTH) &&  (tp > 0))
 			 {
 				 nodeB.getPlayer()->collectItem(ItemType::COOKIE, nodeA.getAI()->getInventory()->countItem(ItemType::COOKIE));
 				 nodeB.getPlayer()->eat();

@@ -6,6 +6,7 @@ Level::Level(const char* levelName)
 	m_levelName = levelName;
 	m_questHandler = new QuestHandler();
 	m_fightSystem = new FightSystem();
+	m_hasTerrain = false;
 
 }
 
@@ -88,9 +89,15 @@ FightSystem* Level::getFightSystem()
 void Level::setTerrain(Terrain* terrain)
 {
 	m_terrain = terrain;
+	m_hasTerrain = true;
 }
 
 Terrain* Level::getTerrain()
 {
 	return m_terrain;
+}
+
+bool Level::hasTerrain()
+{
+	return m_hasTerrain;
 }

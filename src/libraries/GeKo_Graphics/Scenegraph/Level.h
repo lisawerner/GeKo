@@ -55,8 +55,11 @@ public:
 	void setTerrain(Terrain* terrain);
 	Terrain* getTerrain();
 
+	bool hasTerrain();
+
 protected:
 	const char* m_levelName;
+	bool m_hasTerrain;
 
 	std::vector<Scene*> m_sceneSet;
 	Scene* m_activeScene;

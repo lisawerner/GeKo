@@ -140,7 +140,7 @@ public:
 			break;
 
 		case Collision_Event::COLLISION_KI_PLAYER:
-			if (!nodeA.getAI()->getStates(States::HEALTH))
+			if (!nodeA.getAI()->getStates(States::HEALTH) && nodeA.getAI()->getInventory()->countItem(ItemType::COOKIE) > 0)
 			{
 				std::string soundName = nodeB.getPlayer()->getSourceName(EATSOUND);
 				if (soundName != "oor")
