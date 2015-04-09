@@ -18,7 +18,7 @@ public:
 	void removeEmitter(int arrayPosition);
 
 	void changePosition(glm::vec3 newPosition);	//updates the positions of every Emitter
-	void updateEmitters();	//compute Shader
+	void updateEmitters(glm::vec3 playerPosition = glm::vec3(0.0, 0.0, 0.0));	//compute Shader
 	void renderEmitters(Camera &cam);	//render Shader
 
 	int loadEffect(const char* filepath);	//TODO: change the currently loaded effect
