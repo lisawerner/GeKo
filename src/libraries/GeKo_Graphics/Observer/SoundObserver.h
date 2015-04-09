@@ -21,7 +21,7 @@ public:
 
 		case Object_Event::OBJECT_MOVED:
 			soundName = node.getSourceName(MOVESOUND_AI);
-			node.getSoundHandler()->updateListenerPosition(node.getPosition());
+			//node.getSoundHandler()->updateListenerPosition(node.getPosition());
 			node.updateSourcesInMap();
 			if (soundName != "oor")
 			{
@@ -82,6 +82,7 @@ public:
 
 		 case Object_Event::OBJECT_ROTATED:
 			 node.getSoundHandler()->updateListenerOrientation(node.getViewDirection(), glm::vec3(0.0, 1.0, 0.0));
+			 break;
 
 		 case Object_Event::OBJECT_STOPPED:
 			 soundName = node.getSourceName(MOVESOUND);
@@ -100,6 +101,7 @@ public:
 			 {
 					 node.getSoundHandler()->playSource(soundName);
 			 }
+			 break;
 		 }
 	 }
 
@@ -151,6 +153,7 @@ public:
 					}
 				}
 			}
+			break;
 		}
 	}
 
@@ -174,6 +177,7 @@ public:
 			{
 				tmp2->getPlayer()->getSoundHandler()->playSource(soundName);
 			}
+			break;
 		}
 	}
 protected: 

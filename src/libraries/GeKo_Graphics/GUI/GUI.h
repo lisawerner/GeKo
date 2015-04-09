@@ -34,7 +34,7 @@ class GUI
     void setUseScrollbar(bool scrollbar);
     void setCollapsable(bool collapse);
     
-
+	std::string m_windowName;
   protected:
     
     void init();
@@ -44,7 +44,7 @@ class GUI
     bool m_initialized;
     bool m_visible;
 
-    std::string m_windowName;
+   
     int m_windowWidth, m_windowHeight;
     float m_windowPosX, m_windowPosY;
     float m_bgAlpha;

@@ -101,3 +101,23 @@ bool Level::hasTerrain()
 {
 	return m_hasTerrain;
 }
+
+
+void Level::addGUI(GUI* gui)
+{
+	m_guis.push_back(gui);
+}
+
+GUI* Level::getGUI(std::string name)
+{
+	GUI* tmp;
+	for (int i = 0; i < m_guis.size(); i++)
+	{
+		if (m_guis.at(i)->m_windowName == name)
+		{
+			tmp = m_guis.at(i);
+		}
+	}
+
+	return tmp;
+}

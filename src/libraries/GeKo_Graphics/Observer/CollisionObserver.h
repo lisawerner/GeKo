@@ -37,7 +37,7 @@ public:
 
 	void onNotify(Node& nodeA, Node& nodeB, Collision_Event event)
 	 {
-		int tp = nodeA.getAI()->getInventory()->countItem(ItemType::COOKIE);
+		int tp;
 		 switch (event)
 		 {
 		 case Collision_Event::COLLISION_DETECTED:
@@ -45,6 +45,7 @@ public:
 			 break;
 
 		 case Collision_Event::COLLISION_KI_PLAYER:
+			 tp = nodeA.getAI()->getInventory()->countItem(ItemType::COOKIE);
 			 nodeA.getBoundingSphere()->setCollisionDetected(true);
 			 nodeA.getAI()->getGraph()->searchNode(GraphNodeType::OBJECT)->setPosition(nodeB.getPlayer()->getPosition());
 			 nodeA.getAI()->viewArea(true);
@@ -143,6 +144,7 @@ public:
 					 }
 				 }
 			 }
+			 break;
 		 }
 	 }
 
