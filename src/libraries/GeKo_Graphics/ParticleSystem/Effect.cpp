@@ -42,18 +42,10 @@ void Effect::removeEmitter(int arrayPosition)
 	emitterVec.erase(emitterVec.begin() + arrayPosition);
 }
 
-void Effect::changePosition(glm::vec3 newPosition)
+void Effect::updateEmitters(glm::vec3 playerPosition)
 {
 	for (auto emitter : emitterVec){
-		emitter->setPosition(newPosition);
-	}
-}
-
-void Effect::updateEmitters()
-{
-	for (auto emitter : emitterVec){
-		emitter->generateParticle();
-		emitter->update();
+		emitter->update(playerPosition);
 	}
 }
 
@@ -64,6 +56,19 @@ void Effect::renderEmitters(Camera &cam)
 	}
 }
 
+void Effect::setPosition(glm::vec3 newPosition)
+{
+	for (auto emitter : emitterVec){
+		//why should i do this glm????:
+		glm::vec3 pos = emitter->getPosition();
+		glm::vec3 result(0.0, 0.0, 0.0);
+		result.x = pos.x + newPosition.x;
+		result.y = pos.y + newPosition.y;
+		result.z = pos.z + newPosition.z;
+
+		emitter->setPosition(result);
+	}
+}
 
 int Effect::loadEffect(const char* filepath)
 {
@@ -249,13 +254,13 @@ int Effect::loadEffect(const char* filepath)
 				error = physicElement->QueryBoolText(&movementHorizontalZ);
 				XMLCheckResult(error);
 
-				//physicElement = physicType->FirstChildElement("MovementLength");
-				//if (physicElement == nullptr) return XML_ERROR_PARSING_ELEMENT;
-				//float movementLength;
-				//error = physicElement->QueryFloatText(&movementLength);
-				//XMLCheckResult(error);
+				physicElement = physicType->FirstChildElement("Speed");
+				if (physicElement == nullptr) return XML_ERROR_PARSING_ELEMENT;
+				float speed;
+				error = physicElement->QueryFloatText(&speed);
+				XMLCheckResult(error);
 
-				emitter->usePhysicSwarmCircleMotion(movementVertical, movementHorizontalX, movementHorizontalZ);
+				emitter->usePhysicSwarmCircleMotion(movementVertical, movementHorizontalX, movementHorizontalZ, speed);
 			}
 		}
 
@@ -361,7 +366,7 @@ int Effect::loadEffect(const char* filepath)
 				error = tex->QueryFloatText(&rotationSpeed);
 				XMLCheckResult(error);
 
-				emitter->useTexture(useTexture, scalingSize, scalingMoment, 
+				emitter->defineLook(useTexture, scalingSize, scalingMoment, 
 					birthTime, deathTime, rotateLeft, rotationSpeed);
 			}
 			else {
@@ -398,7 +403,7 @@ int Effect::loadEffect(const char* filepath)
 				error = tex->QueryFloatText(&rotationSpeed);
 				XMLCheckResult(error);
 
-				emitter->useTexture(useTexture, particleSize, 
+				emitter->defineLook(useTexture, particleSize, 
 					birthTime, deathTime, rotateLeft, rotationSpeed);
 			}
 			
