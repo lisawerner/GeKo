@@ -3,6 +3,7 @@
 #include "GeKo_Gameplay/AI_Pathfinding/Algorithm.h"
 #include "GeKo_Gameplay/AI_Pathfinding/AStarNode.h"
 #include "GeKo_Gameplay/AI_Pathfinding/AStarAlgorithm.h"
+#include "GeKo_Graphics/Geometry/ForestData.h"
 #include "GraphNodeType.h"
 #include <sstream>
 #include <vector>
