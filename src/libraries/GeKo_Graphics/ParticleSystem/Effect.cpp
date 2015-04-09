@@ -42,13 +42,6 @@ void Effect::removeEmitter(int arrayPosition)
 	emitterVec.erase(emitterVec.begin() + arrayPosition);
 }
 
-void Effect::changePosition(glm::vec3 newPosition)
-{
-	for (auto emitter : emitterVec){
-		emitter->setPosition(newPosition);
-	}
-}
-
 void Effect::updateEmitters(glm::vec3 playerPosition)
 {
 	for (auto emitter : emitterVec){
@@ -63,6 +56,19 @@ void Effect::renderEmitters(Camera &cam)
 	}
 }
 
+void Effect::setPosition(glm::vec3 newPosition)
+{
+	for (auto emitter : emitterVec){
+		//why should i do this glm????:
+		glm::vec3 pos = emitter->getPosition();
+		glm::vec3 result(0.0, 0.0, 0.0);
+		result.x = pos.x + newPosition.x;
+		result.y = pos.y + newPosition.y;
+		result.z = pos.z + newPosition.z;
+
+		emitter->setPosition(result);
+	}
+}
 
 int Effect::loadEffect(const char* filepath)
 {
