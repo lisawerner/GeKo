@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GeKo_Graphics/Camera/Camera.h"
+#include "GeKo_Gameplay/Object/Player.h"
 #include <map>
 #include <functional>
 #include <GLFW/glfw3.h>
@@ -36,6 +37,11 @@ public:
 	
 	/// The method checks whether multiple keys are pressed to ensure performing the right action and it's implemented in the specific InputMaps
 	virtual void checkMultipleMappedKeys(int key, GLFWwindow &window);
+
+	/// The method fills the m_map considering the parameter (camera or player)
+	// Implemented in the specific Input Maps
+	virtual void update(Player &p);
+	virtual void update(Camera &cam);
 
 	void setGLFWwindow(GLFWwindow* window);
 	GLFWwindow* getWindow();

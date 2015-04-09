@@ -40,3 +40,6 @@ GLFWwindow* InputMap::getWindow()
 {
 	return m_usedWindow;
 }
+
+void InputMap::update(Player &p){}
+void InputMap::update(Camera &cam){}

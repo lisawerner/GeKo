@@ -33,10 +33,32 @@ public:
 
 	//Moves Object on Terrain
 	void move(glm::vec3 newPosition);
+
+	///A method to move forward in view Direction
+	/**Changes the position vector*/
+	void moveForward();
+	///A method to move backwards in relation to view direction
+	/**Changes the position vector*/
+	void moveBackward();
+	///A method to move sidewards, right
+	/**Changes the position vector*/
+	void moveRight();
+	///A method to move sidewards, left
+	/**Changes the position vector*/
+	void moveLeft();
+
+	///A method to turn left
+	/**Changes the direction vector*/
+	void turnLeft();
+	///A method to turn right
+	/**Changes the direction vector*/
+	void turnRight();
 	
 	///A method to rotate the view direction
 	/**This method is used to simulate the movement of the head of the character*/
 	void rotateView(float leftRight, float upDown);
+
+	float getPhi();
 
 	///Returns the m_sourceName string
 	/**If a Sound-File-Handler was attached, the m_sourceName contains the name of the source which should be played!*/
@@ -47,8 +69,16 @@ public:
 
 	void updateSourcesInMap();
 
+	//TODO: Open/Close Inventory: Prüfen ob Inventar offen oder geschlossen ist; Inventar mit GUI öffnen
+	void showInventory();
+
 protected:
 	glm::vec3 m_spawnPoint;
+
+	//direction is the view direction of the player
+	glm::vec3 m_direction;
+	float m_deltaTime;
+	float m_phi, m_theta;
 
 	std::map<Soundtype, std::string> m_soundMap;
 };

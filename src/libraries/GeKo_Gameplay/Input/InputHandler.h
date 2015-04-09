@@ -5,6 +5,7 @@
 #include "MapPilotview.h"
 #include "MapPlayerview.h"
 #include "MapStrategyCamera.h"
+#include "MapObject.h"
 #include <cstdlib> 
 
 /** InputHandler creates the various InputMaps and manages them.
