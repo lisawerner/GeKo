@@ -38,6 +38,8 @@
 #include <GeKo_Graphics/GUI/GUI.h>
 #include <GeKo_Graphics/GUI/GUIComponents.hpp>
 
+#include "GeKo_Graphics/Geometry/ForestData.h"
+
 //===================================================================//
 //==================Things you need globally==========================//
 //==================================================================//
