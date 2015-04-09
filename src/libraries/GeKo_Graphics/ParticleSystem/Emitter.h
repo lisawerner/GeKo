@@ -47,12 +47,7 @@ public:
 	void startTime();
 
 	//update & generate the particle
-	void update();
-	void generateParticle();
-	void pushParticle(int numberNewParticle);
-
-	//for moving emitter
-	void update(glm::vec3 playerPosition);
+	void update(glm::vec3 playerPosition = glm::vec3(0.0, 0.0, 0.0));
 	void generateParticle(glm::vec3 playerPosition);
 	void pushParticle(int numberNewParticle, glm::vec3 playerPosition);
 	void movePosition(glm::vec3 playerPosition);
@@ -91,7 +86,7 @@ public:
 	bool m_usePointGravity = false;
 	void usePhysicPointGravity(glm::vec4 gravity, float gravityRange, int gravityFunction, float speed);
 	bool m_useDirectionGravity = true;
-	void usePhysicSwarmCircleMotion(bool verticalMovement, bool horizontalXMovement, bool horizontalYMovement);
+	void usePhysicSwarmCircleMotion(bool verticalMovement, bool horizontalXMovement, bool horizontalYMovement, float speed);
 	bool m_useChaoticSwarmMotion = false;
 
 	//our physic attributes
@@ -110,12 +105,12 @@ public:
 	/*
 		WARNING: Only 2 Textures at the same time are interpolating. if you have a too small fading time not all textures are interpolationg
 	*/
-	void useTexture(bool useTexture, float particleSize,
+	void defineLook(bool useTexture, float particleSize,
 		float birthTime = 0.0, float deathTime = 0.0, float blendingTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
 	/*
 		WARNING: Only 2 Textures at the same time are interpolating. if you have a too small fading time not all textures are interpolationg
 	*/
-	void useTexture(bool useTexture, std::vector<float> scalingSize, std::vector<float> scalingMoment,
+	void defineLook(bool useTexture, std::vector<float> scalingSize, std::vector<float> scalingMoment,
 		float birthTime = 0.0, float deathTime = 0.0, float blendingTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
 	std::vector<Texture*> m_textureList;
 
