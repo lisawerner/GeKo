@@ -169,7 +169,7 @@ int main()
 
 	//Set all InputMaps and set one InputMap active
 	iH.setAllInputMaps(*(testScene.getScenegraph()->getActiveCamera()));
-	iH.changeActiveInputMap("Strategy");
+	iH.changeActiveInputMap("Object");
 
 	// ==============================================================
 	// == Object (ant, afraid) ======================================

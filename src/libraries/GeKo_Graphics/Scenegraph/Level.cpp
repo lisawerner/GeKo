@@ -6,6 +6,7 @@ Level::Level(const char* levelName)
 	m_levelName = levelName;
 	m_questHandler = new QuestHandler();
 	m_fightSystem = new FightSystem();
+	m_hasTerrain = false;
 
 }
 
@@ -88,9 +89,35 @@ FightSystem* Level::getFightSystem()
 void Level::setTerrain(Terrain* terrain)
 {
 	m_terrain = terrain;
+	m_hasTerrain = true;
 }
 
 Terrain* Level::getTerrain()
 {
 	return m_terrain;
+}
+
+bool Level::hasTerrain()
+{
+	return m_hasTerrain;
+}
+
+
+void Level::addGUI(GUI* gui)
+{
+	m_guis.push_back(gui);
+}
+
+GUI* Level::getGUI(std::string name)
+{
+	GUI* tmp;
+	for (int i = 0; i < m_guis.size(); i++)
+	{
+		if (m_guis.at(i)->m_windowName == name)
+		{
+			tmp = m_guis.at(i);
+		}
+	}
+
+	return tmp;
 }

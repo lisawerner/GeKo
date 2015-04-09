@@ -5,6 +5,7 @@
 #include <GeKo_Gameplay/FightSystem/FightSystem.h>
 #include <iostream>
 #include <GeKo_Graphics/Geometry/Terrain.h>
+#include <GeKo_Graphics/GUI/GUI.h>
 
 ///A Level is the necessary unit to create a game
 /**
@@ -55,8 +56,14 @@ public:
 	void setTerrain(Terrain* terrain);
 	Terrain* getTerrain();
 
+	bool hasTerrain();
+
+	void addGUI(GUI* gui);
+	GUI* getGUI(std::string name);
+
 protected:
 	const char* m_levelName;
+	bool m_hasTerrain;
 
 	std::vector<Scene*> m_sceneSet;
 	Scene* m_activeScene;
@@ -66,5 +73,7 @@ protected:
 	FightSystem* m_fightSystem;
 
 	Terrain* m_terrain;
+
+	std::vector<GUI*> m_guis;
 
 };
