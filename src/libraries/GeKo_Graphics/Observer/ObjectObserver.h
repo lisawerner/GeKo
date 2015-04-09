@@ -47,11 +47,19 @@ public:
 			 tmp->addTranslation(node.getPosition());
 			 if (tmp->hasCamera())
 			 {
-				 tmp->getCamera()->setCenter(glm::vec4(node.getPosition().x, tmp->getCamera()->getCenter().y, node.getPosition().z, 1.0));
+				 tmp->getCamera()->setPosition(glm::vec4(node.getPosition(), 1.0));
+				 //tmp->getCamera()->setCenter(glm::vec4(node.getPosition().x, tmp->getCamera()->getCenter().y, node.getPosition().z, 1.0));
 			 }
 	
 			 break;
-
+		 case Object_Event::OBJECT_ROTATED:
+			 tmp->addRotation(node.getPhi(), glm::vec3(0, 1, 0));
+			 if (tmp->hasCamera())
+			 {
+				 tmp->getCamera()->setLookAt(node.getViewDirection());
+					// setCenter(glm::vec4(node.getPosition().x, tmp->getCamera()->getCenter().y, node.getPosition().z, 1.0));
+			 }
+			 break;
 		 case Object_Event::OBJECT_STOPPED:
 			 break;
 		 }

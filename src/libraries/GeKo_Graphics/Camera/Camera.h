@@ -42,6 +42,9 @@ public:
 	/// This method sets the width and height of the viewport
 	void setWidthHeight(int width, int height);
 
+	//This method sets the position of the camera
+	void setPosition(glm::vec4 pos);
+
 	/// This method returns the position m_position of the camera
 	glm::vec4 getPosition();
 
@@ -75,6 +78,7 @@ public:
 	/// This method sets m_mouseSpeed
 	void setMouseSpeed(float speed);
 
+	/// This method return the look at m_center
 	glm::vec4 getCenter();
 	
 	// Implemented in the specific cameras
@@ -110,7 +114,7 @@ protected:
 	// The projection matrix transformes vertices into the clip-space
 	glm::mat4 m_projectionMatrix;
 
-	// Position, center and up are needed to compute the view matrix
+	// Position, center(look at) and up are needed to compute the view matrix
 	glm::vec4 m_position, m_center, m_up;
 
 	// Speed of movement by using keys
