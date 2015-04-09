@@ -12,7 +12,7 @@ layout(std140, binding=1) buffer velocity_ssbo
 
 layout(std140, binding=2) buffer angle_ssbo
 {
-	vec4 angle[];
+	vec2 angle[];
 };
 
 #define PI 3.14159
@@ -44,7 +44,7 @@ void main(){
 	uint gid = gl_GlobalInvocationID.x;
 	vec4 pos = positions[gid]; //xyz position, lifetime
 	vec4 vel = velocity[gid]; //xyz course, speed
-	vec4 ang = angle[gid]; //xz angle, launch angle
+	vec2 ang = angle[gid]; //xz angle, launch angle
 
 	if (pos.w >0 || particleMortal == 0){
 	
@@ -57,12 +57,9 @@ void main(){
 			float theta = radians(ang.y);
 
 			float tempPos = vel.w * cos(theta) * lifetime; //horizontal position in 2d
-			pos.x = tempPos * cos(phi) + emitterPos.x; //"transform" to 3d
-			pos.z = tempPos * sin(phi) + emitterPos.z; //"transform" to 3d
+			pos.x = tempPos * sin(phi) + emitterPos.x; //"transform" to 3d
+			pos.z = tempPos * cos(phi) + emitterPos.z; //"transform" to 3d
 			pos.y = vel.w * sin(theta) * lifetime + 0.5 * (-gravity.w) * pow(lifetime, 2.0) + emitterPos.y; //vertical position in 2d/3d
-
-			if(ang.y == 0.0)
-				pos.x = emitterPos.x + 1.0;
 		}
 
 		/*	DirectionGravity. Speed is constant, particles flying to a direction*/
@@ -107,11 +104,11 @@ void main(){
 		/*Particles fly in a circle/sphere*/
 		else if(useChaoticSwarmMotion == 1){
 			if(useMovementHorizontalX == 1)
-				pos.x += sin(pos.w) * deltaTime / vel.w;
+				pos.x += sin(pos.w) * deltaTime / 3.0;
 			if(useMovementVertical == 1)
-				pos.y += cos(pos.w) * deltaTime / vel.w;
+				pos.y += cos(pos.w) * deltaTime / 3.0;
 			if(useMovementHorizontalZ == 1)
-				pos.z += cos(pos.w) * deltaTime / vel.w;
+				pos.z += cos(pos.w) * deltaTime / 3.0;
 		}
 
 		//set remainLifetime
