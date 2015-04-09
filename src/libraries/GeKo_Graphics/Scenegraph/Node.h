@@ -7,7 +7,6 @@
 #include <GeKo_Graphics/Shader/Shader.h>
 #include <GeKo_Graphics/Geometry/Geometry.h>
 #include <GeKo_Graphics/Material/Texture.h>
-#include <GeKo_Graphics/Camera/StrategyCamera.h>
 
 #include <GeKo_Physics/Gravity.h>
 
@@ -167,8 +166,7 @@ public:
 
 	///Returns m_Camera as a Camera Object
 	/**If the node does not have a camera an error will be thrown!*/
-	StrategyCamera* getCamera();
-	void setCamera(StrategyCamera* camera);
+	Camera* getCamera();
 	void setCamera(Camera* camera);
 
 	///Return m_boundingSphere of the Node
@@ -276,8 +274,8 @@ protected:
 	Texture* m_heightmap;
 	float m_heightScale;
 	float m_heightBias;
-	StrategyCamera* m_camera;
-	Camera* m_otherCamera;
+	Camera* m_camera;
+	//Camera* m_otherCamera;
 
 	BoundingSphere* m_sphere;
 	BoundingSphere* m_viewArea;

@@ -11,53 +11,55 @@ public:
 
 	~ObjectObserver(){}
 
-	void onNotify(AI& node, Collision_Event event)  
+	void onNotify(AI& ai, Collision_Event event)  
 	 {
 		 switch (event)
 		 {
 		 case Collision_Event::COLLISION_KI_PLAYER:
-			 node.viewArea(true);
+			 ai.viewArea(true);
 			 break;
 			  
 		 case Collision_Event::NO_COLLISION_KI_PLAYER:
-			 node.viewArea(false);
+			 ai.viewArea(false);
 			 break;
 		 }
 	 }
 
-	void onNotify(AI& node, Object_Event event) 
+	void onNotify(AI& ai, Object_Event event) 
 	{
 		switch (event)
 		{
 		case Object_Event::OBJECT_MOVED:
-			std::string name = node.getNodeName();
+			std::string name = ai.getNodeName();
 			Node* tmp = m_level->getActiveScene()->getScenegraph()->searchNode(name);
-			tmp->addTranslation(node.getPosition());
+			tmp->addTranslation(ai.getPosition());
 			break;
 		}
 	}
 
-	void onNotify(Player& node, Object_Event event) 
+	void onNotify(Player& player, Object_Event event) 
 	 {
-		 std::string name = node.getNodeName();
+		 std::string name = player.getNodeName();
 		 Node* tmp = m_level->getActiveScene()->getScenegraph()->searchNode(name);
 		 switch (event)
 		 {
 		 case Object_Event::OBJECT_MOVED:
-			 tmp->addTranslation(node.getPosition());
+			 tmp->addTranslation(player.getPosition());
 			 if (tmp->hasCamera())
 			 {
-				 tmp->getCamera()->setPosition(glm::vec4(node.getPosition(), 1.0));
-				 //tmp->getCamera()->setCenter(glm::vec4(node.getPosition().x, tmp->getCamera()->getCenter().y, node.getPosition().z, 1.0));
+				 // Camera looks at player position
+				 glm::vec3 camPosition;
+				 camPosition = player.getPosition() + (-player.getViewDirection()*glm::vec3(2.0));
+				 tmp->getCamera()->setPosition(glm::vec4(camPosition, 1.0));
 			 }
 	
 			 break;
 		 case Object_Event::OBJECT_ROTATED:
-			 tmp->addRotation(node.getPhi(), glm::vec3(0, 1, 0));
+			 tmp->addRotation(player.getPhi(), glm::vec3(0, 1, 0));
 			 if (tmp->hasCamera())
 			 {
-				 tmp->getCamera()->setLookAt(node.getViewDirection());
-					// setCenter(glm::vec4(node.getPosition().x, tmp->getCamera()->getCenter().y, node.getPosition().z, 1.0));
+				 //TODO: Kamera dreht sich zwar parallel mit, muss aber ihre Position zusätzlich ändern, da sie sich auf einem Kreis um das Object dreht
+				 tmp->getCamera()->setLookAt(player.getViewDirection());
 			 }
 			 break;
 		 case Object_Event::OBJECT_STOPPED:

@@ -28,15 +28,12 @@ public:
 	void decreaseRadius();
 
 	void setViewDirection(glm::vec3 viewDirection);
-
-	double getXAngle();
-	double getYAngle();
 	
 protected:
 	double m_oldX, m_oldY;
 	float m_sensitivity;
-	double m_theta, m_phi, m_radius;
-	double angle;
+	double m_radius;
+	//double angle;
 
 	glm::vec3 m_movementVector;
 	glm::vec3 m_viewDirection;

@@ -80,6 +80,17 @@ public:
 
 	/// This method return the look at m_center
 	glm::vec4 getCenter();
+
+	/// This method returns the angle phi
+	/** Phi is the angle in x direction
+	*/
+	float getPhi();
+	/// This method returns the angle theta
+	/** Theta is the angle in y direction
+	*/
+	float getTheta();
+
+	double getRotationAngle();
 	
 	// Implemented in the specific cameras
 	virtual void moveForward();
@@ -94,6 +105,7 @@ public:
 	virtual void turnDown();
 	virtual void increaseRadius();
 	virtual void decreaseRadius();
+
 
 protected:
 	// The name identifies the camera
@@ -125,4 +137,9 @@ protected:
 
 	// m_direction defines the viewing direction
 	glm::vec4 m_direction;
+
+	// Angles in x(phi) and y(theta) direction
+	double m_phi, m_theta;
+	// Angle step
+	float m_rotationAngle;
 };

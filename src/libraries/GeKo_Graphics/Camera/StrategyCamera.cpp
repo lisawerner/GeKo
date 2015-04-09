@@ -58,7 +58,7 @@ void StrategyCamera::update(GLFWwindow* window)
 	double changeX = (x - m_oldX)* m_sensitivity;
 	double changeY = (y - m_oldY)* m_sensitivity;
 
-	angle += glm::atan(changeX) * (180 / glm::pi<float>());
+	m_rotationAngle += glm::atan(changeX) * (180 / glm::pi<float>());
 
 		m_theta -= changeY;
 		if (m_theta < 0.01f) m_theta = 0.01f;
@@ -189,13 +189,4 @@ void StrategyCamera::setViewDirection(glm::vec3 viewDirection)
 
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
 	
-}
-
-double StrategyCamera::getXAngle()
-{
-	return angle;
-}
-double  StrategyCamera::getYAngle()
-{
-	return m_theta;
 }

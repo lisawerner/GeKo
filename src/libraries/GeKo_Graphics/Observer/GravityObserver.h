@@ -31,7 +31,7 @@ public:
 						 node.setGravity(false);
 						 node.getPlayer()->setPosition(glm::vec3(node.getPlayer()->getPosition().x, height + 0.5f, node.getPlayer()->getPosition().z));
 						 if (node.hasCamera())
-							 node.getCamera()->setCenter(glm::vec4(node.getPlayer()->getPosition(), 1.0));
+							 node.getCamera()->setPosition(glm::vec4(node.getPlayer()->getPosition(), 1.0));
 					 }
 					 else if (true)
 					 {
@@ -64,7 +64,7 @@ public:
 						 node.setGravity(false);
 						 node.getPlayer()->setPosition(glm::vec3(node.getPlayer()->getPosition().x, height, node.getPlayer()->getPosition().z));
 						 if (node.hasCamera())
-							 node.getCamera()->setCenter(glm::vec4(node.getPlayer()->getPosition(), 1.0));
+							 node.getCamera()->setPosition(glm::vec4(node.getPlayer()->getPosition(), 1.0));
 					 }
 					 else if (true)
 					 {

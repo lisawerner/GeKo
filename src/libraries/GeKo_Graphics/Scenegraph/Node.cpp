@@ -349,7 +349,7 @@ void Node::addHeightMap(Texture* heightmap, float heightScale, float heightBias,
 	m_hasHeightMap = true;
 }
 
-StrategyCamera* Node::getCamera()
+Camera* Node::getCamera()
 {
 	if (m_hasCamera)
 	{
@@ -362,7 +362,7 @@ StrategyCamera* Node::getCamera()
 	}
 }
 
-void Node::setCamera(StrategyCamera* camera)
+void Node::setCamera(Camera* camera)
 {
 	m_camera = camera;
 	m_hasCamera = true;
@@ -371,21 +371,19 @@ void Node::setCamera(StrategyCamera* camera)
 	{
 		if (m_type == ClassType::PLAYER)
 		{
-			m_player->setPosition(glm::vec3(m_camera->getCenter().x, m_camera->getCenter().y, m_camera->getCenter().z));
+			// Compute position
+			m_player->setPosition(glm::vec3(m_camera->getPosition().x, m_camera->getPosition().y, m_camera->getPosition().z));
 			addTranslation(m_player->getPosition());
-
 			//TODO: Abfrage, welche Kamera-Art benutzt werden soll
-			m_camera->setCenter(glm::vec4(m_camera->getCenter().x, m_player->getPosition().y + 2.0f, m_camera->getCenter().z, 1.0));
-			m_camera->setRadius(2.5f);	
+			m_camera->setPosition(glm::vec4(m_camera->getPosition().x, m_player->getPosition().y + 2.0f, m_camera->getPosition().z, 1.0));
+
+			//TODO: Compute viewDirection
+
+			//TODO: Compute radius for trackball an strategy camera
+			//m_camera->setRadius(2.5f);	
 		}	
 	}
 
-}
-
-void Node::setCamera(Camera* camera)
-{
-	m_otherCamera = camera;
-	m_hasCamera = true;
 }
 
 BoundingSphere* Node::getBoundingSphere()
@@ -584,7 +582,7 @@ void Node::render(ShaderProgram &shader)
 					addTranslation(m_player->getPosition());
 					if (m_hasCamera)
 					{
-						m_camera->setCenter(glm::vec4(m_player->getPosition(), 1.0));
+						m_camera->setPosition(glm::vec4(m_player->getPosition(), 1.0));
 					}
 				}
 				else if ((m_type == ClassType::AI))
@@ -602,8 +600,8 @@ void Node::render(ShaderProgram &shader)
 			{
 				if (m_hasCamera)
 				{
-					addRotation(-(m_camera->getXAngle()), glm::vec3(0.0, 1.0, 0.0));
-					m_player->rotateView((m_camera->getXAngle()), 0.0f);
+					addRotation(-(m_camera->getRotationAngle()), glm::vec3(0.0, 1.0, 0.0));
+					m_player->rotateView((m_camera->getRotationAngle()), 0.0f);
 				}
 			}
 
@@ -673,6 +671,6 @@ void Node::renderParticle(ShaderProgram &shader)
 	//TODO: Particle-System muss gerendert werden!
 
 	m_particleSystem->update();
-	m_particleSystem->render(*m_otherCamera);
+	m_particleSystem->render(*m_camera);
 
 }

@@ -16,6 +16,8 @@ Pilotview::Pilotview(std::string name)
 
 	m_keySpeed = 50.0f;//2.0f;
 	m_sensitivity = 0.01f;
+
+	m_rotationAngle = 0;
 }
 
 Pilotview::~Pilotview()
@@ -84,6 +86,8 @@ void Pilotview::moveDown(){
 }
 
 void Pilotview::turnLeft(){
+	m_rotationAngle = m_keySpeed* m_sensitivity;
+
 	m_phi += m_keySpeed* m_sensitivity;
 	if (m_phi < 0) m_phi += 2 * glm::pi<float>();
 	else if (m_phi > 2 * glm::pi<float>()) m_phi -= 2 * glm::pi<float>();
@@ -98,6 +102,8 @@ void Pilotview::turnLeft(){
 }
 
 void Pilotview::turnRight(){
+	m_rotationAngle = -m_keySpeed* m_sensitivity;
+
 	m_phi -= m_keySpeed* m_sensitivity;
 	if (m_phi < 0) m_phi += 2 * glm::pi<float>();
 	else if (m_phi > 2 * glm::pi<float>()) m_phi -= 2 * glm::pi<float>();
