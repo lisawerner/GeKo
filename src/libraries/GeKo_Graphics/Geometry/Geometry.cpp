@@ -8,6 +8,17 @@ Geometry::Geometry()
 	m_hasIndex = false;
 	m_hasUV = false;
 }
+Geometry::Geometry(const StaticMesh &mesh){
+  m_wasLoaded = false;
+  m_hasNormals = true;
+  m_hasIndex = true;
+  m_hasUV = true;
+
+  m_vertices = mesh.vertices;
+  m_index = mesh.indicies;
+  m_uvs = mesh.uvs;
+  m_normals = mesh.normals;
+}
 
 Geometry::~Geometry()
 {
@@ -163,4 +174,11 @@ void Geometry::setNormalsTrue()
 void Geometry::setUVTrue()
 {
 	m_hasUV = true;
+<<<<<<< HEAD
 }
+=======
+}
+Geometry StaticMesh::toGeometry(){
+  return Geometry(*this);
+}
+>>>>>>> resource

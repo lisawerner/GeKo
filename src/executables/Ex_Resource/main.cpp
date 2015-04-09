@@ -9,22 +9,13 @@
 #include <assimp/mesh.h>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
+#include "GeKo_Graphics/Geometry/Geometry.h"
 
-using Normal = glm::vec3;
-using Vertex = glm::vec4;
-using Uv = glm::vec2;
-using Index = GLuint;
 
-struct StaticMesh{
-  std::vector<Vertex> vertices;
-  std::vector<Normal> normals;
-  std::vector<Uv> uvs;
-  std::vector<Index> indicies;
-};
 struct ResourceManager{
   HandleManager<StaticMesh> geometries;
 };
-StaticMesh load_geometry(std::string filepath){
+StaticMesh loadStaticMesh(std::string filepath){
   Assimp::Importer importer;
   std::vector<aiMesh*> meshEntries;
   const aiScene *scene = importer.ReadFile(filepath.c_str(),
@@ -68,7 +59,6 @@ StaticMesh load_geometry(std::string filepath){
 }
 int main(){
   auto r = ResourceManager();
-  auto antHandle = r.geometries.add(load_geometry("/home/maik/Downloads/sponza_obj/sponza.obj"));
-  std::cout << antHandle.get().vertices.size();
-  std::cout << antHandle.get().uvs.size();
+  auto sponzaHandle = r.geometries.add(loadStaticMesh("/home/maik/Downloads/sponza_obj/sponza.obj"));
+  Geometry sponza = sponzaHandle.get().toGeometry();
 }

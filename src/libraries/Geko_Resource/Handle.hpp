@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <vector>
 #include <stack>
+#include "GeKo_Graphics/Geometry/Geometry.h"
 
 template<class T>
 struct HandleManager;
