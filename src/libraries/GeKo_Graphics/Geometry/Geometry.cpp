@@ -175,7 +175,7 @@ void Geometry::setUVTrue()
 {
 	m_hasUV = true;
 }
-}
+
 Geometry StaticMesh::toGeometry(){
   return Geometry(*this);
 }
