@@ -64,6 +64,10 @@ void Camera::setWidthHeight(int width, int height){
 	m_height = height;
 }
 
+void Camera::setPosition(glm::vec4 pos){
+	m_position = pos;
+}
+
 glm::vec4 Camera::getPosition(){
 	return m_position;
 }
