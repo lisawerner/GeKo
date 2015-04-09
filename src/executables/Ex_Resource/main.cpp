@@ -10,6 +10,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include "GeKo_Graphics/Geometry/Geometry.h"
+using namespace Handle;
 
 
 struct ResourceManager{
