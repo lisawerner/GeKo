@@ -66,7 +66,7 @@ int main()
 	smoke->addTexture(smokeTex, 0.0);
 	std::vector<float> size{ 0.2f, 1.0f, 2.5f };
 	std::vector<float> time{ 0.0f, 0.2f, 1.0f };
-	smoke->useTexture(true, size, time, 2.0, 3.0, false, 0.3);
+	smoke->defineLook(true, size, time, 2.0, 3.0, false, 0.3);
 	smoke->switchToGeometryShader();
 
 	//EMITTER SNOW, needs better texture
@@ -75,7 +75,7 @@ int main()
 	snow->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 0.5f);
 	snow->setAreaEmitting(false, true, 10.0, 10000);
 	snow->addTexture(snowTex, 0.0);
-	snow->useTexture(true, 1.0, 2.0);
+	snow->defineLook(true, 1.0, 2.0);
 
 	/*Effect* effect = new Effect();
 	effect->addEmitter(smoke);

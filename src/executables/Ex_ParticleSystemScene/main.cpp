@@ -52,7 +52,7 @@ int main()
 	snow->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 0.5f);
 	snow->setAreaEmitting(false, true, 10.0, 10000);
 	snow->addTexture(snowTex, 0.0);
-	snow->useTexture(true, 0.04, 2.0);
+	snow->defineLook(true, 0.04, 2.0);
 
 	//FINAL EMITTER WHITE SMOKE
 	Emitter* smokeWhite = new Emitter(0, glm::vec3(0.0, 0.0, 5.0), 0.0, 0.4, 1, 8.0, true);
@@ -62,7 +62,7 @@ int main()
 	smokeWhite->addTexture(smokeWhiteTex2, 0.25);
 	std::vector<float> smokeWhiteSize{ 0.05f, 0.5f, 0.75f, 1.2f };
 	std::vector<float> smokeWhiteTime{ 0.0f, 0.4f, 0.75f, 1.0f };
-	smokeWhite->useTexture(true, smokeWhiteSize, smokeWhiteTime, 1.0, 4.0, 4.0, false, 0.3);
+	smokeWhite->defineLook(true, smokeWhiteSize, smokeWhiteTime, 1.0, 4.0, 4.0, false, 0.3);
 	smokeWhite->switchToGeometryShader();
 
 	//FINAL EMITTER BLACK SMOKE
@@ -73,7 +73,7 @@ int main()
 	smokeBlack->addTexture(smokeBlackTex2, 0.08);
 	std::vector<float> smokeBlackSize{ 0.1f, 0.4f, 0.8f, 1.2f };
 	std::vector<float> smokeBlackTime{ 0.0f, 0.2f, 0.75f, 1.0f };
-	smokeBlack->useTexture(true, smokeBlackSize, smokeBlackTime, 1.0, 4.0, 4.0, false, 0.3);
+	smokeBlack->defineLook(true, smokeBlackSize, smokeBlackTime, 1.0, 4.0, 4.0, false, 0.3);
 	smokeBlack->switchToGeometryShader();
 
 	//PARTICLE SYSTEM

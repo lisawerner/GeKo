@@ -49,11 +49,10 @@ void Effect::changePosition(glm::vec3 newPosition)
 	}
 }
 
-void Effect::updateEmitters()
+void Effect::updateEmitters(glm::vec3 playerPosition)
 {
 	for (auto emitter : emitterVec){
-		emitter->generateParticle();
-		emitter->update();
+		emitter->update(playerPosition);
 	}
 }
 
@@ -249,13 +248,13 @@ int Effect::loadEffect(const char* filepath)
 				error = physicElement->QueryBoolText(&movementHorizontalZ);
 				XMLCheckResult(error);
 
-				//physicElement = physicType->FirstChildElement("MovementLength");
-				//if (physicElement == nullptr) return XML_ERROR_PARSING_ELEMENT;
-				//float movementLength;
-				//error = physicElement->QueryFloatText(&movementLength);
-				//XMLCheckResult(error);
+				physicElement = physicType->FirstChildElement("Speed");
+				if (physicElement == nullptr) return XML_ERROR_PARSING_ELEMENT;
+				float speed;
+				error = physicElement->QueryFloatText(&speed);
+				XMLCheckResult(error);
 
-				emitter->usePhysicSwarmCircleMotion(movementVertical, movementHorizontalX, movementHorizontalZ);
+				emitter->usePhysicSwarmCircleMotion(movementVertical, movementHorizontalX, movementHorizontalZ, speed);
 			}
 		}
 
@@ -361,7 +360,7 @@ int Effect::loadEffect(const char* filepath)
 				error = tex->QueryFloatText(&rotationSpeed);
 				XMLCheckResult(error);
 
-				emitter->useTexture(useTexture, scalingSize, scalingMoment, 
+				emitter->defineLook(useTexture, scalingSize, scalingMoment, 
 					birthTime, deathTime, rotateLeft, rotationSpeed);
 			}
 			else {
@@ -398,7 +397,7 @@ int Effect::loadEffect(const char* filepath)
 				error = tex->QueryFloatText(&rotationSpeed);
 				XMLCheckResult(error);
 
-				emitter->useTexture(useTexture, particleSize, 
+				emitter->defineLook(useTexture, particleSize, 
 					birthTime, deathTime, rotateLeft, rotationSpeed);
 			}
 			
