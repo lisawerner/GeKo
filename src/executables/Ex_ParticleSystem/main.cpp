@@ -86,8 +86,6 @@ int main()
 {
 	//////////////////////////////////////////BASICS///////////////////////////////////////////
 
-	srand(time(NULL));
-
 	glfwInit();
 
 	//WINDOW
@@ -95,7 +93,7 @@ int main()
 	glfwMakeContextCurrent(window.getWindow());
 
 	//CAM
-	cam.setPosition(glm::vec4(-15.0, 0.0, 7.0, 1.0));
+	cam.setPosition(glm::vec4(-21.0, 0.0, 7.0, 1.0));
 	cam.setNearFar(0.1f, 100.0f);
 	cam.setLookAt(glm::vec3(cam.getPosition().x, cam.getPosition().y, cam.getPosition().z - 1.0));
 	cam.setKeySpeed(8.0);
@@ -122,11 +120,12 @@ int main()
 	/////////////////////////////////////////TEXTURES//////////////////////////////////////////
 
 	//COMIC CLOUD
-	Texture* comicBalloonTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/balloon01.png"); 
-	Texture* comicBalloonTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/balloon02.png"); 
-	Texture* comicBalloonTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/balloon03.png"); 
-	Texture* comicBalloonTex4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/balloon04.png"); 
-	Texture* comicCloudTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/cloud01.png"); 
+	Texture* comicBalloonTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/balloon01.png"); //TODO NICO
+	Texture* comicBalloonTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/balloon02.png"); //TODO NICO
+	Texture* comicBalloonTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/balloon03.png"); //TODO NICO
+	Texture* comicBalloonTex4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/balloon04.png"); //TODO NICO
+	Texture* comicCloudTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/cloud01.png"); //TODO NICO
+	Texture* comicCloudTex11 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/cloudN01.png"); //TODO NICO
 	Texture* comicCloudTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/cloud02.png");
 	Texture* comicCloudTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/cloud03.png");
 	Texture* comicCloudTex4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/comicCloud/cloud04.png");
@@ -185,12 +184,12 @@ int main()
 	///////////////////////////////////////FINAL EMITTER///////////////////////////////////////
 
 	//FINAL EMITTER SNOW
-	Emitter* snow = new Emitter(0, glm::vec3(0.0, 5.0, 0.0), 0.0, 0.166, 100, 30.0, true);
+	Emitter* snow = new Emitter(0, glm::vec3(0.0, 3.0, 0.0), 0.0, 0.166, 100, 30.0, true);
 	snow->setVelocity(0);
 	snow->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 0.5f);
 	snow->setAreaEmitting(false,true, 10.0, 10000);
 	snow->addTexture(snowTex, 0.0);
-	snow->defineLook(true, 0.04, 2.0);
+	snow->useTexture(true, 0.04, 2.0);
 	particleCount += (100 * 30 / 0.166);
 
 	//FINAL EMITTER STRONG SNOW
@@ -199,7 +198,7 @@ int main()
 	snowStrong->usePhysicDirectionGravity(glm::vec4(0.6, -1.5, 0.0, 1.0), 2.6f);
 	snowStrong->setAreaEmitting(false, true, 8.0, 10000);
 	snowStrong->addTexture(snowTex, 0.0);
-	snowStrong->defineLook(true, 0.03, 1.0, 3.0);
+	snowStrong->useTexture(true, 0.03, 1.0, 3.0);
 	particleCount += (100 * 15.0 / 0.166);
 
 	//FINAL EMITTER WHITE SMOKE
@@ -210,19 +209,19 @@ int main()
 	smokeWhite->addTexture(smokeWhiteTex2, 0.25);
 	std::vector<float> smokeWhiteSize{ 0.05f, 0.5f, 0.75f, 1.2f };
 	std::vector<float> smokeWhiteTime{ 0.0f, 0.4f, 0.75f, 1.0f };
-	smokeWhite->defineLook(true, smokeWhiteSize, smokeWhiteTime, 1.0, 4.0, 3.0, false, 0.3);
+	smokeWhite->useTexture(true, smokeWhiteSize, smokeWhiteTime, 1.0, 4.0, 3.0, false, 0.3);
 	smokeWhite->switchToGeometryShader();
 	particleCount += (1 * 8.0 / 0.4);
 
 	//FINAL EMITTER BLACK SMOKE
-	Emitter* smokeBlack = new Emitter(0, glm::vec3(6.0, -1.0, 1.0), 0.0, 0.6, 1, 8.0, true);
+	Emitter* smokeBlack = new Emitter(0, glm::vec3(6.0, -1.0, 1.0), 0.0, 0.4, 1, 8.0, true);
 	smokeBlack->setVelocity(2);
 	smokeBlack->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.8), 0.3f);
 	smokeBlack->addTexture(smokeBlackTex1, 1.0);
-	smokeBlack->addTexture(smokeBlackTex2, 0.2);
+	smokeBlack->addTexture(smokeBlackTex2, 0.08);
 	std::vector<float> smokeBlackSize{ 0.1f, 0.4f, 0.8f, 1.2f };
 	std::vector<float> smokeBlackTime{ 0.0f, 0.2f, 0.75f, 1.0f };
-	smokeBlack->defineLook(true, smokeBlackSize, smokeBlackTime, 1.0, 5.0, 3.0, false, 0.3);
+	smokeBlack->useTexture(true, smokeBlackSize, smokeBlackTime, 1.0, 4.0, 3.0, false, 0.3);
 	smokeBlack->switchToGeometryShader();
 	particleCount += (1 * 8 / 0.4);
 
@@ -234,7 +233,7 @@ int main()
 	smokeCloud->addTexture(smokeWhiteTex2, 0.08);
 	std::vector<float> smokeCloudSize{ 0.1f, 0.4f, 0.8f, 1.2f };
 	std::vector<float> smokeCloudTime{ 0.0f, 0.2f, 0.75f, 1.0f };
-	smokeCloud->defineLook(true, smokeBlackSize, smokeBlackTime, 1.0, 2.0, 4.0, false, 0.3);
+	smokeCloud->useTexture(true, smokeBlackSize, smokeBlackTime, 1.0, 2.0, 4.0, false, 0.3);
 	smokeCloud->switchToGeometryShader();
 	particleCount += (1 * 10.0 / 0.3);
 
@@ -244,61 +243,60 @@ int main()
 	rain->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 5.0f);
 	rain->setAreaEmitting(false, true, 8.0, 10000);
 	rain->addTexture(rainTex, 0.0);
-	rain->defineLook(true, 0.03, 1.0, 0.0);
+	rain->useTexture(true, 0.03, 1.0, 0.0);
 	particleCount += (50 * 5.0 / 0.02);
 
 	//FINAL EMITTER FONTAINE
-	Emitter* fontaine = new Emitter(0, glm::vec3(-15.0,-1.0, 1.0), 0.0, 0.05, 5, 2.0, true);
-	fontaine->setVelocity(0);
-	fontaine->usePhysicTrajectory(glm::vec4(0.0, 0.0, 0.0, 1.0), 1.0);
-	//fontaine->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.7f);
-	fontaine->defineLook(false, 0.3, 0.0, 0.5, 0.0, true, 1.0);
+	Emitter* fontaine = new Emitter(0, glm::vec3(-15.0,-1.0, 1.0), 0.0, 0.05, 3, 2.0, true);
+	fontaine->setVelocity(5);
+	fontaine->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.7f);
+	fontaine->useTexture(false, 0.02, 3.0, 3.0, 0.0, true, 1.0);
 	particleCount += (3 * 2.0 / 0.05);
 
 	//FINAL EMITTER CIRCLE
-	Emitter* circle = new Emitter(0, glm::vec3(-18.0, 0.0, 1.0), 0.0, 0.2, 50, 4.0, true);
+	Emitter* circle = new Emitter(0, glm::vec3(-18.0, 0.0, 1.0), 0.0, 0.4, 50, 4.0, true);
 	circle->setVelocity(4);
 	circle->addTexture(fireSparkTex1, 1.0);
 	circle->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.3f);
 	circle->addTexture(fireSparkTex2 ,0.1);
-	circle->defineLook(true, 0.03, 0.0, 2.0, 1.0, true, 0.0);
+	circle->useTexture(true, 0.03, 0.0, 2.0, 1.0, true, 0.0);
 	circle->switchToGeometryShader();
 	particleCount += (50 * 4.0 / 0.4);
 
 	//FINAL EMITTER QUAD
-	Emitter* quad = new Emitter(0, glm::vec3(-21.0, 0.0, 1.0), 0.0, 1.0, 100, 1.0, true);
+	Emitter* quad = new Emitter(0, glm::vec3(-21.0, 0.0, 1.0), 0.0, 1.0, 50, 1.0, true);
 	quad->setVelocity(0);
 	quad->setAreaEmitting(true, true, 0.5, 1);
-	quad->defineLook(false, 0.1, 0.0, 0.0, 0.0, false, 0.0);
+	quad->useTexture(false, 0.1, 0.0, 0.0, 0.0, false, 0.0);
 	particleCount += (50 * 1.0 / 1.0);
 
 	//FINAL EMITTER FRUITFLIES
 	Emitter* fruitFlies = new Emitter(0, glm::vec3(11.5, 0.0, 1.0), 0.0, 0.166, 2, 10.0, true);
 	fruitFlies->setVelocity(0);
-	fruitFlies->usePhysicSwarmCircleMotion(true, true, true, 3.0);
+	fruitFlies->usePhysicSwarmCircleMotion(true, true, true);
 	fruitFlies->setAreaEmitting(true, true, 0.5, 100);
 	fruitFlies->addTexture(particleBlackTex, 0.0);
-	fruitFlies->defineLook(true, 0.012, 3.0, 3.0, 0.0, true, 1.0);
+	fruitFlies->useTexture(true, 0.012, 3.0, 3.0, 0.0, true, 1.0);
 	fruitFlies->switchToGeometryShader();
 	particleCount += (2 * 10.0 / 0.166);
 
 	//FINAL SCREEN EMITTER FRUITFLIES
 	Emitter* screenFruitFlies = new Emitter(0, glm::vec3(-0.2, 0.2, 7.0), 0.0, 0.1, 2, 10.0, true);
 	screenFruitFlies->setVelocity(0);
-	screenFruitFlies->usePhysicSwarmCircleMotion(true, true, true, 3.0);
+	screenFruitFlies->usePhysicSwarmCircleMotion(true, true, true);
 	screenFruitFlies->setAreaEmitting(true, false, 2.5, 1000);
 	screenFruitFlies->addTexture(particleBlackTex, 0.0);
-	screenFruitFlies->defineLook(true, 0.02, 1.0, 3.0, 0.0, true, 1.0);
+	screenFruitFlies->useTexture(true, 0.02, 1.0, 3.0, 0.0, true, 1.0);
 	screenFruitFlies->switchToGeometryShader();
 	particleCount += (3 * 10.0 / 0.166);
 
 	//FINAL EMITTER GLOWWORM
 	Emitter* glowworm = new Emitter(0, glm::vec3(-3.0, 0.0, 1.0), 0.0, 0.2, 1, 10.0, true);
 	glowworm->setVelocity(0);
-	glowworm->usePhysicSwarmCircleMotion(true, true, true, 3.0);
+	glowworm->usePhysicSwarmCircleMotion(true, true, true);
 	glowworm->setAreaEmitting(true, false, 0.4, 1000);
 	glowworm->addTexture(glowwormTex, 0.0);
-	glowworm->defineLook(true, 0.1, 1.0, 1.5);
+	glowworm->useTexture(true, 0.1, 1.0, 1.5);
 	particleCount += (1 * 10.0 / 0.2);
 
 	//FINAL EMITTER ENERGYBALL
@@ -306,90 +304,90 @@ int main()
 	energyBall->setVelocity(5);
 	energyBall->usePhysicPointGravity(glm::vec4(-10.0, 1.0, 1.0, 3.0), 8.0, 2, 1.8);
 	energyBall->addTexture(energyTex, 1.0);
-	energyBall->defineLook(true, 0.04);
+	energyBall->useTexture(true, 0.04);
 	particleCount += (5 * 15.0 / 0.01);
 
 	//FINAL EMITTER COMIC CLOUD
-	Emitter* cloud01 = new Emitter(0, glm::vec3(-6.0, 0.5, 1.0), 0.0, 1.6, 1, 10.0, true);
+	Emitter* cloud01 = new Emitter(0, glm::vec3(-6.0, 0.5, 1.0), 0.0, 1.5, 1, 10.0, true);
 	cloud01->setVelocity(4);
-	cloud01->usePhysicPointGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.0, 0, 0.72);
+	cloud01->usePhysicPointGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.0, 0, 0.62);
 	cloud01->addTexture(comicCloudTex1, 0.0);
 	std::vector<float> cloudSize1{ 0.8f, 1.6f };
 	std::vector<float> cloudTime1{ 0.0f, 1.0f };
-	cloud01->defineLook(true, cloudSize1, cloudTime1, 0.4, 4.0, 0.0, false, 0.3);
+	cloud01->useTexture(true, cloudSize1, cloudTime1, 0.4, 4.0, 0.0, false, 0.3);
 	cloud01->switchToGeometryShader();
 	particleCount += (1 * 1.5 / 10.0);
 
-	Emitter* cloud02 = new Emitter(0, glm::vec3(-6.0, 0.5, 1.0), 0.0, 2.3, 1, 10.0, true);
+	Emitter* cloud02 = new Emitter(0, glm::vec3(-6.0, 0.5, 1.0), 0.0, 2.1, 1, 10.0, true);
 	cloud02->setVelocity(4);
-	cloud02->usePhysicPointGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.0, 0, 0.6);
+	cloud02->usePhysicPointGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.0, 0, 0.5);
 	cloud02->addTexture(comicCloudTex3, 0.0);
 	std::vector<float> cloudSize2{ 0.8f, 1.6f };
 	std::vector<float> cloudTime2{ 0.0f, 1.0f };
-	cloud02->defineLook(true, cloudSize2, cloudTime2, 0.4, 4.0, 0.0, false, 0.3);
+	cloud02->useTexture(true, cloudSize2, cloudTime2, 0.4, 4.0, 0.0, false, 0.3);
 	cloud02->switchToGeometryShader();
 	particleCount += (1 * 2.1 / 10.0);
 
 	Emitter* cloud03 = new Emitter(0, glm::vec3(-7.0, 1.0, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud03->setVelocity(0);
 	cloud03->addTexture(comicBalloonTex4, 1.0);
-	cloud03->defineLook(true, 0.8, 2.0);
+	cloud03->useTexture(true, 0.8, 2.0);
 	cloud03->switchToGeometryShader();
 	particleCount += 1;
 
 	Emitter* cloud04 = new Emitter(0, glm::vec3(-4.8, 2.0, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud04->setVelocity(0);
 	cloud04->addTexture(comicStarTex2, 1.0);
-	cloud04->defineLook(true, 0.3, 2.0, 0.0, 0.0, false, 0.6);
+	cloud04->useTexture(true, 0.3, 2.0, 0.0, 0.0, false, 0.6);
 	cloud04->switchToGeometryShader();
 	particleCount += 1;
 
 	Emitter* cloud05 = new Emitter(0, glm::vec3(-7.0, -1.0, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud05->setVelocity(0);
 	cloud05->addTexture(comicStarTex2, 1.0);
-	cloud05->defineLook(true, 0.5, 2.0, 0.0, 0.0, true, 0.4);
+	cloud05->useTexture(true, 0.5, 2.0, 0.0, 0.0, true, 0.4);
 	cloud05->switchToGeometryShader();
 	particleCount += 1;
 
 	Emitter* cloud06 = new Emitter(0, glm::vec3(-4.3, 0.2, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud06->setVelocity(0);
 	cloud06->addTexture(comicSpiralTex5, 1.0);
-	cloud06->defineLook(true, 0.3, 2.0);
+	cloud06->useTexture(true, 0.3, 2.0);
 	cloud06->switchToGeometryShader();
 	particleCount += 1;
 
 	Emitter* cloud07 = new Emitter(0, glm::vec3(-8.0, 0.7, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud07->setVelocity(0);
 	cloud07->addTexture(comicSpiralTex3, 1.0);
-	cloud07->defineLook(true, 0.3, 2.0);
+	cloud07->useTexture(true, 0.3, 2.0);
 	cloud07->switchToGeometryShader();
 	particleCount += 1;
 
 	Emitter* cloud08 = new Emitter(0, glm::vec3(-7.9, 2.1, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud08->setVelocity(0);
 	cloud08->addTexture(comicLightningTex1, 1.0);
-	cloud08->defineLook(true, 0.6, 2.0);
+	cloud08->useTexture(true, 0.6, 2.0);
 	cloud08->switchToGeometryShader();
 	particleCount += 1;
 
 	Emitter* cloud09 = new Emitter(0, glm::vec3(-4.0, 1.4, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud09->setVelocity(0);
 	cloud09->addTexture(comicLightningTex4, 1.0);
-	cloud09->defineLook(true, 0.5, 2.0);
+	cloud09->useTexture(true, 0.5, 2.0);
 	cloud09->switchToGeometryShader();
 	particleCount += 1;
 
 	Emitter* cloud10 = new Emitter(0, glm::vec3(-3.7, 0.8, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud10->setVelocity(0);
 	cloud10->addTexture(comicExclamationMarkTex3, 1.0);
-	cloud10->defineLook(true, 0.3, 2.0);
+	cloud10->useTexture(true, 0.3, 2.0);
 	cloud10->switchToGeometryShader();
 	particleCount += 1;
 
 	Emitter* cloud11 = new Emitter(0, glm::vec3(-6.5, 2.4, 1.0), 0.0, 0.0, 1, 0.0, false);
 	cloud11->setVelocity(0);
 	cloud11->addTexture(comicExclamationMarkTex2, 1.0);
-	cloud11->defineLook(true, 0.5, 2.0);
+	cloud11->useTexture(true, 0.5, 2.0);
 	cloud11->switchToGeometryShader();
 	particleCount += 1;
 
@@ -399,7 +397,7 @@ int main()
 	Emitter* maximumParticle = new Emitter(0, glm::vec3(-21.0, -3.0, 0.0), 0.0, 0.2, 5000, 12.0, true);
 	maximumParticle->setVelocity(3);
 	maximumParticle->usePhysicDirectionGravity(glm::vec4(0.0, 1.0, 0.0, 0.2), 0.5);
-	maximumParticle->defineLook(false, 0.01);
+	maximumParticle->useTexture(false, 0.01);
 	int particleCountMax = 5000 * 12 / 0.2;
 
 	//particleMax with Texture
@@ -411,7 +409,7 @@ int main()
 	fireMiddle->addTexture(fireTex1, 1.0);
 	//fireMiddle->addTexture(fireTex2, 0.5);
 	fireMiddle->addTexture(fireTex3, 0.0);
-	fireMiddle->defineLook(true, 0.5, 1.0, 2.0);
+	fireMiddle->useTexture(true, 0.5, 1.0, 2.0);
 	fireMiddle->switchToGeometryShader();
 
 	Emitter* fireSmoke = new Emitter(0, glm::vec3(9.0, -1.0, 1.0), 0.0, 0.4, 1, 8.0, true);
@@ -421,38 +419,38 @@ int main()
 	fireSmoke->addTexture(smokeBlackTex2, 0.08);
 	std::vector<float> fireSmokeSize{ 0.1f, 0.4f, 0.8f, 1.2f };
 	std::vector<float> fireSmokeTime{ 0.0f, 0.2f, 0.75f, 1.0f };
-	fireSmoke->defineLook(true, fireSmokeSize, fireSmokeTime, 1.0, 4.0, 1.0, false, 0.3);
+	fireSmoke->useTexture(true, fireSmokeSize, fireSmokeTime, 1.0, 4.0, 1.0, false, 0.3);
 	fireSmoke->switchToGeometryShader();
 
 	Emitter* firefly = new Emitter(0, glm::vec3(9.1, -0.9, 1.0), 0.0, 1.3, 1, 9.0, true);
 	firefly->setVelocity(3);
 	firefly->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.5), 0.13f);
 	firefly->addTexture(fireflyTex, 1.0);
-	firefly->defineLook(true, 0.04, 2.0, 2.0, 0.0, false, 0.3);
+	firefly->useTexture(true, 0.04, 2.0, 2.0, 0.0, false, 0.3);
 
 	Emitter* fireSparkOrange = new Emitter(0, glm::vec3(9.1, -0.9, 1.0), 0.0, 0.1, 1, 0.8, true);
 	fireSparkOrange->setVelocity(3);
 	fireSparkOrange->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.0), 1.5f);
 	fireSparkOrange->addTexture(fireSparkTex1, 1.0);
-	fireSparkOrange->defineLook(true, 0.02, 0.4, 0.3, 0.0, false, 0.3);
+	fireSparkOrange->useTexture(true, 0.02, 0.4, 0.3, 0.0, false, 0.3);
 
 	Emitter* fireSparkRed = new Emitter(0, glm::vec3(9.1, -0.9, 1.0), 0.0, 0.1, 1, 1.0, true);
 	fireSparkRed->setVelocity(3);
 	fireSparkRed->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -1.5), 1.5f);
 	fireSparkRed->addTexture(fireSparkTex2, 1.0);
-	fireSparkRed->defineLook(true, 0.02, 0.4, 0.3, 0.0, false, 0.3);
+	fireSparkRed->useTexture(true, 0.02, 0.4, 0.3, 0.0, false, 0.3);
 
 	//!EMITTER FIREWORK
 	Emitter* firework = new Emitter(0, glm::vec3(0.6, 0.6, 0.0), 0.0, 0.5, 5, 1.0, true);
 	firework->setVelocity(4);
 	firework->usePhysicDirectionGravity(glm::vec4(0.0,-1.0,0.0,0.1), 1.0f);
 	//firework->addTexture(*fireWorkYellowTex, 0.0);
-	//firework->defineLook(true, 0.8, 0.1, 0.2);
+	//firework->useTexture(true, 0.8, 0.1, 0.2);
 	Emitter* firework2 = new Emitter(0, glm::vec3(-0.6, -0.6, 0.0), 0.0, 0.5, 5, 1.0, true);
 	firework2->setVelocity(4);
 	firework2->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 0.1), 1.0f);
 	//firework2->addTexture(*fireWorkOrangeTex, 0.0);
-	//firework2->defineLook(true, 0.8, 0.1, 0.2);
+	//firework2->useTexture(true, 0.8, 0.1, 0.2);
 
 	//////////////////////////////////////OUR SCENE///////////////////////////////////////////////
 
@@ -563,7 +561,7 @@ int main()
 			shaderSkybox.sendMat4("viewMatrix", cam.getViewMatrix());
 			shaderSkybox.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 			shaderSkybox.sendSkyboxTexture("testTexture", skybox.getSkyboxTexture());
-			//skyboxNode.render();
+			skyboxNode.render();
 			shaderSkybox.unbind();
 
 			glEnable(GL_DEPTH_TEST);
@@ -574,68 +572,89 @@ int main()
 			teaNode.setModelMatrix(glm::rotate(teaNode.getModelMatrix(), 3.0f, glm::vec3(0.0, 1.0, 0.0)));
 			cube1.setModelMatrix(glm::rotate(cube1.getModelMatrix(), 3.0f, glm::vec3(0.0, 1.0, 0.0)));
 			cube2.setModelMatrix(glm::rotate(cube2.getModelMatrix(), 3.0f, glm::vec3(0.0, 1.0, 0.0)));
-			//testScene.render(shaderObject);
+			testScene.render(shaderObject);
 			shaderObject.unbind();
 
 			///////////////////////////////////////FINAL EMITTER///////////////////////////////////////
 			glDisable(GL_DEPTH_TEST);
 
-			//smokeWhite->update();
-			//smokeWhite->render(cam);
+			smokeWhite->generateParticle();
+			smokeWhite->update();
+			smokeWhite->render(cam);
 
-			//smokeBlack->update();
-			//smokeBlack->render(cam);
+			smokeBlack->generateParticle();
+			smokeBlack->update();
+			smokeBlack->render(cam);
 
+			fontaine->generateParticle();
 			fontaine->update();
 			fontaine->render(cam);
 
-			//circle->update();
-			//circle->render(cam);
+			circle->generateParticle();
+			circle->update();
+			circle->render(cam);
 
-			//quad->update();
-			//quad->render(cam);
+			quad->generateParticle();
+			quad->update();
+			quad->render(cam);
 
-			//glowworm->update();
-			//glowworm->render(cam);
+			glowworm->generateParticle();
+			glowworm->update();
+			glowworm->render(cam);
 
-			//fruitFlies->update();
-			//fruitFlies->render(cam);
+			fruitFlies->generateParticle();
+			fruitFlies->update();
+			fruitFlies->render(cam);
 
-			//energyBall->update();
-			//energyBall->render(cam);
+			energyBall->generateParticle();
+			energyBall->update();
+			energyBall->render(cam);
 
-			//cloud01->update();
-			//cloud01->render(cam);
-			//cloud02->update();
-			//cloud02->render(cam);
-			//cloud03->update();
-			//cloud03->render(cam);
-			//cloud04->update();
-			//cloud04->render(cam);
-			//cloud05->update();
-			//cloud05->render(cam);
-			//cloud06->update();
-			//cloud06->render(cam);
-			//cloud07->update();
-			//cloud07->render(cam);
-			//cloud08->update();
-			//cloud08->render(cam);
-			//cloud09->update();
-			//cloud09->render(cam);
-			//cloud10->update();
-			//cloud10->render(cam);
-			//cloud11->update();
-			//cloud11->render(cam);
+			cloud01->generateParticle();
+			cloud01->update();
+			cloud01->render(cam);
+			cloud02->generateParticle();
+			cloud02->update();
+			cloud02->render(cam);
+			cloud03->generateParticle();
+			cloud03->update();
+			cloud03->render(cam);
+			cloud04->generateParticle();
+			cloud04->update();
+			cloud04->render(cam);
+			cloud05->generateParticle();
+			cloud05->update();
+			cloud05->render(cam);
+			cloud06->generateParticle();
+			cloud06->update();
+			cloud06->render(cam);
+			cloud07->generateParticle();
+			cloud07->update();
+			cloud07->render(cam);
+			cloud08->generateParticle();
+			cloud08->update();
+			cloud08->render(cam);
+			cloud09->generateParticle();
+			cloud09->update();
+			cloud09->render(cam);
+			cloud10->generateParticle();
+			cloud10->update();
+			cloud10->render(cam);
+			cloud11->generateParticle();
+			cloud11->update();
+			cloud11->render(cam);
 		}
 		////////////////////////////////FINAL SCREEN EMITTER//////////////////////////////////////////////////
 		else{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			maximumParticle->generateParticle();
 			maximumParticle->update();
 			maximumParticle->render(cam);
 			particleCount = particleCountMax;
 		}
 
 		if (useFruitFliesButton->isActive()){
+			screenFruitFlies->generateParticle();
 			screenFruitFlies->update();
 			screenFruitFlies->render(screen);
 		}
@@ -645,6 +664,7 @@ int main()
 
 			////////////////////////////////FINAL GUI EMITTER///////////////////////////////////////////
 		if (useSnowButton->isActive()){
+			snow->generateParticle(glm::vec3(cam.getPosition()));
 			snow->update(glm::vec3(cam.getPosition()));
 			snow->render(cam);
 		}
@@ -653,6 +673,7 @@ int main()
 		}
 
 		if (useStrongSnowButton->isActive()){
+			snowStrong->generateParticle(glm::vec3(cam.getPosition()));
 			snowStrong->update(glm::vec3(cam.getPosition()));
 			snowStrong->render(cam);
 		}
@@ -661,6 +682,7 @@ int main()
 		}
 
 		if (useRainButton->isActive()){
+			rain->generateParticle(glm::vec3(cam.getPosition()));
 			rain->update(glm::vec3(cam.getPosition()));
 			rain->render(cam);
 		}{
@@ -670,31 +692,39 @@ int main()
 		////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////
 
 		//todo: flamme
-		//fireMiddle->update();
+		fireMiddle->generateParticle();
+		fireMiddle->update();
 		//fireMiddle->render(cam);
-		//fireSmoke->update();
-		//fireSmoke->render(cam);
-		//firefly->update();
-		//firefly->render(cam);
-		//fireSparkOrange->update();
-		//fireSparkOrange->render(cam);
-		//fireSparkRed->update();
-		//fireSparkRed->render(cam);
+		fireSmoke->generateParticle();
+		fireSmoke->update();
+		fireSmoke->render(cam);
+		firefly->generateParticle();
+		firefly->update();
+		firefly->render(cam);
+		fireSparkOrange->generateParticle();
+		fireSparkOrange->update();
+		fireSparkOrange->render(cam);
+		fireSparkRed->generateParticle();
+		fireSparkRed->update();
+		fireSparkRed->render(cam);
 
 		// todo all
-		//firework->update();
+		firework->generateParticle();
+		firework->update();
 		//firework->render(cam);
 
 		//smokeCloud
-		//smokeCloud->update();
-		//smokeCloud->render(cam);
+		smokeCloud->generateParticle();
+		smokeCloud->update();
+		smokeCloud->render(cam);
 
 		////////////////////////////////BASICS///////////////////////////////////////////////////////
 
-		//renderer->renderGUI(*gui, window);
+		renderer->renderGUI(*gui, window);
 
 		//WINDOW
-		window.swapAndPoll();
+		glfwSwapBuffers(window.getWindow());
+		glfwPollEvents();
 
 		//FPS
 		if (!(outputFrames % 30)){
