@@ -19,7 +19,7 @@ public:
 	Object();
 	~Object();
 
-	void setPosition(glm::vec3 pos);
+	void setPosition(glm::vec4 pos);
 
 	glm::vec3 getPosition();
 
@@ -39,7 +39,7 @@ public:
 	void setClassType(ClassType type);
 	ClassType getClassType();
 
-	glm::vec3 getViewDirection();
+	glm::vec4 getViewDirection();
 
 	bool getStates(States state);
 	void setStates(States state, bool b);
@@ -79,9 +79,8 @@ protected:
 	std::string m_myNodeName;
 	ClassType m_class;
 
-	glm::vec3 m_position;
-
-	glm::vec3 m_viewDirection;
+	glm::vec4 m_position;
+	glm::vec4 m_viewDirection;
 
 	std::vector<std::pair<States, bool>> m_states;
 	float m_hunger;

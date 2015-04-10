@@ -69,14 +69,14 @@ public:
 
 	void updateSourcesInMap();
 
+	void setDeltaTime(float dt);
+
 	//TODO: Open/Close Inventory: Prüfen ob Inventar offen oder geschlossen ist; Inventar mit GUI öffnen
 	void showInventory();
 
 protected:
 	glm::vec3 m_spawnPoint;
 
-	//direction is the view direction of the player
-	glm::vec3 m_direction;
 	float m_deltaTime;
 	float m_phi, m_theta;
 

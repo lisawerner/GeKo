@@ -6,6 +6,7 @@ MapObject::MapObject()
 	m_name = "Object";
 	Player p;
 	update(p);
+	m_type = MapType::OBJECT;
 }
 
 MapObject::~MapObject()

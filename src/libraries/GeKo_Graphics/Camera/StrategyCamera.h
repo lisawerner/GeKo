@@ -11,7 +11,7 @@ public:
 
 	~StrategyCamera();
 
-	void update(GLFWwindow* window);
+	void turn(double xpos, double ypos);
 
 	void setCenter(glm::vec4 center);
 	void setRadius(float radius);

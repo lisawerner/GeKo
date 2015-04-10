@@ -10,18 +10,18 @@ Geko::Geko(std::string gekoName, glm::vec3 spawnPoint){
 	m_class = ClassType::PLAYER;
 
 	m_movementVector = glm::vec3(0.0f);
-	m_viewDirection = glm::vec3(0.0f, 0.0f, -1.0f);
+	m_viewDirection = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
 
 	m_speed = 8.0f;
 
 	m_spawnPoint = spawnPoint;
-	m_position = spawnPoint;
+	m_position = glm::vec4(spawnPoint, 1.0);
 	m_name = gekoName;
 
-	m_hunger = 10;
-	m_hungerMax = 10;
-	m_health = 10;
-	m_health = 10;
+	m_hunger = 100;
+	m_hungerMax = 100;
+	m_health = 100;
+	m_health = 100;
 	m_strength = 1;
 
 	m_inventory = new Inventory();
@@ -44,12 +44,12 @@ void Geko::moveBackward()
 
 void Geko::moveRight()
 {
-	m_movementVector += glm::cross(m_viewDirection, glm::vec3(0.0f, 1.0f, 0.0f));
+	m_movementVector += glm::cross(glm::vec3(m_viewDirection), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 void Geko::moveLeft()
 {
-	m_movementVector -= glm::cross(m_viewDirection, glm::vec3(0.0f, 1.0f, 0.0f));
+	m_movementVector -= glm::cross(glm::vec3(m_viewDirection), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 void Geko::update(float deltaTime)
@@ -67,9 +67,4 @@ void Geko::update(float deltaTime)
 		notify(*this, Object_Event::OBJECT_STOPPED);
 	}
 	m_movementVector = glm::vec3(0.0f);
-}
-
-glm::vec3 Geko::getPosition()
-{
-	return m_position;
 }

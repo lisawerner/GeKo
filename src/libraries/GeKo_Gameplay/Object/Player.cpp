@@ -12,13 +12,13 @@ Player::Player(std::string playerName, glm::vec3 spawnPoint)
 	m_class = ClassType::PLAYER;
 
 	m_spawnPoint = spawnPoint;
-	m_position = m_spawnPoint;
+	m_position = glm::vec4(m_spawnPoint, 1.0);
 	m_name = playerName;
 
-	m_hunger = 10;
-	m_hungerMax = 10;
-	m_health = 10;
-	m_healthMax = 10;
+	m_hunger = 100;
+	m_hungerMax = 100;
+	m_health = 100;
+	m_healthMax = 100;
 	m_strength = 1;
 
 	m_inventory = new Inventory();
@@ -29,10 +29,12 @@ Player::Player(std::string playerName, glm::vec3 spawnPoint)
 	s.second = true;
 	m_states.push_back(s); 
 
-	m_direction = glm::vec3(0.0, 0.0, -1.0);
+	m_viewDirection = glm::vec4(0.0, 0.0, -1.0, 0.0);
 	m_deltaTime = 0.0;
 	m_phi = 0.0;
 	m_theta = 2.0;
+
+	m_speed = 0.01;
 }
 
 Player::Player(){
@@ -48,39 +50,51 @@ glm::vec3 Player::getSpawnPoint()
 
 void Player::move(glm::vec3 newPosition)
 {
-	m_position = newPosition;
+	m_position = glm::vec4(newPosition, 1.0);
 }
 
 void Player::moveForward(){
-	m_position.x += m_speed* m_deltaTime *m_direction.x;
-	m_position.y += m_speed* m_deltaTime *m_direction.y;
-	m_position.z += m_speed* m_deltaTime *m_direction.z;
+	std::cout << "Player: Old Position: x:" << m_position.x << ", y:" << m_position.y << ", z:" << m_position.z << std::endl;
+
+	m_position.x += m_speed* m_deltaTime *m_viewDirection.x;
+	m_position.y += m_speed* m_deltaTime *m_viewDirection.y;
+	m_position.z += m_speed* m_deltaTime *m_viewDirection.z;
+
+	std::cout << "Player: New Position: x:" << m_position.x << ", y:" << m_position.y << ", z:" << m_position.z << std::endl;
+
+	std::cout << "Player moveFwd" << std::endl;
 
 	notify(*this, Object_Event::OBJECT_MOVED);
 }
 
 void Player::moveBackward(){
-	m_position.x -= m_speed* m_deltaTime *m_direction.x;
-	m_position.y -= m_speed* m_deltaTime *m_direction.y;
-	m_position.z -= m_speed* m_deltaTime *m_direction.z;
+	m_position.x -= m_speed* m_deltaTime *m_viewDirection.x;
+	m_position.y -= m_speed* m_deltaTime *m_viewDirection.y;
+	m_position.z -= m_speed* m_deltaTime *m_viewDirection.z;
+
+	std::cout << "Player moveBwd" << std::endl;
 
 	notify(*this, Object_Event::OBJECT_MOVED);
 }
 
 void Player::moveLeft(){
-	glm::vec3 directionOrtho = glm::cross(m_direction, glm::vec3(0,1,0));
+	glm::vec3 directionOrtho = glm::cross(glm::vec3(m_viewDirection), glm::vec3(0, 1, 0));
 	m_position.x -= m_speed* m_deltaTime*directionOrtho.x;
 	m_position.y -= m_speed* m_deltaTime*directionOrtho.y;
 	m_position.z -= m_speed* m_deltaTime*directionOrtho.z;
+
+	std::cout << "Player moveLeft" << std::endl;
 
 	notify(*this, Object_Event::OBJECT_MOVED);
 }
 
 void Player::moveRight(){
-	glm::vec3 directionOrtho = glm::cross(m_direction, glm::vec3(0, 1, 0));
+	glm::vec3 directionOrtho = glm::cross(glm::vec3(m_viewDirection), glm::vec3(0, 1, 0));
 	m_position.x += m_speed* m_deltaTime*directionOrtho.x;
 	m_position.y += m_speed* m_deltaTime*directionOrtho.y;
 	m_position.z += m_speed* m_deltaTime*directionOrtho.z;
+
+	std::cout << "Player moveRight" << std::endl;
 
 	notify(*this, Object_Event::OBJECT_MOVED);
 }
@@ -91,10 +105,12 @@ void Player::turnLeft(){
 	if (m_phi < 0) m_phi += 2 * glm::pi<float>();
 	else if (m_phi > 2 * glm::pi<float>()) m_phi -= 2 * glm::pi<float>();
 
-	m_direction.x = sin(m_theta) * cos(m_phi);
+	m_viewDirection.x = sin(m_theta) * cos(m_phi);
 	// y-direction only needed for flying
 	//m_direction.y = cos(m_theta);
-	m_direction.z = -sin(m_theta) * sin(m_phi);
+	m_viewDirection.z = -sin(m_theta) * sin(m_phi);
+
+	std::cout << "Player turnLeft" << std::endl;
 
 	//TODO: OBJECT_MOVED mit m_direction noch anpassen
 	notify(*this, Object_Event::OBJECT_ROTATED);
@@ -105,10 +121,12 @@ void Player::turnRight(){
 	if (m_phi < 0) m_phi += 2 * glm::pi<float>();
 	else if (m_phi > 2 * glm::pi<float>()) m_phi -= 2 * glm::pi<float>();
 
-	m_direction.x = sin(m_theta) * cos(m_phi);
+	m_viewDirection.x = sin(m_theta) * cos(m_phi);
 	// y-direction only needed for flying
 	//m_direction.y = cos(m_theta);
-	m_direction.z = -sin(m_theta) * sin(m_phi);
+	m_viewDirection.z = -sin(m_theta) * sin(m_phi);
+
+	std::cout << "Player turnRight" << std::endl;
 
 	notify(*this, Object_Event::OBJECT_ROTATED);
 }
@@ -120,16 +138,16 @@ void Player::update(){
 		setStates(States::HEALTH, false);
 	}
 	if (getStates(States::HEALTH)){ 
-		std::cout << "<<<<<<<< UpdateMethod <<<<<<<<" << std::endl;
+		//std::cout << "<<<<<<<< UpdateMethod <<<<<<<<" << std::endl;
 		updateStates();
-		std::cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
+		//std::cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
 	}
 }
 
 void Player::rotateView(float leftRight, float upDown)
 {
-	m_viewDirection = glm::vec3(0.0, 0.0, -1.0);
-	m_viewDirection = glm::rotate(m_viewDirection, upDown, glm::cross(m_viewDirection, glm::vec3(0.0f, -1.0f, 0.0f)));
+	m_viewDirection = glm::vec4(0.0, 0.0, -1.0, 0.0);
+	m_viewDirection = glm::rotate(m_viewDirection, upDown, glm::cross(glm::vec3(m_viewDirection), glm::vec3(0.0f, -1.0f, 0.0f)));
 	m_viewDirection = glm::rotate(m_viewDirection, leftRight, glm::vec3(0.0f, -1.0f, 0.0f));
 	m_viewDirection.y = glm::clamp(m_viewDirection.y, -0.5f, 0.5f);
 	notify(*this, Object_Event::OBJECT_ROTATED);
@@ -143,7 +161,7 @@ void Player::updateSourcesInMap()
 {
 	for (std::map<Soundtype, std::string>::iterator i = m_soundMap.begin(); i != m_soundMap.end(); ++i)
 	{
-			m_sfh->updateSourcePosition(i->second , m_position);
+			m_sfh->updateSourcePosition(i->second , glm::vec3(m_position));
 	}
 }
 
@@ -161,6 +179,10 @@ std::string Player::getSourceName(Soundtype type)
 
 void Player::setSourceName(Soundtype type , std::string sourceName, const char* filepath)
 {
-		m_sfh->generateSource(sourceName, m_position, filepath);
+		m_sfh->generateSource(sourceName, glm::vec3(m_position), filepath);
 		m_soundMap.insert(std::pair<Soundtype, std::string>(type, sourceName));
+}
+
+void Player::setDeltaTime(float dt){
+	m_deltaTime = dt;
 }

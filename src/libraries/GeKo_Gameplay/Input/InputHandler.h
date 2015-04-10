@@ -24,12 +24,18 @@ public:
 
 	// The method sets the InputMap active according to its name and ensures that just this InputMap is active
 	void changeActiveInputMap(std::string name);
+	// The method sets the InputMap active according to its MapType and ensures that just this InputMap is active
+	void changeActiveInputMap(MapType type);
 
 	/// The method returns the InputMap instance with the matching name
 	/** If there is any InputMap named as the parameter the according InputMap is returned,
 	otherwise an error message is given.
 	*/ 
 	InputMap* getInputMap(std::string name);
+	/// The method returns the InputMap instance with the matching MapType
+	/** Each map can only exist once and because of that this method can only return the map of this maptype
+	*/
+	InputMap* getInputMap(MapType type);
 
 	/// The method returns the active InputMap
 	/** Iterates over m_allInputMaps, where all the InputMaps are stored and returns the one,

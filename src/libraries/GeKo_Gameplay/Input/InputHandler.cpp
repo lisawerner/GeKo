@@ -35,6 +35,16 @@ void InputHandler::changeActiveInputMap(std::string name){
 	getInputMap(name)->setActive(true);
 }
 
+void InputHandler::changeActiveInputMap(MapType type){
+	// additional loop over all the InputMaps is necessary because the method retrieves always the last active InputMap and for the first time there's no InputMap active
+	for (int j = 0; j < m_allInputMaps.size(); j++)
+	{
+		if (m_allInputMaps.at(j)->getActive() == true)
+			getActiveInputMap()->setActive(false);
+	}
+	getInputMap(type)->setActive(true);
+}
+
 // TODO maybe an exception 
 InputMap* InputHandler::getInputMap(std::string name) {
 
@@ -48,6 +58,22 @@ InputMap* InputHandler::getInputMap(std::string name) {
 		}
 	}
 	std::cerr << "No map is named like this" << std::endl;
+
+	return 0;
+}
+
+InputMap* InputHandler::getInputMap(MapType type) {
+
+	InputMap* instance = new InputMap();
+
+	for (int i = 0; i < m_allInputMaps.size(); i++)
+	{
+		if (m_allInputMaps.at(i)->getType() == type){
+			instance = m_allInputMaps.at(i);
+			return instance;
+		}
+	}
+	std::cerr << "There exist no map with this MapType" << std::endl;
 
 	return 0;
 }

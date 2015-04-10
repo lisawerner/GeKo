@@ -29,7 +29,7 @@ AI::AI(){
 	m_speed = 0.01;
 	m_epsilon = 0.1;
 
-	m_position = glm::vec3(0.0);
+	m_position = glm::vec4(0.0, 0.0, 0.0, 1.0);
 
 	AStarNode* defaultNode = new AStarNode();
 	
@@ -94,7 +94,7 @@ void AI::addFoodNodes(){
 
 void AI::update(){
 	if (m_health <= 0){
-		std::cout << "Object" << m_name << ": is dead!" << std::endl;
+		//std::cout << "Object" << m_name << ": is dead!" << std::endl;
 
 		if (!m_hasDied)
 		{
@@ -107,33 +107,33 @@ void AI::update(){
 	}
 
 	if (getStates(States::HEALTH)){ 
-		std::cout << "<<<<<<<< UpdateMethod <<<<<<<<" << std::endl;
+		//std::cout << "<<<<<<<< UpdateMethod <<<<<<<<" << std::endl;
 		updateStates();
 
 		GraphNodeType lastNodeType = m_target->getNodeType();
 		decide2();
 		
 		float eps = m_epsilon + m_speed;
-		if(!checkPosition(m_position, m_target->getPosition())){
+		if(!checkPosition(glm::vec3(m_position), m_target->getPosition())){
 			move();
 		}
-	std::cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
+	//std::cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
 	}
 	
 }
 
 void AI::move(){
 	float eps = m_epsilon + m_speed;
-	if(checkPosition(m_position, m_nextTarget->getPosition())){
+	if(checkPosition(glm::vec3(m_position), m_nextTarget->getPosition())){
 		if (m_path.size() > 0){
 			m_nextTarget = m_path.back();
 			m_path.pop_back();
-			std::cout << "Move to: " << m_nextTarget->getName() << std::endl;
+			//std::cout << "Move to: " << m_nextTarget->getName() << std::endl;
 			m_lastTarget = m_nextTarget;
 		}
 	}
 
-	glm::vec3 diff = m_position - m_nextTarget->getPosition();
+	glm::vec3 diff = glm::vec3(m_position) - m_nextTarget->getPosition();
 	if (diff.x > 0){
 		m_position.x -= m_speed;
 	}
@@ -155,7 +155,7 @@ void AI::move(){
 	
 	notify(*this, Object_Event::OBJECT_MOVED);
 
-	std::cout << "Aktuelle Position: x_" << m_position.x << " y_" << m_position.y << " z_" << m_position.z << std::endl;
+	//std::cout << "Aktuelle Position der AI: x_" << m_position.x << " y_" << m_position.y << " z_" << m_position.z << std::endl;
 }
 
 void AI::viewArea(bool state)
@@ -201,7 +201,7 @@ AStarNode* AI::nearestFoodNode(){
 }
 
 void AI::decide(){
-	std::cout << "********** DecideMethod **********" << std::endl;
+	//std::cout << "********** DecideMethod **********" << std::endl;
 	m_targetType = m_decisionTree->decide(m_states);
 
 	switch (m_targetType) {
@@ -210,11 +210,11 @@ void AI::decide(){
 	case TreeOutput::PLAYER: m_target = m_graph->searchNode(GraphNodeType::OBJECT); break;
 	case TreeOutput::PATROL: m_target = nextNodeOnPatrol(); break;
 	}
-	std::cout << "**********************************" << std::endl;
+	//std::cout << "**********************************" << std::endl;
 }
 
 void AI::decide2(){
-	std::cout << "********** DecideMethod **********" << std::endl;
+	//std::cout << "********** DecideMethod **********" << std::endl;
 	TreeOutput lastOutput = m_targetType;
 	m_targetType = m_decisionTree->decide(m_states);
 
@@ -242,7 +242,7 @@ void AI::decide2(){
 			m_target = nextNodeOnPatrol();
 			updatePathPatrol();
 		}
-		if (checkPosition(m_position, m_target->getPosition())){
+		if (checkPosition(glm::vec3(m_position), m_target->getPosition())){
 			//if (m_path.size() == 1){
 				updatePathPatrol();
 				//m_path = m_pathPatrol;
@@ -250,7 +250,7 @@ void AI::decide2(){
 		}
 		break;
 	}
-	std::cout << "**********************************" << std::endl;
+	//std::cout << "**********************************" << std::endl;
 }
 
 
@@ -271,7 +271,7 @@ void AI::updatePathPlayer(){
 	m_path.clear();
 
 	m_path.push_back(m_target);
-	std::cout << "Laufe auf Player zu!!!" << std::endl;
+	//std::cout << "Laufe auf Player zu!!!" << std::endl;
 	m_nextTarget = m_target;
 	m_lastTargetOnGraph = m_lastTarget;
 }
@@ -288,13 +288,13 @@ void AI::updatePathPatrol(){
 	m_path.pop_back();
 	m_nextTarget = m_path.back();
 	m_target = m_path.at(0);
-	std::cout << "Laufe auf Patrouille!!!" << " Next target at path: " << m_nextTarget->getName() << std::endl;
+	//std::cout << "Laufe auf Patrouille!!!" << " Next target at path: " << m_nextTarget->getName() << std::endl;
 }
 
 AStarNode* AI::nextNodeOnPatrol(){
 	std::vector<AStarNode*>* temp = m_graph->getGraph();
 	if (m_target->getNodeType() != GraphNodeType::DEFAULT){
-		if (checkPosition(m_position, m_nextTarget->getPosition())){
+		if (checkPosition(glm::vec3(m_position), m_nextTarget->getPosition())){
 			for (int i = 0; i < temp->size(); i++){
 				if (m_lastTarget->getNodeType() == GraphNodeType::OBJECT || m_lastTarget->getNodeType() == GraphNodeType::FOOD){
 					if (temp->at(i)->getNodeType() == GraphNodeType::OTHER){
@@ -327,8 +327,6 @@ void AI::setAntAfraid(){
 
 	m_speed = 0.3;
 
-	m_position = glm::vec3(0.0);
-
 	glm::vec3 posFood(10.0, 0.0, -5.0);
 	glm::vec3 posSpawn(3.0, 0.0, 3.0);
 	glm::vec3 posDefaultPlayer(0.0, 0.0, 0.0);
@@ -339,7 +337,7 @@ void AI::setAntAfraid(){
 	m_lastTarget = antGraph->searchNode(GraphNodeType::HOME);
 	m_target = antGraph->searchNode(GraphNodeType::HOME);
 
-	m_position = posSpawn;
+	m_position = glm::vec4(posSpawn, 1.0);
 	m_homeNode = antGraph->searchNode(GraphNodeType::HOME);
 	m_foodNodes.pop_back(); 
 	addFoodNodes();
@@ -356,8 +354,6 @@ void AI::setAntAggressiv(){
 	m_speed = 0.1;
 	m_strength = 1.2;
 
-	m_position = glm::vec3(0.0);
-
 	glm::vec3 posFood(10.0, 0.0, -5.0);
 	glm::vec3 posSpawn(3.0, 0.0, 3.0);
 	glm::vec3 posDefaultPlayer(0.0, 0.0, 0.0);
@@ -373,7 +369,7 @@ void AI::setAntAggressiv(){
 	m_lastTarget = antGraph->searchNode(GraphNodeType::FOOD);
 	m_target = antGraph->searchNode(GraphNodeType::FOOD);
 
-	m_position = posSpawn;
+	m_position = glm::vec4(posSpawn, 1.0);
 	m_homeNode = antGraph->searchNode(GraphNodeType::FOOD);
 	m_foodNodes.pop_back(); //Delete DefaultNode
 	m_foodNodes.push_back(antGraph->searchNode(GraphNodeType::FOOD));
@@ -394,7 +390,7 @@ std::string AI::getSourceName(SoundtypeAI type)
 
 void AI::setSourceName(SoundtypeAI type, std::string sourceName, const char* filepath)
 {
-	m_sfh->generateSource(sourceName, m_position, filepath);
+	m_sfh->generateSource(sourceName, glm::vec3(m_position), filepath);
 	m_soundMap.insert(std::pair<SoundtypeAI, std::string>(type, sourceName));
 }
 
@@ -402,7 +398,7 @@ void AI::updateSourcesInMap()
 {
 	for (std::map<SoundtypeAI, std::string>::iterator i = m_soundMap.begin(); i != m_soundMap.end(); ++i)
 	{
-		m_sfh->updateSourcePosition(i->second, m_position);
+		m_sfh->updateSourcePosition(i->second, glm::vec3(m_position));
 	}
 }
 

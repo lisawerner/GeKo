@@ -6,7 +6,7 @@ StaticObject::StaticObject(){
 	m_id = 0;
 	m_name = "defaultstaticobject";
 
-	m_position = glm::vec3(0.0);
+	m_position = glm::vec4(0.0, 0.0, 0.0, 1.0);
 
 	m_inventory = new Inventory();
 

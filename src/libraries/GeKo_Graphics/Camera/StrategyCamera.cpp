@@ -50,26 +50,23 @@ void StrategyCamera::updateCursor(GLFWwindow* window)
 	m_viewMatrix = glm::lookAt(glm::vec3(m_center) + glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
 }
 
-void StrategyCamera::update(GLFWwindow* window)
+void StrategyCamera::turn(double xpos, double ypos)
 {
-	double x, y;
-	glfwGetCursorPos(window, &x, &y);
-
-	double changeX = (x - m_oldX)* m_sensitivity;
-	double changeY = (y - m_oldY)* m_sensitivity;
+	double changeX = (xpos - m_oldX)* m_sensitivity;
+	double changeY = (ypos - m_oldY)* m_sensitivity;
 
 	m_rotationAngle += glm::atan(changeX) * (180 / glm::pi<float>());
 
-		m_theta -= changeY;
-		if (m_theta < 0.01f) m_theta = 0.01f;
-		else if (m_theta > glm::pi<float>() - 0.01f) m_theta = glm::pi<float>() - 0.01f;
+	m_theta -= changeY;
+	if (m_theta < 0.01f) m_theta = 0.01f;
+	else if (m_theta > glm::pi<float>() - 0.01f) m_theta = glm::pi<float>() - 0.01f;
 
-		m_phi -= changeX;
-		if (m_phi < 0) m_phi += 2 * glm::pi<float>();
-		else if (m_phi > 2 * glm::pi<float>()) m_phi -= 2 * glm::pi<float>();
+	m_phi -= changeX;
+	if (m_phi < 0) m_phi += 2 * glm::pi<float>();
+	else if (m_phi > 2 * glm::pi<float>()) m_phi -= 2 * glm::pi<float>();
 
-	m_oldX = x;
-	m_oldY = y;
+	m_oldX = xpos;
+	m_oldY = ypos;
 
 	m_position.x = m_radius * sin(m_theta) * cos(m_phi);
 	m_position.y = m_radius * cos(m_theta);

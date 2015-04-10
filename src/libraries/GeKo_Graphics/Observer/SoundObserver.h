@@ -81,7 +81,7 @@ public:
 			 break;
 
 		 case Object_Event::OBJECT_ROTATED:
-			 node.getSoundHandler()->updateListenerOrientation(node.getViewDirection(), glm::vec3(0.0, 1.0, 0.0));
+			 node.getSoundHandler()->updateListenerOrientation(glm::vec3(node.getViewDirection()), glm::vec3(0.0, 1.0, 0.0));
 
 		 case Object_Event::OBJECT_STOPPED:
 			 soundName = node.getSourceName(MOVESOUND);

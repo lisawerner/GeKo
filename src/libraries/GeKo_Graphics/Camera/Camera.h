@@ -103,8 +103,11 @@ public:
 	virtual void turnRight();
 	virtual void turnUp();
 	virtual void turnDown();
+	//virtual void turn(GLFWwindow* window);
+	virtual void turn(double xpos, double ypos);
 	virtual void increaseRadius();
 	virtual void decreaseRadius();
+	virtual void updateCursor(GLFWwindow* window);
 
 
 protected:

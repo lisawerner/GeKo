@@ -133,5 +133,8 @@ void Camera::turnLeft(){}
 void Camera::turnRight(){}
 void Camera::turnUp(){}
 void Camera::turnDown(){}
+//void Camera::turn(GLFWwindow* window){}
+void Camera::turn(double xpos, double ypos){}
 void Camera::increaseRadius(){}
 void Camera::decreaseRadius(){}
+void Camera::updateCursor(GLFWwindow* window){}

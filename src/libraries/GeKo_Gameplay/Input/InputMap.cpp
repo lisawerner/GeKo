@@ -3,6 +3,7 @@
 InputMap::InputMap()
 {
 	m_active = false;
+	m_type = MapType::DEFAULTMAP;
 }
 
 InputMap::~InputMap()
@@ -27,6 +28,10 @@ void InputMap::setName(std::string name){
 
 std::string InputMap::getName(){
 	return m_name;
+}
+
+MapType InputMap::getType(){
+	return m_type;
 }
 
 void InputMap::checkMultipleMappedKeys(int key, GLFWwindow &window){}
