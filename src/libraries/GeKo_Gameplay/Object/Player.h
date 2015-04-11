@@ -28,13 +28,11 @@ public:
 	/**/
 	glm::vec3 getSpawnPoint();
 
-	//Per Frame
+	//Updates the object per Frame
 	void update();
 
-	//Move Object on Terrain
+	//Moves Object on Terrain
 	void move(glm::vec3 newPosition);
-
-//	virtual void update(float deltaTime);
 	
 	///A method to rotate the view direction
 	/**This method is used to simulate the movement of the head of the character*/
@@ -53,6 +51,4 @@ protected:
 	glm::vec3 m_spawnPoint;
 
 	std::map<Soundtype, std::string> m_soundMap;
-	
-
 };

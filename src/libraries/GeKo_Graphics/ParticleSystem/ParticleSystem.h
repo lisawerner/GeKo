@@ -22,5 +22,5 @@ public:
 
 private:
 	glm::vec3 position;
-	Effect* effect;
+	Effect* effect = new Effect();
 };

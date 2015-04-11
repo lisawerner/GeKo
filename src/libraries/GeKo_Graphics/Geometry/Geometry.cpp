@@ -8,22 +8,24 @@ Geometry::Geometry()
 	m_hasIndex = false;
 	m_hasUV = false;
 }
+Geometry::Geometry(const StaticMesh &mesh){
+  m_wasLoaded = false;
+  m_hasNormals = true;
+  m_hasIndex = true;
+  m_hasUV = true;
+
+  m_vertices = mesh.vertices;
+  m_index = mesh.indicies;
+  m_uvs = mesh.uvs;
+  m_normals = mesh.normals;
+}
 
 Geometry::~Geometry()
 {
 }
 
-
 void Geometry::loadBufferData()
 {
-	//temporary solution
-	if (m_tangents.empty())
-	{
-		computeTangents();
-	}
-	m_tangentBuffer = new Buffer<glm::vec3>(m_tangents, STATIC_DRAW);
-
-
 	m_vertexBuffer = new Buffer<glm::vec4>(m_vertices, STATIC_DRAW);
 	if (m_hasNormals){
 		m_normalBuffer = new Buffer<glm::vec3>(m_normals, STATIC_DRAW);
@@ -35,7 +37,6 @@ void Geometry::loadBufferData()
 	{
 		m_indexBuffer = new BufferIndex<GLuint>(m_index, STATIC_DRAW_INDEX);
 	}
-	
 
 	glGenVertexArrays(1, &m_vaoBuffer);
 	glBindVertexArray(m_vaoBuffer);
@@ -56,20 +57,12 @@ void Geometry::loadBufferData()
 		glEnableVertexAttribArray(2);
 	}
 
-	//temporary solution
-	m_tangentBuffer->bind();
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(3);
-
-
 	if (m_hasIndex){
 		m_indexBuffer->bind();
 	}
 
-	
 	glBindVertexArray(0);
 }
-
 
 void Geometry::renderGeometry()
 {
@@ -81,13 +74,12 @@ void Geometry::renderGeometry()
 	}
 	else
 	{
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, m_indices);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, m_vertices.size());
 	}
 
 	glBindVertexArray(0);
 
 }
-
 
 void Geometry::computeTangents()
 {
@@ -119,7 +111,6 @@ void Geometry::computeTangents()
 	}
 }
 
-
 std::vector<glm::vec4> Geometry::getVertices()
 {
 	return m_vertices;
@@ -150,12 +141,10 @@ void Geometry::setLoaded()
 	m_wasLoaded = true;
 }
 
-
 void Geometry::resetLoaded()
 {
 	m_wasLoaded = false;
 }
-
 
 bool Geometry::isLoaded()
 {
@@ -185,4 +174,8 @@ void Geometry::setNormalsTrue()
 void Geometry::setUVTrue()
 {
 	m_hasUV = true;
+}
+
+Geometry StaticMesh::toGeometry(){
+  return Geometry(*this);
 }

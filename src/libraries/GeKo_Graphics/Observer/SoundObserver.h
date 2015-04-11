@@ -3,7 +3,7 @@
 #include <GeKo_Graphics/Observer/Observer.h>
 #include <GeKo_Graphics/Scenegraph/Level.h>
 
-
+/**This Observer handles all the sound actions like the move-sound or the fight-sounds.*/
 class SoundObserver : public Observer<AI, Object_Event>, public Observer<Player, Object_Event>, public Observer<Node, Collision_Event>, public Observer<Quest, Quest_Event>
 {
 public:
@@ -21,7 +21,7 @@ public:
 
 		case Object_Event::OBJECT_MOVED:
 			soundName = node.getSourceName(MOVESOUND_AI);
-			node.getSoundHandler()->updateListenerPosition(node.getPosition());
+			//node.getSoundHandler()->updateListenerPosition(node.getPosition());
 			node.updateSourcesInMap();
 			if (soundName != "oor")
 			{
@@ -44,6 +44,7 @@ public:
 			break;
 
 		case Object_Event::OBJECT_DIED:
+
 			soundName = node.getSourceName(DEATHSOUND_AI);
 			if (soundName != "oor")
 			{
@@ -52,6 +53,8 @@ public:
 					node.getSoundHandler()->playSource(soundName);
 				}
 			}
+
+			m_level->getActiveScene()->getScenegraph()->getRootNode()->deleteChildrenNode(node.getNodeName());			
 			break;
 		}
 	}
@@ -79,6 +82,7 @@ public:
 
 		 case Object_Event::OBJECT_ROTATED:
 			 node.getSoundHandler()->updateListenerOrientation(node.getViewDirection(), glm::vec3(0.0, 1.0, 0.0));
+			 break;
 
 		 case Object_Event::OBJECT_STOPPED:
 			 soundName = node.getSourceName(MOVESOUND);
@@ -96,9 +100,8 @@ public:
 			 if (soundName != "oor")
 			 {
 					 node.getSoundHandler()->playSource(soundName);
-
 			 }
-
+			 break;
 		 }
 	 }
 
@@ -139,7 +142,7 @@ public:
 			break;
 
 		case Collision_Event::COLLISION_KI_PLAYER:
-			if (!nodeA.getAI()->getStates(States::HEALTH))
+			if (!nodeA.getAI()->getStates(States::HEALTH) && nodeA.getAI()->getInventory()->countItem(ItemType::COOKIE) > 0)
 			{
 				std::string soundName = nodeB.getPlayer()->getSourceName(EATSOUND);
 				if (soundName != "oor")
@@ -150,6 +153,7 @@ public:
 					}
 				}
 			}
+			break;
 		}
 	}
 
@@ -173,11 +177,9 @@ public:
 			{
 				tmp2->getPlayer()->getSoundHandler()->playSource(soundName);
 			}
+			break;
 		}
 	}
 protected: 
 	Level* m_level;
-
-	
 };
-

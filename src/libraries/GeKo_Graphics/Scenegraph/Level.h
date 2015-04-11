@@ -4,6 +4,8 @@
 #include <GeKo_Gameplay/Questsystem/QuestHandler.h>
 #include <GeKo_Gameplay/FightSystem/FightSystem.h>
 #include <iostream>
+#include <GeKo_Graphics/Geometry/Terrain.h>
+#include <GeKo_Graphics/GUI/GUI.h>
 
 ///A Level is the necessary unit to create a game
 /**
@@ -14,7 +16,7 @@ class Level
 {
 public:
     ///The constructor for the level
-	/**The level needs a name, but do not consist of any scenes at the beginning*/
+	/**The level needs a name, but does not consist of any scenes at the beginning*/
 	Level(const char* levelName);
 	~Level();
 	
@@ -32,7 +34,7 @@ public:
 	void removeScene(std::string sceneName);
 
 	///Returns a Scene object
-	/**Need a Scenename to find a Scene. Returns NULL if the Scene does not exist*/
+	/**Needs a Scenename to find a Scene. Returns NULL if the Scene does not exist*/
 	Scene* getScene(std::string sceneName);
 
 	///Changes the active Scene to the given scene
@@ -51,13 +53,17 @@ public:
 	/**The FightSystem is unique for every level and handles all the fights of KI and Player*/
 	FightSystem* getFightSystem();
 
-	/////Returns the m_sfh
-	///**This Handler manages all the sounds of an object like the movement of a Player etc.*/
-	//SoundFileHandler* getSoundHandler();
-	//void setSoundHandler(SoundFileHandler* soundHandler);
+	void setTerrain(Terrain* terrain);
+	Terrain* getTerrain();
+
+	bool hasTerrain();
+
+	void addGUI(GUI* gui);
+	GUI* getGUI(std::string name);
 
 protected:
 	const char* m_levelName;
+	bool m_hasTerrain;
 
 	std::vector<Scene*> m_sceneSet;
 	Scene* m_activeScene;
@@ -66,5 +72,8 @@ protected:
 
 	FightSystem* m_fightSystem;
 
-};
+	Terrain* m_terrain;
 
+	std::vector<GUI*> m_guis;
+
+};

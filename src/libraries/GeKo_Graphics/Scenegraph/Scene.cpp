@@ -39,5 +39,3 @@ void Scene::render(ShaderProgram &shader)
 	m_sceneGraph->getRootNode()->render(shader);
 
 }
-
-

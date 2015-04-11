@@ -28,6 +28,7 @@ Object::Object()
 		m_states.push_back(s);
 		m_hasSound = false;
 }
+
 Object::~Object(){}
 
 void Object::setPosition(glm::vec3 pos){
@@ -66,11 +67,11 @@ Inventory* Object::getInventory()
 	return m_inventory;
 }
 
-
 void Object::setObjectType(ObjectType type)
 {
 	m_type = type;
 }
+
 ObjectType Object::getObjectType()
 {
 	return m_type;
@@ -85,7 +86,7 @@ bool Object::getStates(States state){
 	for (int i = 0; i < m_states.size(); i++){
 		if (m_states.at(i).first == state) {
 			return m_states.at(i).second;
-		};
+		}
 	}
 	return NULL;
 }
@@ -98,15 +99,12 @@ void Object::setStates(States state, bool b){
 	}
 }
 
-//Per Frame
 void Object::update(){
-
 }
 
 void Object::updateStates(){
 	if (m_hunger > 0){
 		m_hunger -= 0.01;
-		//m_hunger -= 0.0000001;
 		if (m_hunger <= m_hungerMax / 2){
 			std::cout << "Object" << m_name << ": Is hungry! Hunger: " << m_hunger << std::endl;
 			setStates(States::HUNGER, true);
@@ -121,13 +119,11 @@ void Object::updateStates(){
 		std::cout << "Object looses health because it is too hungry!" << std::endl;
 	}
 	if (m_health == 0){
-		//Delete Object
 		std::cout << "Player: Died because he was too hungry" << std::endl;
 		setStates(States::HEALTH, false);
 	}
 }
 
-//Input: Target (Durch Entscheidung) Bsp-Target können Nahrung oder nach Hause sein
 void Object::move(){}
 
 void Object::eat(){
@@ -139,7 +135,6 @@ void Object::eat(){
 void Object::collectItem(ItemType typeId, int count){
 	for (int i = 0; i < count; i++){
 		m_inventory->addItem(typeId);
-	//	notify(*this, Object_Event::PLAYER_COLLECT);
 	}
 }
 
@@ -155,7 +150,6 @@ ClassType Object::getClassType()
 
 void Object::heal()
 {
-
 }
 
 float Object::getExp()
@@ -194,7 +188,6 @@ void Object::levelUp()
 		m_exp = m_exp - m_levelThreshold;
 		m_levelThreshold *= m_level;
 	}
-	
 }
 
 void Object::setLevel(int level)

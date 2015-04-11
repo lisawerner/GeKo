@@ -1,10 +1,13 @@
 #pragma once
 
+///A class to add acceleration to an  object.
+/** The speed is added each frame to the object untill it reaches a maximum speed, so that it seems the objects gets faster gradually.
+*/
 class Acceleration{
 protected:
 	double m_acceleration;
-	double m_speed; 		 //momentane Geschwindigkeit
-	double maxSpeed;    // Man sollte irgendwann aufhören, oder irre ich mich da?
+	double m_speed; 		 
+	double maxSpeed;    
 	
 public:
 	Acceleration();

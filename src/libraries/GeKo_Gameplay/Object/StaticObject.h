@@ -10,13 +10,11 @@
 class StaticObject : public Object
 {
 public: 
-	//Eine Position: Objekt startet zu Hause! (Weiterer Konstrutkor, falls Objekt woanders starten soll)
 	StaticObject();
 	~StaticObject();
 
 	void setTree();
+	void setTree(int i);
 	void setExampleAntHome();
 
-protected:
-	
 };

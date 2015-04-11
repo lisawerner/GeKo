@@ -19,7 +19,6 @@ void StaticObject::setTree(){
 	m_type = ObjectType::TREE;
 	m_name = "CookieTree";
 
-
 	Item cookie(1);
 	cookie.setName("Cookie");
 	cookie.setTypeId(ItemType::COOKIE);
@@ -28,6 +27,20 @@ void StaticObject::setTree(){
 	branch.setTypeId(ItemType::BRANCH);
 	m_inventory->addItem(&cookie, 25);
 	m_inventory->addItem(&branch, 50);
+}
+
+void StaticObject::setTree(int i){
+	m_type = ObjectType::TREE;
+	m_name = "CookieTree";
+
+	Item cookie(1);
+	cookie.setName("Cookie");
+	cookie.setTypeId(ItemType::COOKIE);
+	Item branch(2);
+	branch.setName("Branch");
+	branch.setTypeId(ItemType::BRANCH);
+	m_inventory->addItem(&cookie, 25);
+	m_inventory->addItem(&branch, i);
 }
 
 void StaticObject::setExampleAntHome(){

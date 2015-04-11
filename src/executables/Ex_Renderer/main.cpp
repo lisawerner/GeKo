@@ -36,7 +36,7 @@ int main()
     glfwInit();
 
     //our window
-    Window window(550, 50, 800, 600, "Renderer Example");
+    Window window(550, 50, 400, 300, "Renderer Example", glm::vec3(0.2, 0.0, 0.0));
 
     glewInit();
 
@@ -56,13 +56,12 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//shading & rendering
-        shader.bind();
-        shader.sendVec4("color", glm::vec4(0.5,0.2,0.8,1.0));
-        renderer.draw(buffer);
-        shader.unbind();
-
-        glfwSwapBuffers(window.getWindow());
-        glfwPollEvents();
+		shader.bind();
+		shader.sendVec4("color", glm::vec4(0.5,0.2,0.8,1.0));
+		renderer.draw(buffer);
+		shader.unbind();
+	
+		window.swapAndPoll();
     }
 
     window.close();

@@ -19,7 +19,7 @@
 #include <GeKo_Graphics/Geometry/GekoMesh.h>
 #include <GeKo_Graphics/Geometry/Plane.h>
 
-#include <GeKo_Graphics/Geometry/Terrain.h>
+
 
 #include <GeKo_Physics/CollisionTest.h>
 
@@ -34,13 +34,28 @@
 #include <GeKo_Gameplay/Questsystem/Goal_Kill.h>
 #include <GeKo_Gameplay/Questsystem/Goal_Eaten.h>
 
+#include <GeKo_Graphics/GUI/GUI.h>
+#include <GeKo_Graphics/GUI/GUIComponents.hpp>
+
 //===================================================================//
 //==================Things you need globally==========================//
 //==================================================================//
 InputHandler iH;
 StrategyCamera cam("StrategyCam");
 Geko geko("Geko", glm::vec3(10.0, 3.0, -5.0));
-Renderer *renderer;
+//Renderer *renderer;
+
+const int WINDOW_WIDTH = 800;
+const int WINDOW_HEIGHT = 600;
+const int HUD_HEIGHT = 100;
+const int HUD_WIDTH = 350;
+const int QUEST_WIDTH = 325;
+const int QUEST_HEIGHT = 300;
+bool showlightTexture = false;
+
+GUI *hud;
+GuiElement::NestedWindow *questWindow;
+GuiElement::NestedWindow *inventoryWindow;
 
 //===================================================================//
 //==================Callbacks for the Input==========================//
@@ -153,7 +168,8 @@ int main()
 	glewInit();
 
 	OpenGL3Context context;
-	renderer = new Renderer(context);
+	//renderer = new Renderer(context);
+	Renderer renderer(context);
 
 	//===================================================================//
 	//==================Shaders for your program========================//
@@ -161,6 +177,16 @@ int main()
 	VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/Vertex-Shaders/TextureShader3D.vert")));
 	FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/Fragment-Shaders/TextureShader3D.frag")));
 	ShaderProgram shader(vs, fs);
+
+	VertexShader vsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.vert")));
+	FragmentShader fsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.frag")));
+	ShaderProgram shaderGBuffer(vsGBuffer, fsGBuffer);
+
+	VertexShader vsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.vert")));
+	FragmentShader fsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.frag")));
+	ShaderProgram shaderSFQ(vsSfq, fsSfq);
+
+	FBO fboGBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, 3, true, false);
 
 
 	//===================================================================//
@@ -207,6 +233,8 @@ int main()
 	ant_Flick.setSourceName(EATSOUND_AI, "AIEssen", RESOURCES_PATH "/Sound/Munching.wav");
 	sfh.disableLooping("AIEssen");
 
+	Rect screenFillingQuad;
+	screenFillingQuad.loadBufferData();
 
 
 
@@ -239,7 +267,7 @@ int main()
 	sfh.disableLooping("Essen");
 	sfh.disableLooping("Quest");
 	sfh.disableLooping("Item");
-	sfh.generateSource("Feuer",posFood, RESOURCES_PATH "/Sound/Feuer kurz.wav");
+	//sfh.generateSource("Feuer",posFood, RESOURCES_PATH "/Sound/Feuer kurz.wav");
 
 	playerNode.setCamera(&cam);
 
@@ -281,6 +309,7 @@ int main()
 	terrainNode.addTranslation(0.0, -0.75, 0.0);
 	terrainNode.addRotation(90.0f, glm::vec3(1.0, 0.0, 0.0));
 	terrainNode.addScale(20.0, 20.0, 20.0);
+
 
 
 	//===================================================================//
@@ -439,7 +468,7 @@ int main()
 	collision.addObserver(&colObserver);
 	collision.addObserver(&soundPlayerObserver);
 
-	GravityObserver gravityObserver;
+	GravityObserver gravityObserver(&testLevel);
 	collision.addObserver(&gravityObserver);
 
 	QuestObserver questObserver(&testLevel);
@@ -481,9 +510,103 @@ int main()
 	sfh.playSource("Hintergrund");
 	sfh.setGain("Hintergrund", 0.5f);
 
+	//===================================================================//
+	//==================The Particle-System==============================//
+	//==================================================================//
+	
 
-	
-	
+	//===================================================================//
+	//==================The GUI=========================================//
+	//==================================================================//
+
+
+	//========================================================================================================
+	//SETUP GUI
+	Texture bricks((char*)RESOURCES_PATH "/bricks_diffuse.png");
+	hud = new GUI("testGUI", HUD_WIDTH, HUD_HEIGHT);
+	hud->setPosition((WINDOW_WIDTH / 2) - (HUD_WIDTH / 2), WINDOW_HEIGHT - HUD_HEIGHT);
+	hud->setCollapsable(false);
+	hud->setTitleBarVisible(false);
+	hud->setBackgroundAlpha(0.5f);
+	hud->setResizable(false);
+	hud->setUseScrollbar(false);
+	hud->setMoveable(false);
+
+	int hp = playerNode.getPlayer()->getHealth();
+	int hpMax = 10;
+	int exp = playerNode.getPlayer()->getExp();
+	int expMax = playerNode.getPlayer()->getLevelThreshold();
+
+	GuiElement::ProgressBar *hpBar = new GuiElement::ProgressBar(&hp, hpMax, 300, glm::fvec4(1.0f, 0.0f, 0.0f, 1.0f));
+	hud->addElement(hpBar);
+	hud->addElement(new GuiElement::SameLine());
+	hud->addElement(new GuiElement::Text("HP"));
+
+	GuiElement::ProgressBar *expBar = new GuiElement::ProgressBar(&exp, expMax, 300, glm::fvec4(1.0f, 0.9960784f, 0.9529411f, 1.0f));
+	hud->addElement(expBar);
+	hud->addElement(new GuiElement::SameLine());
+	hud->addElement(new GuiElement::Text("EXP"));
+
+	hud->addElement(new GuiElement::Spacing());
+	hud->addElement(new GuiElement::Separator());
+	hud->addElement(new GuiElement::Spacing());
+	hud->addElement(new GuiElement::Text("LVL"));
+
+	int level = playerNode.getPlayer()->getLvl();
+	hud->addElement(new GuiElement::SameLine());
+	GuiElement::IntBox *lvlBox = new GuiElement::IntBox(&level, glm::fvec4(1.0f, 1.0f, 1.0f, 1.0f), glm::fvec4(0.7f, 0.7f, 0.7f, 1.0f));
+	hud->addElement(lvlBox);
+
+	hud->addElement(new GuiElement::SameLine());
+	GuiElement::PushButton *inventoryButton = new GuiElement::PushButton("Inventory");
+	hud->addElement(inventoryButton);
+	hud->addElement(new GuiElement::SameLine());
+	GuiElement::PushButton *questButton = new GuiElement::PushButton("Quests");
+	hud->addElement(questButton);
+
+	questWindow = new GuiElement::NestedWindow();
+	questWindow->hide();
+	GuiElement::Header *quest1 = new GuiElement::Header("Test the Quest");
+	quest1->addElement(new GuiElement::Text("Quest description here bla bla bla"));
+	GuiElement::Header *quest2 = new GuiElement::Header("Testwindow Questwindow");
+	quest2->addElement(new GuiElement::Text("Quest description here too bla bla bla"));
+	questWindow->addElement(quest1);
+	questWindow->addElement(quest2);
+	questWindow->setName("Quests");
+	questWindow->setCollapsable(false);
+	questWindow->setPosition(WINDOW_WIDTH - QUEST_WIDTH, (WINDOW_HEIGHT / 2) - (QUEST_HEIGHT / 2));
+	questWindow->setSize(QUEST_WIDTH, QUEST_HEIGHT);
+	hud->addNestedWindow(questWindow);
+
+	inventoryWindow = new GuiElement::NestedWindow();
+	inventoryWindow->hide();
+
+	inventoryWindow->setName("Inventory");
+	inventoryWindow->setCollapsable(false);
+	inventoryWindow->setResizable(false);
+	inventoryWindow->setPosition(WINDOW_WIDTH - QUEST_WIDTH, (WINDOW_HEIGHT / 2) - (QUEST_HEIGHT / 2));
+	inventoryWindow->setSize(QUEST_WIDTH, QUEST_HEIGHT);
+	hud->addNestedWindow(inventoryWindow);
+
+	std::map<std::string, Texture*> *inventoryItems = new std::map<std::string, Texture*>();
+	inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem1"), &bricks));
+	inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem2"), &bricks));
+	inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem3"), &bricks));
+	inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem4"), &bricks));
+	inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem5"), &bricks));
+	inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem6"), &bricks));
+	inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem7"), &bricks));
+	inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem8"), &bricks));
+	inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem9"), &bricks));
+	GuiElement::Inventory *inventory = new GuiElement::Inventory(inventoryItems, 6);
+	inventoryWindow->addElement(inventory);
+
+	float testFloat = float(0.0f);
+	float testFloat2 = float(0.0f);
+
+	testLevel.addGUI(hud);
+	testLevel.getGUI("testGUI")->m_windowName;
+
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
 	
@@ -513,9 +636,41 @@ int main()
 		//==================Render your Objects==============================//
 		//==================================================================//
 	
-		renderer->renderScene(testScene, testWindow);
+
+
+		fboGBuffer.bind();
+		glClearColor(0, 0, 0, 0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		shaderGBuffer.bind();
+		shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
+		shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+
+		testScene.render(shaderGBuffer);
+
+		shaderGBuffer.unbind();
+		fboGBuffer.unbind();
+
+		//ScreenFillingQuad Render Pass
+		shaderSFQ.bind();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		shaderSFQ.sendSampler2D("fboTexture", fboGBuffer.getColorTexture(2));
+
+		screenFillingQuad.renderGeometry();
+		shaderSFQ.unbind();
+		renderer.renderGUI(*hud, testWindow);
+		hp=playerNode.getPlayer()->getHealth();
+
+		glfwSwapBuffers(testWindow.getWindow());
+		glfwPollEvents();
+
+//		renderer->renderScene(testScene, testWindow);
+
+
 
 	}
+
+
 
 	glfwDestroyWindow(testWindow.getWindow());
 	glfwTerminate();

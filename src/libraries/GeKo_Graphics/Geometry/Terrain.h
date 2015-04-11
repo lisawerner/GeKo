@@ -15,17 +15,9 @@ public:
 
 	void loadHeightmap(std::string filename);
 
-	void generateMesh();
-
 	glm::vec3 calculateNormal(int x, int z);
 
 	float getHeight(glm::vec2 position);
-	float getHeight(int x, int z);
-	void setHeight(int x, int z, float height);
-
-	float random(float interval);
-
-	void generate(int x1, int z1, int x2, int z2, float interval);
 
 protected:
 	std::vector<float> m_height;
@@ -34,6 +26,4 @@ protected:
 	float **m_heightMap;
 
 	float m_interval, m_resolution;
-
-
 };

@@ -20,6 +20,4 @@ public:
 	///A method to render the Object 
 	/**In the while-Loop of the main-programm (Renderer or else) this method will be called to draw the array*/
 	void renderGeometry();
-
-
 };

@@ -15,12 +15,9 @@ DecisionTreeNode::DecisionTreeNode(int nodeID, DecisionTreeNode* defaultNode){
 }
 
 DecisionTreeNode::DecisionTreeNode(){
-
 }
 
-
 DecisionTreeNode::~DecisionTreeNode(){
-
 }
 
 int DecisionTreeNode::getID(){

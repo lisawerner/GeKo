@@ -7,7 +7,7 @@
 class BoundingBox {
 
 public:
-	///Each Bounding Box needs a Object to wrap
+	///Each Bounding Box needs an Object to wrap
 	/**/
 	BoundingBox();
 	BoundingBox(Node* object);
@@ -36,8 +36,4 @@ private:
 	std::vector<glm::vec4> m_box;
 
 	bool m_collisionDetected;
-
-
-
-
 };

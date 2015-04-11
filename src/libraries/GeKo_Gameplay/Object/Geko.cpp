@@ -52,8 +52,6 @@ void Geko::moveLeft()
 	m_movementVector -= glm::cross(m_viewDirection, glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
-
-
 void Geko::update(float deltaTime)
 {
 	updateStates();
@@ -69,19 +67,6 @@ void Geko::update(float deltaTime)
 		notify(*this, Object_Event::OBJECT_STOPPED);
 	}
 	m_movementVector = glm::vec3(0.0f);
-
-	/*glm::mat4 modelMatrix = glm::mat4(1);
-	m_geometry->setModelMatrix(glm::translate(modelMatrix, m_position));
-
-	glm::vec3 axisX = m_viewDirection;
-	glm::vec3 axisZ = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), axisX));
-	glm::vec3 axisY = glm::normalize(glm::cross(axisX, axisZ));
-
-	m_geometry->setModelMatrix(m_geometry->getModelMatrix() * glm::mat4(
-		axisX.x, axisX.y, axisX.z, 0,
-		axisY.x, axisY.y, axisY.z, 0,
-		axisZ.x, axisZ.y, axisZ.z, 0,
-		0, 0, 0, 1));*/
 }
 
 glm::vec3 Geko::getPosition()

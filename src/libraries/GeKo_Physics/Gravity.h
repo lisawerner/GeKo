@@ -1,8 +1,7 @@
 #pragma once
 #include <glm/ext.hpp>
-///Scenegraph contains Node
-/**Every scenegraph is connected with one scene.
-The scenegraph is managing all the objects in the scene which are added to the scenegraph by adding them to the scene*/
+///A class to add gravity to a scene
+/** Through gravity things and objects can fall down to the plane. This is made possible through adding a constant vector to the modelmatrix.*/
 class Gravity
 {
 public:

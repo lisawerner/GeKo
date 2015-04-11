@@ -18,7 +18,6 @@ Node::Node(std::string nodeName)
 	m_hasGravity = false;
 	m_hasObject = false; 
 	m_hasParticleSystem = false;
-	
 
 	m_type = ClassType::OBJECT;
 }
@@ -37,7 +36,6 @@ void Node::setNodeName(std::string nodeName)
 {
 	m_nodeName = nodeName;
 }
-
 
 Node* Node::getParentNode()
 {
@@ -77,6 +75,7 @@ void Node::deleteChildrenNode(std::string nodeName)
 	{
 		if (m_childrenSet.at(i)->getNodeName() == nodeName)
 		{
+			m_childrenSet.at(i) = NULL;
 			m_childrenSet.erase(m_childrenSet.begin() + i);
 			success = true;
 		}
@@ -115,6 +114,7 @@ glm::mat4 Node::getPrevModelMatrix()
 {
 	return m_PrevModelMatrix;
 }
+
 void Node::setPrevModelMatrix(glm::mat4 modelMatrix)
 {
 	m_PrevModelMatrix = modelMatrix;
@@ -131,7 +131,6 @@ void Node::addRotation(float angle, glm::vec3 axis)
 	m_rotationMatrix = newRotationMatrix;
 
 	updateModelMatrix();
-
 }
 
 glm::mat4 Node::getTranslationMatrix()
@@ -167,7 +166,6 @@ void Node::addTranslation(glm::vec3 position)
 		m_boundingList.at(i)->update(m_modelMatrix);
 	}
 }
-
 
 glm::mat4 Node::getScaleMatrix()
 {
@@ -373,15 +371,21 @@ void Node::setCamera(StrategyCamera* camera)
 	{
 		if (m_type == ClassType::PLAYER)
 		{
-			m_player->setPosition(glm::vec3(m_camera->getCenter().x, 0.0f, m_camera->getCenter().z));
+			m_player->setPosition(glm::vec3(m_camera->getCenter().x, m_camera->getCenter().y, m_camera->getCenter().z));
 			addTranslation(m_player->getPosition());
 
 			//TODO: Abfrage, welche Kamera-Art benutzt werden soll
-			m_camera->setCenter(glm::vec4(m_camera->getCenter().x, 2.0f, m_camera->getCenter().z, 1.0));
+			m_camera->setCenter(glm::vec4(m_camera->getCenter().x, m_player->getPosition().y + 2.0f, m_camera->getCenter().z, 1.0));
 			m_camera->setRadius(2.5f);	
 		}	
 	}
 
+}
+
+void Node::setCamera(Camera* camera)
+{
+	m_otherCamera = camera;
+	m_hasCamera = true;
 }
 
 BoundingSphere* Node::getBoundingSphere()
@@ -521,7 +525,6 @@ ClassType Node::getType()
 	}
 }
 
-
 ParticleSystem* Node::getParticleSystem()
 {
 	if (m_hasParticleSystem)
@@ -568,12 +571,8 @@ void Node::render()
 void Node::render(ShaderProgram &shader)
 {
 
-	if (m_hasParticleSystem)
+	if (!m_hasParticleSystem)
 	{
-		//Extra Render-Methode für ein Partikel-System
-		renderParticle(shader);
-	}else{
-		//Normale Render-Routine, ohne Partikel-System
 		if (!(m_nodeName == "Root"))
 		{
 			glm::mat4 modelMatrix(1.0);
@@ -583,6 +582,10 @@ void Node::render(ShaderProgram &shader)
 				{
 					m_player->setPosition(m_player->getPosition() + m_Gravity->getGravity());
 					addTranslation(m_player->getPosition());
+					if (m_hasCamera)
+					{
+						m_camera->setCenter(glm::vec4(m_player->getPosition(), 1.0));
+					}
 				}
 				else if ((m_type == ClassType::AI))
 				{
@@ -603,7 +606,6 @@ void Node::render(ShaderProgram &shader)
 					m_player->rotateView((m_camera->getXAngle()), 0.0f);
 				}
 			}
-
 
 			modelMatrix = getParentNode()->getModelMatrix() * m_modelMatrix;
 			shader.sendMat4("modelMatrix", modelMatrix);
@@ -658,14 +660,19 @@ void Node::render(ShaderProgram &shader)
 		}
 
 	}
+	else {
+		//Extra Render-Methode für ein Partikel-System
+		renderParticle(shader);
+	}
 }
 
 void Node::renderParticle(ShaderProgram &shader)
 
 {
+
 	//TODO: Particle-System muss gerendert werden!
+
+	m_particleSystem->update();
+	m_particleSystem->render(*m_otherCamera);
+
 }
-
-
-
-

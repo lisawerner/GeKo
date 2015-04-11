@@ -4,6 +4,7 @@
 #include <GeKo_Graphics/Scenegraph/Level.h>
 
 
+/**A Questobserver manages all the quest-changes like increasing a collecting-goal-value or finishing a quest.*/
 class QuestObserver : public Observer<Quest, Quest_Event>, public Observer<Goal, Quest_Event>, public Observer<FightSystem, Quest_Event>
 {
 public:
@@ -86,6 +87,4 @@ public:
 	}
 protected: 
 	Level* m_level;
-
 };
-

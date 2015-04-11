@@ -15,8 +15,8 @@ public:
 	DecisionTree();
 	DecisionTree(DecisionTreeNode* root);
 	~DecisionTree();
-	
-	//Methode geht über den Baum und prüft anhand des aktuellen State des Objektes, in welchen Ast weiter gegangen werden soll
+
+	///This method goes through the tree and checks which branch it shall follow with the help of the actual state
 	TreeOutput decide(std::vector<std::pair<States, bool>> states);
 
 	void setRootNode(DecisionTreeNode &root);

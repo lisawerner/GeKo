@@ -318,7 +318,7 @@ int main()
 	CollisionObserver colObserver(&testLevel);
 	collision.addObserver(&colObserver);
 
-	GravityObserver gravityObserver;
+	GravityObserver gravityObserver(&testLevel);
 	collision.addObserver(&gravityObserver);
 
 

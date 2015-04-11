@@ -20,13 +20,13 @@
 #include <GeKo_Sound/SoundFileHandler.h>
 
 ///A Node contains information, which can be rendered in the world
-/*A "Node" should be a container for Geometry, Material, Lights, Cameras, KI and Player and provides all the information a shader could need
+/**A "Node" should be a container for Geometry, Material, Lights, Cameras, KI and Player and provides all the information a shader could need
   like a Modelmatrix for example. It has one parent and can have a lot of children or none. Every Node exists as long as the scenegraph */
 class Node
 {
 public:
 
-	///The constructor of a Node
+	///The constructor for a Node
 	/**At the beginning a Node just needs a name, the m_modelMatrix will be set to the identity matrix*/
 	Node(std::string nodeName);
 	~Node();
@@ -38,23 +38,22 @@ public:
 	std::string getNodeName();
 	void setNodeName(std::string nodeName);
 
-	///Returns the m_Node Object which represent the Parent Node
+	///Returns the m_Node Object which represents the Parent Node
 	/**/
 	Node* getParentNode();
 	void setParentNode(Node* parentNode);
 
 	///Returns a Node-Object with the name nodeName
-	/**This Method iterates over the m_childrenSet and returns the Node with the nodeName, but just the children, not the grand-
-	or grand-grand-children of the node!*/
+	/**This Method iterates over the m_childrenSet and returns the Node with the nodeName, but just the direct children!*/
 	Node* getChildrenNode(std::string nodeName);
 
-	///A Node-Object will be add to m_childrenSet
+	///A Node-Object will be added to m_childrenSet
 	/**The Parent Node will be set automatically to the node which calls the function!*/
 	void addChildrenNode(Node* childrenNode);
 
 	///This method deletes a Node-Object in m_childrenSet
 	/**The user gives the method a name and the method iterates over the m_childrenSet
-	and deletes the Child with the nodeName. It just deletes children and not grand- or grand-grand-children of the node!*/
+	and deletes the Child with the nodeName. It just deletes children and not grand- or great-grand-children of the node!*/
 	void deleteChildrenNode(std::string nodeName);
 
 	///Returns the m_childrenSet of the Node
@@ -104,7 +103,7 @@ public:
 	/**The user tells the method in which directions (x, y and/or z) the object should be scaled.
 	Then the method calls the scale(...) Method of opengl and updates the modelmatrix.
 	This method overwrites all scalings from before!
-	Furthermore if the node has an bounding-sphere, the radius of it will be updated as well!*/
+	Furthermore if the node has an bounding-sphere, its radius will be updated as well!*/
 	void addScale(float x, float y, float z);
 
 	///The Translationmatrix will be set to the Identity matrix
@@ -146,8 +145,8 @@ public:
 	///Returns m_geometry as a Geometry object
 	/**If the node does not have a geometry an error will be thrown!*/
 	Geometry* getGeometry();
-	///A Geometry Object will be linked with the node
-	/**A geometry Object saved as m_geometry. If the geometry was not loaded yet, the buffers will be loaded with the 
+	///A Geometry Object will be linked to the node
+	/**A geometry Object will be saved as m_geometry. If the geometry was not loaded yet, the buffers will be loaded with the 
 	geometry information like vertices, normals etc.!*/
 	void addGeometry(Geometry* geometry);
 
@@ -170,6 +169,7 @@ public:
 	/**If the node does not have a camera an error will be thrown!*/
 	StrategyCamera* getCamera();
 	void setCamera(StrategyCamera* camera);
+	void setCamera(Camera* camera);
 
 	///Return m_boundingSphere of the Node
 	/**If the node does not have a bounding-sphere an error will be thrown!*/
@@ -222,7 +222,7 @@ public:
 	/**If the node does not have a Particle-unit an error will be thrown!*/
 	ParticleSystem* getParticleSystem();
 	///Adds a Particle-System to the node
-	/**The Node will not render geometry or other thing. It will be only function as a source for a particle system!*/
+	/**The Node will not render geometry or other things. It will be only functional as a source for a particle system!*/
 	void addParticleSystem(ParticleSystem* particleSystem);
 
 
@@ -236,11 +236,11 @@ public:
 	
 //==================Render functions===========================//
 	///A method to tell the Node to draw itself
-	/**The Node will take this call and forward it to the geometry, so the geometry will be drawed*/
+	/**The Node will take this call and forward it to the geometry, so the geometry will be drawn*/
 	void render();
 
 	///A method to tell the Node to draw itself
-	/**The Node will take this call and forward it to the geometry, so the geometry will be drawed*/
+	/**The Node will take this call and forward it to the geometry, so the geometry will be drawn*/
 	void render(ShaderProgram &shader);
 
 	///A method to tell the Node to render its Particle-System
@@ -277,8 +277,8 @@ protected:
 	float m_heightScale;
 	float m_heightBias;
 	StrategyCamera* m_camera;
+	Camera* m_otherCamera;
 
-	//Template sollte hier eingefügt werden, damit wir auch andere Formen ermöglichen könnnen!
 	BoundingSphere* m_sphere;
 	BoundingSphere* m_viewArea;
 	std::vector<BoundingSphere*> m_boundingList;
@@ -295,10 +295,7 @@ protected:
 private:
 	///A method which updates the Modelmatrix
 	/**When a new rotation, scale or translation is added to the object, then the modelMatrix needs an update.
-	This update will be done by this method, all the single matrizes (scale, rotation, translation) will be computed.
+	This update will be done by this method, all the single matrices (scale, rotation, translation) will be computed.
 	The order of the update will be: translation * rotation * scale!*/
 	void updateModelMatrix();
-	
-
 };
-

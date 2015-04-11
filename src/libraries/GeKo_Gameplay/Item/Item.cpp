@@ -7,7 +7,6 @@ Item::Item(int id){
 }
 
 Item::Item(){
-	
 }
 
 Item::~Item(){
@@ -16,6 +15,7 @@ Item::~Item(){
 void Item::setId(int id){
 	m_id = id;
 }
+
 void Item::setName(std::string name){
 	m_name = name;
 }
