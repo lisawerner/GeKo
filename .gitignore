@@ -5,3 +5,4 @@ BUILD_MINGW/
 BUILD_LINUX/
 BUILD_GCC/
 *.db
+*.cmake~

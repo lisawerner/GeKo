@@ -6,7 +6,7 @@
 #include <GLFW/glfw3.h>
 #include <GeKo_Graphics/Buffer.h>
 #include <GeKo_Graphics/BufferIndex.h>
-#include <Geko_Resource/Handle.hpp>
+#include <Geko_Resource/Handle/Handle.hpp>
 
 /*This class should be used as a interface class. It provides two Methods to load Data and to render the Vertice Data. 
   Every Geometry Object which will inherit this class should use this methods. A vector for the vertices is provided as well.*/
