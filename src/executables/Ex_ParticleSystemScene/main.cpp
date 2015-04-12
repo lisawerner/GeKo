@@ -138,9 +138,6 @@ int main()
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&whiteSmokeNode);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&snowNode);
 
-	Rect rect;
-	rect.loadBufferData();
-
 	// getting the start time
 	double startTime = glfwGetTime();
 

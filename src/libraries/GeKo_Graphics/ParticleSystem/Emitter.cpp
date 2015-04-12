@@ -286,22 +286,32 @@ void Emitter::generateParticle(glm::vec3 playerPosition)
 void Emitter::render(Camera &cam)
 {
 	auto useTexture = getUseTexture();
+	glDepthMask(GL_FALSE);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //how we calculate transperancy
 
 	if (getUsePointSprites()){ //if we dont use a geometry shader..
 
-		glDepthFunc(GL_FALSE);
 
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //how we calculate transperancy
 
-		if (useTexture){
-			glEnable(GL_POINT_SPRITE);
-			glTexEnvi(GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE);	//the fragment color gets interpolated
-		}
 
 		emitterShader->bind();
 		glBindBuffer(GL_ARRAY_BUFFER, position_ssbo);
 
+		if (useTexture){
+			glEnable(GL_POINT_SPRITE);
+			glTexEnvi(GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE);	//the fragment color gets interpolated
+			glEnable(GL_PROGRAM_POINT_SIZE);
+			std::string s = "tex";
+			for (int i = 0; i < textureCount; i++){
+				std::string i2 = std::to_string(i);
+				s += i2;
+				emitterShader->sendSampler2D(s, m_textureList.at(i)->getTexture(), i + 1);
+				s = "tex";
+			}
+			emitterShader->sendInt("textureCount", textureCount);
+		}
 		//Uniform Vars
 		emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
 		emitterShader->sendInt("particleMortal", m_particleMortal);
@@ -309,7 +319,9 @@ void Emitter::render(Camera &cam)
 		emitterShader->sendFloat("deathTime", m_deathTime);
 		emitterShader->sendMat4("viewMatrix", cam.getViewMatrix());
 		emitterShader->sendMat4("projectionMatrix", cam.getProjectionMatrix());
-
+		emitterShader->sendInt("useTexture", useTexture);
+		emitterShader->sendFloat("blendingTime", m_blendingTime);
+		emitterShader->sendFloatArray("time", 4, blendingTime);
 		if (m_useScaling){
 			emitterShader->sendInt("useScaling", 1);
 			emitterShader->sendInt("scalingCount", m_scalingCount);
@@ -321,41 +333,15 @@ void Emitter::render(Camera &cam)
 			emitterShader->sendInt("useScaling", 0);
 			emitterShader->sendFloat("size", particleDefaultSize);
 		}
-
-		if (m_useTexture){
-			std::string s = "tex";
-			for (int i = 0; i < textureCount; i++){
-				std::string i2 = std::to_string(i);
-				s += i2;
-				emitterShader->sendSampler2D(s, m_textureList.at(i)->getTexture(), i + 1);
-				s = "tex";
-			}
-			emitterShader->sendInt("textureCount", textureCount);
-		}
-		emitterShader->sendInt("useTexture", useTexture);
-
-		emitterShader->sendFloat("blendingTime", m_blendingTime);
-		emitterShader->sendFloatArray("time", 4, blendingTime);
-
 		glVertexPointer(4, GL_FLOAT, 0, (void*)0);
 		glEnableClientState(GL_VERTEX_ARRAY);
-
-		if (useTexture){
-			glEnable(GL_PROGRAM_POINT_SIZE);
-		}
 		glDrawArrays(GL_POINTS, 0, numMaxParticle);
-
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glDepthFunc(GL_TRUE);
-		glDisable(GL_BLEND);
+
 		emitterShader->unbind();
 	}
 	else if (getUseGeometryShader() && useTexture){
-		glDepthMask(GL_FALSE);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 		emitterShader->bind();
 		glBindBuffer(GL_ARRAY_BUFFER, position_ssbo);
 
@@ -366,10 +352,11 @@ void Emitter::render(Camera &cam)
 		emitterShader->sendFloat("deathTime", m_deathTime);
 		emitterShader->sendFloat("fullLifetime", (float)particleLifetime);
 		emitterShader->sendVec4("camPos", cam.getPosition());
-
 		emitterShader->sendInt("rotateLeft", m_rotateLeft);
 		emitterShader->sendFloat("rotationSpeed", m_rotationSpeed);
-
+		emitterShader->sendInt("useTexture", useTexture);
+		emitterShader->sendFloat("blendingTime", m_blendingTime);
+		emitterShader->sendFloatArray("time", 4, blendingTime);
 		if (m_useTexture){
 			std::string s = "tex";
 			for (int i = 0; i < textureCount; i++){
@@ -380,11 +367,6 @@ void Emitter::render(Camera &cam)
 			}
 			emitterShader->sendInt("textureCount", textureCount);
 		}
-		emitterShader->sendInt("useTexture", useTexture);
-		
-		emitterShader->sendFloat("blendingTime", m_blendingTime);
-		emitterShader->sendFloatArray("time", 4, blendingTime);
-
 		if (m_useScaling){
 			emitterShader->sendInt("useScaling", 1);
 			emitterShader->sendInt("scalingCount", m_scalingCount);
@@ -395,7 +377,6 @@ void Emitter::render(Camera &cam)
 			emitterShader->sendInt("useScaling", 0);
 			emitterShader->sendFloat("size", particleDefaultSize);
 		}
-
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
 		glDrawArrays(GL_POINTS, 0, numMaxParticle);
@@ -403,13 +384,13 @@ void Emitter::render(Camera &cam)
 
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glDepthMask(GL_TRUE);
-		glDisable(GL_BLEND);
 		emitterShader->unbind();
 	}
 	else{
 		perror("Problem in Emitter.cpp: Geometry Shader maybe miss a texture");
 	}
+	glDepthMask(GL_TRUE);
+	glDisable(GL_BLEND);
 }
 
 void Emitter::updateSize()
@@ -586,7 +567,7 @@ void Emitter::addTexture(Texture* texture, float time){
 	else if (textureCount == 4){
 		perror("just 4 textures per emitter possible");
 	}
-	else if (blendingTime[textureCount - 1] > time){
+	else if (blendingTime[textureCount - 1] < time){
 		perror("the textures must be added ordered descending by their blending time");
 	}
 }
