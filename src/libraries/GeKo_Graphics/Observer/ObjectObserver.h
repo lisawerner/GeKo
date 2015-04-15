@@ -49,8 +49,10 @@ public:
 			 {
 				 // Camera looks at player position
 				 glm::vec3 camPosition;
+				 tmp->getCamera()->setCenter(player.getViewDirection());
 				 camPosition = glm::vec3(player.getPosition() + (player.getViewDirection()*glm::vec4(-5.0)));
-				 tmp->getCamera()->setPosition(glm::vec4(camPosition, 1.0));
+				 tmp->getCamera()->setPosition(player.getPosition());
+				 //tmp->getCamera()->setPosition(glm::vec4(camPosition, 1.0));
 			 }
 	
 			 break;

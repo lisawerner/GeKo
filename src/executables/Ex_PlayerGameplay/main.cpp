@@ -23,6 +23,7 @@
 #include <GeKo_Graphics/Geometry/TreeMesh.h>
 #include <GeKo_Graphics/Geometry/AntMesh.h>
 #include <GeKo_Graphics/Geometry/AntHomeMesh.h>
+#include <GeKo_Graphics/Geometry/GekoMesh.h>
 
 #include <GeKo_Gameplay/AI_Decisiontree/DecisionTree.h>
 #include <GeKo_Gameplay/FightSystem/FightSystem.h>
@@ -86,6 +87,7 @@ int main()
 	//Set Camera to another position
 	cam.setPosition(glm::vec4(0.0, 0.0, 20.0, 1.0));
 	//cam.setName("PlayerViewCam");
+	cam.setCenter(glm::vec4(0.0, 0.0, -1.0, 0.0));
 	cam.setKeySpeed(2.0);
 	cam.setNearFar(0.0001, 100);
 
@@ -205,12 +207,14 @@ int main()
 	// ==============================================================
 
 	Teapot teaPlayer;
+	GekoMesh gekomesh;
 //	Texture texBrick((char*)RESOURCES_PATH "/brick.bmp");
 
 	Node playerNode("Player");
-	playerNode.addGeometry(&teaPlayer);
 	playerNode.addTexture(&texBrick);
 	playerNode.setObject(&geko);
+	//playerNode.addGeometry(&teaPlayer);
+	playerNode.addGeometry(&gekomesh);
 	playerNode.setCamera(&cam);
 	geko.move(glm::vec3(10.0, 0.0, 10.0));
 

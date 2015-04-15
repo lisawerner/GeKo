@@ -80,6 +80,8 @@ public:
 
 	/// This method return the look at m_center
 	glm::vec4 getCenter();
+	/// This method set the m_center
+	void setCenter(glm::vec4 c);
 
 	/// This method returns the angle phi
 	/** Phi is the angle in x direction

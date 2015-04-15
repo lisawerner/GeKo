@@ -110,6 +110,10 @@ glm::vec4 Camera::getCenter(){
 	return m_center;
 }
 
+void Camera::setCenter(glm::vec4 c){
+	m_center = c;
+}
+
 float Camera::getPhi(){
 	return m_phi;
 }
