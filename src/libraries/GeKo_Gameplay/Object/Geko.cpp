@@ -34,12 +34,12 @@ Geko::~Geko(){
 
 void Geko::moveForward()
 {
-	m_movementVector += m_viewDirection;
+	m_movementVector += glm::vec3(m_viewDirection);
 }
 
 void Geko::moveBackward()
 {
-	m_movementVector -= m_viewDirection;
+	m_movementVector -= glm::vec3(m_viewDirection);
 }
 
 void Geko::moveRight()
