@@ -373,7 +373,7 @@ void Node::setCamera(Camera* camera)
 		{
 			// Compute position
 			m_player->setPosition(glm::vec4(m_camera->getPosition().x, m_camera->getPosition().y, m_camera->getPosition().z, 1.0));
-			addTranslation(m_player->getPosition());
+			addTranslation(glm::vec3(m_player->getPosition()));
 			//TODO: Abfrage, welche Kamera-Art benutzt werden soll
 			m_camera->setPosition(glm::vec4(m_camera->getPosition().x, m_player->getPosition().y + 2.0f, m_camera->getPosition().z, 1.0));
 
@@ -453,7 +453,7 @@ void Node::setObject(AI* object)
 	m_viewArea->center += glm::vec3(object->getViewDirection()) * glm::vec3(m_sphere->radius, m_sphere->radius, m_sphere->radius);
 	m_boundingList.push_back(m_viewArea);
 
-	addTranslation(object->getPosition());
+	addTranslation(glm::vec3(object->getPosition()));
 }
 
 Player* Node::getPlayer()
@@ -482,7 +482,7 @@ void Node::setObject(Player* object)
 		m_player->setPosition(glm::vec4(m_camera->getCenter().x, 0.0f, m_camera->getCenter().z, 1.0));
 	}
 
-	addTranslation(m_player->getPosition());
+	addTranslation(glm::vec3(m_player->getPosition()));
 }
 
 
@@ -507,7 +507,7 @@ void Node::setObject(StaticObject* object)
 	m_hasObject = true;
 	m_staticObject = object;
 
-	addTranslation(object->getPosition());
+	addTranslation(glm::vec3(object->getPosition()));
 }
 
 ClassType Node::getType()
@@ -578,17 +578,17 @@ void Node::render(ShaderProgram &shader)
 			if (m_hasGravity){
 				if ((m_type == ClassType::PLAYER | m_type == ClassType::PLAYER) & m_type != ClassType::OBJECT)
 				{
-					m_player->setPosition(glm::vec4(m_player->getPosition() + m_Gravity->getGravity(), 1.0));
-					addTranslation(m_player->getPosition());
+					m_player->setPosition(glm::vec4(glm::vec3(m_player->getPosition()) + m_Gravity->getGravity(), 1.0));
+					addTranslation(glm::vec3(m_player->getPosition()));
 					if (m_hasCamera)
 					{
-						m_camera->setPosition(glm::vec4(m_player->getPosition(), 1.0));
+						m_camera->setPosition(m_player->getPosition());
 					}
 				}
 				else if ((m_type == ClassType::AI))
 				{
-					m_ai->setPosition(glm::vec4(m_ai->getPosition() + m_Gravity->getGravity(), 1.0));
-					addTranslation(m_ai->getPosition());
+					m_ai->setPosition(glm::vec4(glm::vec3(m_ai->getPosition()) + m_Gravity->getGravity(), 1.0));
+					addTranslation(glm::vec3(m_ai->getPosition()));
 				}
 				else if (m_type == ClassType::OBJECT)
 				{

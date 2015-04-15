@@ -36,9 +36,9 @@ void Object::setPosition(glm::vec4 pos){
 	m_position = pos;
 }
 
-glm::vec3 Object::getPosition()
+glm::vec4 Object::getPosition()
 {
-	return glm::vec3(m_position);
+	return m_position;
 }
 
 float Object::getStrength(){

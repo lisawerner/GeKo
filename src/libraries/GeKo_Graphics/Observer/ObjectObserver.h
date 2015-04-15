@@ -32,7 +32,7 @@ public:
 		case Object_Event::OBJECT_MOVED:
 			std::string name = ai.getNodeName();
 			Node* tmp = m_level->getActiveScene()->getScenegraph()->searchNode(name);
-			tmp->addTranslation(ai.getPosition());
+			tmp->addTranslation(glm::vec3(ai.getPosition()));
 			break;
 		}
 	}
@@ -44,12 +44,12 @@ public:
 		 switch (event)
 		 {
 		 case Object_Event::OBJECT_MOVED:
-			 tmp->addTranslation(player.getPosition());
+			 tmp->addTranslation(glm::vec3(player.getPosition()));
 			 if (tmp->hasCamera())
 			 {
 				 // Camera looks at player position
 				 glm::vec3 camPosition;
-				 camPosition = glm::vec3(glm::vec4(player.getPosition(), 1.0) + (player.getViewDirection()*glm::vec4(-5.0)));
+				 camPosition = glm::vec3(player.getPosition() + (player.getViewDirection()*glm::vec4(-5.0)));
 				 tmp->getCamera()->setPosition(glm::vec4(camPosition, 1.0));
 			 }
 	

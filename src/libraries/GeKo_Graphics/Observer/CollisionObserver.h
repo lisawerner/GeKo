@@ -46,7 +46,7 @@ public:
 
 		 case Collision_Event::COLLISION_KI_PLAYER:
 			 nodeA.getBoundingSphere()->setCollisionDetected(true);
-			 nodeA.getAI()->getGraph()->searchNode(GraphNodeType::OBJECT)->setPosition(nodeB.getPlayer()->getPosition());
+			 nodeA.getAI()->getGraph()->searchNode(GraphNodeType::OBJECT)->setPosition(glm::vec3(nodeB.getPlayer()->getPosition()));
 			 nodeA.getAI()->viewArea(true);
 
 			

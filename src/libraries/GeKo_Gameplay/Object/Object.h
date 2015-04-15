@@ -21,7 +21,7 @@ public:
 
 	void setPosition(glm::vec4 pos);
 
-	glm::vec3 getPosition();
+	glm::vec4 getPosition();
 
 	float getStrength();
 

@@ -13,6 +13,7 @@
 
 #include "GeKo_Graphics/Camera/Trackball.h"
 #include "GeKo_Graphics/Camera/Playerview.h"
+#include <GeKo_Graphics/Camera/StrategyCamera.h>
 
 #include <GeKo_Gameplay/Object/Object.h>
 #include <GeKo_Gameplay/Object/AI.h>
@@ -30,8 +31,6 @@
 
 #include <GeKo_Gameplay/Questsystem/Quest.h>
 #include <GeKo_Gameplay/Questsystem/Goal_Collect.h>
-
-#include <GeKo_Graphics/Camera/StrategyCamera.h>
 
 #include <GeKo_Graphics/Observer/ObjectObserver.h>
 #include <GeKo_Graphics/Observer/CollisionObserver.h>
