@@ -31,11 +31,12 @@ Player::Player(std::string playerName, glm::vec3 spawnPoint)
 
 	m_viewDirection = glm::vec4(0.0, 0.0, -1.0, 0.0);
 	m_deltaTime = 0.0;
-	m_phi = 0.0;
+	m_phi = 90.0;
 	m_theta = 2.0;
 	m_alpha = 0;
 
 	m_speed = 0.01;
+	m_speedTurn = 0.08;
 }
 
 Player::Player(){
@@ -102,36 +103,39 @@ void Player::moveRight(){
 
 void Player::turnLeft(){
 
-	m_phi += m_speed* m_deltaTime;
-	if (m_phi < 0) m_phi += 2 * glm::pi<float>();
-	else if (m_phi > 2 * glm::pi<float>()) m_phi -= 2 * glm::pi<float>();
+	m_phi -= m_speedTurn* m_deltaTime;
+	if (m_phi < 0) m_phi += 360.0;
+	else if (m_phi > 360) m_phi -= 360;
 
-	m_alpha += glm::atan(m_phi)*(180/glm::pi<float>());
+	//m_viewDirection.x = sin(m_theta) * cos(m_phi);
+	//// y-direction only needed for flying
+	////m_direction.y = cos(m_theta);
+	//m_viewDirection.z = -sin(m_theta) * sin(m_phi);
 
-	m_viewDirection.x = sin(m_theta) * cos(m_phi);
-	// y-direction only needed for flying
-	//m_direction.y = cos(m_theta);
-	m_viewDirection.z = -sin(m_theta) * sin(m_phi);
+	rotateView(m_phi, m_theta);
 
-	std::cout << "Player turnLeft" << std::endl;
+
+	//std::cout << "Player turnLeft" << std::endl;
+	std::cout << "m_phi :" << m_phi << std::endl;
 
 	//TODO: OBJECT_MOVED mit m_direction noch anpassen
 	notify(*this, Object_Event::OBJECT_ROTATED);
 }
 
 void Player::turnRight(){
-	m_phi -= m_speed* m_deltaTime;
-	if (m_phi < 0) m_phi += 2 * glm::pi<float>();
-	else if (m_phi > 2 * glm::pi<float>()) m_phi -= 2 * glm::pi<float>();
+	m_phi += m_speedTurn* m_deltaTime;
+	if (m_phi < 0) m_phi += 360.0;
+	else if (m_phi > 360) m_phi -= 360;
 
-	m_alpha += glm::atan(m_phi)*(180 / glm::pi<float>());
+	//m_viewDirection.x = sin(m_theta) * cos(m_phi);
+	//// y-direction only needed for flying
+	////m_direction.y = cos(m_theta);
+	//m_viewDirection.z = -sin(m_theta) * sin(m_phi);
 
-	m_viewDirection.x = sin(m_theta) * cos(m_phi);
-	// y-direction only needed for flying
-	//m_direction.y = cos(m_theta);
-	m_viewDirection.z = -sin(m_theta) * sin(m_phi);
+	rotateView(m_phi, m_theta);
 
-	std::cout << "Player turnRight" << std::endl;
+	//std::cout << "Player turnRight" << std::endl;
+	std::cout <<"m_phi :"<< m_phi << std::endl;
 
 	notify(*this, Object_Event::OBJECT_ROTATED);
 }
@@ -147,6 +151,7 @@ void Player::update(){
 		updateStates();
 		//std::cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
 	}
+	//notify(*this, Object_Event::OBJECT_STOPPED);
 }
 
 void Player::rotateView(float leftRight, float upDown)
@@ -155,7 +160,7 @@ void Player::rotateView(float leftRight, float upDown)
 	m_viewDirection = glm::rotate(m_viewDirection, upDown, glm::cross(glm::vec3(m_viewDirection), glm::vec3(0.0f, -1.0f, 0.0f)));
 	m_viewDirection = glm::rotate(m_viewDirection, leftRight, glm::vec3(0.0f, -1.0f, 0.0f));
 	m_viewDirection.y = glm::clamp(m_viewDirection.y, -0.5f, 0.5f);
-	notify(*this, Object_Event::OBJECT_ROTATED);
+	//notify(*this, Object_Event::OBJECT_ROTATED);
 }
 
 float Player::getPhi(){

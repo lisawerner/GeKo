@@ -48,28 +48,35 @@ public:
 			 if (tmp->hasCamera())
 			 {
 				 // Camera looks at player position
-				 glm::vec3 camPosition;
-				 camPosition = glm::vec3(player.getPosition() + (player.getViewDirection()*glm::vec4(-5.0)));
+				/* glm::vec3 camPosition;
+				 camPosition = glm::vec3(player.getPosition() + glm::vec4((player.getViewDirection().x * -5.0, player.getViewDirection().y * -5.0, player.getViewDirection().z * -5.0, 1.0)));
 				 camPosition.y += 3.0;
 				 tmp->getCamera()->setPosition(glm::vec4(camPosition, 1.0));
 				// tmp->getCamera()->setPosition(glm::vec4(player.getPosition().x, 10.0, player.getPosition().z, 1.0));
-				tmp->getCamera()->setLookAt(glm::vec3(player.getPosition() + player.getViewDirection()));
+				tmp->getCamera()->setLookAt(glm::vec3(player.getPosition() + player.getViewDirection()));*/
+				 glm::vec3 camPosition;
+				 camPosition = glm::vec3(player.getPosition() + (player.getViewDirection()*glm::vec4(-5.0, -5.0, -5.0, 1.0)));
+				 camPosition.y += 3.0;
+				 tmp->getCamera()->setPosition(glm::vec4(camPosition, 1.0));
+				 //// tmp->getCamera()->setPosition(glm::vec4(player.getPosition().x, 10.0, player.getPosition().z, 1.0));
+				 tmp->getCamera()->setLookAt(glm::vec3(player.getPosition() + player.getViewDirection()));
 				
 				 //tmp->getCamera()->setPosition(glm::vec4(camPosition, 1.0));
 			 }
 	
 			 break;
 		 case Object_Event::OBJECT_ROTATED:
-			 tmp->addRotation(player.getPhi(), glm::vec3(0, 1, 0));
+			 tmp->addRotation(player.getPhi(), glm::vec3(0, -1, 0));
+			// tmp->addRotation(player.getAlpha(), glm::vec3(0, 1, 0));
 			 if (tmp->hasCamera())
 			 {
 
 				 // Camera looks at player position
 				 glm::vec3 camPosition;
-				 camPosition = glm::vec3(player.getPosition() + (player.getViewDirection()*glm::vec4(-5.0)));
+				 camPosition = glm::vec3(player.getPosition() + (player.getViewDirection()*glm::vec4(-5.0, -5.0, -5.0, 1.0)));
 				 camPosition.y += 3.0;
 				 tmp->getCamera()->setPosition(glm::vec4(camPosition, 1.0));
-				 // tmp->getCamera()->setPosition(glm::vec4(player.getPosition().x, 10.0, player.getPosition().z, 1.0));
+				 //// tmp->getCamera()->setPosition(glm::vec4(player.getPosition().x, 10.0, player.getPosition().z, 1.0));
 				 tmp->getCamera()->setLookAt(glm::vec3(player.getPosition() + player.getViewDirection()));
 
 				 //tmp->getCamera()->setPosition(glm::vec4(camPosition, 1.0));
@@ -80,11 +87,11 @@ public:
 			 break;
 		 case Object_Event::OBJECT_STOPPED:
 			/* tmp->getCamera()->setPosition(glm::vec4(player.getPosition().x, 10.0, player.getPosition().z, 1.0));*/
-			 glm::vec3 camPosition;
+			 /*glm::vec3 camPosition;
 			 camPosition = glm::vec3(player.getPosition() + (player.getViewDirection()*glm::vec4(-5.0)));
 			 camPosition.y += 3.0;
 			 tmp->getCamera()->setPosition(glm::vec4(camPosition, 1.0));
-			 tmp->getCamera()->setLookAt(glm::vec3(player.getPosition() + player.getViewDirection()));
+			 tmp->getCamera()->setLookAt(glm::vec3(player.getPosition() + player.getViewDirection()));*/
 			
 			 break;
 		 }

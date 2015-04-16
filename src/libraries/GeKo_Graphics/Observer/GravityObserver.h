@@ -30,8 +30,14 @@ public:
 					 if (node.getPlayer()->getPosition().y <= height + 0.5f){
 						 node.setGravity(false);
 						 node.getPlayer()->setPosition(glm::vec4(node.getPlayer()->getPosition().x, height + 0.5f, node.getPlayer()->getPosition().z, 1.0));
-						 if (node.hasCamera())
-							 node.getCamera()->setPosition(node.getPlayer()->getPosition());
+						 if (node.hasCamera()){
+							 glm::vec3 camPosition;
+							 camPosition = glm::vec3(node.getPlayer()->getPosition() + (node.getPlayer()->getViewDirection()*glm::vec4(-5.0)));
+							 camPosition.y += 3.0;
+							 node.getCamera()->setPosition(glm::vec4(camPosition, 1.0));
+							 //node.getCamera()->setPosition(node.getPlayer()->getPosition());
+							 node.getCamera()->setLookAt(glm::vec3(node.getPlayer()->getPosition() + node.getPlayer()->getViewDirection()));
+						 }
 					 }
 					 else if (true)
 					 {
@@ -63,8 +69,14 @@ public:
 					 if (node.getPlayer()->getPosition().y <= height ){
 						 node.setGravity(false);
 						 node.getPlayer()->setPosition(glm::vec4(glm::vec3(node.getPlayer()->getPosition().x, height, node.getPlayer()->getPosition().z), 1.0));
-						 if (node.hasCamera())
-							 node.getCamera()->setPosition(node.getPlayer()->getPosition());
+						 if (node.hasCamera()){
+							 glm::vec3 camPosition;
+							 camPosition = glm::vec3(node.getPlayer()->getPosition() + (node.getPlayer()->getViewDirection()*glm::vec4(-5.0)));
+							 camPosition.y += 3.0;
+							 node.getCamera()->setPosition(glm::vec4(camPosition, 1.0));
+							 //node.getCamera()->setPosition(node.getPlayer()->getPosition());
+							 node.getCamera()->setLookAt(glm::vec3(node.getPlayer()->getPosition() + node.getPlayer()->getViewDirection()));
+						 }
 					 }
 					 else if (true)
 					 {

@@ -82,5 +82,7 @@ protected:
 	//Phi: Winkel-Schritt um x-Achse; Theta: Winkel um Bla-Achse; Alpha: Winkel-Gesamt um x-Achse
 	float m_phi, m_theta, m_alpha;
 
+	float m_speedTurn;
+
 	std::map<Soundtype, std::string> m_soundMap;
 };

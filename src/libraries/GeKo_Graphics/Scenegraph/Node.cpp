@@ -372,10 +372,16 @@ void Node::setCamera(Camera* camera)
 		if (m_type == ClassType::PLAYER)
 		{
 			// Compute position
-			m_player->setPosition(glm::vec4(m_camera->getPosition().x, m_camera->getPosition().y, m_camera->getPosition().z, 1.0));
-			addTranslation(glm::vec3(m_player->getPosition()));
-			//TODO: Abfrage, welche Kamera-Art benutzt werden soll
-			m_camera->setPosition(glm::vec4(m_camera->getPosition().x, m_player->getPosition().y + 2.0f, m_camera->getPosition().z, 1.0));
+			//m_player->setPosition(glm::vec4(m_camera->getPosition().x, m_camera->getPosition().y, m_camera->getPosition().z, 1.0));
+			//addTranslation(glm::vec3(m_player->getPosition()));
+			////TODO: Abfrage, welche Kamera-Art benutzt werden soll
+			//m_camera->setPosition(glm::vec4(m_camera->getPosition().x, m_player->getPosition().y + 2.0f, m_camera->getPosition().z, 1.0));
+
+			glm::vec3 camPosition;
+			camPosition = glm::vec3(m_player->getPosition() + (m_player->getViewDirection()*glm::vec4(-5.0)));
+			camPosition.y += 3.0;
+			m_camera->setPosition(glm::vec4(camPosition, 1.0));
+			m_camera->setLookAt(glm::vec3(m_player->getPosition() + m_player->getViewDirection()));
 
 			//TODO: Compute viewDirection
 
@@ -582,7 +588,12 @@ void Node::render(ShaderProgram &shader)
 					addTranslation(glm::vec3(m_player->getPosition()));
 					if (m_hasCamera)
 					{
-						m_camera->setPosition(m_player->getPosition());
+						glm::vec3 camPosition;
+						camPosition = glm::vec3(m_player->getPosition() + (m_player->getViewDirection()*glm::vec4(-5.0)));
+						camPosition.y += 3.0;
+						m_camera->setPosition(glm::vec4(camPosition, 1.0));
+						m_camera->setLookAt(glm::vec3(m_player->getPosition() + m_player->getViewDirection()));
+						//m_camera->setPosition(m_player->getPosition());
 					}
 				}
 				else if ((m_type == ClassType::AI))
@@ -600,8 +611,14 @@ void Node::render(ShaderProgram &shader)
 			{
 				if (m_hasCamera)
 				{
-					addRotation(-(m_camera->getRotationAngle()), glm::vec3(0.0, 1.0, 0.0));
-					m_player->rotateView((m_camera->getRotationAngle()), 0.0f);
+					//addRotation(-(m_camera->getRotationAngle()), glm::vec3(0.0, 1.0, 0.0));
+					//m_player->rotateView((m_camera->getRotationAngle()), 0.0f);
+
+					/*glm::vec3 camPosition;
+					camPosition = glm::vec3(m_player->getPosition() + (m_player->getViewDirection()*glm::vec4(-5.0)));
+					camPosition.y += 3.0;
+					m_camera->setPosition(glm::vec4(camPosition, 1.0));
+					m_camera->setLookAt(glm::vec3(m_player->getPosition() + m_player->getViewDirection()));*/
 				}
 			}
 
