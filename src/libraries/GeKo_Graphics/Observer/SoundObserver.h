@@ -68,7 +68,7 @@ public:
 
 		 case Object_Event::OBJECT_MOVED:
 			 soundName =  node.getSourceName(MOVESOUND);
-			 node.getSoundHandler()->updateListenerPosition(node.getPosition());
+			 node.getSoundHandler()->updateListenerPosition(glm::vec3(node.getPosition()));
 			 node.updateSourcesInMap();
 			 if (soundName != "oor")
 			 {

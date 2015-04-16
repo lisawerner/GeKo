@@ -49,9 +49,12 @@ public:
 			 {
 				 // Camera looks at player position
 				 glm::vec3 camPosition;
-				 tmp->getCamera()->setCenter(player.getViewDirection());
 				 camPosition = glm::vec3(player.getPosition() + (player.getViewDirection()*glm::vec4(-5.0)));
-				 tmp->getCamera()->setPosition(player.getPosition());
+				 camPosition.y += 3.0;
+				 tmp->getCamera()->setPosition(glm::vec4(camPosition, 1.0));
+				// tmp->getCamera()->setPosition(glm::vec4(player.getPosition().x, 10.0, player.getPosition().z, 1.0));
+				tmp->getCamera()->setLookAt(glm::vec3(player.getPosition() + player.getViewDirection()));
+				
 				 //tmp->getCamera()->setPosition(glm::vec4(camPosition, 1.0));
 			 }
 	
@@ -61,10 +64,17 @@ public:
 			 if (tmp->hasCamera())
 			 {
 				 //TODO: Kamera dreht sich zwar parallel mit, muss aber ihre Position zusätzlich ändern, da sie sich auf einem Kreis um das Object dreht
-				 tmp->getCamera()->setLookAt(glm::vec3(player.getViewDirection()));
+				 tmp->getCamera()->setLookAt(glm::vec3(player.getPosition() + player.getViewDirection()));
 			 }
 			 break;
 		 case Object_Event::OBJECT_STOPPED:
+			/* tmp->getCamera()->setPosition(glm::vec4(player.getPosition().x, 10.0, player.getPosition().z, 1.0));*/
+			 glm::vec3 camPosition;
+			 camPosition = glm::vec3(player.getPosition() + (player.getViewDirection()*glm::vec4(-5.0)));
+			 camPosition.y += 3.0;
+			 tmp->getCamera()->setPosition(glm::vec4(camPosition, 1.0));
+			 tmp->getCamera()->setLookAt(glm::vec3(player.getPosition() + player.getViewDirection()));
+			
 			 break;
 		 }
 	 }
