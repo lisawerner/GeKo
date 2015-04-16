@@ -59,7 +59,7 @@ void Effect::renderEmitters(Camera &cam)
 void Effect::setPosition(glm::vec3 newPosition)
 {
 	for (auto emitter : emitterVec){
-		//why should i do this glm????:
+		//why should I do this glm????:
 		glm::vec3 pos = emitter->getPosition();
 		glm::vec3 result(0.0, 0.0, 0.0);
 		result.x = pos.x + newPosition.x;
@@ -137,12 +137,13 @@ int Effect::loadEffect(const char* filepath)
 	/****other necessary stuff****/
 		//Geometry Shader
 		item = emitterNode->FirstChildElement("UseGeometryShader");
-		if (item == nullptr) return XML_ERROR_PARSING_ELEMENT;
-		bool geom;
-		error = item->QueryBoolText(&geom);
-		XMLCheckResult(error);
-		if (geom) emitter->switchToGeometryShader();
-
+		if (item != nullptr){
+			bool geom;
+			error = item->QueryBoolText(&geom);
+			XMLCheckResult(error);
+			if (geom) emitter->switchToGeometryShader();
+		}
+			
 		//Velocity
 		item = emitterNode->FirstChildElement("Velocity");
 		if (item != nullptr){
@@ -232,7 +233,7 @@ int Effect::loadEffect(const char* filepath)
 				error = physicElement->QueryIntText(&gravityFunction);
 				XMLCheckResult(error);
 
-				emitter->usePhysicPointGravity(gravity, gravityRange, gravityFunction,speed);
+				emitter->usePhysicPointGravity(gravity, gravityRange, gravityFunction, speed);
 			}
 			physicType = item->FirstChildElement("SwarmCircleMotion");
 			if (physicType != nullptr){
@@ -312,7 +313,7 @@ int Effect::loadEffect(const char* filepath)
 				tex = tex->NextSiblingElement("Tex");
 			}
 
-			//useTexture
+			//defineLook
 			XMLElement* scaling = item->FirstChildElement("Scaling");
 			if (scaling != nullptr) {
 				bool useTexture;

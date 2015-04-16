@@ -699,7 +699,7 @@ int main()
 		//FPS
 		if (!(outputFrames % 30)){
 			outputFrames = 1;
-			std::cout << "FPS: " << static_cast<int> (1 / dTime) << "; Up to " << particleCount << " particles"<<std::endl;
+			//std::cout << "FPS: " << static_cast<int> (1 / dTime) << "; Up to " << particleCount << " particles"<<std::endl;
 		}
 		outputFrames++;
 	}
