@@ -33,6 +33,7 @@ Player::Player(std::string playerName, glm::vec3 spawnPoint)
 	m_deltaTime = 0.0;
 	m_phi = 0.0;
 	m_theta = 2.0;
+	m_alpha = 0;
 
 	m_speed = 0.01;
 }
@@ -105,6 +106,8 @@ void Player::turnLeft(){
 	if (m_phi < 0) m_phi += 2 * glm::pi<float>();
 	else if (m_phi > 2 * glm::pi<float>()) m_phi -= 2 * glm::pi<float>();
 
+	m_alpha += glm::atan(m_phi)*(180/glm::pi<float>());
+
 	m_viewDirection.x = sin(m_theta) * cos(m_phi);
 	// y-direction only needed for flying
 	//m_direction.y = cos(m_theta);
@@ -120,6 +123,8 @@ void Player::turnRight(){
 	m_phi -= m_speed* m_deltaTime;
 	if (m_phi < 0) m_phi += 2 * glm::pi<float>();
 	else if (m_phi > 2 * glm::pi<float>()) m_phi -= 2 * glm::pi<float>();
+
+	m_alpha += glm::atan(m_phi)*(180 / glm::pi<float>());
 
 	m_viewDirection.x = sin(m_theta) * cos(m_phi);
 	// y-direction only needed for flying
@@ -155,6 +160,10 @@ void Player::rotateView(float leftRight, float upDown)
 
 float Player::getPhi(){
 	return m_phi;
+}
+
+float Player::getAlpha(){
+	return m_alpha;
 }
 
 void Player::updateSourcesInMap()

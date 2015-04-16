@@ -59,6 +59,7 @@ public:
 	void rotateView(float leftRight, float upDown);
 
 	float getPhi();
+	float getAlpha();
 
 	///Returns the m_sourceName string
 	/**If a Sound-File-Handler was attached, the m_sourceName contains the name of the source which should be played!*/
@@ -78,7 +79,8 @@ protected:
 	glm::vec3 m_spawnPoint;
 
 	float m_deltaTime;
-	float m_phi, m_theta;
+	//Phi: Winkel-Schritt um x-Achse; Theta: Winkel um Bla-Achse; Alpha: Winkel-Gesamt um x-Achse
+	float m_phi, m_theta, m_alpha;
 
 	std::map<Soundtype, std::string> m_soundMap;
 };
