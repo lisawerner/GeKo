@@ -60,13 +60,16 @@ void Emitter::startTime(){
 
 void Emitter::loadBuffer(){
 	//?
+	std::cout << numMaxParticle << std::endl;
 	glGenBuffers(1, &position_ssbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, position_ssbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, numMaxParticle * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW);
-	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
-	glm::vec4* positions = (glm::vec4*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask);
+	//GLsizeiptr ptr = numMaxParticle * sizeof(glm::vec4);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, numMaxParticle * sizeof(glm::vec4), NULL, GL_STREAM_DRAW);
+	glm::vec4* positions = (glm::vec4*) glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_WRITE_ONLY);
+	//glm::vec4 pos = glm::vec4(getPosition(), -1.0f);
 	for (int i = 0; i < numMaxParticle; i++)
 	{
+		//std::wcout << i << std::endl;
 		positions[i] = glm::vec4(getPosition(), -1.0f);
 	}
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
@@ -75,29 +78,30 @@ void Emitter::loadBuffer(){
 	//?
 	glGenBuffers(1, &velocity_ssbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, velocity_ssbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, numMaxParticle * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW);
-	glm::vec4* velocity = (glm::vec4*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, numMaxParticle * sizeof(glm::vec4), NULL, GL_STREAM_DRAW);
+	glm::vec4* velocity = (glm::vec4*) glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_WRITE_ONLY);
 	for (int i = 0; i < numMaxParticle; i++)
 	{
-		velocity[i].x = 0.0f;
+		velocity[i] = glm::vec4(0.0, 0.0, 0.0, 0.0);
+		/*velocity[i].x = 0.0f;
 		velocity[i].y = 0.0f;
 		velocity[i].z = 0.0f;
-		velocity[i].w = 0.0f;
+		velocity[i].w = 0.0f;*/
 	}
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
 	glGenBuffers(1, &angle_ssbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, angle_ssbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, numMaxParticle * sizeof(glm::vec4), NULL, GL_DYNAMIC_DRAW);
-	glm::vec4* angle = (glm::vec4*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, numMaxParticle * sizeof(glm::vec4), NULL, GL_STREAM_DRAW);
+	glm::vec4* angle = (glm::vec4*) glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_WRITE_ONLY);
 	for (int i = 0; i < numMaxParticle; i++)
 	{
-		angle[i].x = 0.0f;
+		angle[i] = glm::vec4(0.0, 0.0, 0.0, 0.0);
+		/*angle[i].x = 0.0f;
 		angle[i].y = 0.0f;
 		angle[i].z = 0.0f;
-		angle[i].w = 0.0f;
-
+		angle[i].w = 0.0f;*/
 	}
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
@@ -141,12 +145,12 @@ void Emitter::update(glm::vec3 playerPosition){
 	compute->sendInt("useMovementHorizontalZ", m_movementHorizontalZ);
 
 	//Unbind CD and all SSBO's
-	glDispatchCompute(computeGroupCount, 1, 1); //?
+	glDispatchCompute(computeGroupCount, 1, 1); //runs the compute shader
+	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 0);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, 0);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, 0);
-	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
-	emitterShader->unbind();
+	compute->unbind();
 }
 void Emitter::pushParticle(int numberNewParticle, glm::vec3 playerPosition){
 	auto emitPosition = getPosition() + playerPosition;
@@ -154,9 +158,8 @@ void Emitter::pushParticle(int numberNewParticle, glm::vec3 playerPosition){
 	auto areaEmittingXZ = getAreaEmittingXZ();
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, position_ssbo);
-	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
 
-	glm::vec4* positions = (glm::vec4*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask);
+	glm::vec4* positions = (glm::vec4*) glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_WRITE_ONLY);
 	if (areaEmittingXY && areaEmittingXZ){
 		auto accuracy = getAreaAccuracy(); //how near it will be generated
 		auto areaSize = getAreaSize(); //how big the area is
@@ -230,7 +233,7 @@ void Emitter::pushParticle(int numberNewParticle, glm::vec3 playerPosition){
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, velocity_ssbo);
 
-	glm::vec4* velocity = (glm::vec4*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask); //direction of movement
+	glm::vec4* velocity = (glm::vec4*) glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_WRITE_ONLY); //direction of movement
 	for (int i = 0; i < numberNewParticle; i++)
 	{
 		glm::vec3 vel = this->m_pfunc(); //gets a random vector from the desired vector space
@@ -245,7 +248,7 @@ void Emitter::pushParticle(int numberNewParticle, glm::vec3 playerPosition){
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, angle_ssbo);
 
-	glm::vec4* angle = (glm::vec4*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, numMaxParticle * sizeof(glm::vec4), bufMask); //angle of movement as option to velocity
+	glm::vec4* angle = (glm::vec4*) glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_WRITE_ONLY); //angle of movement as option to velocity
 	for (int i = 0; i < numberNewParticle; i++)
 	{
 		int index = (indexBuffer + i) % numMaxParticle;
@@ -292,9 +295,6 @@ void Emitter::render(Camera &cam)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //how we calculate transperancy
 
 	if (getUsePointSprites()){ //if we dont use a geometry shader..
-
-
-
 
 		emitterShader->bind();
 		glBindBuffer(GL_ARRAY_BUFFER, position_ssbo);

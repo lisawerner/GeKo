@@ -125,4 +125,10 @@ void main(){
 		positions[gid] = pos;
 		velocity[gid] = vel;
 	}
+	else{
+		pos = vec4(emitterPos, 0.0);
+		positions[gid] = pos;
+		vel = vec4(0.0, 0.0, 0.0, 0.0);
+		velocity[gid] = vel;
+	}
 }
