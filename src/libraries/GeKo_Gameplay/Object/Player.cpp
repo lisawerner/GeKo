@@ -31,12 +31,12 @@ Player::Player(std::string playerName, glm::vec3 spawnPoint)
 
 	m_viewDirection = glm::vec4(0.0, 0.0, -1.0, 0.0);
 	m_deltaTime = 0.0;
-	m_phi = 90.0;
+	m_phi = 0.0;
 	m_theta = 2.0;
 	m_alpha = 0;
 
 	m_speed = 0.01;
-	m_speedTurn = 0.08;
+	m_speedTurn = 0.1;
 }
 
 Player::Player(){
@@ -56,15 +56,11 @@ void Player::move(glm::vec3 newPosition)
 }
 
 void Player::moveForward(){
-	std::cout << "Player: Old Position: x:" << m_position.x << ", y:" << m_position.y << ", z:" << m_position.z << std::endl;
-
 	m_position.x += m_speed* m_deltaTime *m_viewDirection.x;
 	m_position.y += m_speed* m_deltaTime *m_viewDirection.y;
 	m_position.z += m_speed* m_deltaTime *m_viewDirection.z;
 
-	std::cout << "Player: New Position: x:" << m_position.x << ", y:" << m_position.y << ", z:" << m_position.z << std::endl;
-
-	std::cout << "Player moveFwd" << std::endl;
+	//std::cout << "Player moveFwd" << std::endl;
 
 	notify(*this, Object_Event::OBJECT_MOVED);
 }
@@ -74,7 +70,7 @@ void Player::moveBackward(){
 	m_position.y -= m_speed* m_deltaTime *m_viewDirection.y;
 	m_position.z -= m_speed* m_deltaTime *m_viewDirection.z;
 
-	std::cout << "Player moveBwd" << std::endl;
+//	std::cout << "Player moveBwd" << std::endl;
 
 	notify(*this, Object_Event::OBJECT_MOVED);
 }
@@ -85,7 +81,7 @@ void Player::moveLeft(){
 	m_position.y -= m_speed* m_deltaTime*directionOrtho.y;
 	m_position.z -= m_speed* m_deltaTime*directionOrtho.z;
 
-	std::cout << "Player moveLeft" << std::endl;
+	//std::cout << "Player moveLeft" << std::endl;
 
 	notify(*this, Object_Event::OBJECT_MOVED);
 }
@@ -96,7 +92,7 @@ void Player::moveRight(){
 	m_position.y += m_speed* m_deltaTime*directionOrtho.y;
 	m_position.z += m_speed* m_deltaTime*directionOrtho.z;
 
-	std::cout << "Player moveRight" << std::endl;
+	//std::cout << "Player moveRight" << std::endl;
 
 	notify(*this, Object_Event::OBJECT_MOVED);
 }
@@ -107,18 +103,8 @@ void Player::turnLeft(){
 	if (m_phi < 0) m_phi += 360.0;
 	else if (m_phi > 360) m_phi -= 360;
 
-	//m_viewDirection.x = sin(m_theta) * cos(m_phi);
-	//// y-direction only needed for flying
-	////m_direction.y = cos(m_theta);
-	//m_viewDirection.z = -sin(m_theta) * sin(m_phi);
-
 	rotateView(m_phi, m_theta);
 
-
-	//std::cout << "Player turnLeft" << std::endl;
-	std::cout << "m_phi :" << m_phi << std::endl;
-
-	//TODO: OBJECT_MOVED mit m_direction noch anpassen
 	notify(*this, Object_Event::OBJECT_ROTATED);
 }
 
@@ -127,15 +113,7 @@ void Player::turnRight(){
 	if (m_phi < 0) m_phi += 360.0;
 	else if (m_phi > 360) m_phi -= 360;
 
-	//m_viewDirection.x = sin(m_theta) * cos(m_phi);
-	//// y-direction only needed for flying
-	////m_direction.y = cos(m_theta);
-	//m_viewDirection.z = -sin(m_theta) * sin(m_phi);
-
 	rotateView(m_phi, m_theta);
-
-	//std::cout << "Player turnRight" << std::endl;
-	std::cout <<"m_phi :"<< m_phi << std::endl;
 
 	notify(*this, Object_Event::OBJECT_ROTATED);
 }

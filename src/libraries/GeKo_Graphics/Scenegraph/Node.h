@@ -169,6 +169,10 @@ public:
 	Camera* getCamera();
 	void setCamera(Camera* camera);
 
+	///Updates the camera in relation to the player
+	/**The cameraposition and its lookat are updated in relation to the player position and viewdirection */
+	void setCameraToPlayer();
+
 	///Return m_boundingSphere of the Node
 	/**If the node does not have a bounding-sphere an error will be thrown!*/
 	BoundingSphere* getBoundingSphere();

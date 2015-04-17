@@ -89,7 +89,7 @@ int main()
 	//cam.setName("PlayerViewCam");
 	cam.setCenter(glm::vec4(0.0, 0.0, -1.0, 0.0));
 	cam.setKeySpeed(2.0);
-	cam.setNearFar(0.0001, 100);
+	cam.setNearFar(0.01, 100);
 
 	//Callback for Camera and Player
 	glfwSetKeyCallback(testWindow.getWindow(), key_callback);
