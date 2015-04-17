@@ -20,6 +20,7 @@ Node::Node(std::string nodeName)
 	m_hasParticleSystem = false;
 
 	m_type = ClassType::OBJECT;
+	m_parentNode = nullptr;
 }
 
 
@@ -607,7 +608,11 @@ void Node::render(ShaderProgram &shader)
 				}
 			}
 
-			modelMatrix = getParentNode()->getModelMatrix() * m_modelMatrix;
+			if (m_parentNode)
+				modelMatrix = getParentNode()->getModelMatrix() * m_modelMatrix;
+			else
+				modelMatrix = m_modelMatrix;
+
 			shader.sendMat4("modelMatrix", modelMatrix);
 			shader.sendMat4("previousModelMatrix", m_PrevModelMatrix);
 			m_PrevModelMatrix = modelMatrix;
@@ -669,8 +674,6 @@ void Node::render(ShaderProgram &shader)
 void Node::renderParticle(ShaderProgram &shader)
 
 {
-
-	//TODO: Particle-System muss gerendert werden!
 
 	m_particleSystem->update();
 	m_particleSystem->render(*m_otherCamera);

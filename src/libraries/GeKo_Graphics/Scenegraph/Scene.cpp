@@ -5,6 +5,12 @@ Scene::Scene(std::string sceneName)
 {
 	m_sceneName = sceneName;
 	m_sceneGraph = new Scenegraph(m_sceneName);
+	m_skyboxNode = NULL;
+}
+
+bool Scene::hasSkybox()
+{
+	return m_skyboxNode;
 }
 
 Scene::~Scene()
@@ -32,6 +38,16 @@ Scenegraph* Scene::getScenegraph()
 void Scene::setScenegraph(Scenegraph* scenegraph)
 {
 	m_sceneGraph = scenegraph;
+}
+
+Node* Scene::getSkyboxNode()
+{
+	return m_skyboxNode;
+}
+
+void Scene::setSkyboxNode(Node* skyboxNode)
+{
+	m_skyboxNode = skyboxNode;
 }
 
 void Scene::render(ShaderProgram &shader)

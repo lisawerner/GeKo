@@ -196,13 +196,16 @@ int main()
 	glfwSetKeyCallback(testWindow.getWindow(), key_callback);
 
 	glewInit();
-  
+
   renderer = new Renderer(context);
 
   //our object
 	Cube cube;
 	Teapot teapot;
-	Mesh dragon = Mesh("dragon.obj");
+	std::string dragonPath = RESOURCES_PATH;
+	dragonPath.append("/");
+	dragonPath.append("dragon.obj");
+	Mesh dragon = Mesh(dragonPath.c_str());
 	
   Rect plane;
   plane.setTcoords(
@@ -217,11 +220,7 @@ int main()
   Texture bricks_normal((char*)RESOURCES_PATH "/bricks_normal.png");
   Texture bricks_height((char*)RESOURCES_PATH "/bricks_height.png");
 
-  Texture stone((char*)RESOURCES_PATH "/diffusemap_stone.png");
-  Texture stone_normal((char*)RESOURCES_PATH "/normalmap_stone.png");
-  Texture stone_height((char*)RESOURCES_PATH "/heightmap_stone.png");
-
-	Texture marble((char*)RESOURCES_PATH "/seamless_marble.jpg");
+	Texture marble((char*)RESOURCES_PATH "/seamless_marble.png");
 	Texture chrome((char*)RESOURCES_PATH "/chrome.jpg");
 
 	//Scene creation 
@@ -235,9 +234,32 @@ int main()
 	testScene.getScenegraph()->getCamera("PilotviewCam");
   testScene.getScenegraph()->setActiveCamera("PilotviewCam");
 
-  Node dragonNode("dragonNode");
-  dragonNode.addGeometry(&dragon);
-  
+  //SKYBOX
+  const char *textureNames[6] = {
+	  (char*)RESOURCES_PATH "/Skybox_Data/PereaBeach1/posx.jpg",
+	  (char*)RESOURCES_PATH "/Skybox_Data/PereaBeach1/negx.jpg",
+	  (char*)RESOURCES_PATH "/Skybox_Data/PereaBeach1/posy.jpg",
+	  (char*)RESOURCES_PATH "/Skybox_Data/PereaBeach1/negy.jpg",
+	  (char*)RESOURCES_PATH "/Skybox_Data/PereaBeach1/posz.jpg",
+	  (char*)RESOURCES_PATH "/Skybox_Data/PereaBeach1/negz.jpg"
+	  /*(char*)RESOURCES_PATH "/Color/testTex.png",
+	  (char*)RESOURCES_PATH "/Color/testTex.png",
+	  (char*)RESOURCES_PATH "/Color/testTex.png",
+	  (char*)RESOURCES_PATH "/Color/testTex.png",
+	  (char*)RESOURCES_PATH "/Color/testTex.png",
+	  (char*)RESOURCES_PATH "/Color/testTex.png" */
+  };
+  Skybox skybox = Skybox(textureNames);
+  Node skyboxNode = Node("skybox");
+  skyboxNode.addGeometry(&skybox);
+  skyboxNode.setModelMatrix(glm::scale(skyboxNode.getModelMatrix(), glm::vec3(6, 6, 6)));
+  testScene.setSkyboxNode(&skyboxNode);
+
+
+  //Node dragonNode("dragonNode");
+  //dragonNode.addGeometry(&dragon);
+  //dragonNode.setModelMatrix(glm::scale(dragonNode.getModelMatrix(), glm::vec3(0.5, 0.5, 0.5)));
+
 
 	Node cube1("cube1");
 	cube1.addGeometry(&cube);
@@ -276,7 +298,8 @@ int main()
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube1);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube2);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&teaNode);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&dragonNode);
+	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&dragonNode);
+	
   Node lights = Node("Root");
   Sphere lightSphere = Sphere();
   ConeLight slight(glm::vec4(2.0, 2.5, 3.5, 1.0), glm::vec4(0.7, 0.7, 0.7, 1.0), true, glm::vec3(-1.0, -1.0, -1.0), 90.0f, 1.0f, 10.0f);

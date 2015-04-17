@@ -187,17 +187,19 @@ void Renderer::renderScene(Scene& scene, Window& window)
   if (!m_ping || !m_pong)
     init(window.getWidth(), window.getHeight());
   
+  glClearColor(0.5, 0.5, 0.5, 1);
+  
   if (m_useShadowMapping)
     renderShadowMapping(scene);
 
   m_firstRender = true;
   
   m_currentFBOIndex = 0;
+  
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   m_gBuffer->bind();
-  glClearColor(0.5, 0.5, 0.5, 1);
 
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   m_shaderGBuffer->bind();
 
   m_currentViewMatrix = scene.getScenegraph()->getActiveCamera()->getViewMatrix();
@@ -250,7 +252,20 @@ void Renderer::renderScene(Scene& scene, Window& window)
     //Bind and Pass shadow map. Only use SHADOW_TEXTURE_UNIT when Normal Mapping is applied.
     m_shaderGBuffer->sendSampler2D("depthTexture", m_smFBO->getDepthTexture(), 3);
   }
+  
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  
+  if (scene.hasSkybox())
+  {
+	  glDisable(GL_DEPTH_TEST);
+	  m_shaderGBuffer->sendSkyboxTexture("cubeMap", reinterpret_cast<Skybox*>(scene.getSkyboxNode()->getGeometry())->getSkyboxTexture(),4);
+	  m_shaderGBuffer->sendInt("renderSkybox", 1);
+	  scene.getSkyboxNode()->render(*m_shaderGBuffer);
+	  glEnable(GL_DEPTH_TEST);
+  }
 
+  m_shaderGBuffer->sendInt("renderSkybox", 0);
+  
   scene.render(*m_shaderGBuffer);
   m_shaderGBuffer->unbind();
   m_gBuffer->unbind();
