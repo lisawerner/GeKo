@@ -50,6 +50,7 @@ void ParticleSystem::setEffect(Effect* newEffect)
 
 void ParticleSystem::loadEffect(const char* filepath)
 {
+	effect = new Effect();
 	effect->loadEffect(filepath);
 }
 

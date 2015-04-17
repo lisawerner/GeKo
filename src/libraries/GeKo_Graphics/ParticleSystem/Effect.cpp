@@ -4,17 +4,20 @@ using namespace tinyxml2;
 
 Effect::Effect()
 {
+	emitterVec.clear();
 	setName("unnamedEffect");
 }
 
 Effect::Effect(std::string name)
 {
+	emitterVec.clear();
 	setName(name);
 }
 
 Effect::Effect(const char*filepath)
 {
 	//TODO
+	emitterVec.clear();
 	loadEffect(filepath);
 }
 
@@ -76,6 +79,7 @@ int Effect::loadEffect(const char* filepath)
 	if (effectNode == nullptr) return XML_ERROR_FILE_READ_ERROR;
 
 	XMLElement* emitterNode = effectNode->FirstChildElement("Emitter");
+
 	while (emitterNode != nullptr)
 	{
 	/****Constructor stuff****/

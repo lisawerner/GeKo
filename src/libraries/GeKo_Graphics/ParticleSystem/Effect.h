@@ -27,7 +27,7 @@ public:
 	void setName(std::string name);
 	std::string getName();
 
-private:
+protected:
 	std::vector<Emitter*> emitterVec;	//contains all Emitters of the Effect
 	std::string effectName;		//name of the effect file
 

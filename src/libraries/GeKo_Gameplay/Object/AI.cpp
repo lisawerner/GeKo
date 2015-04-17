@@ -10,8 +10,8 @@ AI::AI(){
 
 	m_hunger = 10;
 	m_hungerMax = 10;
-	m_health = 10;
-	m_healthMax = 10;
+	m_health = 1000;
+	m_healthMax = 1000;
 	m_strength = 0.5;
 	m_hasDied = false;
 

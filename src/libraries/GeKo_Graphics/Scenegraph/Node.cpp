@@ -18,6 +18,7 @@ Node::Node(std::string nodeName)
 	m_hasGravity = false;
 	m_hasObject = false; 
 	m_hasParticleSystem = false;
+	m_particleActive = false;
 
 	m_type = ClassType::OBJECT;
 }
@@ -262,6 +263,14 @@ bool Node::hasGravity()
 bool Node::hasParticleSystem()
 {
 	return m_hasParticleSystem;
+}
+
+bool Node::isParticleActive(){
+	return m_particleActive;
+}
+
+void Node::setParticleActive(bool b){
+	m_particleActive = b;
 }
 
 Geometry* Node::getGeometry()
@@ -666,7 +675,9 @@ void Node::render(ShaderProgram &shader)
 	}
 	else {
 		//Extra Render-Methode für ein Partikel-System
-		renderParticle(shader);
+		if (m_particleActive){
+			renderParticle(shader);
+		}
 	}
 }
 

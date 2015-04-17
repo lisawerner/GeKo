@@ -21,9 +21,6 @@
 
 #include <GeKo_Graphics/ParticleSystem/ParticleSystem.h>
 
-
-
-
 #include <GeKo_Physics/CollisionTest.h>
 
 #include <GeKo_Graphics/Observer/ObjectObserver.h>
@@ -44,9 +41,8 @@
 //===================================================================//
 //==================Things you need globally==========================//
 //==================================================================//
-InputHandler iH;
-StrategyCamera cam("StrategyCam");
-Geko geko("Geko", glm::vec3(10.0, 3.0, -5.0));
+Player geko("Geko", glm::vec3(10.0, 3.0, -5.0));
+static StrategyCamera cam("PlayerViewCam");
 //Renderer *renderer;
 
 const int WINDOW_WIDTH = 800;
@@ -65,85 +61,33 @@ GuiElement::NestedWindow *inventoryWindow;
 //==================Callbacks for the Input==========================//
 //==================================================================//
 
-void playKey_callback(GLFWwindow* window)
-{
-	//Recognizing if the player wants to move its character
-	if (glfwGetKey(window, GLFW_KEY_UP))
-	{
-		geko.moveForward();
-	}
-	if (glfwGetKey(window, GLFW_KEY_DOWN))
-	{
-		geko.moveBackward();
-	}
-	if (glfwGetKey(window, GLFW_KEY_RIGHT))
-	{
-		geko.moveRight();
-	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT))
-	{
-		geko.moveLeft();
-	}
+static InputHandler iH;
 
+// As we do not use the Node class, we can't set the teapot into the middle of the window, therefore is the change of the direction improperly limited
+// just needed in the player mode
+static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos){
+	if (iH.getActiveInputMap()->getType() == MapType::CAMPLAYERVIEW){
+		cam.turn(xpos, ypos);
+	}
+	if (iH.getActiveInputMap()->getType() == MapType::CAMSTRATEGY){
+		if (glfwGetMouseButton(window, 0) == GLFW_PRESS){
+			cam.turn(xpos, ypos);
+		}
+		else{
+			cam.updateCursor(window);
+		}
+	}
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
+	// The active InputMap is fetched
 	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
-
-	iH.getActiveInputMap()->setGLFWwindow(window);
-
+	// You go over the active InputMap, if it's the key that is pressed, a method is called and the mapped action is executed else the key is ignored
 	for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
 		if (it->first == key)
 			activeMap.at(key)();
 		if (it == activeMap.end())
 			std::cout << "Key is not mapped to an action" << std::endl;
-	}
-}
-
-void mouse_callback(GLFWwindow* window)
-{
-	int i = 0;
-	if (glfwGetMouseButton(window, i) == GLFW_PRESS)
-	{
-		std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
-
-		iH.getActiveInputMap()->setGLFWwindow(window);
-
-		for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
-			if (it->first == i)
-				activeMap.at(i)();
-			if (it == activeMap.end())
-				std::cout << "Key is not mapped to an action" << std::endl;
-		}
-	}
-	else{
-		cam.updateCursor(window);
-	}
-}
-
-void mouseScroll_callback(GLFWwindow* window, double offsetX, double offSetY)
-{
-
-	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
-
-	iH.getActiveInputMap()->setGLFWwindow(window);
-
-	if (offSetY < 0)
-	{
-		for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
-			if (it->first == 001)
-				activeMap.at(001)();
-			if (it == activeMap.end())
-				std::cout << "Key is not mapped to an action" << std::endl;
-		}
-	}
-	else{
-		for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
-			if (it->first == 002)
-				activeMap.at(002)();
-			if (it == activeMap.end())
-				std::cout << "Key is not mapped to an action" << std::endl;
-		}
 	}
 }
 
@@ -161,13 +105,11 @@ int main()
 	Window testWindow(500, 50, 800, 600, "testWindow");
 	glfwMakeContextCurrent(testWindow.getWindow());
 
-	cam.setCenter(glm::vec4(0.0, 10.0, 20.0, 1.0));
-	cam.setName("StrategyCam");
+	// Callback
+	glfwSetKeyCallback(testWindow.getWindow(), key_callback);
+
 	cam.setKeySpeed(2.0);
 	cam.setNearFar(0.01, 100);
-
-	glfwSetKeyCallback(testWindow.getWindow(), key_callback);
-	glfwSetScrollCallback(testWindow.getWindow(), mouseScroll_callback);
 
 	glewInit();
 
@@ -190,9 +132,15 @@ int main()
 	FragmentShader fsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.frag")));
 	ShaderProgram shaderSFQ(vsSfq, fsSfq);
 
+
+
 	FBO fboGBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, 3, true, false);
 
-	//	ParticleSystem* particle = new ParticleSystem(glm::vec3(0, 0, 0), (char*)RESOURCES_PATH "/XML/ComicCloudEffect.xml");
+	ParticleSystem* particle = new ParticleSystem(glm::vec3(0, 0, 0), (char*)RESOURCES_PATH "/XML/ComicCloudEffect.xml");
+	Node particleNode("ParticleNode");
+	particleNode.addParticleSystem(particle);
+	particleNode.setCamera(&cam);
+
 	//===================================================================//
 	//==================A Graph for the AI-Unit=========================//
 	//==================================================================//
@@ -275,13 +223,6 @@ int main()
 
 	playerNode.setCamera(&cam);
 
-	// ==============================================================
-	// == Items =====================================================
-	// ==============================================================
-
-
-
-
 	//===================================================================//
 	//==================Object declarations - Geometry, Texture, Node=== //
 	//==========================Object: Tree===========================//
@@ -314,8 +255,6 @@ int main()
 	terrainNode.addRotation(90.0f, glm::vec3(1.0, 0.0, 0.0));
 	terrainNode.addScale(20.0, 20.0, 20.0);
 
-
-
 	//===================================================================//
 	//==================Setting up the Level and Scene==================//
 	//==================================================================//
@@ -324,14 +263,16 @@ int main()
 	Scene testScene("testScene");
 	testLevel.addScene(&testScene);
 	testLevel.changeScene("testScene");
+	testLevel.getFightSystem()->setParticle(particle);
 
 	//==================Add Camera to Scene============================//
 	testScene.getScenegraph()->addCamera(&cam);
-	testScene.getScenegraph()->setActiveCamera("StrategyCam");
+	testScene.getScenegraph()->setActiveCamera("PlayerViewCam");
 
 	//==================Set Input-Maps and activate one================//
 	iH.setAllInputMaps(*(testScene.getScenegraph()->getActiveCamera()));
-	iH.changeActiveInputMap("Strategy");
+	iH.changeActiveInputMap(MapType::OBJECT);
+	iH.getActiveInputMap()->update(geko);
 
 	//==================Add Objects to the Scene=======================//
 	//==================Update the Bounding-Sphere 1st time============//
@@ -342,6 +283,8 @@ int main()
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&terrainNode);
 
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&treeNode);
+
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&particleNode);
 
 
 	// ==============================================================
@@ -620,60 +563,71 @@ int main()
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
 
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		float currentTime = glfwGetTime();
 		float deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
 
-		mouse_callback(testWindow.getWindow());
-
-
-		//===================================================================//
-		//==================Update your Objects per Frame here =============//
-		//==================================================================//
 		collision.update();
 
 		ant_Flick.update();
+		//ant_Flack.update();
 
-		//===================================================================//
-		//==================Input and update for the Player==================//
-		//==================================================================//
+		geko.update();
+		geko.setDeltaTime(currentTime);
 
-		playKey_callback(testWindow.getWindow());
-		geko.update(deltaTime);
+		renderer.renderScene(testScene, testWindow);
 
-		//===================================================================//
-		//==================Render your Objects==============================//
-		//==================================================================//
-
+		//float currentTime = glfwGetTime();
+		//float deltaTime = currentTime - lastTime;
+		//lastTime = currentTime;
 
 
-		fboGBuffer.bind();
-		glClearColor(0, 0, 0, 0);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shaderGBuffer.bind();
-		shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
-		shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+		////===================================================================//
+		////==================Update your Objects per Frame here =============//
+		////==================================================================//
+		//collision.update();
 
-		testScene.render(shaderGBuffer);
+		//ant_Flick.update();
 
-		shaderGBuffer.unbind();
-		fboGBuffer.unbind();
+		////===================================================================//
+		////==================Input and update for the Player==================//
+		////==================================================================//
 
-		//ScreenFillingQuad Render Pass
-		shaderSFQ.bind();
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//geko.update();
+		//geko.setDeltaTime(currentTime);
 
-		shaderSFQ.sendSampler2D("fboTexture", fboGBuffer.getColorTexture(2));
+		////===================================================================//
+		////==================Render your Objects==============================//
+		////==================================================================//
 
-		screenFillingQuad.renderGeometry();
-		shaderSFQ.unbind();
-		//renderer.renderGUI(*hud, testWindow);
-		//	renderer.renderGUI(*playerGUI.getHUD(), testWindow);
+		//fboGBuffer.bind();
+		//glClearColor(0, 0, 0, 0);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//shaderGBuffer.bind();
+		//shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
+		//shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 
-		glfwSwapBuffers(testWindow.getWindow());
-		glfwPollEvents();
+		//testScene.render(shaderGBuffer);
 
-		//		renderer->renderScene(testScene, testWindow);
+		//shaderGBuffer.unbind();
+		//fboGBuffer.unbind();
+
+		////ScreenFillingQuad Render Pass
+		////shaderSFQ.bind();
+		////glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		////shaderSFQ.sendSampler2D("fboTexture", fboGBuffer.getColorTexture(2));
+
+		////screenFillingQuad.renderGeometry();
+		////shaderSFQ.unbind();
+		////renderer.renderGUI(*hud, testWindow);
+		////	renderer.renderGUI(*playerGUI.getHUD(), testWindow);
+
+		////glfwSwapBuffers(testWindow.getWindow());
+		////glfwPollEvents();
+
+		//renderer->renderScene(testScene, testWindow);
 
 
 

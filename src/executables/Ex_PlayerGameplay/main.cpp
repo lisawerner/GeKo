@@ -84,10 +84,6 @@ int main()
 	Window testWindow(500, 50, 800, 600, "testWindow");
 	glfwMakeContextCurrent(testWindow.getWindow());
 
-	//Set Camera to another position
-	cam.setPosition(glm::vec4(0.0, 0.0, 20.0, 1.0));
-	//cam.setName("PlayerViewCam");
-	cam.setCenter(glm::vec4(0.0, 0.0, -1.0, 0.0));
 	cam.setKeySpeed(2.0);
 	cam.setNearFar(0.01, 100);
 
@@ -299,20 +295,7 @@ int main()
 		geko.update();
 		geko.setDeltaTime(currentTime);
 
-		//Render the Player and AI
-		//glEnable(GL_DEPTH_TEST);
-
 		renderer.renderScene(testScene, testWindow);
-
-		//shader.bind();
-		//shader.sendMat4("viewMatrix", cam.getViewMatrix());
-		//shader.sendMat4("projectionMatrix", cam.getProjectionMatrix());
-
-		//testScene.render(shader);
-		//shader.unbind();
-
-		//glfwSwapBuffers(testWindow.getWindow());
-		//glfwPollEvents();
 	
 	}
 

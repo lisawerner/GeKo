@@ -138,6 +138,11 @@ public:
 	bool hasGravity();
 	///Returns true, if a partice system has been attached
 	bool hasParticleSystem();
+	///Return true, if the particle should be rendered
+	bool isParticleActive();
+	///Set the m_particleActive to true or false
+	/**Should be used to activate or deactivate the render loop for particles*/
+	void setParticleActive(bool b);
 
 //==================Functions to add Units to the Node===========================//
 
@@ -271,6 +276,7 @@ protected:
 	bool m_hasObject;
 	bool m_hasGravity;
 	bool m_hasParticleSystem;
+	bool m_particleActive;
 
 	Geometry* m_geometry;
 	Texture* m_texture;
