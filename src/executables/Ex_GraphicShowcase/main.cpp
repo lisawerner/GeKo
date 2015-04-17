@@ -256,9 +256,9 @@ int main()
   testScene.setSkyboxNode(&skyboxNode);
 
 
-  //Node dragonNode("dragonNode");
-  //dragonNode.addGeometry(&dragon);
-  //dragonNode.setModelMatrix(glm::scale(dragonNode.getModelMatrix(), glm::vec3(0.5, 0.5, 0.5)));
+  Node dragonNode("dragonNode");
+  dragonNode.addGeometry(&dragon);
+  dragonNode.setModelMatrix(glm::scale(dragonNode.getModelMatrix(), glm::vec3(0.5, 0.5, 0.5)));
 
 
 	Node cube1("cube1");
