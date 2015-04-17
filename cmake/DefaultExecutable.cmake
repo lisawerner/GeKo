@@ -88,7 +88,13 @@ ELSEIF (MSVC)
 			${CMAKE_BINARY_DIR}/dependencies/glew/src/glew-build/bin/$<CONFIGURATION>/glewd.dll      
 			$<TARGET_FILE_DIR:${PROJECT_NAME}>
 		)
-	#		
+		
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different  
+			${CMAKE_SOURCE_DIR}/dependencies/assimp/lib/assimp_release-dll_win32/Assimp32.dll   
+			$<TARGET_FILE_DIR:${PROJECT_NAME}>
+		)
+	
 	#if(CMAKE_SIZEOF_VOID_P EQUAL 8)
 	#	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 	#	COMMAND ${CMAKE_COMMAND} -E copy_if_different  
