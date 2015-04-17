@@ -61,7 +61,7 @@ Skybox::Skybox(const char **fileNames)
 
 	for (int i = 0; i<m_points; i++)
 	{
-		m_vertices.push_back(glm::vec4(vertices[i * 3] * 1, vertices[i * 3 + 1] * 1, vertices[i * 3 + 2] * 1, 1.0f));
+		m_vertices.push_back(glm::vec4(vertices[i * 3] * 0.5, vertices[i * 3 + 1] * 0.5, vertices[i * 3 + 2] * 0.5, 1.0f));
 		m_normals.push_back(glm::vec3(normals[i * 3], normals[i * 3 + 1], normals[i * 3 + 2]));
 		m_uvs.push_back(glm::vec2(texCoords[i * 2], texCoords[i * 2 + 1]));
 	}
