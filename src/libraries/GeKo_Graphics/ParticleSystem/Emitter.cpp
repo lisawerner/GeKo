@@ -38,6 +38,7 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 	updateSize(); //update the number of max particle and create new buffer for it.
 	startTime();
 
+	m_scalingData[32] = { 0 };
 	blendingTime[4] = { 0 };
 }
 //TODO: Memory?
@@ -854,7 +855,7 @@ void Emitter::setAttributes(){
 	m_rotationSpeed = 0.0;
 	
 	//velocity type
-	int m_velocityType = 0;
+	m_velocityType = 0;
 
 	//physic type
 	m_useTrajectory = false;
@@ -871,9 +872,12 @@ void Emitter::setAttributes(){
 	m_movementHorizontalZ = false;
 
 	//rotating, scaling and blending of the particle
+	m_birthTime = 0.0;
+	m_deathTime = 0.0;
 	m_scalingCount = 0;
 	m_useScaling = false;
 	m_particleDefaultSize = 1.0;
 	m_rotateLeft = false;
 	m_textureCount = 0;
+	m_blendingTime = 0.0f;
 }

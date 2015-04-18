@@ -159,27 +159,8 @@ public:
 	float m_scalingData[32];
 	float blendingTime[4];
 
-	
-
-	
-
-	//physic attributes
-	float m_gravityRange;
-	int m_gravityFunction;
-	float m_speed;
-	bool m_movementVertical;
-	bool m_movementHorizontalX;
-	bool m_movementHorizontalZ;
-
-	//rotating, scaling and blending of the particle
-	float m_birthTime;
-	float m_deathTime;
-	int m_scalingCount;
-	bool m_useScaling;
-	float m_particleDefaultSize;
-	bool m_rotateLeft;
-	int m_textureCount;
-	float m_blendingTime;
+	//defines if the emitter is movable
+	bool m_movable;
 
 private:
 	//for the constructor
@@ -236,7 +217,7 @@ private:
 	bool m_useTexture;
 
 	//defines if the emitter is movable
-	bool m_movable;
+	//bool m_movable;
 
 	//Property of the Geometry Shader
 	float m_rotationSpeed;
@@ -249,4 +230,22 @@ private:
 	bool m_usePointGravity;
 	bool m_useDirectionGravity;
 	bool m_useChaoticSwarmMotion;
+
+	//physic attributes
+	float m_gravityRange;
+	int m_gravityFunction;
+	float m_speed;
+	bool m_movementVertical;
+	bool m_movementHorizontalX;
+	bool m_movementHorizontalZ;
+
+	//rotating, scaling and blending of the particle
+	float m_birthTime;
+	float m_deathTime;
+	int m_scalingCount;
+	bool m_useScaling;
+	float m_particleDefaultSize;
+	bool m_rotateLeft;
+	int m_textureCount;
+	float m_blendingTime;
 };

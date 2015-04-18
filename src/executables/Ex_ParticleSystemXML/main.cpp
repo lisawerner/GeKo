@@ -73,7 +73,7 @@ int main()
 	fire->switchToGeometryShader();
 
 	//Effect* effect = new Effect(RESOURCES_PATH "/XML/ComicCloudEffect.xml");
-	ParticleSystem* ps = new ParticleSystem(glm::vec3(0.0, 0.0, 0.0), RESOURCES_PATH "/XML/ComicCloudEffect.xml");
+	//ParticleSystem* ps = new ParticleSystem(glm::vec3(0.0, 0.0, 0.0), RESOURCES_PATH "/XML/ComicCloudEffect.xml");
 	//effect->saveEffect(RESOURCES_PATH "/XML/EffectTest.xml");
 
 	Effect* effect = new Effect();
