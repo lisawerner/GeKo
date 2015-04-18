@@ -4,13 +4,9 @@ using namespace tinyxml2;
 
 Effect::Effect()
 {
-	setName("unnamedEffect");
+	
 }
 
-Effect::Effect(std::string name)
-{
-	setName(name);
-}
 
 Effect::Effect(const char*filepath)
 {
@@ -42,10 +38,14 @@ void Effect::removeEmitter(int arrayPosition)
 	emitterVec.erase(emitterVec.begin() + arrayPosition);
 }
 
-void Effect::updateEmitters(glm::vec3 playerPosition)
+void Effect::updateEmitters(Camera &cam)
 {
 	for (auto emitter : emitterVec){
-		emitter->update(playerPosition);
+		if (emitter->getMovable()) 
+			emitter->update(glm::vec3(cam.getPosition().x, cam.getPosition().y, cam.getPosition().z));
+		else {
+			emitter->update();
+		}
 	}
 }
 
@@ -142,6 +142,15 @@ int Effect::loadEffect(const char* filepath)
 			error = item->QueryBoolText(&geom);
 			XMLCheckResult(error);
 			if (geom) emitter->switchToGeometryShader();
+		}
+
+		//Movable
+		item = emitterNode->FirstChildElement("Movable");
+		if (item != nullptr){
+			bool mov;
+			error = item->QueryBoolText(&mov);
+			XMLCheckResult(error);
+			if (mov) emitter->setMovable(mov);
 		}
 			
 		//Velocity
@@ -466,6 +475,10 @@ int Effect::saveEffect(char* filepath)
 		element = doc.NewElement("UseGeometryShader");
 		element->SetText(emitter->getUseGeometryShader());
 		emitterNode->InsertEndChild(element);
+
+		element = doc.NewElement("Movable");
+		element->SetText(emitter->getMovable());
+		emitterNode->InsertEndChild(element);
 		
 		//Velocity
 		element = doc.NewElement("Velocity");
@@ -474,7 +487,7 @@ int Effect::saveEffect(char* filepath)
 
 		//Physic
 		element = doc.NewElement("Physic");
-		if (emitter->m_useTrajectory){
+		if (emitter->getPhysicTrajectory()){
 			XMLElement* physic = doc.NewElement("Trajectory");
 			XMLElement* gravity = doc.NewElement("Gravity");
 			glm::vec4 gravityVec = emitter->getGravity();
@@ -489,7 +502,7 @@ int Effect::saveEffect(char* filepath)
 			physic->InsertEndChild(speed);
 			element->InsertEndChild(physic);
 		}
-		else if (emitter->m_useDirectionGravity){
+		else if (emitter->getPhysicDirectionGravity()){
 			XMLElement* physic = doc.NewElement("DirectionGravity");
 			XMLElement* temp = doc.NewElement("Gravity");
 			glm::vec4 gravityVec = emitter->getGravity();
@@ -504,7 +517,7 @@ int Effect::saveEffect(char* filepath)
 			physic->InsertEndChild(temp);
 			element->InsertEndChild(physic);
 		}
-		else if (emitter->m_usePointGravity){
+		else if (emitter->getPhysicPointGravity()){
 			XMLElement* physic = doc.NewElement("PointGravity");
 			XMLElement* temp = doc.NewElement("Gravity");
 			glm::vec4 gravityVec = emitter->getGravity();
@@ -519,26 +532,26 @@ int Effect::saveEffect(char* filepath)
 			physic->InsertEndChild(temp);
 
 			temp = doc.NewElement("GravityRange");
-			temp->SetText(emitter->m_gravityRange);
+			temp->SetText(emitter->getPhysicAttGravityRange());
 			physic->InsertEndChild(temp);
 
 			temp = doc.NewElement("GravityFunction");
-			temp->SetText(emitter->m_gravityFunction);
+			temp->SetText(emitter->getPhysicAttGravityFunction());
 			physic->InsertEndChild(temp);
 			element->InsertEndChild(physic);
 		}
-		else if (emitter->m_useChaoticSwarmMotion){
+		else if (emitter->getPhysicSwarmCircleMotion()){
 			XMLElement* physic = doc.NewElement("SwarmCircleMotion");
 			XMLElement* temp = doc.NewElement("MovementVertical");
-			temp->SetText(emitter->m_movementVertical);
+			temp->SetText(emitter->getPhysicAttMovementVertical());
 			physic->InsertEndChild(temp);
 
 			temp = doc.NewElement("MovementHorizontalX");
-			temp->SetText(emitter->m_movementHorizontalX);
+			temp->SetText(emitter->getPhysicAttMovementHorizontalX());
 			physic->InsertEndChild(temp);
 
 			temp = doc.NewElement("MovementHorizontalZ");
-			temp->SetText(emitter->m_movementHorizontalZ);
+			temp->SetText(emitter->getPhysicAttMovementHorizontalZ());
 			physic->InsertEndChild(temp);
 
 			//temp = doc.NewElement("MovementLength");
@@ -580,7 +593,7 @@ int Effect::saveEffect(char* filepath)
 			element->InsertEndChild(tex);
 		}
 
-		if (emitter->m_useScaling) {
+		if (emitter->getTexUseScaling()) {
 			XMLElement* scaling = doc.NewElement("Scaling");
 			
 			XMLElement* tex = doc.NewElement("UseTexture");
@@ -588,7 +601,7 @@ int Effect::saveEffect(char* filepath)
 			scaling->InsertEndChild(tex);
 
 			tex = doc.NewElement("ScalingSize");
-			for (int i = 1; i < emitter->m_scalingCount; i = i + 2){
+			for (int i = 1; i < emitter->getTexScalingCount(); i = i + 2){
 				XMLElement* item = doc.NewElement("Item");
 				item->SetText(emitter->m_scalingData[i]);
 				tex->InsertEndChild(item);
@@ -596,7 +609,7 @@ int Effect::saveEffect(char* filepath)
 			scaling->InsertEndChild(tex);
 			
 			tex = doc.NewElement("ScalingMoment");
-			for (int i = 0; i < emitter->m_scalingCount; i = i + 2){
+			for (int i = 0; i < emitter->getTexScalingCount(); i = i + 2){
 				XMLElement* item = doc.NewElement("Item");
 				item->SetText(emitter->m_scalingData[i]);
 				tex->InsertEndChild(item);
@@ -604,15 +617,15 @@ int Effect::saveEffect(char* filepath)
 			scaling->InsertEndChild(tex);			
 
 			tex = doc.NewElement("BirthTime");
-			tex->SetText(emitter->m_birthTime);
+			tex->SetText(emitter->getTexBirthTime());
 			scaling->InsertEndChild(tex);
 
 			tex = doc.NewElement("DeathTime");
-			tex->SetText(emitter->m_deathTime);
+			tex->SetText(emitter->getTexDeathTime());
 			scaling->InsertEndChild(tex);
 
 			tex = doc.NewElement("RotateLeft");
-			tex->SetText(emitter->m_rotateLeft);
+			tex->SetText(emitter->getTexRotateLeft());
 			scaling->InsertEndChild(tex);
 
 			tex = doc.NewElement("RotationSpeed");
@@ -629,19 +642,19 @@ int Effect::saveEffect(char* filepath)
 			scaling->InsertEndChild(tex);
 
 			tex = doc.NewElement("ParticleSize");
-			tex->SetText(emitter->particleDefaultSize);
+			tex->SetText(emitter->getTexParticleDefaultSize());
 			scaling->InsertEndChild(tex);
 
 			tex = doc.NewElement("BirthTime");
-			tex->SetText(emitter->m_birthTime);
+			tex->SetText(emitter->getTexBirthTime());
 			scaling->InsertEndChild(tex);
 
 			tex = doc.NewElement("DeathTime");
-			tex->SetText(emitter->m_deathTime);
+			tex->SetText(emitter->getTexDeathTime());
 			scaling->InsertEndChild(tex);
 
 			tex = doc.NewElement("RotateLeft");
-			tex->SetText(emitter->m_rotateLeft);
+			tex->SetText(emitter->getTexRotateLeft());
 			scaling->InsertEndChild(tex);
 
 			tex = doc.NewElement("RotationSpeed");
@@ -660,13 +673,76 @@ int Effect::saveEffect(char* filepath)
 	return XML_SUCCESS;
 }
 
-
-void Effect::setName(std::string name)
+int Effect::XMLCheckResult(int result)
 {
-	effectName = name;
-}
-
-std::string Effect::getName()
-{
-	return effectName;
+	if (result != XML_SUCCESS) 
+	{
+		switch (result)
+		{
+		case tinyxml2::XML_NO_ATTRIBUTE:
+			printf("XMLError: %i - XML_NO_ATTRIBUTE\n", result);
+			break;
+		case tinyxml2::XML_WRONG_ATTRIBUTE_TYPE:
+			printf("XMLError: %i - XML_WRONG_ATTRIBUTE_TYPE\n", result);
+			break;
+		case tinyxml2::XML_ERROR_FILE_NOT_FOUND:
+			printf("XMLError: %i - XML_ERROR_FILE_NOT_FOUND\n", result);
+			break;
+		case tinyxml2::XML_ERROR_FILE_COULD_NOT_BE_OPENED:
+			printf("XMLError: %i - XML_ERROR_FILE_COULD_NOT_BE_OPENED\n", result);
+			break;
+		case tinyxml2::XML_ERROR_FILE_READ_ERROR:
+			printf("XMLError: %i - XML_ERROR_FILE_READ_ERROR\n", result);
+			break;
+		case tinyxml2::XML_ERROR_ELEMENT_MISMATCH:
+			printf("XMLError: %i - XML_ERROR_ELEMENT_MISMATCH\n", result);
+			break;
+		case tinyxml2::XML_ERROR_PARSING_ELEMENT:
+			printf("XMLError: %i - XML_ERROR_PARSING_ELEMENT\n", result);
+			break;
+		case tinyxml2::XML_ERROR_PARSING_ATTRIBUTE:
+			printf("XMLError: %i - XML_ERROR_PARSING_ATTRIBUTE\n", result);
+			break;
+		case tinyxml2::XML_ERROR_IDENTIFYING_TAG:
+			printf("XMLError: %i - XML_ERROR_IDENTIFYING_TAG\n", result);
+			break;
+		case tinyxml2::XML_ERROR_PARSING_TEXT:
+			printf("XMLError: %i - XML_ERROR_PARSING_TEXT\n", result);
+			break;
+		case tinyxml2::XML_ERROR_PARSING_CDATA:
+			printf("XMLError: %i - XML_ERROR_PARSING_CDATA\n", result);
+			break;
+		case tinyxml2::XML_ERROR_PARSING_COMMENT:
+			printf("XMLError: %i - XML_ERROR_PARSING_COMMENT\n", result);
+			break;
+		case tinyxml2::XML_ERROR_PARSING_DECLARATION:
+			printf("XMLError: %i - XML_ERROR_PARSING_DECLARATION\n", result);
+			break;
+		case tinyxml2::XML_ERROR_PARSING_UNKNOWN:
+			printf("XMLError: %i - XML_ERROR_PARSING_UNKNOWN\n", result);
+			break;
+		case tinyxml2::XML_ERROR_EMPTY_DOCUMENT:
+			printf("XMLError: %i - XML_ERROR_EMPTY_DOCUMENT\n", result);
+			break;
+		case tinyxml2::XML_ERROR_MISMATCHED_ELEMENT:
+			printf("XMLError: %i - XML_ERROR_MISMATCHED_ELEMENT\n", result);
+			break;
+		case tinyxml2::XML_ERROR_PARSING:
+			printf("XMLError: %i - XML_ERROR_PARSING\n", result);
+			break;
+		case tinyxml2::XML_CAN_NOT_CONVERT_TEXT:
+			printf("XMLError: %i - XML_CAN_NOT_CONVERT_TEXT\n", result);
+			break;
+		case tinyxml2::XML_NO_TEXT_NODE:
+			printf("XMLError: %i - XML_NO_TEXT_NODE\n", result);
+			break;
+		case tinyxml2::XML_ERROR_COUNT:
+			printf("XMLError: %i - XML_ERROR_COUNT\n", result);
+			break;
+		default:
+			printf("XMLError: %i\n", result); 
+			break;
+		}	
+		return result; 
+	}
 }

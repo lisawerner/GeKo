@@ -675,7 +675,7 @@ void Node::renderParticle(ShaderProgram &shader)
 
 {
 
-	m_particleSystem->update();
+	m_particleSystem->update(*m_otherCamera);
 	m_particleSystem->render(*m_otherCamera);
 
 }
