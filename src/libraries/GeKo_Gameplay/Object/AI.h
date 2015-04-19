@@ -26,6 +26,7 @@ class AI : public Object, public Subject<AI, Object_Event>
 public: 
 
 	AI();
+	AI(glm::vec4 position);
 	~AI();
 
 	AStarNode* getPosHome();
@@ -65,6 +66,7 @@ public:
 
 	void setAntAfraid();
 	void setAntAggressiv();
+	void setAntAggressiv(std::string name, DecisionTree *tree, Graph<AStarNode, AStarAlgorithm> *antGraph);
 
 	///Returns the m_sourceName string
 	/**If a Sound-File-Handler was attached, the m_sourceName contains the name of the source which should be played!*/

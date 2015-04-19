@@ -137,9 +137,10 @@ int main()
 	FBO fboGBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, 3, true, false);
 
 	ParticleSystem* particle = new ParticleSystem(glm::vec3(0, 0, 0), (char*)RESOURCES_PATH "/XML/ComicCloudEffect.xml");
-	Node particleNode("ParticleNode");
-	particleNode.addParticleSystem(particle);
-	particleNode.setCamera(&cam);
+	//Node particleNode("ParticleNode");
+	//particleNode.addParticleSystem(particle);
+	//particleNode.setCamera(&cam);
+	//particleNode.setParticleActive(true);
 
 	//===================================================================//
 	//==================A Graph for the AI-Unit=========================//
@@ -284,7 +285,7 @@ int main()
 
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&treeNode);
 
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&particleNode);
+	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&particleNode);
 
 
 	// ==============================================================

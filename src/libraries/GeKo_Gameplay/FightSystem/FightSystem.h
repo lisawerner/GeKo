@@ -11,6 +11,7 @@ class FightSystem : public Subject<FightSystem, Quest_Event>
 {
 public:
 	FightSystem();
+	FightSystem(ParticleSystem* ps);
 	~FightSystem();
 
 	void setParticle(ParticleSystem* ps);

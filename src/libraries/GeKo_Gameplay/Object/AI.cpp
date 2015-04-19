@@ -51,6 +51,57 @@ AI::AI(){
 	m_class = ClassType::AI;
 }
 
+AI::AI(glm::vec4 position){
+	m_id = 0;
+	m_type = ObjectType::DEFAULTOBJECT;
+	m_name = "defaultObject";
+
+	m_myNodeName = "NULL";
+
+	m_hunger = 10;
+	m_hungerMax = 10;
+	m_health = 1000;
+	m_healthMax = 1000;
+	m_strength = 0.5;
+	m_hasDied = false;
+
+	m_decisionTree = new DecisionTree();
+
+	std::pair<States, bool> s(States::HUNGER, false);
+	m_states.push_back(s);
+	s.first = States::VIEW;
+	s.second = false;
+	m_states.push_back(s);
+	s.first = States::HEALTH;
+	s.second = true;
+	m_states.push_back(s);
+
+	m_speed = 0.01;
+	m_epsilon = 0.1;
+
+	m_position = position;
+
+	AStarNode* defaultNode = new AStarNode();
+
+	m_lastTarget = defaultNode;
+	m_target = defaultNode;
+	m_nextTarget = defaultNode;
+	m_lastTargetOnGraph = defaultNode;
+
+	m_homeNode = defaultNode;
+	m_foodNodes.push_back(defaultNode);
+	m_graph = new Graph<AStarNode, AStarAlgorithm>();
+
+	m_viewRadius = 1.0f;
+
+	m_inventory = new Inventory();
+
+	m_targetType = TreeOutput::HOME;
+
+	m_class = ClassType::AI;
+
+}
+
 AI::~AI(){}
 
 AStarNode* AI::getPosHome(){
@@ -372,6 +423,38 @@ void AI::setAntAggressiv(){
 	m_position = glm::vec4(posSpawn, 1.0);
 	m_homeNode = antGraph->searchNode(GraphNodeType::FOOD);
 	m_foodNodes.pop_back(); //Delete DefaultNode
+	m_foodNodes.push_back(antGraph->searchNode(GraphNodeType::FOOD));
+}
+
+void AI::setAntAggressiv(std::string name, DecisionTree *tree, Graph<AStarNode, AStarAlgorithm> *antGraph){
+	m_type = ObjectType::ANT;
+	m_name = name;
+
+	/*DecisionTree* tree = new DecisionTree();
+	tree->setAntTreeAggressiv();*/
+	m_decisionTree = tree;
+
+	m_speed = 0.1;
+	m_strength = 1.2;
+
+	glm::vec3 posFood(10.0, 0.0, -5.0);
+	glm::vec3 posSpawn(3.0, 0.0, 3.0);
+	glm::vec3 posDefaultPlayer(0.0, 0.0, 0.0);
+	/*Graph<AStarNode, AStarAlgorithm>* antGraph = new Graph<AStarNode, AStarAlgorithm>();
+	antGraph->setExampleAntAggressiv(posSpawn, posSpawn, posDefaultPlayer);*/
+	m_graph = antGraph;
+	for (int i = 0; i < m_graph->getGraph()->size(); i++){
+		if (m_graph->getGraph()->at(i)->getNodeType() == GraphNodeType::OTHER){
+			m_pathPatrol.push_back(m_graph->getGraph()->at(i));
+		}
+	}
+
+	m_lastTarget = antGraph->searchNode(GraphNodeType::FOOD);
+	m_target = antGraph->searchNode(GraphNodeType::FOOD);
+
+	m_position = glm::vec4(posSpawn, 1.0);
+	m_homeNode = antGraph->searchNode(GraphNodeType::FOOD);
+	m_foodNodes.clear(); //Delete DefaultNode
 	m_foodNodes.push_back(antGraph->searchNode(GraphNodeType::FOOD));
 }
 

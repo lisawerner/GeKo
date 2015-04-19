@@ -2,7 +2,11 @@
 
 FightSystem::FightSystem()
 {
-	//m_fightParticle = new ParticleSystem(glm::vec3(0, 0, 0), (char*)RESOURCES_PATH "/XML/ComicCloudEffect.xml");
+}
+
+FightSystem::FightSystem(ParticleSystem* ps)
+{
+	setParticle(ps);
 }
 
 FightSystem::~FightSystem()

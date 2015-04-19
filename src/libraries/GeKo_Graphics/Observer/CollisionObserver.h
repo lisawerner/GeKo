@@ -77,6 +77,7 @@ public:
 					 {
 						 m_level->getFightSystem()->objectVSobject(nodeA.getAI(), nodeB.getPlayer());
 						 m_level->getFightSystem()->getParticle()->setPosition(glm::vec3(nodeB.getPlayer()->getPosition()));
+						 m_level->getFightSystem()->getParticle()->update();
 						 m_level->getFightSystem()->getParticle()->render(*nodeB.getCamera());
 						 if (nodeA.getAI()->getHealth() <= 0){
 
