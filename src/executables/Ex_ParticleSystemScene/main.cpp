@@ -53,6 +53,7 @@ int main()
 	snow->setAreaEmitting(false, true, 10.0, 10000);
 	snow->addTexture(snowTex, 0.0);
 	snow->defineLook(true, 0.04, 2.0);
+	snow->setMovable(true);
 
 	//FINAL EMITTER WHITE SMOKE
 	Emitter* smokeWhite = new Emitter(0, glm::vec3(0.0, 0.0, 5.0), 0.0, 0.4, 1, 8.0, true);

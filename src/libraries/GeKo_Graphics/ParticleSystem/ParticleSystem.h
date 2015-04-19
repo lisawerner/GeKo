@@ -10,7 +10,7 @@ public:
 
 	/*void active();*/
 
-	void update();
+	void update(Camera &cam);
 	void render(Camera &cam);
 
 	void setPosition(glm::vec3 newPosition);
@@ -22,5 +22,5 @@ public:
 
 private:
 	glm::vec3 position;
-	Effect* effect = new Effect();
+	Effect* effect;
 };
