@@ -21,12 +21,17 @@ Effect::~Effect()
 }
 
 
-//void Effect::active()
-//{
-//	for (auto emitter : emitterVec){
-//		emitter->active();
-//	}
-//}
+void Effect::start(){
+	for (auto emitter : emitterVec){
+		emitter->start();
+	}
+}
+
+void Effect::stop(){
+	for (auto emitter : emitterVec){
+		emitter->stop();
+	}
+}
 
 void Effect::addEmitter(Emitter* emitter)
 {

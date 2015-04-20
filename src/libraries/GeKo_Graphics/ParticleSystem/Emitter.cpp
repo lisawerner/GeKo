@@ -9,6 +9,7 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 	setAttributes();
 
 	m_output = static_cast<FLOW> (OUTPUT); //set if won't generate (-1), constant (0) or just once (1)
+	outputType = OUTPUT;
 
 	//set Emitter properties
 	setPosition(position);
@@ -37,7 +38,9 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 	glDeleteShader(compute->handle);
 
 	updateSize(); //update the number of max particle and create new buffer for it.
-	startTime();
+	
+	//bullshit
+	//startTime();
 
 	m_scalingData[32] = { 0 };
 	blendingTime[4] = { 0 };
@@ -61,6 +64,15 @@ void Emitter::startTime(){
 	updateTime = glfwGetTime();
 	deltaTime = updateTime;
 	generateTime = deltaTime;
+}
+
+void Emitter::start(){
+	startTime();
+	setOutputMode(outputType);
+}
+
+void Emitter::stop(){
+	setOutputMode(-1);
 }
 
 void Emitter::loadBuffer(){

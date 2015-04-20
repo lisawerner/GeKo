@@ -45,6 +45,8 @@ public:
 
 	//set the time for generating and stuff
 	void startTime();
+	void start();
+	void stop();
 
 	//update & generate the particle
 	void update(glm::vec3 playerPosition = glm::vec3(0.0, 0.0, 0.0));
@@ -182,6 +184,7 @@ private:
 
 	//Var how the Output should flow
 	enum FLOW { UNUSED = -1, CONSTANT = 0, ONCE = 1 } m_output;
+	int outputType;
 
 	//Var for the buffer iteration
 	int indexBuffer;
