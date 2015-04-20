@@ -667,11 +667,11 @@ void Node::render(ShaderProgram &shader)
 	}
 	else {
 		//Extra Render-Methode für ein Partikel-System
-		renderParticle(shader);
+		renderParticles();
 	}
 }
 
-void Node::renderParticle(ShaderProgram &shader)
+void Node::renderParticles()
 
 {
 
