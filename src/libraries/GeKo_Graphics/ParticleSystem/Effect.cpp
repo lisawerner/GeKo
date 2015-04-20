@@ -60,7 +60,7 @@ void Effect::setPosition(glm::vec3 newPosition)
 {
 	for (auto emitter : emitterVec){
 		//why should I do this glm????:
-		glm::vec3 pos = emitter->getPosition();
+		glm::vec3 pos = emitter->getLocalPosition();
 		glm::vec3 result(0.0, 0.0, 0.0);
 		result.x = pos.x + newPosition.x;
 		result.y = pos.y + newPosition.y;
@@ -444,7 +444,7 @@ int Effect::saveEffect(char* filepath)
 		emitterNode->InsertEndChild(element);
 
 		element = doc.NewElement("Position");
-		glm::vec3 position = emitter->getPosition();
+		glm::vec3 position = emitter->getLocalPosition();
 		element->SetAttribute("x", position.x);
 		element->SetAttribute("y", position.y);
 		element->SetAttribute("z", position.z);

@@ -60,7 +60,7 @@ int main()
 
 	//EmitterFire
 	Emitter* fire = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.4, 1, 8.0, true);
-	fire->setVelocity(2);
+	fire->setVelocity(1);
 	fire->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.8), 0.3f);
 	fire->addTexture(fireTex, 1.0);
 	//fire->addTexture(fireTex2, 0.6);
@@ -124,7 +124,7 @@ int main()
 	iH.setAllInputMaps(*(testScene.getScenegraph()->getActiveCamera()));
 	iH.changeActiveInputMap("Pilotview");
 
-	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&testNode);
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&testNode);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&fireNode);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&whiteSmokeNode);
 	
