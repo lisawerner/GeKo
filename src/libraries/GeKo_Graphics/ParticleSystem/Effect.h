@@ -7,32 +7,26 @@ Compilation of different Emitters.
 */
 class Effect{
 public:
-	Effect();
-	Effect(std::string name);
-	Effect(const char* filepath);	//TODO: gets an effect file
-	~Effect();
+	Effect();	//creates an Effect with no Emitters
+	Effect(const char* filepath);	//creates an Effect loaded from a XML file
+	~Effect(); //deletes the Effect
 
 	/*void active();*/
 
-	void addEmitter(Emitter* emitter);
-	void removeEmitter(int arrayPosition);
+	void addEmitter(Emitter* emitter);	//the Emitter pointer will be stored in a vector of emitter pointers.
+	void removeEmitter(int vectorPosition);	//if it's the first Emitter you added, it's at position 0 and so on
 
-	void changePosition(glm::vec3 newPosition);	//updates the positions of every Emitter
-	void updateEmitters();	//compute Shader
+	void updateEmitters(Camera &cam);	//compute Shader
 	void renderEmitters(Camera &cam);	//render Shader
 
-	int loadEffect(const char* filepath);	//TODO: change the currently loaded effect
-	int saveEffect(char* filepath);		//TODO: save the settings of this effect to a file (XML?)
+	int loadEffect(const char* filepath);	//load an effect from an XML file and replace the current Effect
+	int saveEffect(char* filepath);		//save the settings of this effect to a XML file
 
-	void setName(std::string name);
-	std::string getName();
+	void setPosition(glm::vec3 newPosition);	//updates the positions of every Emitter
 
-protected:
+private:
 	std::vector<Emitter*> emitterVec;	//contains all Emitters of the Effect
-	std::string effectName;		//name of the effect file
 
-	//check for Error
-	#ifndef XMLCheckResult
-	#define XMLCheckResult(result) if (result != XML_SUCCESS) { printf("Error: %i\n", result); return result; }
-	#endif
+	//check for a XML Error. Gives feedback what went wrong if something goes wrong
+	int XMLCheckResult(int result);
 };

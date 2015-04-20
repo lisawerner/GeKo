@@ -47,12 +47,7 @@ public:
 	void startTime();
 
 	//update & generate the particle
-	void update();
-	void generateParticle();
-	void pushParticle(int numberNewParticle);
-
-	//for moving emitter
-	void update(glm::vec3 playerPosition);
+	void update(glm::vec3 playerPosition = glm::vec3(0.0, 0.0, 0.0));
 	void generateParticle(glm::vec3 playerPosition);
 	void pushParticle(int numberNewParticle, glm::vec3 playerPosition);
 	void movePosition(glm::vec3 playerPosition);
@@ -82,25 +77,12 @@ public:
 	void setVelocity(int velocityType);
 	int getVelocityType();
 	glm::vec3(*m_pfunc)();
-	int m_velocityType;
 
 	//our physic possibilities
 	void usePhysicTrajectory(glm::vec4 gravity, float speed);
-	bool m_useTrajectory = false;
 	void usePhysicDirectionGravity(glm::vec4 gravity, float speed);
-	bool m_usePointGravity = false;
 	void usePhysicPointGravity(glm::vec4 gravity, float gravityRange, int gravityFunction, float speed);
-	bool m_useDirectionGravity = true;
-	void usePhysicSwarmCircleMotion(bool verticalMovement, bool horizontalXMovement, bool horizontalYMovement);
-	bool m_useChaoticSwarmMotion = false;
-
-	//our physic attributes
-	float m_gravityRange = 0.0f;
-	int m_gravityFunction = 0;
-	float m_speed = 0.0f;
-	bool m_movementVertical = false;
-	bool m_movementHorizontalX = false;
-	bool m_movementHorizontalZ = false;
+	void usePhysicSwarmCircleMotion(bool verticalMovement, bool horizontalXMovement, bool horizontalYMovement, float speed);
 
 	//texturing	
 	/*
@@ -110,30 +92,19 @@ public:
 	/*
 		WARNING: Only 2 Textures at the same time are interpolating. if you have a too small fading time not all textures are interpolationg
 	*/
-	void useTexture(bool useTexture, float particleSize,
+	void defineLook(bool useTexture, float particleSize,
 		float birthTime = 0.0, float deathTime = 0.0, float blendingTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
 	/*
 		WARNING: Only 2 Textures at the same time are interpolating. if you have a too small fading time not all textures are interpolationg
 	*/
-	void useTexture(bool useTexture, std::vector<float> scalingSize, std::vector<float> scalingMoment,
+	void defineLook(bool useTexture, std::vector<float> scalingSize, std::vector<float> scalingMoment,
 		float birthTime = 0.0, float deathTime = 0.0, float blendingTime = 0.0, bool rotateLeft = false, float rotationSpeed = 0.0);
 	std::vector<Texture*> m_textureList;
-
-	//rotating, scaling and blending of the particle
-	float m_birthTime;
-	float m_deathTime;
-	float m_scalingData[32];
-	int m_scalingCount = 0;
-	bool m_useScaling = false;
-	float particleDefaultSize = 1.0;
-	bool m_rotateLeft = true;
-	float blendingTime[4];
-	int textureCount = 0;
-	float m_blendingTime;
 
 	//change properties
 	void setOutputMode(const int OUTPUT);
 	void setPosition(glm::vec3 newPosition);
+	void setLocalPosition(glm::vec3 newLocalPosition);
 	void setEmitterMortality(double emitterLifetime);
 	void setEmitterLifetime(double emitterLifetime);
 	void setEmitFrequency(float newEmitFrequency);
@@ -142,10 +113,12 @@ public:
 	void setParticleMortality(bool particleMortality);
 	void setGravity(glm::vec4 newGravity);
 	void setSpeed(float speed);
+	void setMovable(bool on);
 
 	//get properties
 	int getOutputMode();
 	glm::vec3 getPosition();
+	glm::vec3 getLocalPosition();
 	bool getEmitterMortality();
 	double getEmitterLifetime();
 	double getEmitFrequency();
@@ -162,8 +135,39 @@ public:
 	bool getUseGeometryShader();
 	bool getUsePointSprites();
 	float getRotationSpeed();
+	bool getMovable();
+
+	bool getPhysicTrajectory();
+	bool getPhysicDirectionGravity();
+	bool getPhysicPointGravity();
+	bool getPhysicSwarmCircleMotion();
+	float getPhysicAttGravityRange();
+	int getPhysicAttGravityFunction();
+	float getPhysicAttSpeed();
+	bool getPhysicAttMovementVertical();
+	bool getPhysicAttMovementHorizontalX();
+	bool getPhysicAttMovementHorizontalZ();
+
+	float getTexBirthTime();
+	float getTexDeathTime();
+	int getTexScalingCount();
+	bool getTexUseScaling();
+	float getTexParticleDefaultSize();
+	bool getTexRotateLeft();
+	int getTexTextureCount();
+	float getTexBlendingTime();
+
+	//scaling and blending
+	float m_scalingData[32];
+	float blendingTime[4];
+
+	//defines if the emitter is movable
+	bool m_movable;
 
 private:
+	//for the constructor
+	void setAttributes();
+
 	//updates the buffer and compute size
 	void updateSize();
 
@@ -180,13 +184,14 @@ private:
 	enum FLOW { UNUSED = -1, CONSTANT = 0, ONCE = 1 } m_output;
 
 	//Var for the buffer iteration
-	int indexBuffer = 0;
+	int indexBuffer;
 
 	//property of the emitter
-	glm::vec3 emitterPosition;
-	bool emitterMortal;			//if the emitter stops working after emitLifetime
-	double emitLifetime;	//if mortal=true: how long the emitter is active
-	float emitFrequency;	//After this frequencytime we generate particle
+	glm::vec3 m_emitterPosition;	//this is the position that gets updated constantly during rendering
+	glm::vec3 m_localPosition;		//this is the position that gets added to the ParticleSystem position
+	bool m_emitterMortal;			//if the emitter stops working after emitLifetime
+	double m_emitLifetime;	//if mortal=true: how long the emitter is active
+	float m_emitFrequency;	//After this frequencytime we generate particle
 
 	//Number of particles
 	int numMaxParticle;		//How many particles we has as maximum
@@ -194,9 +199,9 @@ private:
 	int computeGroupCount;	//number of compute groups (for glDispatchCompute)
 
 	//property of the particle
-	float particleLifetime;	//lifetime of any particle in seconds
+	float m_particleLifetime;	//lifetime of any particle in seconds
 	bool m_particleMortal; //if the particle can die
-	glm::vec4 m_gravity = glm::vec4(0.0,-1.0,0.0,1.0);		//xyz = direction of the gravity, z = power
+	glm::vec4 m_gravity;		//xyz = direction of the gravity, z = power
 
 	//Var for time measure
 	double generateTime;	//The last time, when particle were generated	
@@ -204,16 +209,46 @@ private:
 	double deltaTime;		//temp var which calculate the difference of actual time & generateTime/updateTime
 
 	//Var for emitting in an Area
-	bool m_areaEmittingXY = false;
-	bool m_areaEmittingXZ = false;
-	float m_areaSize = 3.0;
-	int m_areaAccuracy = 1000;
+	bool m_areaEmittingXY;
+	bool m_areaEmittingXZ;
+	float m_areaSize;
+	int m_areaAccuracy;
 
 	//Property of the rendering
-	bool m_useGeometryShader = false;
-	bool m_usePointSprites = true;
-	bool m_useTexture = false;
+	bool m_useGeometryShader;
+	bool m_usePointSprites;
+	bool m_useTexture;
+
+	//defines if the emitter is movable
+	//bool m_movable;
 
 	//Property of the Geometry Shader
-	float m_rotationSpeed = 0.0;
+	float m_rotationSpeed;
+
+	//velocity type
+	int m_velocityType;
+
+	//physic type
+	bool m_useTrajectory;
+	bool m_usePointGravity;
+	bool m_useDirectionGravity;
+	bool m_useChaoticSwarmMotion;
+
+	//physic attributes
+	float m_gravityRange;
+	int m_gravityFunction;
+	float m_speed;
+	bool m_movementVertical;
+	bool m_movementHorizontalX;
+	bool m_movementHorizontalZ;
+
+	//rotating, scaling and blending of the particle
+	float m_birthTime;
+	float m_deathTime;
+	int m_scalingCount;
+	bool m_useScaling;
+	float m_particleDefaultSize;
+	bool m_rotateLeft;
+	int m_textureCount;
+	float m_blendingTime;
 };

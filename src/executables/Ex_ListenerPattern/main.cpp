@@ -137,10 +137,11 @@ int main()
 	FBO fboGBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, 3, true, false);
 
 	ParticleSystem* particle = new ParticleSystem(glm::vec3(0, 0, 0), (char*)RESOURCES_PATH "/XML/ComicCloudEffect.xml");
-	//Node particleNode("ParticleNode");
-	//particleNode.addParticleSystem(particle);
-	//particleNode.setCamera(&cam);
-	//particleNode.setParticleActive(true);
+	particle->m_type = ParticleType::FIGHT;
+	/*Node particleNode("ParticleNode");
+	particleNode.addParticleSystem(particle);
+	particleNode.setCamera(&cam);
+	particleNode.setParticleActive(true);*/
 
 	//===================================================================//
 	//==================A Graph for the AI-Unit=========================//
@@ -286,6 +287,8 @@ int main()
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&treeNode);
 
 	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&particleNode);
+
+	testScene.getScenegraph()->addParticleSystem(particle);
 
 
 	// ==============================================================
@@ -564,20 +567,51 @@ int main()
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		float currentTime = glfwGetTime();
 		float deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
+		
 
-		collision.update();
 
 		ant_Flick.update();
-		//ant_Flack.update();
+	//	ant_Flack.update();
 
 		geko.update();
 		geko.setDeltaTime(currentTime);
+		//renderer.renderScene(testScene, testWindow);
 
-		renderer.renderScene(testScene, testWindow);
+		fboGBuffer.bind();
+		//glClearColor(0, 0, 0, 0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		shaderGBuffer.bind();
+		shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
+		shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+		
+		testScene.render(shaderGBuffer);
+		collision.update();
+		//TEST
+		//particle->update(cam);
+		//particle->render(cam);
+
+		shaderGBuffer.unbind();
+	
+		fboGBuffer.unbind();
+
+
+		//ScreenFillingQuad Render Pass
+		shaderSFQ.bind();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		shaderSFQ.sendSampler2D("fboTexture", fboGBuffer.getColorTexture(2));
+
+		screenFillingQuad.renderGeometry();
+		shaderSFQ.unbind();
+
+
+
+		glfwSwapBuffers(testWindow.getWindow());
+		glfwPollEvents();
 
 		//float currentTime = glfwGetTime();
 		//float deltaTime = currentTime - lastTime;

@@ -687,7 +687,7 @@ void Node::renderParticle(ShaderProgram &shader)
 
 	//TODO: Particle-System muss gerendert werden!
 
-	m_particleSystem->update();
+	m_particleSystem->update(*m_camera);
 	m_particleSystem->render(*m_camera);
 
 }

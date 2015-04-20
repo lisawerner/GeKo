@@ -124,3 +124,13 @@ Node* Scenegraph::searchNode(std::vector<Node*>* list, std::string name)
 		}
 	}
 }
+
+void Scenegraph::addParticleSystem(ParticleSystem* ps)
+{
+	m_particleSet.push_back(ps);
+}
+
+std::vector<ParticleSystem*>* Scenegraph::getParticleSet()
+{
+	return &m_particleSet;
+}

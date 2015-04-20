@@ -73,12 +73,26 @@ public:
 			 {
 				 if (nodeA.getAI()->getHealth() > 0)
 				 {
+		/*			 m_level->getFightSystem()->getParticle()->setPosition(glm::vec3(nodeB.getPlayer()->getPosition()));
+					 m_level->getFightSystem()->getParticle()->update(*nodeB.getCamera());
+					 m_level->getFightSystem()->getParticle()->render(*nodeB.getCamera());*/
+					 std::vector<ParticleSystem*>* ps = m_level->getActiveScene()->getScenegraph()->getParticleSet();
+					 for (auto particle : *ps)
+					 {
+						 if (particle->m_type == ParticleType::FIGHT)
+						 {
+							 particle->setPosition(glm::vec3(nodeB.getPlayer()->getPosition()));
+							 particle->update(*nodeB.getCamera());
+							 particle->render(*nodeB.getCamera());
+						 }
+					 }
+
 					 if (m_counter->getTime() <= 0)
 					 {
 						 m_level->getFightSystem()->objectVSobject(nodeA.getAI(), nodeB.getPlayer());
-						 m_level->getFightSystem()->getParticle()->setPosition(glm::vec3(nodeB.getPlayer()->getPosition()));
-						 m_level->getFightSystem()->getParticle()->update();
-						 m_level->getFightSystem()->getParticle()->render(*nodeB.getCamera());
+						/* m_level->getFightSystem()->getParticle()->setPosition(glm::vec3(nodeB.getPlayer()->getPosition()));
+						 m_level->getFightSystem()->getParticle()->update(*nodeB.getCamera());
+						 m_level->getFightSystem()->getParticle()->render(*nodeB.getCamera());*/
 						 if (nodeA.getAI()->getHealth() <= 0){
 
 							 std::vector<Goal*> tmp = m_level->getQuestHandler()->getQuests(GoalType::KILL);
