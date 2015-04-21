@@ -37,6 +37,8 @@
 #include <GeKo_Graphics/Observer/CollisionObserver.h>
 #include <GeKo_Graphics/Observer/GravityObserver.h>
 
+#include <GeKo_Gameplay/Object/AntHome.h>
+
 #include <list>
 #include <queue>
 #include <stack>
@@ -48,17 +50,17 @@ static StrategyCamera cam("PlayerViewCam");
 // As we do not use the Node class, we can't set the teapot into the middle of the window, therefore is the change of the direction improperly limited
 // just needed in the player mode
 static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos){
-		if (iH.getActiveInputMap()->getType() == MapType::CAMPLAYERVIEW){
+	if (iH.getActiveInputMap()->getType() == MapType::CAMPLAYERVIEW){
+		cam.turn(xpos, ypos);
+	}
+	if (iH.getActiveInputMap()->getType() == MapType::CAMSTRATEGY){
+		if (glfwGetMouseButton(window, 0) == GLFW_PRESS){
 			cam.turn(xpos, ypos);
 		}
-		if (iH.getActiveInputMap()->getType() == MapType::CAMSTRATEGY){
-			if (glfwGetMouseButton(window, 0) == GLFW_PRESS){
-				cam.turn(xpos, ypos);
-			}
-			else{
-				cam.updateCursor(window);
-			}
+		else{
+			cam.updateCursor(window);
 		}
+	}
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
@@ -126,35 +128,35 @@ int main()
 	// ==============================================================
 	// == Object (ant, afraid) ======================================
 	// ==============================================================
-	Teapot teaAnt; 
+	Teapot teaAnt;
 	Texture texCV((char*)RESOURCES_PATH "/cv_logo.bmp");
 	//AntMesh antMesh;
-	Node aiNodeFlick("Flick");
+	//Node aiNodeFlick("Flick");
 
-	aiNodeFlick.addGeometry(&teaAnt);
-	aiNodeFlick.addTexture(&texCV);
-	
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&aiNodeFlick);
-	
-	AI ant_Flick;
-	ant_Flick.setAntAfraid();
-	aiNodeFlick.setObject(&ant_Flick);
+	//aiNodeFlick.addGeometry(&teaAnt);
+	//aiNodeFlick.addTexture(&texCV);
+
+	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&aiNodeFlick);
+
+	//AI ant_Flick;
+	//ant_Flick.setAntAfraid();
+	//aiNodeFlick.ssetObject(&ant_Flick);
 
 	// ==============================================================
 	// == Object (ant, aggressiv) ===================================
 	// ==============================================================
 	AntMesh antMesh;
-	Node aiNodeFlack("Flack");
+	//Node aiNodeFlack("Flack");
 
 	//aiNodeFlack.addGeometry(&teaAnt);
-	aiNodeFlack.addGeometry(&antMesh);
-	aiNodeFlack.addTexture(&texCV);
+	//aiNodeFlack.addGeometry(&antMesh);
+	//aiNodeFlack.addTexture(&texCV);
 
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&aiNodeFlack);
+	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&aiNodeFlack);
 
-	AI ant_Flack;
-	ant_Flack.setAntAggressiv();
-	aiNodeFlack.setObject(&ant_Flack);
+	//AI ant_Flack;
+	//ant_Flack.setAntAggressiv();
+	//aiNodeFlack.setObject(&ant_Flack);
 
 	// ==============================================================
 	// == Object (Tree) =============================================
@@ -204,7 +206,7 @@ int main()
 
 	Teapot teaPlayer;
 	GekoMesh gekomesh;
-//	Texture texBrick((char*)RESOURCES_PATH "/brick.bmp");
+	//	Texture texBrick((char*)RESOURCES_PATH "/brick.bmp");
 
 	Node playerNode("Player");
 	playerNode.addTexture(&texBrick);
@@ -233,7 +235,7 @@ int main()
 	questCollect2.setActive(true);
 	Goal_Collect goalCollect2(2);
 	questCollect2.addGoal(&goalCollect2);
-	
+
 	goalCollect.setGoalCount(50);
 	goalCollect2.setGoalCount(50);
 	goalCollect3.setGoalCount(50);
@@ -254,9 +256,9 @@ int main()
 	// == Collision, FightSystem=====================================
 	// ==============================================================
 
-// Bounding Box creation for the objects and collision test //
+	// Bounding Box creation for the objects and collision test //
 	CollisionTest collision;
-	collision.collectNodes(testScene.getScenegraph()->getRootNode());
+
 
 	FightSystem fight;
 
@@ -264,8 +266,8 @@ int main()
 	//==================Setting up the Observers========================//
 	//==================================================================//
 	ObjectObserver aiObserver(&testLevel);
-	ant_Flick.addObserver(&aiObserver);
-	ant_Flack.addObserver(&aiObserver);
+	//ant_Flick.addObserver(&aiObserver);
+	//ant_Flack.addObserver(&aiObserver);
 
 	ObjectObserver playerObserver(&testLevel);
 	geko.addObserver(&playerObserver);
@@ -276,27 +278,57 @@ int main()
 	GravityObserver gravityObserver(&testLevel);
 	collision.addObserver(&gravityObserver);
 
+	// ==============================================================
+	// == Object (Anthome) ==========================================
+	// ==============================================================
+	glm::vec3 posFood2(10.0, 0.0, -5.0);
+	glm::vec3 posSpawn(3.0, 0.0, 3.0);
+	glm::vec3 posDefaultPlayer(0.0, 0.0, 0.0);
 
-		
+	DecisionTree *aggressivedecisionTree = new DecisionTree();
+	aggressivedecisionTree->setAntTreeAggressiv();
 
+	DecisionTree *afraidDecisionTree = new DecisionTree();
+	afraidDecisionTree->setAntTreeAfraid();
+
+	Graph<AStarNode, AStarAlgorithm>* antAggressiveGraph = new Graph<AStarNode, AStarAlgorithm>();
+	antAggressiveGraph->setExampleAntAfraid(posSpawn, posFood2, posDefaultPlayer);
+
+	Graph<AStarNode, AStarAlgorithm>* antAfraidGraph = new Graph<AStarNode, AStarAlgorithm>();
+	antAfraidGraph->setExampleAntAfraid(posSpawn, posFood, posDefaultPlayer);
+
+	Anthome antHome(posSpawn, antMesh, &texCV, &texCV, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
+	//antHome.generateGuards(5, &aiObserver);
+	antHome.generateWorkers(1, &aiObserver);
+	antHome.addAntsToSceneGraph(testScene.getScenegraph()->getRootNode());
+
+
+	collision.collectNodes(testScene.getScenegraph()->getRootNode());
 	float lastTime = glfwGetTime();
+	int i = 0;
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
+		i++;
+		if (i == 30){
+			i++;
+		}
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		float currentTime = glfwGetTime();
 		float deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
-
 		collision.update();
-		
-		ant_Flick.update();
-		ant_Flack.update();
+
+		antHome.updateAnts();
+		antHome.printPosWorkers();
+
+		/*	ant_Flick.update();
+		ant_Flack.update();*/
 
 		geko.update();
 		geko.setDeltaTime(currentTime);
 
 		renderer.renderScene(testScene, testWindow);
-	
+
 	}
 
 	glfwDestroyWindow(testWindow.getWindow());
