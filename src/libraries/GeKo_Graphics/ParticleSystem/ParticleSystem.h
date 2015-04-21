@@ -9,8 +9,8 @@ public:
 	ParticleSystem(glm::vec3 position, const char* filepath);
 	~ParticleSystem();
 
-	/*void active();*/
-
+	void start();
+	void stop();
 	void update(Camera &cam);
 	void render(Camera &cam);
 

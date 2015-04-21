@@ -18,7 +18,7 @@
 #include "States.h"
 
 enum SoundtypeAI{
-	MOVESOUND_AI, EATSOUND_AI, DEATHSOUND_AI
+	MOVESOUND_AI, EATSOUND_AI, DEATHSOUND_AI, DEATHSOUND_FLIES_AI
 };
 
 class AI : public Object, public Subject<AI, Object_Event>

@@ -36,12 +36,12 @@
 
 //#include <GeKo_Graphics/GUI/GUI.h>
 //#include <GeKo_Graphics/GUI/GUIComponents.hpp>
-//#include <GeKo_Graphics/GUI/PlayerGUI.h>
+#include <GeKo_Graphics/GUI/PlayerGUI.h>
 
 //===================================================================//
 //==================Things you need globally==========================//
 //==================================================================//
-Player geko("Geko", glm::vec3(10.0, 3.0, -5.0));
+Player geko("Geko", glm::vec3(-10.0, 1.0,30.0));
 static StrategyCamera cam("PlayerViewCam");
 //Renderer *renderer;
 
@@ -138,10 +138,20 @@ int main()
 
 	ParticleSystem* particle = new ParticleSystem(glm::vec3(0, 0, 0), (char*)RESOURCES_PATH "/XML/ComicCloudEffect.xml");
 	particle->m_type = ParticleType::FIGHT;
-	/*Node particleNode("ParticleNode");
-	particleNode.addParticleSystem(particle);
+	ParticleSystem* particle2 = new ParticleSystem(glm::vec3(0, 0, 0), (char*)RESOURCES_PATH "/XML/SwarmOfFliesEffect.xml");
+	particle2->m_type = ParticleType::SWARMOFFLIES;
+	ParticleSystem* particleFire = new ParticleSystem(glm::vec3(0, 0, 0), (char*)RESOURCES_PATH "/XML/Fire.xml");
+	particleFire->m_type = ParticleType::FIRE;
+
+	Node particleNode("ParticleNode");
+	particleNode.addParticleSystem(particle2);
 	particleNode.setCamera(&cam);
-	particleNode.setParticleActive(true);*/
+	particleNode.setParticleActive(true);
+
+	Node particleNodeFire("ParticleNodeFire");
+	particleNodeFire.addParticleSystem(particleFire);
+	particleNodeFire.setCamera(&cam);
+	particleNodeFire.setParticleActive(true);
 
 	//===================================================================//
 	//==================A Graph for the AI-Unit=========================//
@@ -182,10 +192,13 @@ int main()
 	ant_Flick.setSoundHandler(&sfh);
 
 	ant_Flick.setSourceName(MOVESOUND_AI, "AIFootsteps", RESOURCES_PATH "/Sound/Footsteps.wav");
+	sfh.disableLooping("AIFootsteps");
 	ant_Flick.setSourceName(DEATHSOUND_AI, "AIDeath", RESOURCES_PATH "/Sound/death.wav");
 	sfh.disableLooping("AIDeath");
 	ant_Flick.setSourceName(EATSOUND_AI, "AIEssen", RESOURCES_PATH "/Sound/Munching.wav");
 	sfh.disableLooping("AIEssen");
+	ant_Flick.setSourceName(DEATHSOUND_FLIES_AI, "Flies", RESOURCES_PATH "/Sound/Fliege_kurz.wav");
+	sfh.setGain("Flies", 7.0);
 
 	Rect screenFillingQuad;
 	screenFillingQuad.loadBufferData();
@@ -212,11 +225,12 @@ int main()
 	sfh.generateSource(posFood, RESOURCES_PATH "/Sound/Rascheln.wav");
 	geko.setSoundHandler(&sfh);
 	geko.setSourceName(MOVESOUND, "SpielerFootsteps", RESOURCES_PATH "/Sound/Rascheln.wav");
-	geko.setSourceName(BACKGROUNDMUSIC, "Hintergrund", RESOURCES_PATH "/Sound/jingle2.wav");
+	//geko.setSourceName(BACKGROUNDMUSIC, "Hintergrund", RESOURCES_PATH "/Sound/jingle2.wav");
 	geko.setSourceName(FIGHTSOUND, "Kampfsound", RESOURCES_PATH "/Sound/punch.wav");
 	geko.setSourceName(EATSOUND, "Essen", RESOURCES_PATH "/Sound/Munching.wav");
 	geko.setSourceName(QUESTSOUND, "Quest", RESOURCES_PATH "/Sound/jingle.wav");
 	geko.setSourceName(ITEMSOUND, "Item", RESOURCES_PATH "/Sound/itempickup.wav");
+	geko.setSourceName(FIRESOUND, "Fire", RESOURCES_PATH "/Sound/Feuer_kurz.wav");
 
 	sfh.disableLooping("Essen");
 	sfh.disableLooping("Quest");
@@ -286,10 +300,11 @@ int main()
 
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&treeNode);
 
-	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&particleNode);
-
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&particleNode);
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&particleNodeFire);
 	testScene.getScenegraph()->addParticleSystem(particle);
-
+	testScene.getScenegraph()->addParticleSystem(particle2);
+	testScene.getScenegraph()->addParticleSystem(particleFire);
 
 	// ==============================================================
 	// == Questsystem ====================================================
@@ -555,7 +570,8 @@ int main()
 	//inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem9"), &bricks));
 	//GuiElement::Inventory *inventory = new GuiElement::Inventory(inventoryItems, 6);
 	//inventoryWindow->addElement(inventory);
-	//PlayerGUI playerGUI(HUD_WIDTH, HUD_HEIGHT, WINDOW_HEIGHT, WINDOW_WIDTH, QUEST_HEIGHT, QUEST_WIDTH, *playerNode.getPlayer());
+	
+	PlayerGUI playerGUI(HUD_WIDTH, HUD_HEIGHT, WINDOW_HEIGHT, WINDOW_WIDTH, QUEST_HEIGHT, QUEST_WIDTH, *playerNode.getPlayer());
 
 
 	float testFloat = float(0.0f);
@@ -574,22 +590,26 @@ int main()
 		
 
 
-		ant_Flick.update();
+		
 	//	ant_Flack.update();
 
-		geko.update();
-		geko.setDeltaTime(currentTime);
+		
 		//renderer.renderScene(testScene, testWindow);
 
 		fboGBuffer.bind();
-		//glClearColor(0, 0, 0, 0);
+		glClearColor(0.5, 0.5, 0.5, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shaderGBuffer.bind();
 		shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
 		shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 		
+		
 		testScene.render(shaderGBuffer);
+		ant_Flick.update();
+		geko.update();
+		geko.setDeltaTime(currentTime);
 		collision.update();
+
 		//TEST
 		//particle->update(cam);
 		//particle->render(cam);

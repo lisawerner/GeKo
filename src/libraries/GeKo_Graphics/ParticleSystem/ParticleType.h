@@ -3,5 +3,5 @@
 
 enum class ParticleType
 {
-	DEFAULT, FIGHT
+	DEFAULT, FIGHT, SWARMOFFLIES, FIRE
 };

@@ -11,7 +11,8 @@ public:
 	Effect(const char* filepath);	//creates an Effect loaded from a XML file
 	~Effect(); //deletes the Effect
 
-	/*void active();*/
+	void start();
+	void stop();
 
 	void addEmitter(Emitter* emitter);	//the Emitter pointer will be stored in a vector of emitter pointers.
 	void removeEmitter(int vectorPosition);	//if it's the first Emitter you added, it's at position 0 and so on

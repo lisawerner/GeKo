@@ -32,6 +32,7 @@
                 </ScalingMoment>
                 <BirthTime>0.40000001</BirthTime>
                 <DeathTime>4</DeathTime>
+				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
                 <RotationSpeed>0.30000001</RotationSpeed>
             </Scaling>
@@ -70,6 +71,7 @@
                 </ScalingMoment>
                 <BirthTime>0.40000001</BirthTime>
                 <DeathTime>4</DeathTime>
+				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
                 <RotationSpeed>0.30000001</RotationSpeed>
             </Scaling>
@@ -99,6 +101,7 @@
                 <ParticleSize>0.80000001</ParticleSize>
                 <BirthTime>2</BirthTime>
                 <DeathTime>0</DeathTime>
+				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
                 <RotationSpeed>0</RotationSpeed>
             </Size>
@@ -128,6 +131,7 @@
                 <ParticleSize>0.30000001</ParticleSize>
                 <BirthTime>2</BirthTime>
                 <DeathTime>0</DeathTime>
+				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
                 <RotationSpeed>0.60000002</RotationSpeed>
             </Size>
@@ -157,6 +161,7 @@
                 <ParticleSize>0.5</ParticleSize>
                 <BirthTime>2</BirthTime>
                 <DeathTime>0</DeathTime>
+				<BlendingTime>0</BlendingTime>
                 <RotateLeft>1</RotateLeft>
                 <RotationSpeed>0.40000001</RotationSpeed>
             </Size>
@@ -186,6 +191,7 @@
                 <ParticleSize>0.30000001</ParticleSize>
                 <BirthTime>2</BirthTime>
                 <DeathTime>0</DeathTime>
+				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
                 <RotationSpeed>0</RotationSpeed>
             </Size>
@@ -215,6 +221,7 @@
                 <ParticleSize>0.30000001</ParticleSize>
                 <BirthTime>2</BirthTime>
                 <DeathTime>0</DeathTime>
+				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
                 <RotationSpeed>0</RotationSpeed>
             </Size>
@@ -244,6 +251,7 @@
                 <ParticleSize>0.60000002</ParticleSize>
                 <BirthTime>2</BirthTime>
                 <DeathTime>0</DeathTime>
+				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
                 <RotationSpeed>0</RotationSpeed>
             </Size>
@@ -273,6 +281,7 @@
                 <ParticleSize>0.5</ParticleSize>
                 <BirthTime>2</BirthTime>
                 <DeathTime>0</DeathTime>
+				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
                 <RotationSpeed>0</RotationSpeed>
             </Size>
@@ -302,6 +311,7 @@
                 <ParticleSize>0.30000001</ParticleSize>
                 <BirthTime>2</BirthTime>
                 <DeathTime>0</DeathTime>
+				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
                 <RotationSpeed>0</RotationSpeed>
             </Size>
@@ -331,6 +341,7 @@
                 <ParticleSize>0.5</ParticleSize>
                 <BirthTime>2</BirthTime>
                 <DeathTime>0</DeathTime>
+				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
                 <RotationSpeed>0</RotationSpeed>
             </Size>

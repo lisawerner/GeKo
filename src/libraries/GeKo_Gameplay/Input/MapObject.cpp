@@ -41,6 +41,10 @@ void MapObject::update(Player &p){
 	};
 
 	// Setting all methods to open and close menues
+	auto setFire = [&](){
+		p.setFire();
+	};
+
 	auto inventory = [&](){
 		//TODO: Zugriff auf GUI: Open or close inventory
 	};
@@ -59,6 +63,7 @@ void MapObject::update(Player &p){
 		m[GLFW_KEY_Q] = playerTurnLeft;
 		m[GLFW_KEY_E] = playerTurnRight;
 		//Mapping the keys to action methodes
+		m[GLFW_KEY_F] = setFire;
 		m[GLFW_KEY_I] = inventory;
 		m[GLFW_KEY_J] = journal;
 	};

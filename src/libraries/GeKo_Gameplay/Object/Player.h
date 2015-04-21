@@ -8,7 +8,7 @@ The Player class is a Basic class to provide a playable character. It is just an
 It provides a spawnpoint location, a  name, a current, a speed and can be visualized by a Geometry. The Geometry has to be bound to a Node (see Scenegraph for details!).
 */
 enum Soundtype{
-	MOVESOUND, BACKGROUNDMUSIC, FIGHTSOUND, EATSOUND, QUESTSOUND, ITEMSOUND
+	MOVESOUND, BACKGROUNDMUSIC, FIGHTSOUND, EATSOUND, QUESTSOUND, ITEMSOUND, FIRESOUND
 };
 
 class Player : public Object, public Subject<Player, Object_Event>
@@ -71,6 +71,10 @@ public:
 	void updateSourcesInMap();
 
 	void setDeltaTime(float dt);
+
+	///Sets a fire into the world
+	/**This method deletes one branch in the inventory and creates a fire with the help of the particlesystem*/
+	void setFire();
 
 	//TODO: Open/Close Inventory: Prüfen ob Inventar offen oder geschlossen ist; Inventar mit GUI öffnen
 	void showInventory();

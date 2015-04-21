@@ -121,6 +121,7 @@ void Player::turnRight(){
 void Player::update(){
 	if (m_health == 0){
 		std::cout << "Player: Died" << std::endl;
+		//TODO OBJECT_DIED, Weil "stopped" den Observervorgang bescheibt , wenn sich das Object nicht mehr bewegt
 		notify(*this, Object_Event::OBJECT_STOPPED);
 		setStates(States::HEALTH, false);
 	}
@@ -129,7 +130,7 @@ void Player::update(){
 		updateStates();
 		//std::cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
 	}
-	//notify(*this, Object_Event::OBJECT_STOPPED);
+	notify(*this, Object_Event::OBJECT_STOPPED);
 }
 
 void Player::rotateView(float leftRight, float upDown)
@@ -177,4 +178,13 @@ void Player::setSourceName(Soundtype type , std::string sourceName, const char* 
 
 void Player::setDeltaTime(float dt){
 	m_deltaTime = dt;
+}
+
+void Player::setFire(){
+	if (m_inventory->countItem(ItemType::BRANCH)){
+		m_inventory->reduceItem(ItemType::BRANCH, 1);
+		notify(*this, Object_Event::PLAYER_SET_ON_FIRE);
+	} else{
+		//TODO: GUI sagt, dass das Inventar keine Branches hat
+	}
 }

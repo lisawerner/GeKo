@@ -60,8 +60,8 @@ AI::AI(glm::vec4 position){
 
 	m_hunger = 10;
 	m_hungerMax = 10;
-	m_health = 1000;
-	m_healthMax = 1000;
+	m_health = 10;
+	m_healthMax = 10;
 	m_strength = 0.5;
 	m_hasDied = false;
 
@@ -185,26 +185,39 @@ void AI::move(){
 	}
 
 	glm::vec3 diff = glm::vec3(m_position) - m_nextTarget->getPosition();
+	bool moved = false;
 	if (diff.x > 0){
 		m_position.x -= m_speed;
+		moved = true;
 	}
 	if (diff.y > 0){
 		m_position.y -= m_speed;
+
 	}
 	if (diff.z > 0){
 		m_position.z -= m_speed;
+		moved = true;
+
 	}
 	if (diff.x < 0){
+		moved = true;
 		m_position.x += m_speed;
 	}
 	if (diff.y < 0){
 		m_position.y += m_speed;
+
 	}
 	if (diff.z < 0){
 		m_position.z += m_speed;
+		moved = true;
+
 	}
 	
-	notify(*this, Object_Event::OBJECT_MOVED);
+	if (moved)
+		notify(*this, Object_Event::OBJECT_MOVED);
+	else
+		notify(*this, Object_Event::OBJECT_STOPPED);
+	
 
 	//std::cout << "Aktuelle Position der AI: x_" << m_position.x << " y_" << m_position.y << " z_" << m_position.z << std::endl;
 }

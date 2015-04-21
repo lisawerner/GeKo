@@ -122,6 +122,7 @@ void Object::updateStates(){
 	if (m_health == 0){
 		std::cout << "Object " << m_name << ": Died because he was too hungry" << std::endl;
 		setStates(States::HEALTH, false);
+		
 	}
 }
 

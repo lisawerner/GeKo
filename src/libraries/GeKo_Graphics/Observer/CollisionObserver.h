@@ -51,12 +51,26 @@ public:
 			 nodeA.getAI()->viewArea(true);
 
 			
-			 if (!nodeA.getAI()->getStates(States::HEALTH) &&  (tp > 0))
+			 if (!nodeA.getAI()->getStates(States::HEALTH))
 			 {
-				 nodeB.getPlayer()->collectItem(ItemType::COOKIE, nodeA.getAI()->getInventory()->countItem(ItemType::COOKIE));
 				 nodeB.getPlayer()->eat();
 
-				 nodeA.getAI()->getInventory()->clearInventory();
+				 if (tp > 0){
+					nodeB.getPlayer()->collectItem(ItemType::COOKIE, nodeA.getAI()->getInventory()->countItem(ItemType::COOKIE));
+					nodeA.getAI()->getInventory()->clearInventory();
+				 }
+				 
+				 m_level->getActiveScene()->getScenegraph()->getRootNode()->deleteChildrenNode(nodeA.getNodeName());
+
+				 std::vector<ParticleSystem*>* ps = m_level->getActiveScene()->getScenegraph()->getParticleSet();
+				 for (auto particle : *ps)
+				 {
+					 if (particle->m_type == ParticleType::SWARMOFFLIES)
+					 {
+						 particle->stop();
+						 nodeA.getAI()->getSoundHandler()->stopSource("Flies");
+					 }
+				 }
 
 				 std::vector<Goal*> tmp = m_level->getQuestHandler()->getQuests(GoalType::EATEN);
 
@@ -82,6 +96,7 @@ public:
 						 if (particle->m_type == ParticleType::FIGHT)
 						 {
 							 particle->setPosition(glm::vec3(nodeB.getPlayer()->getPosition()));
+							 particle->start();
 							 particle->update(*nodeB.getCamera());
 							 particle->render(*nodeB.getCamera());
 						 }
