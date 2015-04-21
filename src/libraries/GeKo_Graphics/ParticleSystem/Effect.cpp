@@ -371,6 +371,11 @@ int Effect::loadEffect(const char* filepath)
 				error = tex->QueryFloatText(&deathTime);
 				XMLCheckResult(error);
 
+				float blendingTime;
+				tex = scaling->FirstChildElement("BlendingTime");
+				error = tex->QueryFloatText(&blendingTime);
+				XMLCheckResult(error);
+
 				bool rotateLeft;
 				tex = scaling->FirstChildElement("RotateLeft");
 				error = tex->QueryBoolText(&rotateLeft);
@@ -408,6 +413,11 @@ int Effect::loadEffect(const char* filepath)
 				error = tex->QueryFloatText(&deathTime);
 				XMLCheckResult(error);
 
+				float blendingTime;
+				tex = scaling->FirstChildElement("BlendingTime");
+				error = tex->QueryFloatText(&blendingTime);
+				XMLCheckResult(error);
+
 				bool rotateLeft;
 				tex = scaling->FirstChildElement("RotateLeft");
 				error = tex->QueryBoolText(&rotateLeft);
@@ -418,8 +428,8 @@ int Effect::loadEffect(const char* filepath)
 				error = tex->QueryFloatText(&rotationSpeed);
 				XMLCheckResult(error);
 
-				emitter->defineLook(useTexture, particleSize, 
-					birthTime, deathTime, rotateLeft, rotationSpeed);
+				emitter->defineLook(useTexture, particleSize,
+					birthTime, deathTime, blendingTime, rotateLeft, rotationSpeed);
 			}
 			
 		}
@@ -559,9 +569,9 @@ int Effect::saveEffect(char* filepath)
 			temp->SetText(emitter->getPhysicAttMovementHorizontalZ());
 			physic->InsertEndChild(temp);
 
-			//temp = doc.NewElement("MovementLength");
-			//temp->SetText(emitter->m_movementLength);
-			//physic->InsertEndChild(temp);
+			temp = doc.NewElement("Speed");
+			temp->SetText(emitter->getSpeed());
+			physic->InsertEndChild(temp);
 			element->InsertEndChild(physic);
 		}
 		emitterNode->InsertEndChild(element);
@@ -629,6 +639,10 @@ int Effect::saveEffect(char* filepath)
 			tex->SetText(emitter->getTexDeathTime());
 			scaling->InsertEndChild(tex);
 
+			tex = doc.NewElement("BlendingTime");
+			tex->SetText(emitter->getTexBlendingTime());
+			scaling->InsertEndChild(tex);
+
 			tex = doc.NewElement("RotateLeft");
 			tex->SetText(emitter->getTexRotateLeft());
 			scaling->InsertEndChild(tex);
@@ -656,6 +670,10 @@ int Effect::saveEffect(char* filepath)
 
 			tex = doc.NewElement("DeathTime");
 			tex->SetText(emitter->getTexDeathTime());
+			scaling->InsertEndChild(tex);
+
+			tex = doc.NewElement("BlendingTime");
+			tex->SetText(emitter->getTexBlendingTime());
 			scaling->InsertEndChild(tex);
 
 			tex = doc.NewElement("RotateLeft");
