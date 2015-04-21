@@ -23,7 +23,7 @@ enum SoundtypeAI{
 
 class AI : public Object, public Subject<AI, Object_Event>
 {
-public: 
+public:
 
 	AI();
 	AI(glm::vec4 position);
@@ -65,6 +65,7 @@ public:
 	AStarNode* nextNodeOnPatrol();
 
 	void setAntAfraid();
+	void setAntAfraid(std::string name, DecisionTree *tree, Graph<AStarNode, AStarAlgorithm> *antGraph);
 	void setAntAggressiv();
 	void setAntAggressiv(std::string name, DecisionTree *tree, Graph<AStarNode, AStarAlgorithm> *antGraph);
 
@@ -74,11 +75,11 @@ public:
 	///Sets a specific source-file to the node
 	/**This method uses the sfh to generate a new sound-source which can be played with the sfh later ingame!*/
 	void setSourceName(SoundtypeAI type, std::string sourceName, const char* filepath);
-	
+
 	void updateSourcesInMap();
 
 	bool hasDied();
-	
+
 protected:
 	float m_epsilon;
 

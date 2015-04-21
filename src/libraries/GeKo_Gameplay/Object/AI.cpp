@@ -18,13 +18,13 @@ AI::AI(){
 	m_decisionTree = new DecisionTree();
 
 	std::pair<States, bool> s(States::HUNGER, false);
-	m_states.push_back(s); 
+	m_states.push_back(s);
 	s.first = States::VIEW;
 	s.second = false;
-	m_states.push_back(s); 
+	m_states.push_back(s);
 	s.first = States::HEALTH;
 	s.second = true;
-	m_states.push_back(s); 
+	m_states.push_back(s);
 
 	m_speed = 0.01;
 	m_epsilon = 0.1;
@@ -32,7 +32,7 @@ AI::AI(){
 	m_position = glm::vec4(0.0, 0.0, 0.0, 1.0);
 
 	AStarNode* defaultNode = new AStarNode();
-	
+
 	m_lastTarget = defaultNode;
 	m_target = defaultNode;
 	m_nextTarget = defaultNode;
@@ -45,7 +45,7 @@ AI::AI(){
 	m_viewRadius = 1.0f;
 
 	m_inventory = new Inventory();
-	
+
 	m_targetType = TreeOutput::HOME;
 
 	m_class = ClassType::AI;
@@ -60,8 +60,8 @@ AI::AI(glm::vec4 position){
 
 	m_hunger = 10;
 	m_hungerMax = 10;
-	m_health = 10;
-	m_healthMax = 10;
+	m_health = 1000;
+	m_healthMax = 1000;
 	m_strength = 0.5;
 	m_hasDied = false;
 
@@ -153,29 +153,29 @@ void AI::update(){
 			notify(*this, Object_Event::OBJECT_DIED);
 			m_hasDied = true;
 		}
-		
+
 		setStates(States::HEALTH, false);
 	}
 
-	if (getStates(States::HEALTH)){ 
+	if (getStates(States::HEALTH)){
 		//std::cout << "<<<<<<<< UpdateMethod <<<<<<<<" << std::endl;
 		updateStates();
 
 		GraphNodeType lastNodeType = m_target->getNodeType();
 		decide2();
-		
+
 		float eps = m_epsilon + m_speed;
-		if(!checkPosition(glm::vec3(m_position), m_target->getPosition())){
+		if (!checkPosition(glm::vec3(m_position), m_target->getPosition())){
 			move();
 		}
-	//std::cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
+		//std::cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
 	}
-	
+
 }
 
 void AI::move(){
 	float eps = m_epsilon + m_speed;
-	if(checkPosition(glm::vec3(m_position), m_nextTarget->getPosition())){
+	if (checkPosition(glm::vec3(m_position), m_nextTarget->getPosition())){
 		if (m_path.size() > 0){
 			m_nextTarget = m_path.back();
 			m_path.pop_back();
@@ -212,12 +212,11 @@ void AI::move(){
 		moved = true;
 
 	}
-	
+
 	if (moved)
 		notify(*this, Object_Event::OBJECT_MOVED);
 	else
 		notify(*this, Object_Event::OBJECT_STOPPED);
-	
 
 	//std::cout << "Aktuelle Position der AI: x_" << m_position.x << " y_" << m_position.y << " z_" << m_position.z << std::endl;
 }
@@ -254,8 +253,8 @@ AStarNode* AI::nearestFoodNode(){
 	m_graph->getAlgorithm()->startAlgorithm2(m_lastTarget, m_foodNodes.at(0), m_path);
 	tempReturn = m_path.at(m_path.size() - 1);
 
-	for (int i = 0; i < m_foodNodes.size()-1; i++){
-		m_graph->getAlgorithm()->startAlgorithm2(m_lastTarget, m_foodNodes.at(i+1), m_path);
+	for (int i = 0; i < m_foodNodes.size() - 1; i++){
+		m_graph->getAlgorithm()->startAlgorithm2(m_lastTarget, m_foodNodes.at(i + 1), m_path);
 		if (tempReturn->getDistanceTravelled() > m_path.at(m_path.size() - 1)->getDistanceTravelled()){
 			tempReturn = m_path.at(m_path.size() - 1);
 		}
@@ -283,7 +282,7 @@ void AI::decide2(){
 	m_targetType = m_decisionTree->decide(m_states);
 
 	switch (m_targetType) {
-	case TreeOutput::HOME:	
+	case TreeOutput::HOME:
 		if (lastOutput != m_targetType){
 			m_target = m_homeNode;
 			updatePath();
@@ -295,7 +294,7 @@ void AI::decide2(){
 			updatePath();
 		}
 		break;
-	case TreeOutput::PLAYER: 
+	case TreeOutput::PLAYER:
 		if (lastOutput != m_targetType){
 			m_target = m_graph->searchNode(GraphNodeType::OBJECT);
 			updatePathPlayer();
@@ -308,8 +307,8 @@ void AI::decide2(){
 		}
 		if (checkPosition(glm::vec3(m_position), m_target->getPosition())){
 			//if (m_path.size() == 1){
-				updatePathPatrol();
-				//m_path = m_pathPatrol;
+			updatePathPatrol();
+			//m_path = m_pathPatrol;
 			//}
 		}
 		break;
@@ -325,7 +324,7 @@ void AI::updatePath(){
 	m_graph->resetAlgorithm(&defaultNode);
 	m_nextTarget = m_path.back();
 	m_path.pop_back();
-	
+
 	if (m_lastTarget->getNodeType() == GraphNodeType::OBJECT && m_target->getNodeType() != GraphNodeType::OBJECT){
 		m_nextTarget = m_lastTargetOnGraph;
 	}
@@ -344,8 +343,8 @@ void AI::updatePathPatrol(){
 	m_path.clear();
 	std::vector<AStarNode*> tmp = m_pathPatrol;
 	m_pathPatrol.clear();
-	for (int i = 0; i < tmp.size()-1; i++){
-		m_pathPatrol.push_back(tmp.at(i+1));
+	for (int i = 0; i < tmp.size() - 1; i++){
+		m_pathPatrol.push_back(tmp.at(i + 1));
 	}
 	m_pathPatrol.push_back(tmp.at(0));
 	m_path = m_pathPatrol;
@@ -365,7 +364,7 @@ AStarNode* AI::nextNodeOnPatrol(){
 						return temp->at(i);
 					}
 				}
-				else { 
+				else {
 					if (m_lastTarget == temp->at(i)){
 						int j = (i + 1) % temp->size();
 						while (temp->at(j) != m_lastTarget){
@@ -389,7 +388,7 @@ void AI::setAntAfraid(){
 	tree->setAntTreeAfraid();
 	m_decisionTree = tree;
 
-	m_speed = 0.3;
+	m_speed = 0.1;
 
 	glm::vec3 posFood(10.0, 0.0, -5.0);
 	glm::vec3 posSpawn(3.0, 0.0, 3.0);
@@ -403,7 +402,33 @@ void AI::setAntAfraid(){
 
 	m_position = glm::vec4(posSpawn, 1.0);
 	m_homeNode = antGraph->searchNode(GraphNodeType::HOME);
-	m_foodNodes.pop_back(); 
+	m_foodNodes.pop_back();
+	addFoodNodes();
+}
+
+void AI::setAntAfraid(std::string name, DecisionTree *tree, Graph<AStarNode, AStarAlgorithm> *antGraph){
+	m_type = ObjectType::ANT;
+	m_name = name;
+
+	/*DecisionTree* tree = new DecisionTree();
+	tree->setAntTreeAfraid();*/
+	m_decisionTree = tree;
+
+	m_speed = 0.1;
+
+	glm::vec3 posFood(10.0, 0.0, -5.0);
+	glm::vec3 posSpawn(3.0, 0.0, 3.0);
+	glm::vec3 posDefaultPlayer(0.0, 0.0, 0.0);
+	/*Graph<AStarNode, AStarAlgorithm>* antGraph = new Graph<AStarNode, AStarAlgorithm>();
+	antGraph->setExampleAntAfraid(posSpawn, posFood, posDefaultPlayer);*/
+	m_graph = antGraph;
+
+	m_lastTarget = antGraph->searchNode(GraphNodeType::HOME);
+	m_target = antGraph->searchNode(GraphNodeType::HOME);
+
+	//m_position = glm::vec4(posSpawn, 1.0);
+	m_homeNode = antGraph->searchNode(GraphNodeType::HOME);
+	m_foodNodes.pop_back();
 	addFoodNodes();
 }
 
@@ -465,7 +490,7 @@ void AI::setAntAggressiv(std::string name, DecisionTree *tree, Graph<AStarNode, 
 	m_lastTarget = antGraph->searchNode(GraphNodeType::FOOD);
 	m_target = antGraph->searchNode(GraphNodeType::FOOD);
 
-	m_position = glm::vec4(posSpawn, 1.0);
+	//m_position = glm::vec4(posSpawn, 1.0);
 	m_homeNode = antGraph->searchNode(GraphNodeType::FOOD);
 	m_foodNodes.clear(); //Delete DefaultNode
 	m_foodNodes.push_back(antGraph->searchNode(GraphNodeType::FOOD));
