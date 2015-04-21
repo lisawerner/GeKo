@@ -16,19 +16,28 @@
 class Anthome : public Object{
 public :
 	Anthome();
-	Anthome(glm::vec3 position,AntMesh antMesh, DecisionTree *aggressiveDecisionTree, Graph<AStarNode, AStarAlgorithm> *aggressiveGraph, Texture *tex);
+	Anthome(glm::vec3 position, AntMesh antMesh, Texture *guardTex, Texture *workerTex, DecisionTree *aggressiveDecisionTree, Graph<AStarNode, AStarAlgorithm> *aggressiveGraph, DecisionTree *afraidDecisionTree, Graph<AStarNode, AStarAlgorithm> *afraidGraph);
 	~Anthome();
-	void initAnts(ObjectObserver *objectObserver);
+	void generateGuards(int i, ObjectObserver *objectObserver);
+	void generateWorkers(int i, ObjectObserver *objectObserver);
+
 	void updateAnts();
 	void addAntsToSceneGraph(Node *rootNode);
 	//void putObserver();
+	void printPosGuards();
+	void printPosWorkers();
+
 protected :
-	std::vector<Node*> m_ants;
+	std::vector<Node*> m_guards;
+	std::vector<Node*> m_workers;
 	glm::vec3 m_position;
 	AntMesh m_antMesh;
-	Texture *m_antTexture;
+	Texture *m_guardTexture;
+	Texture *m_workerTexture;
 	Graph<AStarNode, AStarAlgorithm> *m_aggressiveGraph;
 	DecisionTree *m_aggressiveDecisionTree;
+	Graph<AStarNode, AStarAlgorithm> *m_afraidGraph;
+	DecisionTree *m_afraidDecisionTree;
 	int m_numberOfGuards;
 	int m_numberOfWorkers;
 };
