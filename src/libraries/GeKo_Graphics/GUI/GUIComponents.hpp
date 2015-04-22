@@ -23,7 +23,6 @@ namespace GuiElement
   private:
   };
 
-  ///Element to display plain text
   class Text : public Element
   {
   
@@ -41,7 +40,6 @@ namespace GuiElement
 
   };
 
-  ///Element for a simple slider for a float variable
   class SliderFloat : public Element
   {
 
@@ -57,8 +55,6 @@ namespace GuiElement
     float *m_parameter, m_min, m_max;
   };
 
-  ///Class to create a new header for the GUI
-  /** Class can have subelements, which are contained within the header */
   class Header : public Element
   {
   public:
@@ -85,7 +81,6 @@ namespace GuiElement
 
   };
 
-  ///Creates a spacing between the last and next element
   class Spacing : public Element
   {
   public:
@@ -98,7 +93,6 @@ namespace GuiElement
 
   };
 
-  ///Creates a separator line between the last and the next element
   class Separator : public Element
   {
   public:
@@ -111,7 +105,6 @@ namespace GuiElement
 
   };
 
-  ///Instead of moving to the next line, the next item will be placed in the same line as the last one
   class SameLine : public Element
   {
   public:
@@ -124,7 +117,6 @@ namespace GuiElement
 
   };
 
-  ///Class for creating a simple push button
   class PushButton : public Element
   {
   public:
@@ -140,7 +132,6 @@ namespace GuiElement
     std::string m_ID;
   };
 
-  ///Class for a checkbox for a boolean variable
   class Checkbox : public Element
   {
   public:
@@ -161,7 +152,6 @@ namespace GuiElement
 
   };
 
-  ///Box that shows a normal int variable inside of a colored border
   class IntBox : public Element
   {
   public:
@@ -195,7 +185,6 @@ namespace GuiElement
     int *m_number;
   };
 
-  ///Widget with three float values for easy color tweaking
   class ColorEditRGB : public Element
   {
   public:
@@ -212,7 +201,6 @@ namespace GuiElement
     glm::fvec3 *m_colorVec;
   };
 
-  ///Widget with four float values for easy color and alpha tweaking
   class ColorEditRGBA : public Element
   {
   public:
@@ -229,7 +217,6 @@ namespace GuiElement
     glm::fvec4 *m_colorVec;
   };
 
-  //Class to create a game inventory
   class Inventory : public Element
   {
   public:
@@ -291,7 +278,6 @@ namespace GuiElement
   const int width = 50;
   static float arr[width];
 
-  ///Class for showing a progress (Loading, HP Bar,...)
   class ProgressBar : public Element
   {
 
@@ -336,6 +322,12 @@ namespace GuiElement
         }
 
       }
+
+      //ImGui::Text(std::to_string(0).c_str());
+      //ImGui::SameLine();
+      
+      //ImGui::PushID(0);
+      //ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0, 0.0, 0.0, 0.0));
       ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(m_color.r, m_color.g, m_color.b, m_color.a));
       ImGui::PushStyleColor(ImGuiCol_PlotHistogramHovered, ImVec4(m_color.r, m_color.g, m_color.b, m_color.a));
       ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.0f, 0.0f, 0.0f, 00.7f));
@@ -345,6 +337,13 @@ namespace GuiElement
 
       if (ImGui::IsItemHovered())
         ImGui::SetTooltip(" ");
+
+      //ImGui::PopStyleColor(5);
+      //ImGui::PopID();
+      //ImGui::SameLine();
+      //ImGui::Text(std::to_string(m_hpMax).c_str());
+
+      //ImGui::SliderInt(m_ID.c_str(), m_hp, m_hpMin, m_hpMax);
     }
     inline void dispose() { delete this; }
 
@@ -356,7 +355,6 @@ namespace GuiElement
     int *m_hp, m_hpMax, m_hpBarWidth;
   };
   
-  ///Class to create a nested window inside the current GUI
   class NestedWindow
   {
   public:

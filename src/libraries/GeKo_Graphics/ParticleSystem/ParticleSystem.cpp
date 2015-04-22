@@ -27,10 +27,15 @@ ParticleSystem::~ParticleSystem()
 }
 
 
-//void ParticleSystem::active()
-//{
-//	effect->active();
-//}
+void ParticleSystem::start()
+{
+	effect->start();
+}
+
+void ParticleSystem::stop()
+{
+	effect->stop();
+}
 
 void ParticleSystem::update(Camera &cam)
 {

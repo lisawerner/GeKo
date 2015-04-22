@@ -3,6 +3,7 @@
 InputMap::InputMap()
 {
 	m_active = false;
+	m_type = MapType::DEFAULTMAP;
 }
 
 InputMap::~InputMap()
@@ -29,6 +30,10 @@ std::string InputMap::getName(){
 	return m_name;
 }
 
+MapType InputMap::getType(){
+	return m_type;
+}
+
 void InputMap::checkMultipleMappedKeys(int key, GLFWwindow &window){}
 
 void InputMap::setGLFWwindow(GLFWwindow* window)
@@ -40,3 +45,6 @@ GLFWwindow* InputMap::getWindow()
 {
 	return m_usedWindow;
 }
+
+void InputMap::update(Player &p){}
+void InputMap::update(Camera &cam){}
