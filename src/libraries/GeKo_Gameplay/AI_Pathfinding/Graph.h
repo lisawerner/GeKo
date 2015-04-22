@@ -3,6 +3,7 @@
 #include "GeKo_Gameplay/AI_Pathfinding/Algorithm.h"
 #include "GeKo_Gameplay/AI_Pathfinding/AStarNode.h"
 #include "GeKo_Gameplay/AI_Pathfinding/AStarAlgorithm.h"
+#include "GeKo_Graphics/Geometry/ForestData.h"
 #include "GraphNodeType.h"
 #include <sstream>
 #include <vector>
@@ -263,27 +264,6 @@ public:
 		 calculateDistanceToGoal(nodeSpawn);
 	 }
 
-	 ///Another Example-Graph for a AI which will react afraid while the player is nearby
-	 /***/
-	 void setExampleAntAfraid2(glm::vec3 posSpawn, glm::vec3 posPlayer)
-	 {
-		 AStarNode* defaultNode = new AStarNode();
-
-		 AStarNode* nodeSpawn = new AStarNode("Spawn", defaultNode, posSpawn, GraphNodeType::HOME);
-		 std::vector<glm::vec3> trees;
-		 trees.push_back(glm::vec3(16.0, 0.0, 76.0));
-		 trees.push_back(glm::vec3(23.0, 0.0, 74.0));
-		 trees.push_back(glm::vec3(21.5, 0.0, 78.5));
-		 trees.push_back(glm::vec3(15.0, 0.0, 81.5));
-		 trees.push_back(glm::vec3(27.5, 0.0, 88.5));
-		 generateForest(trees, nodeSpawn, defaultNode);
-
-		 addGraphNode(nodeSpawn);
-
-		 AStarAlgorithm* pathfinding = new AStarAlgorithm("pathfinding");
-		 setAlgorithm(pathfinding);
-		 calculateDistanceToGoal(nodeSpawn);
-	 }
 
 	 ///An Example-Graph for a AI which will react aggresive while the player is nearby
 	 /***/
@@ -360,19 +340,38 @@ public:
 
 	 ///A method to create a Forest
 	 /**This is just an example forest. It will contain paths and nodes for the trees.*/
-	 void generateForest(std::vector<glm::vec3> treePositions,AStarNode *nodeSpawn, AStarNode *defaultNode){
+	 void generateForest(std::string nameOfForest, std::vector<glm::vec3> treePositions, AStarNode *nodeSpawn, AStarNode *defaultNode){
 		 //int i = 1;
 		 std::stringstream name;
 		 for (int i = 0; i < treePositions.size(); i++){
-			 name << "Tree" << i;
-			 AStarNode* tree = new AStarNode(name.str(), defaultNode, treePositions.at(i), GraphNodeType::FOOD);
+			 //for (glm::vec3 position : treePositions){
+			 name << nameOfForest << "Tree" << i;
+			 //std::string nametmp = name.str();
+			 AStarNode* tree = new AStarNode(name.str(), defaultNode, treePositions[i], GraphNodeType::FOOD);
 			 Path<AStarNode>* pathSpawnTree = new Path<AStarNode>(1, nodeSpawn, tree);
 			 nodeSpawn->addPath(pathSpawnTree);
 			 Path<AStarNode>* pathTreeSpawn = new Path<AStarNode>(1, tree, nodeSpawn);
 			 tree->addPath(pathTreeSpawn);
 			 addGraphNode(tree);
 			 name.str("");
+			 //i++;
+
 		 }
+	 }
+
+	 void setExampleAntAfraid2(glm::vec3 posSpawn, glm::vec3 posPlayer)
+	 {
+		 //Dieser Graph enthält neben dem Bau auch einige FoodNodes und zwischenwegpunkte
+		 //TODO: Mehr FOODs
+		 //AStarNode* defaultNode = new AStarNode("Default");
+		 AStarNode* defaultNode = new AStarNode();
+		 AStarNode* nodeSpawn = new AStarNode("Spawn", defaultNode, posSpawn, GraphNodeType::HOME);
+		 generateForest("Forest1", TreeData::forest1, nodeSpawn, defaultNode);
+		 generateForest("Forest2", TreeData::forest2, nodeSpawn, defaultNode);
+		 addGraphNode(nodeSpawn);
+		 AStarAlgorithm* pathfinding = new AStarAlgorithm("pathfinding");
+		 setAlgorithm(pathfinding);
+		 calculateDistanceToGoal(nodeSpawn);
 	 }
 
 	

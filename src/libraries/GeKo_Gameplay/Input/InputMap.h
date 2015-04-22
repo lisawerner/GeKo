@@ -1,12 +1,9 @@
 #pragma once
 
-#include "GeKo_Gameplay/Input/MapType.h"
+#include "GeKo_Graphics/Camera/Camera.h"
 #include <map>
 #include <functional>
 #include <GLFW/glfw3.h>
-//Includes for different contexts
-#include "GeKo_Graphics/Camera/Camera.h"
-#include "GeKo_Gameplay/Object/Player.h"
 
 /** InputMap is a superclass of the specific map classes.
 To insert an own specific InputMap, you have to add a class containing an update function, which allocates keys or buttons to a method in the map. 
@@ -36,17 +33,9 @@ public:
 
 	/// The method returns the name of the InputMap
 	std::string getName();
-
-	/// The method return the MapType of the InputMap
-	MapType getType();
 	
 	/// The method checks whether multiple keys are pressed to ensure performing the right action and it's implemented in the specific InputMaps
 	virtual void checkMultipleMappedKeys(int key, GLFWwindow &window);
-
-	/// The method fills the m_map considering the parameter (camera or player)
-	// Implemented in the specific Input Maps
-	virtual void update(Player &p);
-	virtual void update(Camera &cam);
 
 	void setGLFWwindow(GLFWwindow* window);
 	GLFWwindow* getWindow();
@@ -61,8 +50,6 @@ protected:
 	std::string m_name;
 
 	GLFWwindow* m_usedWindow;
-
-	MapType m_type;
 
 };
 

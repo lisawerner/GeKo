@@ -135,10 +135,16 @@ void ShaderProgram::sendSampler2D(std::string uniform, GLuint sampler2Dhandler, 
 	glBindTexture(GL_TEXTURE_2D, sampler2Dhandler);
 }
 
-void ShaderProgram::sendSkyboxTexture(std::string uniform, GLuint sampler2Dhandler)
+void ShaderProgram::sendSkyboxTexture(std::string uniform, GLuint sampler2Dhandler, int textureIndex)
 {
-	glUniform1i(getLocation(uniform), 0);
-	glActiveTexture(GL_TEXTURE0);
+	if (textureIndex > 32)
+	{
+		std::cerr << "Error in ShaderProgram::sendSampler2D - textureIndex too high" << std::endl;
+		return;
+	}
+
+	glUniform1i(getLocation(uniform), textureIndex);
+	glActiveTexture(0x84C0 + textureIndex);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, sampler2Dhandler);
 }
 

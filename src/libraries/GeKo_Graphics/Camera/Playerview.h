@@ -33,4 +33,7 @@ public:
 protected:
 	// m_oldX and m_oldY remember the last x and y value of the mouse position
 	double m_oldX, m_oldY;
+
+	// Angles in x and y direction
+	double m_phi, m_theta;
 };

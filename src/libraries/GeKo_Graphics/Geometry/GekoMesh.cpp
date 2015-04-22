@@ -1,6 +1,6 @@
 #include "GekoMesh.h"
 
-GekoMesh::GekoMesh() : Mesh((char*)RESOURCES_PATH "/Gecko.obj"){
+GekoMesh::GekoMesh() : Mesh((char*)RESOURCES_PATH "/Geko.ply"){
 
 }
 

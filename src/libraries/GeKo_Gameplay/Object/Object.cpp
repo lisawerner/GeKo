@@ -18,8 +18,7 @@ Object::Object()
 	
 		m_speed = 0.01;
 	
-		m_position = glm::vec4(0.0, 0.0, 0.0, 1.0);
-		m_viewDirection = glm::vec4(0.0, 0.0, -1.0, 0.0);
+		m_position = glm::vec3(0.0);
 	
 		m_inventory = new Inventory();
 		
@@ -32,11 +31,11 @@ Object::Object()
 
 Object::~Object(){}
 
-void Object::setPosition(glm::vec4 pos){
+void Object::setPosition(glm::vec3 pos){
 	m_position = pos;
 }
 
-glm::vec4 Object::getPosition()
+glm::vec3 Object::getPosition()
 {
 	return m_position;
 }
@@ -78,7 +77,7 @@ ObjectType Object::getObjectType()
 	return m_type;
 }
 
-glm::vec4 Object::getViewDirection()
+glm::vec3 Object::getViewDirection()
 {
 	return m_viewDirection;
 }
@@ -107,7 +106,7 @@ void Object::updateStates(){
 	if (m_hunger > 0){
 		m_hunger -= 0.01;
 		if (m_hunger <= m_hungerMax / 2){
-			//std::cout << "Object" << m_name << ": Is hungry! Hunger: " << m_hunger << std::endl;
+			std::cout << "Object" << m_name << ": Is hungry! Hunger: " << m_hunger << std::endl;
 			setStates(States::HUNGER, true);
 		}
 		else {
@@ -117,12 +116,11 @@ void Object::updateStates(){
 	}
 	else {
 		m_health--;
-		//::cout << "Object " << m_name << ": Looses health because it is too hungry!" << std::endl;
+		std::cout << "Object looses health because it is too hungry!" << std::endl;
 	}
 	if (m_health == 0){
-		std::cout << "Object " << m_name << ": Died because he was too hungry" << std::endl;
+		std::cout << "Player: Died because he was too hungry" << std::endl;
 		setStates(States::HEALTH, false);
-		
 	}
 }
 
@@ -130,7 +128,7 @@ void Object::move(){}
 
 void Object::eat(){
 	m_hunger = m_hungerMax;
-	//std::cout << "Object" << m_name << ": Has eaten." << std::endl;
+	std::cout << "Object" << m_name << ": Has eaten." << std::endl;
 	setStates(States::HUNGER, false);
 }
 

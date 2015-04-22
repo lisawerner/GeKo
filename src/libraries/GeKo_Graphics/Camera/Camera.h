@@ -42,9 +42,6 @@ public:
 	/// This method sets the width and height of the viewport
 	void setWidthHeight(int width, int height);
 
-	//This method sets the position of the camera
-	void setPosition(glm::vec4 pos);
-
 	/// This method returns the position m_position of the camera
 	glm::vec4 getPosition();
 
@@ -78,21 +75,7 @@ public:
 	/// This method sets m_mouseSpeed
 	void setMouseSpeed(float speed);
 
-	/// This method return the look at m_center
 	glm::vec4 getCenter();
-	/// This method set the m_center
-	void setCenter(glm::vec4 c);
-
-	/// This method returns the angle phi
-	/** Phi is the angle in x direction
-	*/
-	float getPhi();
-	/// This method returns the angle theta
-	/** Theta is the angle in y direction
-	*/
-	float getTheta();
-
-	double getRotationAngle();
 	
 	// Implemented in the specific cameras
 	virtual void moveForward();
@@ -105,12 +88,8 @@ public:
 	virtual void turnRight();
 	virtual void turnUp();
 	virtual void turnDown();
-	//virtual void turn(GLFWwindow* window);
-	virtual void turn(double xpos, double ypos);
 	virtual void increaseRadius();
 	virtual void decreaseRadius();
-	virtual void updateCursor(GLFWwindow* window);
-
 
 protected:
 	// The name identifies the camera
@@ -131,7 +110,7 @@ protected:
 	// The projection matrix transformes vertices into the clip-space
 	glm::mat4 m_projectionMatrix;
 
-	// Position, center(look at) and up are needed to compute the view matrix
+	// Position, center and up are needed to compute the view matrix
 	glm::vec4 m_position, m_center, m_up;
 
 	// Speed of movement by using keys
@@ -142,9 +121,4 @@ protected:
 
 	// m_direction defines the viewing direction
 	glm::vec4 m_direction;
-
-	// Angles in x(phi) and y(theta) direction
-	double m_phi, m_theta;
-	// Angle step
-	float m_rotationAngle;
 };

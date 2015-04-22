@@ -5,7 +5,6 @@ MapTrackball::MapTrackball(Camera &activeCam)
 	m_name = "Trackball";
 	m_active = false;
 	update(activeCam);
-	m_type = MapType::CAMTRACKBALL;
 }
 
 

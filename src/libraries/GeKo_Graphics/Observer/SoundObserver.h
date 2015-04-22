@@ -2,13 +2,12 @@
 #include <glm/ext.hpp>
 #include <GeKo_Graphics/Observer/Observer.h>
 #include <GeKo_Graphics/Scenegraph/Level.h>
-#include <sstream>
 
 /**This Observer handles all the sound actions like the move-sound or the fight-sounds.*/
 class SoundObserver : public Observer<AI, Object_Event>, public Observer<Player, Object_Event>, public Observer<Node, Collision_Event>, public Observer<Quest, Quest_Event>
 {
 public:
-	SoundObserver(Level* level){ m_level = level; m_fires = 0; }
+	SoundObserver(Level* level){ m_level = level; }
 
 	~SoundObserver(){}
 
@@ -16,15 +15,13 @@ public:
 	{
 		std::string name = node.getNodeName();
 		std::string soundName;
-		std::stringstream streamName;
-
 		Node* tmp = m_level->getActiveScene()->getScenegraph()->searchNode(name);
 		switch (event)
 		{
 
 		case Object_Event::OBJECT_MOVED:
 			soundName = node.getSourceName(MOVESOUND_AI);
-		//	node.getSoundHandler()->updateListenerPosition(node.getPosition());
+			//node.getSoundHandler()->updateListenerPosition(node.getPosition());
 			node.updateSourcesInMap();
 			if (soundName != "oor")
 			{
@@ -57,18 +54,8 @@ public:
 				}
 			}
 
-			soundName = node.getSourceName(DEATHSOUND_FLIES_AI);
-			if (soundName != "oor")
-			{
-				if (!(node.getSoundHandler()->sourceIsPlaying(soundName)))
-				{
-					node.getSoundHandler()->playSource(soundName);
-				}
-			}
-
-				
+			m_level->getActiveScene()->getScenegraph()->getRootNode()->deleteChildrenNode(node.getNodeName());			
 			break;
-
 		}
 	}
 
@@ -76,13 +63,12 @@ public:
 	 {
 		 std::string name = node.getNodeName();
 		 std::string soundName;
-		 std::stringstream streamName;
 		 switch (event)
 		 {
 
 		 case Object_Event::OBJECT_MOVED:
 			 soundName =  node.getSourceName(MOVESOUND);
-			 node.getSoundHandler()->updateListenerPosition(glm::vec3(node.getPosition()));
+			 node.getSoundHandler()->updateListenerPosition(node.getPosition());
 			 node.updateSourcesInMap();
 			 if (soundName != "oor")
 			 {
@@ -95,7 +81,8 @@ public:
 			 break;
 
 		 case Object_Event::OBJECT_ROTATED:
-			 node.getSoundHandler()->updateListenerOrientation(glm::vec3(node.getViewDirection()), glm::vec3(0.0, 1.0, 0.0));
+			 node.getSoundHandler()->updateListenerOrientation(node.getViewDirection(), glm::vec3(0.0, 1.0, 0.0));
+			 break;
 
 		 case Object_Event::OBJECT_STOPPED:
 			 soundName = node.getSourceName(MOVESOUND);
@@ -114,14 +101,6 @@ public:
 			 {
 					 node.getSoundHandler()->playSource(soundName);
 			 }
-			 break;
-
-		 case Object_Event::PLAYER_SET_ON_FIRE:
-			 streamName << "Fire" << ++m_fires;
-			 name = streamName.str();
-			 node.getSoundHandler()->generateSource(name, glm::vec3(node.getPosition()), RESOURCES_PATH "/Sound/Feuer_kurz.wav");
-			 node.getSoundHandler()->playSource(name);
-			 streamName.str("");
 			 break;
 		 }
 	 }
@@ -174,6 +153,7 @@ public:
 					}
 				}
 			}
+			break;
 		}
 	}
 
@@ -197,10 +177,9 @@ public:
 			{
 				tmp2->getPlayer()->getSoundHandler()->playSource(soundName);
 			}
+			break;
 		}
 	}
 protected: 
 	Level* m_level;
-	int m_fires;
-	int m_flies;
 };

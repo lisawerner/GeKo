@@ -76,7 +76,7 @@ void main(){
 			vel.y += gravity.y * gravity.w * deltaTime;
 			vel.z += gravity.z * gravity.w * deltaTime;
 
-			if( length(vel) != 0.0)
+			if(length(vel) != 0)
 				vel = vec4(normalize(vel.xyz), vel.w);
 		}
 		
@@ -126,7 +126,7 @@ void main(){
 		velocity[gid] = vel;
 	}
 	else{
-		pos = vec4(emitterPos, 0.0);
+		pos = vec4(emitterPos, -1.0);
 		positions[gid] = pos;
 		vel = vec4(0.0, 0.0, 0.0, 0.0);
 		velocity[gid] = vel;

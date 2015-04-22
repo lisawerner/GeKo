@@ -16,8 +16,6 @@ enum class Object_Event
 
 	PLAYER_EXP,
 
-	PLAYER_LVLUP, 
-
-	PLAYER_SET_ON_FIRE
+	PLAYER_LVLUP
 
 };

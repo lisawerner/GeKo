@@ -7,27 +7,26 @@ Compilation of different Emitters.
 */
 class Effect{
 public:
-	Effect();	//creates an Effect with no Emitters
-	Effect(const char* filepath);	//creates an Effect loaded from a XML file
-	~Effect(); //deletes the Effect
+	Effect();
+	Effect(const char* filepath);
+	~Effect();
 
-	void start();
-	void stop();
+	/*void active();*/
 
-	void addEmitter(Emitter* emitter);	//the Emitter pointer will be stored in a vector of emitter pointers.
-	void removeEmitter(int vectorPosition);	//if it's the first Emitter you added, it's at position 0 and so on
+	void addEmitter(Emitter* emitter);
+	void removeEmitter(int arrayPosition);
 
 	void updateEmitters(Camera &cam);	//compute Shader
 	void renderEmitters(Camera &cam);	//render Shader
 
-	int loadEffect(const char* filepath);	//load an effect from an XML file and replace the current Effect
-	int saveEffect(char* filepath);		//save the settings of this effect to a XML file
+	int loadEffect(const char* filepath);	//TODO: change the currently loaded effect
+	int saveEffect(char* filepath);		//TODO: save the settings of this effect to a file (XML?)
 
 	void setPosition(glm::vec3 newPosition);	//updates the positions of every Emitter
 
 private:
 	std::vector<Emitter*> emitterVec;	//contains all Emitters of the Effect
 
-	//check for a XML Error. Gives feedback what went wrong if something goes wrong
+	//check for XML Error
 	int XMLCheckResult(int result);
 };

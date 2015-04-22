@@ -16,6 +16,10 @@ uniform sampler2D heightMap;
 
 uniform sampler2D depthTexture;
 
+in vec3 passSkyboxTexCoord;
+uniform samplerCube cubeMap;
+uniform int renderSkybox;
+
 uniform float fWindowHeight;
 uniform float fWindowWidth;
 uniform float thresholdValue;
@@ -158,6 +162,11 @@ void main(){
 	positionOutput = passPosition;
 	normalOutput = vec4(normalize(passNormal), 1);
 	
+	if(renderSkybox != 0)
+	{
+		colorOutput = texture(cubeMap, passSkyboxTexCoord);	
+	}else
+	{
 	if (useTexture != 0)
 	{
 		colorOutput = texture(fboTexture,passUV);
@@ -203,5 +212,6 @@ void main(){
 						   
 		vec3 calcNormal = vec3((texture(normalMap,finalUV).rgb * 2.0 - 1.0)*tangentToWorldSpace);
 		normalOutput =  vec4(calcNormal,1.0);
+	}
 	}
 }

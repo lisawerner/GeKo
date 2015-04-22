@@ -25,6 +25,9 @@ public:
 	/**/
 	Scenegraph* getScenegraph();
 	void setScenegraph(Scenegraph* scenegraph);
+	Node* getSkyboxNode();
+	void setSkyboxNode(Node* skyboxNode);
+	bool hasSkybox();
 
 	///The render call which will be forwarded to the scenegraph object of the scene
 	/**Each Render call needs a shader-Unit, with which the rendering progress will be startet*/
@@ -32,6 +35,6 @@ public:
 
 protected:
 	std::string m_sceneName;
-
+	Node* m_skyboxNode;
 	Scenegraph* m_sceneGraph;
 };

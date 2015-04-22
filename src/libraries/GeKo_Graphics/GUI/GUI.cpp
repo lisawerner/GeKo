@@ -8,7 +8,7 @@
 #include<GLFW/glfw3.h>
 #include<imgui.cpp>
 
-// Shader variables
+//create Shader variables
 static int shader_handle, vert_handle, frag_handle;
 static int texture_location, proj_mtx_location;
 static int position_location, uv_location, colour_location;
@@ -40,9 +40,11 @@ GUI::GUI(std::string windowName, int windowWidth, int windowHeight) :
 
 GUI::~GUI()
 {
+  //delete all GUI elements
   for (std::vector<GuiElement::Element*>::iterator it = m_guiElements->begin(); it != m_guiElements->end(); ++it)
     (*it)->dispose();
 
+  //delete shader variables and deallocate memory
   if (vao_handle) glDeleteVertexArrays(1, &vao_handle);
   if (vbo_handle) glDeleteBuffers(1, &vbo_handle);
   glDetachShader(shader_handle, vert_handle);
@@ -52,7 +54,6 @@ GUI::~GUI()
   glDeleteProgram(shader_handle);
 
   ImGui::Shutdown();
-
 }
 
 ImVec4 clear_col = ImColor(114, 144, 154);
@@ -70,6 +71,7 @@ void GUI::render(Window& window)
 
   update(window);
 
+  //set window options
   ImGuiWindowFlags window_flags = 0;
   if (!m_titlebar)  window_flags |= ImGuiWindowFlags_NoTitleBar;
   if (m_border)     window_flags |= ImGuiWindowFlags_ShowBorders;
@@ -82,6 +84,7 @@ void GUI::render(Window& window)
   ImGui::SetNextWindowSize(ImVec2(m_windowWidth,m_windowHeight));
   ImGui::Begin(m_windowName.c_str(), &m_visible, ImVec2(m_windowWidth, m_windowHeight), m_bgAlpha, window_flags);
 
+  //render all elements
   for (std::vector<GuiElement::Element*>::iterator it = m_guiElements->begin(); it != m_guiElements->end(); ++it)
   {
       (*it)->render();

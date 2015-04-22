@@ -3,7 +3,8 @@ include(${CMAKE_MODULE_PATH}/DefaultLibrary.cmake)
 
 file(GLOB_RECURSE HEADER *.h)
 file(GLOB_RECURSE CPP *.cpp)
-SOURCE_GROUP(" " FILES 	${HEADER} ${CPP})
+file(GLOB_RECURSE HPP *.hpp)
+SOURCE_GROUP(" " FILES 	${HEADER} ${CPP} ${HPP})
 
 MACRO(SUBDIRLIST result curdir)
   FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)

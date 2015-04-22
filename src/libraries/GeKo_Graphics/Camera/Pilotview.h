@@ -44,5 +44,9 @@ public:
 
 	/// The method changes viewing direction by turning down
 	void turnDown();
+
+protected:
+	// Angles in x and y direction
+	double m_phi, m_theta;
 };
 
