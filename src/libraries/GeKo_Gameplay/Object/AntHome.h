@@ -1,6 +1,6 @@
 #pragma once
 #include "GeKo_Gameplay/Object/Object.h"
-#include "GeKo_Gameplay/Object/Ai.h"
+#include "GeKo_Gameplay/Object/AI.h"
 #include "GeKo_Graphics/Geometry/AntMesh.h"
 #include "GeKo_Graphics/Scenegraph/Node.h"
 #include "GeKo_Graphics/Material/Texture.h"
