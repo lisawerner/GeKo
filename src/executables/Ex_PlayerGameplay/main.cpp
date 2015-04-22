@@ -297,7 +297,7 @@ int main()
 	Graph<AStarNode, AStarAlgorithm>* antAfraidGraph = new Graph<AStarNode, AStarAlgorithm>();
 	antAfraidGraph->setExampleAntAfraid(posSpawn, posFood, posDefaultPlayer);
 
-	Anthome antHome(posSpawn, antMesh, &texCV, &texCV, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
+	AntHome antHome(posSpawn, antMesh, &texCV, &texCV, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
 	//antHome.generateGuards(5, &aiObserver);
 	antHome.generateWorkers(1, &aiObserver);
 	antHome.addAntsToSceneGraph(testScene.getScenegraph()->getRootNode());
