@@ -5,7 +5,6 @@ MapPilotview::MapPilotview(Camera &activeCam)
 	m_active = false;
 	m_name = "Pilotview";
 	update(activeCam);
-	m_type = MapType::CAMPILOTVIEW;
 }
 
 MapPilotview::~MapPilotview()

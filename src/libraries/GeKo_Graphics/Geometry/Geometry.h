@@ -1,20 +1,36 @@
 #pragma once
 #include <glm/glm.hpp>
+#include "GeKo_Graphics/StaticMesh.h"
 #include<vector>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <GeKo_Graphics/Buffer.h>
 #include <GeKo_Graphics/BufferIndex.h>
+#include <Geko_Resource/Handle/Handle.hpp>
 
 /*This class should be used as a interface class. It provides two Methods to load Data and to render the Vertice Data. 
   Every Geometry Object which will inherit this class should use this methods. A vector for the vertices is provided as well.*/
+using Normal = glm::vec3;
+using Vertex = glm::vec4;
+using Uv = glm::vec2;
+using Index = GLuint;
+
+class Geometry;
+struct StaticMesh{
+  std::vector<Vertex> vertices;
+  std::vector<Normal> normals;
+  std::vector<Uv> uvs;
+  std::vector<Index> indicies;
+  Geometry toGeometry();
+};
 class Geometry
 {
 public:
 	///Standard constructor, sets the m_wasLoaded boolean to false
 	/**/
 	Geometry();
-	~Geometry();
+  Geometry(const StaticMesh &mesh);
+  ~Geometry();
 
 	///A Method to load Buffer
 	/**The vertices Data from m_vertices will be loaded into Buffers, so the Shader can use this information for the position of the object*/

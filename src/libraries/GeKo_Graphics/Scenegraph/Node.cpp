@@ -18,9 +18,9 @@ Node::Node(std::string nodeName)
 	m_hasGravity = false;
 	m_hasObject = false; 
 	m_hasParticleSystem = false;
-	m_particleActive = false;
 
 	m_type = ClassType::OBJECT;
+	m_parentNode = nullptr;
 }
 
 
@@ -265,14 +265,6 @@ bool Node::hasParticleSystem()
 	return m_hasParticleSystem;
 }
 
-bool Node::isParticleActive(){
-	return m_particleActive;
-}
-
-void Node::setParticleActive(bool b){
-	m_particleActive = b;
-}
-
 Geometry* Node::getGeometry()
 {
 	if (m_hasGeometry)
@@ -358,7 +350,7 @@ void Node::addHeightMap(Texture* heightmap, float heightScale, float heightBias,
 	m_hasHeightMap = true;
 }
 
-Camera* Node::getCamera()
+StrategyCamera* Node::getCamera()
 {
 	if (m_hasCamera)
 	{
@@ -371,29 +363,31 @@ Camera* Node::getCamera()
 	}
 }
 
-void Node::setCamera(Camera* camera)
+void Node::setCamera(StrategyCamera* camera)
 {
 	m_camera = camera;
 	m_hasCamera = true;
 
-	setCameraToPlayer();
-}
-
-void Node::setCameraToPlayer(){
 	if (m_hasObject)
 	{
 		if (m_type == ClassType::PLAYER)
 		{
-			glm::vec3 camPosition;
-			camPosition = glm::vec3(m_player->getPosition() + (m_player->getViewDirection()*glm::vec4(-5.0, -5.0, -5.0, 1.0)));
-			camPosition.y += 3.0;
-			m_camera->setPosition(glm::vec4(camPosition, 1.0));
-			m_camera->setLookAt(glm::vec3(m_player->getPosition() + m_player->getViewDirection()));
-		}
+			m_player->setPosition(glm::vec3(m_camera->getCenter().x, m_camera->getCenter().y, m_camera->getCenter().z));
+			addTranslation(m_player->getPosition());
+
+			//TODO: Abfrage, welche Kamera-Art benutzt werden soll
+			m_camera->setCenter(glm::vec4(m_camera->getCenter().x, m_player->getPosition().y + 2.0f, m_camera->getCenter().z, 1.0));
+			m_camera->setRadius(2.5f);	
+		}	
 	}
+
 }
 
-
+void Node::setCamera(Camera* camera)
+{
+	m_otherCamera = camera;
+	m_hasCamera = true;
+}
 
 BoundingSphere* Node::getBoundingSphere()
 {
@@ -459,10 +453,10 @@ void Node::setObject(AI* object)
 	m_hasObject = true;
 
 	m_viewArea = new BoundingSphere(m_sphere->radius, m_sphere->center);
-	m_viewArea->center += glm::vec3(object->getViewDirection()) * glm::vec3(m_sphere->radius, m_sphere->radius, m_sphere->radius);
+	m_viewArea->center += object->getViewDirection() * glm::vec3(m_sphere->radius, m_sphere->radius, m_sphere->radius);
 	m_boundingList.push_back(m_viewArea);
 
-	addTranslation(glm::vec3(object->getPosition()));
+	addTranslation(object->getPosition());
 }
 
 Player* Node::getPlayer()
@@ -488,10 +482,10 @@ void Node::setObject(Player* object)
 
 	if (m_hasCamera)
 	{
-		m_player->setPosition(glm::vec4(m_camera->getCenter().x, 0.0f, m_camera->getCenter().z, 1.0));
+		m_player->setPosition(glm::vec3(m_camera->getCenter().x, 0.0f, m_camera->getCenter().z));
 	}
 
-	addTranslation(glm::vec3(m_player->getPosition()));
+	addTranslation(m_player->getPosition());
 }
 
 
@@ -516,7 +510,7 @@ void Node::setObject(StaticObject* object)
 	m_hasObject = true;
 	m_staticObject = object;
 
-	addTranslation(glm::vec3(object->getPosition()));
+	addTranslation(object->getPosition());
 }
 
 ClassType Node::getType()
@@ -587,17 +581,17 @@ void Node::render(ShaderProgram &shader)
 			if (m_hasGravity){
 				if ((m_type == ClassType::PLAYER | m_type == ClassType::PLAYER) & m_type != ClassType::OBJECT)
 				{
-					m_player->setPosition(glm::vec4(glm::vec3(m_player->getPosition()) + m_Gravity->getGravity(), 1.0));
-					addTranslation(glm::vec3(m_player->getPosition()));
+					m_player->setPosition(m_player->getPosition() + m_Gravity->getGravity());
+					addTranslation(m_player->getPosition());
 					if (m_hasCamera)
 					{
-						setCameraToPlayer();
+						m_camera->setCenter(glm::vec4(m_player->getPosition(), 1.0));
 					}
 				}
 				else if ((m_type == ClassType::AI))
 				{
-					m_ai->setPosition(glm::vec4(glm::vec3(m_ai->getPosition()) + m_Gravity->getGravity(), 1.0));
-					addTranslation(glm::vec3(m_ai->getPosition()));
+					m_ai->setPosition(m_ai->getPosition() + m_Gravity->getGravity());
+					addTranslation(m_ai->getPosition());
 				}
 				else if (m_type == ClassType::OBJECT)
 				{
@@ -609,18 +603,16 @@ void Node::render(ShaderProgram &shader)
 			{
 				if (m_hasCamera)
 				{
-					//addRotation(-(m_camera->getRotationAngle()), glm::vec3(0.0, 1.0, 0.0));
-					//m_player->rotateView((m_camera->getRotationAngle()), 0.0f);
-
-					/*glm::vec3 camPosition;
-					camPosition = glm::vec3(m_player->getPosition() + (m_player->getViewDirection()*glm::vec4(-5.0)));
-					camPosition.y += 3.0;
-					m_camera->setPosition(glm::vec4(camPosition, 1.0));
-					m_camera->setLookAt(glm::vec3(m_player->getPosition() + m_player->getViewDirection()));*/
+					addRotation(-(m_camera->getXAngle()), glm::vec3(0.0, 1.0, 0.0));
+					m_player->rotateView((m_camera->getXAngle()), 0.0f);
 				}
 			}
 
-			modelMatrix = getParentNode()->getModelMatrix() * m_modelMatrix;
+			if (m_parentNode)
+				modelMatrix = getParentNode()->getModelMatrix() * m_modelMatrix;
+			else
+				modelMatrix = m_modelMatrix;
+
 			shader.sendMat4("modelMatrix", modelMatrix);
 			shader.sendMat4("previousModelMatrix", m_PrevModelMatrix);
 			m_PrevModelMatrix = modelMatrix;
@@ -675,19 +667,15 @@ void Node::render(ShaderProgram &shader)
 	}
 	else {
 		//Extra Render-Methode für ein Partikel-System
-		if (m_particleActive){
-			renderParticle(shader);
-		}
+		renderParticles();
 	}
 }
 
-void Node::renderParticle(ShaderProgram &shader)
+void Node::renderParticles()
 
 {
 
-	//TODO: Particle-System muss gerendert werden!
-
-	m_particleSystem->update(*m_camera);
-	m_particleSystem->render(*m_camera);
+	m_particleSystem->update(*m_otherCamera);
+	m_particleSystem->render(*m_otherCamera);
 
 }

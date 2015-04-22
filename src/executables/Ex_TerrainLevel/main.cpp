@@ -10,7 +10,7 @@
 #include <GeKo_Graphics/ShaderInclude.h>
 
 #include <GeKo_Graphics/AIInclude.h>
-#include "GeKo_Gameplay/AI_Decisiontree/DecisionTree.h"
+#include <GeKo_Gameplay/AI_Decisiontree/DecisionTree.h>
 #include <GeKo_Gameplay/Object/Geko.h>
 #include <GeKo_Gameplay/Object/AI.h>
 
@@ -28,6 +28,7 @@
 #include <GeKo_Graphics/Observer/GravityObserver.h>
 #include <GeKo_Graphics/Observer/SoundObserver.h>
 #include <GeKo_Graphics/Observer/QuestObserver.h>
+#include <GeKo_Graphics/Geometry/ForestData.h>
 
 #include <GeKo_Gameplay/Questsystem/ItemReward.h>
 #include <GeKo_Gameplay/Questsystem/ExpReward.h>
@@ -36,6 +37,7 @@
 
 #include <GeKo_Graphics/GUI/GUI.h>
 #include <GeKo_Graphics/GUI/GUIComponents.hpp>
+
 
 //===================================================================//
 //==================Things you need globally==========================//
@@ -198,6 +200,8 @@ int main()
 	geko.setSourceName(QUESTSOUND, "Quest", RESOURCES_PATH "/Sound/jingle.wav");
 	geko.setSourceName(ITEMSOUND, "Item", RESOURCES_PATH "/Sound/itempickup.wav");
 
+	sfh.playSource("Hintergrund");
+	sfh.setGain("Hintergrund", 0.5f);
 	sfh.disableLooping("Essen");
 	sfh.disableLooping("Quest");
 	sfh.disableLooping("Item");
@@ -212,7 +216,7 @@ int main()
 	StaticObject terrainObject;
 	terrainObject.setClassType(ClassType::TERRAIN);
 	
-	Texture terrainTex((char*)RESOURCES_PATH "/Grass.jpg");
+	Texture terrainTex((char*)RESOURCES_PATH "/Grass2.jpg");
 
 	Terrain terrain2((char*)RESOURCES_PATH "/heightmap.jpg", 0.0f, 0.0f);
 	Node terrainNode2("Terrain");
@@ -252,6 +256,29 @@ int main()
 	testLevel.addScene(&testScene);
 	testLevel.changeScene("testScene");
 	testLevel.setTerrain(&terrain2);
+
+	//===================================================================//
+	//==================Generating Forest===============================//
+	//==================================================================//
+
+	TreeMesh tree;
+	std::stringstream name;
+	for (int i = 0; i<TreeData::forest1.size(); i++)
+	{
+		name << "Forest1Tree" << i;
+		std::string stringname = name.str();
+		StaticObject *treeStatic = new StaticObject();
+		treeStatic->setTree(50 / TreeData::forest1.size());
+		Node *treeNode = new Node(stringname);
+		treeNode->addGeometry(&tree);
+		treeNode->setObject(treeStatic);
+		treeNode->addTranslation(TreeData::forest1[i].x, terrain2.getHeight(glm::vec2(TreeData::forest1[i].x, TreeData::forest1[i].z)), TreeData::forest1[i].z);
+		treeNode->getBoundingSphere()->radius = 2.5;
+		testScene.getScenegraph()->getRootNode()->addChildrenNode(treeNode);
+		name.str("");
+
+	}
+
 
 	//==================Add Camera to Scene============================//
 	testScene.getScenegraph()->addCamera(&cam);
@@ -303,8 +330,7 @@ int main()
 	//==================================================================//
 	float lastTime = glfwGetTime();
 
-	sfh.playSource("Hintergrund");
-	sfh.setGain("Hintergrund", 0.5f);
+	
 
 
 	while (!glfwWindowShouldClose(testWindow.getWindow()))

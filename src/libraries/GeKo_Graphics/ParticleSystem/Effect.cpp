@@ -21,17 +21,12 @@ Effect::~Effect()
 }
 
 
-void Effect::start(){
-	for (auto emitter : emitterVec){
-		emitter->start();
-	}
-}
-
-void Effect::stop(){
-	for (auto emitter : emitterVec){
-		emitter->stop();
-	}
-}
+//void Effect::active()
+//{
+//	for (auto emitter : emitterVec){
+//		emitter->active();
+//	}
+//}
 
 void Effect::addEmitter(Emitter* emitter)
 {
@@ -65,7 +60,7 @@ void Effect::setPosition(glm::vec3 newPosition)
 {
 	for (auto emitter : emitterVec){
 		//why should I do this glm????:
-		glm::vec3 pos = emitter->getLocalPosition();
+		glm::vec3 pos = emitter->getPosition();
 		glm::vec3 result(0.0, 0.0, 0.0);
 		result.x = pos.x + newPosition.x;
 		result.y = pos.y + newPosition.y;
@@ -371,11 +366,6 @@ int Effect::loadEffect(const char* filepath)
 				error = tex->QueryFloatText(&deathTime);
 				XMLCheckResult(error);
 
-				float blendingTime;
-				tex = scaling->FirstChildElement("BlendingTime");
-				error = tex->QueryFloatText(&blendingTime);
-				XMLCheckResult(error);
-
 				bool rotateLeft;
 				tex = scaling->FirstChildElement("RotateLeft");
 				error = tex->QueryBoolText(&rotateLeft);
@@ -413,11 +403,6 @@ int Effect::loadEffect(const char* filepath)
 				error = tex->QueryFloatText(&deathTime);
 				XMLCheckResult(error);
 
-				float blendingTime;
-				tex = scaling->FirstChildElement("BlendingTime");
-				error = tex->QueryFloatText(&blendingTime);
-				XMLCheckResult(error);
-
 				bool rotateLeft;
 				tex = scaling->FirstChildElement("RotateLeft");
 				error = tex->QueryBoolText(&rotateLeft);
@@ -428,8 +413,8 @@ int Effect::loadEffect(const char* filepath)
 				error = tex->QueryFloatText(&rotationSpeed);
 				XMLCheckResult(error);
 
-				emitter->defineLook(useTexture, particleSize,
-					birthTime, deathTime, blendingTime, rotateLeft, rotationSpeed);
+				emitter->defineLook(useTexture, particleSize, 
+					birthTime, deathTime, rotateLeft, rotationSpeed);
 			}
 			
 		}
@@ -459,7 +444,7 @@ int Effect::saveEffect(char* filepath)
 		emitterNode->InsertEndChild(element);
 
 		element = doc.NewElement("Position");
-		glm::vec3 position = emitter->getLocalPosition();
+		glm::vec3 position = emitter->getPosition();
 		element->SetAttribute("x", position.x);
 		element->SetAttribute("y", position.y);
 		element->SetAttribute("z", position.z);
@@ -569,9 +554,9 @@ int Effect::saveEffect(char* filepath)
 			temp->SetText(emitter->getPhysicAttMovementHorizontalZ());
 			physic->InsertEndChild(temp);
 
-			temp = doc.NewElement("Speed");
-			temp->SetText(emitter->getSpeed());
-			physic->InsertEndChild(temp);
+			//temp = doc.NewElement("MovementLength");
+			//temp->SetText(emitter->m_movementLength);
+			//physic->InsertEndChild(temp);
 			element->InsertEndChild(physic);
 		}
 		emitterNode->InsertEndChild(element);
@@ -639,10 +624,6 @@ int Effect::saveEffect(char* filepath)
 			tex->SetText(emitter->getTexDeathTime());
 			scaling->InsertEndChild(tex);
 
-			tex = doc.NewElement("BlendingTime");
-			tex->SetText(emitter->getTexBlendingTime());
-			scaling->InsertEndChild(tex);
-
 			tex = doc.NewElement("RotateLeft");
 			tex->SetText(emitter->getTexRotateLeft());
 			scaling->InsertEndChild(tex);
@@ -670,10 +651,6 @@ int Effect::saveEffect(char* filepath)
 
 			tex = doc.NewElement("DeathTime");
 			tex->SetText(emitter->getTexDeathTime());
-			scaling->InsertEndChild(tex);
-
-			tex = doc.NewElement("BlendingTime");
-			tex->SetText(emitter->getTexBlendingTime());
 			scaling->InsertEndChild(tex);
 
 			tex = doc.NewElement("RotateLeft");

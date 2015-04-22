@@ -53,7 +53,9 @@ public:
   void printInfo();
 
   void init(int windowWidth, int windowHeight);
+  
   void renderScene(Scene &scene, Window &window);
+  void renderSkybox(Skybox &skybox);
 
   ///renders the given GUI
   void renderGUI(GUI &guiToRender, Window &window);

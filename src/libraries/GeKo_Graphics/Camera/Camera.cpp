@@ -16,8 +16,6 @@ Camera::Camera(std::string name){
 
 	m_viewMatrix = glm::lookAt(glm::vec3(m_position), glm::vec3(m_center), glm::vec3(m_up));
 	m_projectionMatrix = glm::perspective(m_fov, m_width / (float)m_height, m_near, m_far);
-
-	m_rotationAngle = 0;
 }
 
 Camera::~Camera(){
@@ -66,10 +64,6 @@ void Camera::setWidthHeight(int width, int height){
 	m_height = height;
 }
 
-void Camera::setPosition(glm::vec4 pos){
-	m_position = pos;
-}
-
 glm::vec4 Camera::getPosition(){
 	return m_position;
 }
@@ -110,23 +104,6 @@ glm::vec4 Camera::getCenter(){
 	return m_center;
 }
 
-void Camera::setCenter(glm::vec4 c){
-	m_center = c;
-}
-
-float Camera::getPhi(){
-	return m_phi;
-}
-
-float Camera::getTheta(){
-	return m_theta;
-}
-
-double Camera::getRotationAngle()
-{
-	return m_rotationAngle;
-}
-
 void Camera::moveForward(){}
 void Camera::moveBackward(){}
 void Camera::moveLeft(){}
@@ -137,8 +114,5 @@ void Camera::turnLeft(){}
 void Camera::turnRight(){}
 void Camera::turnUp(){}
 void Camera::turnDown(){}
-//void Camera::turn(GLFWwindow* window){}
-void Camera::turn(double xpos, double ypos){}
 void Camera::increaseRadius(){}
 void Camera::decreaseRadius(){}
-void Camera::updateCursor(GLFWwindow* window){}

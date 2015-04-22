@@ -5,7 +5,6 @@ MapPlayerview::MapPlayerview(Camera &activeCam)
 	m_active = false;
 	m_name = "Playerview";
 	update(activeCam);
-	m_type = MapType::CAMPLAYERVIEW;
 }
 
 MapPlayerview::~MapPlayerview()

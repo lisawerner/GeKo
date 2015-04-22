@@ -44,9 +44,6 @@ public:
 	bool containsCamera(std::string cameraName);
 	void addCamera(Camera* camera);
 
-	void addParticleSystem(ParticleSystem* ps);
-	std::vector<ParticleSystem*>* getParticleSet();
-
 protected:
 
 	std::string m_scenegraphName;
@@ -54,6 +51,4 @@ protected:
 	
 	Camera* m_activeCamera;
 	std::vector<Camera*> m_cameraSet;
-
-	std::vector<ParticleSystem*> m_particleSet;
 };

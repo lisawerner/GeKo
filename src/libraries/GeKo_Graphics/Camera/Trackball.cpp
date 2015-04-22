@@ -20,8 +20,6 @@ Trackball::Trackball(std::string name){
 	m_sensitivity = 0.01;
 
 	m_direction = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
-
-	m_rotationAngle = 0;
 }
 
 Trackball::~Trackball()
@@ -71,9 +69,6 @@ void Trackball::moveBackward(){
 }
 
 void Trackball::moveLeft(){
-	m_rotationAngle = -m_keySpeed* m_sensitivity;
-	
-
 	m_phi -= m_keySpeed* m_sensitivity;
 	if (m_phi < 0) m_phi += 2 * glm::pi<float>();
 	else if (m_phi > 2 * glm::pi<float>()) m_phi -= 2 * glm::pi<float>();
@@ -88,8 +83,6 @@ void Trackball::moveLeft(){
 }
 
 void Trackball::moveRight(){
-	m_rotationAngle = m_keySpeed* m_sensitivity;
-
 	m_phi += m_keySpeed* m_sensitivity;
 	if (m_phi < 0) m_phi += 2 * glm::pi<float>();
 	else if (m_phi > 2 * glm::pi<float>()) m_phi -= 2 * glm::pi<float>();
