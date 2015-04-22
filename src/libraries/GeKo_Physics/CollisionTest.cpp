@@ -137,7 +137,10 @@ void CollisionTest::collectNodes(Node* root)
 {
 	for (int i = 0; i < root->getChildrenSet()->size(); i++)
 	{
-		addNode(root->getChildrenSet()->at(i));
-		collectNodes(root->getChildrenSet()->at(i));
+		if (root->getChildrenSet()->at(i)->hasObject()){
+			addNode(root->getChildrenSet()->at(i));
+			collectNodes(root->getChildrenSet()->at(i));
+		}
+		//TODO: If you want a collision with sound, you have to upgrade it yourself 
 	}
 }

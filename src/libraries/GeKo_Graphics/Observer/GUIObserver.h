@@ -17,7 +17,7 @@ public:
 		switch (event)
 		{
 		case Object_Event::PLAYER_EXP:
-			break;
+		
 		}
 	 }
 

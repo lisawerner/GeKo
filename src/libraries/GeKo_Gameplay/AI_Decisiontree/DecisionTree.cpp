@@ -78,11 +78,11 @@ void DecisionTree::setStates(std::vector<std::pair<States, bool>> list, States s
 
 void DecisionTree::setAntTreeAfraid(){
 	DecisionTreeNode defaultNode;
-	m_rootNode = new DecisionTreeNode(1, &defaultNode);
-	DecisionTreeNode* lView = new DecisionTreeNode(2, &defaultNode);
-	DecisionTreeNode* rView = new DecisionTreeNode(3, &defaultNode);
-	DecisionTreeNode* lHunger = new DecisionTreeNode(4, &defaultNode);
-	DecisionTreeNode* rHunger = new DecisionTreeNode(5, &defaultNode);
+	m_rootNode = new DecisionTreeNode(1, &defaultNode, "root -> State:VIEW");
+	DecisionTreeNode* lView = new DecisionTreeNode(2, &defaultNode, "lView -> T:HOME");
+	DecisionTreeNode* rView = new DecisionTreeNode(3, &defaultNode, "rView -> State:HUNGER");
+	DecisionTreeNode* lHunger = new DecisionTreeNode(4, &defaultNode, "lHunger -> T:FOOD");
+	DecisionTreeNode* rHunger = new DecisionTreeNode(5, &defaultNode, "rHunger -> T:HOME");
 
 	m_rootNode->setStateID(States::VIEW);
 
