@@ -245,7 +245,7 @@ public:
 
 	///A method to tell the Node to render its Particle-System
 	/**This Method will be used by the Node if a Particle system was attached to it, only!*/
-	void renderParticle(ShaderProgram &shader);
+	void renderParticles();
 
 protected:
 	std::string m_nodeName;

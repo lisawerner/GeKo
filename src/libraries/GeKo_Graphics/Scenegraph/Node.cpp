@@ -667,15 +667,15 @@ void Node::render(ShaderProgram &shader)
 	}
 	else {
 		//Extra Render-Methode für ein Partikel-System
-		renderParticle(shader);
+		renderParticles();
 	}
 }
 
-void Node::renderParticle(ShaderProgram &shader)
+void Node::renderParticles()
 
 {
 
-	m_particleSystem->update();
+	m_particleSystem->update(*m_otherCamera);
 	m_particleSystem->render(*m_otherCamera);
 
 }

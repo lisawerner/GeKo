@@ -53,6 +53,7 @@ int main()
 	snow->setAreaEmitting(false, true, 10.0, 10000);
 	snow->addTexture(snowTex, 0.0);
 	snow->defineLook(true, 0.04, 2.0);
+	snow->setMovable(true);
 
 	//FINAL EMITTER WHITE SMOKE
 	Emitter* smokeWhite = new Emitter(0, glm::vec3(0.0, 0.0, 5.0), 0.0, 0.4, 1, 8.0, true);
@@ -79,28 +80,25 @@ int main()
 	//PARTICLE SYSTEM
 	Effect* sn = new Effect();
 	sn->addEmitter(snow);
-	ParticleSystem* psSnow = new ParticleSystem(glm::vec3(0, 10, -5), sn);
+	ParticleSystem* psSnow = new ParticleSystem(glm::vec3(0, 2, -5), sn);
 	Node snowNode("snowNode");
 	snowNode.setCamera(&cam);
 	snowNode.addParticleSystem(psSnow);
 	
-
 	Effect* smWhi = new Effect();
 	smWhi->addEmitter(smokeWhite);
-	ParticleSystem* psSmokeWhite = new ParticleSystem(glm::vec3(0, 0, 5), smWhi);
+	ParticleSystem* psSmokeWhite = new ParticleSystem(glm::vec3(0, 0, 3), smWhi);
 	Node whiteSmokeNode("whiteSmokeNode");
 	whiteSmokeNode.setCamera(&cam);
 	whiteSmokeNode.addParticleSystem(psSmokeWhite);
 	
-
 	Effect* smBla = new Effect();
 	smBla->addEmitter(smokeBlack);
-	ParticleSystem* psSmokeBlack = new ParticleSystem(glm::vec3(0, 0, -10), smBla);
+	ParticleSystem* psSmokeBlack = new ParticleSystem(glm::vec3(0, 0, -3), smBla);
 	Node blackSmokeNode("blackSmokeNode");
 	blackSmokeNode.setCamera(&cam);
 	blackSmokeNode.addParticleSystem(psSmokeBlack);
 	
-
 	// Shader
 	VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader3D/ColorShader3D.vert")));
 	FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader3D/ColorShader3D.frag")));
