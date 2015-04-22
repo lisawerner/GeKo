@@ -52,8 +52,7 @@ int main()
 	snow->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 1.0), 0.5f);
 	snow->setAreaEmitting(false, true, 10.0, 10000);
 	snow->addTexture(snowTex, 0.0);
-	snow->defineLook(true, 0.04, 2.0);
-	snow->setMovable(true);
+	snow->useTexture(true, 0.04, 2.0);
 
 	//FINAL EMITTER WHITE SMOKE
 	Emitter* smokeWhite = new Emitter(0, glm::vec3(0.0, 0.0, 5.0), 0.0, 0.4, 1, 8.0, true);
@@ -63,7 +62,7 @@ int main()
 	smokeWhite->addTexture(smokeWhiteTex2, 0.25);
 	std::vector<float> smokeWhiteSize{ 0.05f, 0.5f, 0.75f, 1.2f };
 	std::vector<float> smokeWhiteTime{ 0.0f, 0.4f, 0.75f, 1.0f };
-	smokeWhite->defineLook(true, smokeWhiteSize, smokeWhiteTime, 1.0, 4.0, 4.0, false, 0.3);
+	smokeWhite->useTexture(true, smokeWhiteSize, smokeWhiteTime, 1.0, 4.0, 4.0, false, 0.3);
 	smokeWhite->switchToGeometryShader();
 
 	//FINAL EMITTER BLACK SMOKE
@@ -74,31 +73,34 @@ int main()
 	smokeBlack->addTexture(smokeBlackTex2, 0.08);
 	std::vector<float> smokeBlackSize{ 0.1f, 0.4f, 0.8f, 1.2f };
 	std::vector<float> smokeBlackTime{ 0.0f, 0.2f, 0.75f, 1.0f };
-	smokeBlack->defineLook(true, smokeBlackSize, smokeBlackTime, 1.0, 4.0, 4.0, false, 0.3);
+	smokeBlack->useTexture(true, smokeBlackSize, smokeBlackTime, 1.0, 4.0, 4.0, false, 0.3);
 	smokeBlack->switchToGeometryShader();
 
 	//PARTICLE SYSTEM
 	Effect* sn = new Effect();
 	sn->addEmitter(snow);
-	ParticleSystem* psSnow = new ParticleSystem(glm::vec3(0, 2, -5), sn);
+	ParticleSystem* psSnow = new ParticleSystem(glm::vec3(0, 10, -5), sn);
 	Node snowNode("snowNode");
 	snowNode.setCamera(&cam);
 	snowNode.addParticleSystem(psSnow);
 	
+
 	Effect* smWhi = new Effect();
 	smWhi->addEmitter(smokeWhite);
-	ParticleSystem* psSmokeWhite = new ParticleSystem(glm::vec3(0, 0, 3), smWhi);
+	ParticleSystem* psSmokeWhite = new ParticleSystem(glm::vec3(0, 0, 5), smWhi);
 	Node whiteSmokeNode("whiteSmokeNode");
 	whiteSmokeNode.setCamera(&cam);
 	whiteSmokeNode.addParticleSystem(psSmokeWhite);
 	
+
 	Effect* smBla = new Effect();
 	smBla->addEmitter(smokeBlack);
-	ParticleSystem* psSmokeBlack = new ParticleSystem(glm::vec3(0, 0, -3), smBla);
+	ParticleSystem* psSmokeBlack = new ParticleSystem(glm::vec3(0, 0, -10), smBla);
 	Node blackSmokeNode("blackSmokeNode");
 	blackSmokeNode.setCamera(&cam);
 	blackSmokeNode.addParticleSystem(psSmokeBlack);
 	
+
 	// Shader
 	VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader3D/ColorShader3D.vert")));
 	FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader3D/ColorShader3D.frag")));
@@ -135,6 +137,9 @@ int main()
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&blackSmokeNode);	
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&whiteSmokeNode);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&snowNode);
+
+	Rect rect;
+	rect.loadBufferData();
 
 	// getting the start time
 	double startTime = glfwGetTime();

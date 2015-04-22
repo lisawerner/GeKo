@@ -12,6 +12,8 @@
 #include <GeKo_Physics/CollisionTest.h>
 
 #include "GeKo_Graphics/Camera/Trackball.h"
+#include "GeKo_Graphics/Camera/Playerview.h"
+#include <GeKo_Graphics/Camera/StrategyCamera.h>
 
 #include <GeKo_Gameplay/Object/Object.h>
 #include <GeKo_Gameplay/Object/AI.h>
@@ -21,6 +23,7 @@
 #include <GeKo_Graphics/Geometry/TreeMesh.h>
 #include <GeKo_Graphics/Geometry/AntMesh.h>
 #include <GeKo_Graphics/Geometry/AntHomeMesh.h>
+#include <GeKo_Graphics/Geometry/GekoMesh.h>
 
 #include <GeKo_Gameplay/AI_Decisiontree/DecisionTree.h>
 #include <GeKo_Gameplay/FightSystem/FightSystem.h>
@@ -30,28 +33,40 @@
 #include <GeKo_Gameplay/Questsystem/Quest.h>
 #include <GeKo_Gameplay/Questsystem/Goal_Collect.h>
 
-#include <GeKo_Graphics/Camera/StrategyCamera.h>
-
 #include <GeKo_Graphics/Observer/ObjectObserver.h>
 #include <GeKo_Graphics/Observer/CollisionObserver.h>
 #include <GeKo_Graphics/Observer/GravityObserver.h>
+
+#include <GeKo_Gameplay/Object/AntHome.h>
 
 #include <list>
 #include <queue>
 #include <stack>
 
 
-InputHandler iH;
-StrategyCamera cam("Trackball");
+static InputHandler iH;
+static StrategyCamera cam("PlayerViewCam");
 
-
-Geko geko("Geko", glm::vec3(10.0, 10.0, 10.0));
+// As we do not use the Node class, we can't set the teapot into the middle of the window, therefore is the change of the direction improperly limited
+// just needed in the player mode
+static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos){
+	if (iH.getActiveInputMap()->getType() == MapType::CAMPLAYERVIEW){
+		cam.turn(xpos, ypos);
+	}
+	if (iH.getActiveInputMap()->getType() == MapType::CAMSTRATEGY){
+		if (glfwGetMouseButton(window, 0) == GLFW_PRESS){
+			cam.turn(xpos, ypos);
+		}
+		else{
+			cam.updateCursor(window);
+		}
+	}
+}
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
+	// The active InputMap is fetched
 	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
-
-	iH.getActiveInputMap()->setGLFWwindow(window);
-
+	// You go over the active InputMap, if it's the key that is pressed, a method is called and the mapped action is executed else the key is ignored
 	for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
 		if (it->first == key)
 			activeMap.at(key)();
@@ -60,66 +75,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 }
 
-void mouse_callback(GLFWwindow* window)
-{
-	int i = 0;
-	if (glfwGetMouseButton(window, i) == GLFW_PRESS)
-	{
-		std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
-
-		iH.getActiveInputMap()->setGLFWwindow(window);
-
-		for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
-			if (it->first == i)
-				activeMap.at(i)();
-			if (it == activeMap.end())
-				std::cout << "Key is not mapped to an action" << std::endl;
-		}
-	}
-	else{
-		cam.updateCursor(window);
-	}
-}
-
-void mouseScroll_callback(GLFWwindow* window, double offsetX, double offSetY)
-{
-
-	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
-
-	iH.getActiveInputMap()->setGLFWwindow(window);
-
-	if (offSetY < 0)
-	{
-		for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
-			if (it->first == 001)
-				activeMap.at(001)();
-			if (it == activeMap.end())
-				std::cout << "Key is not mapped to an action" << std::endl;
-		}
-	}
-	else{
-		for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
-			if (it->first == 002)
-				activeMap.at(002)();
-			if (it == activeMap.end())
-				std::cout << "Key is not mapped to an action" << std::endl;
-		}
-	}
-}
-
-//Mouse Move Callback for rotating the view
-double lastX, lastY;
-void mouseMoveCallback(GLFWwindow* window, double xPos, double yPos)
-{
-	geko.rotateView(xPos - lastX, yPos - lastY);
-	lastX = xPos;
-	lastY = yPos;
-}
-
-
-
 int main()
 {
+	Player geko("Geko", glm::vec3(10.0, 10.0, 10.0));
+
 
 	// Start Konifguration - Window, Context, Camera and Callbacks //
 	glfwInit();
@@ -127,17 +86,11 @@ int main()
 	Window testWindow(500, 50, 800, 600, "testWindow");
 	glfwMakeContextCurrent(testWindow.getWindow());
 
-	//Set Camera to another position
-	//cam.setPosition(glm::vec4(0.0, 0.0, 20.0, 1.0));
-	cam.setCenter(glm::vec4(0.0, 0.0, 20.0, 1.0));
-	cam.setName("TrackballCam");
 	cam.setKeySpeed(2.0);
-	cam.setNearFar(0.0001, 100);
+	cam.setNearFar(0.01, 100);
 
 	//Callback for Camera and Player
 	glfwSetKeyCallback(testWindow.getWindow(), key_callback);
-//	glfwSetCursorPosCallback(testWindow.getWindow(), mouseMoveCallback);
-	glfwSetScrollCallback(testWindow.getWindow(), mouseScroll_callback);
 
 	glewInit();
 
@@ -164,45 +117,46 @@ int main()
 
 	//Add Camera to scenegraph
 	testScene.getScenegraph()->addCamera(&cam);
-	testScene.getScenegraph()->getCamera("TrackballCam");
-	testScene.getScenegraph()->setActiveCamera("TrackballCam");
+	testScene.getScenegraph()->getCamera("PlayerViewCam");
+	testScene.getScenegraph()->setActiveCamera("PlayerViewCam");
 
 	//Set all InputMaps and set one InputMap active
 	iH.setAllInputMaps(*(testScene.getScenegraph()->getActiveCamera()));
-	iH.changeActiveInputMap("Strategy");
+	iH.changeActiveInputMap("Object");
+	iH.getActiveInputMap()->update(geko);
 
 	// ==============================================================
 	// == Object (ant, afraid) ======================================
 	// ==============================================================
-	Teapot teaAnt; 
+	Teapot teaAnt;
 	Texture texCV((char*)RESOURCES_PATH "/cv_logo.bmp");
 	//AntMesh antMesh;
-	Node aiNodeFlick("Flick");
+	//Node aiNodeFlick("Flick");
 
-	aiNodeFlick.addGeometry(&teaAnt);
-	aiNodeFlick.addTexture(&texCV);
-	
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&aiNodeFlick);
-	
-	AI ant_Flick;
-	ant_Flick.setAntAfraid();
-	aiNodeFlick.setObject(&ant_Flick);
+	//aiNodeFlick.addGeometry(&teaAnt);
+	//aiNodeFlick.addTexture(&texCV);
+
+	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&aiNodeFlick);
+
+	//AI ant_Flick;
+	//ant_Flick.setAntAfraid();
+	//aiNodeFlick.ssetObject(&ant_Flick);
 
 	// ==============================================================
 	// == Object (ant, aggressiv) ===================================
 	// ==============================================================
 	AntMesh antMesh;
-	Node aiNodeFlack("Flack");
+	//Node aiNodeFlack("Flack");
 
 	//aiNodeFlack.addGeometry(&teaAnt);
-	aiNodeFlack.addGeometry(&antMesh);
-	aiNodeFlack.addTexture(&texCV);
+	//aiNodeFlack.addGeometry(&antMesh);
+	//aiNodeFlack.addTexture(&texCV);
 
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&aiNodeFlack);
+	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&aiNodeFlack);
 
-	AI ant_Flack;
-	ant_Flack.setAntAggressiv();
-	aiNodeFlack.setObject(&ant_Flack);
+	//AI ant_Flack;
+	//ant_Flack.setAntAggressiv();
+	//aiNodeFlack.setObject(&ant_Flack);
 
 	// ==============================================================
 	// == Object (Tree) =============================================
@@ -251,12 +205,15 @@ int main()
 	// ==============================================================
 
 	Teapot teaPlayer;
-//	Texture texBrick((char*)RESOURCES_PATH "/brick.bmp");
+	GekoMesh gekomesh;
+	//	Texture texBrick((char*)RESOURCES_PATH "/brick.bmp");
 
 	Node playerNode("Player");
-	playerNode.addGeometry(&teaPlayer);
 	playerNode.addTexture(&texBrick);
 	playerNode.setObject(&geko);
+	//playerNode.addGeometry(&teaPlayer);
+	playerNode.addGeometry(&gekomesh);
+	playerNode.setCamera(&cam);
 	geko.move(glm::vec3(10.0, 0.0, 10.0));
 
 	//Add the node to the Scene
@@ -278,7 +235,7 @@ int main()
 	questCollect2.setActive(true);
 	Goal_Collect goalCollect2(2);
 	questCollect2.addGoal(&goalCollect2);
-	
+
 	goalCollect.setGoalCount(50);
 	goalCollect2.setGoalCount(50);
 	goalCollect3.setGoalCount(50);
@@ -299,9 +256,9 @@ int main()
 	// == Collision, FightSystem=====================================
 	// ==============================================================
 
-// Bounding Box creation for the objects and collision test //
+	// Bounding Box creation for the objects and collision test //
 	CollisionTest collision;
-	collision.collectNodes(testScene.getScenegraph()->getRootNode());
+
 
 	FightSystem fight;
 
@@ -309,8 +266,8 @@ int main()
 	//==================Setting up the Observers========================//
 	//==================================================================//
 	ObjectObserver aiObserver(&testLevel);
-	ant_Flick.addObserver(&aiObserver);
-	ant_Flack.addObserver(&aiObserver);
+	//ant_Flick.addObserver(&aiObserver);
+	//ant_Flack.addObserver(&aiObserver);
 
 	ObjectObserver playerObserver(&testLevel);
 	geko.addObserver(&playerObserver);
@@ -321,58 +278,57 @@ int main()
 	GravityObserver gravityObserver(&testLevel);
 	collision.addObserver(&gravityObserver);
 
+	// ==============================================================
+	// == Object (Anthome) ==========================================
+	// ==============================================================
+	glm::vec3 posFood2(10.0, 0.0, -5.0);
+	glm::vec3 posSpawn(3.0, 0.0, 3.0);
+	glm::vec3 posDefaultPlayer(0.0, 0.0, 0.0);
 
-		
+	DecisionTree *aggressivedecisionTree = new DecisionTree();
+	aggressivedecisionTree->setAntTreeAggressiv();
 
+	DecisionTree *afraidDecisionTree = new DecisionTree();
+	afraidDecisionTree->setAntTreeAfraid();
+
+	Graph<AStarNode, AStarAlgorithm>* antAggressiveGraph = new Graph<AStarNode, AStarAlgorithm>();
+	antAggressiveGraph->setExampleAntAfraid(posSpawn, posFood2, posDefaultPlayer);
+
+	Graph<AStarNode, AStarAlgorithm>* antAfraidGraph = new Graph<AStarNode, AStarAlgorithm>();
+	antAfraidGraph->setExampleAntAfraid(posSpawn, posFood, posDefaultPlayer);
+
+	Anthome antHome(posSpawn, antMesh, &texCV, &texCV, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
+	//antHome.generateGuards(5, &aiObserver);
+	antHome.generateWorkers(1, &aiObserver);
+	antHome.addAntsToSceneGraph(testScene.getScenegraph()->getRootNode());
+
+
+	collision.collectNodes(testScene.getScenegraph()->getRootNode());
 	float lastTime = glfwGetTime();
+	int i = 0;
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
+		i++;
+		if (i == 30){
+			i++;
+		}
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		float currentTime = glfwGetTime();
 		float deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
-		mouse_callback(testWindow.getWindow());
-
 		collision.update();
-			//fight.gekoVSai(&geko, &ant_Flick);
-			//fight.objectVSobject(&geko, &ant_Flick);
-		
-		ant_Flick.update();
-		ant_Flack.update();
 
-		//Recognizing if the player wants to move its character
-		if (glfwGetKey(testWindow.getWindow(), GLFW_KEY_UP))
-		{
-			geko.moveForward();
-		}
-		if (glfwGetKey(testWindow.getWindow(), GLFW_KEY_DOWN))
-		{
-			geko.moveBackward();
-		}
-		if (glfwGetKey(testWindow.getWindow(), GLFW_KEY_RIGHT))
-		{
-			geko.moveRight();
-		}
-		if (glfwGetKey(testWindow.getWindow(), GLFW_KEY_LEFT))
-		{
-			geko.moveLeft();
-		}
+		antHome.updateAnts();
+		antHome.printPosWorkers();
 
-		geko.update(deltaTime);
+		/*	ant_Flick.update();
+		ant_Flack.update();*/
 
-		//Render the Player and AI
-		glEnable(GL_DEPTH_TEST);
+		geko.update();
+		geko.setDeltaTime(currentTime);
 
-		shader.bind();
-		shader.sendMat4("viewMatrix", cam.getViewMatrix());
-		shader.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+		renderer.renderScene(testScene, testWindow);
 
-		testScene.render(shader);
-		shader.unbind();
-
-		glfwSwapBuffers(testWindow.getWindow());
-		glfwPollEvents();
-	
 	}
 
 	glfwDestroyWindow(testWindow.getWindow());

@@ -8,10 +8,12 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 	//set default
 	setAttributes();
 
-	m_output = static_cast<FLOW> (OUTPUT); //set if won't generate (-1), constant (0) or just once (1)
+	m_output = static_cast<FLOW> (-1); //set if won't generate (-1), constant (0) or just once (1)
+	outputType = OUTPUT;
 
 	//set Emitter properties
 	setPosition(position);
+	setLocalPosition(position);
 	setEmitterLifetime(emitterLifetime);
 	setEmitterMortality(emitterLifetime);
 
@@ -36,7 +38,9 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 	glDeleteShader(compute->handle);
 
 	updateSize(); //update the number of max particle and create new buffer for it.
-	startTime();
+	
+	//bullshit
+	//startTime();
 
 	m_scalingData[32] = { 0 };
 	blendingTime[4] = { 0 };
@@ -60,6 +64,17 @@ void Emitter::startTime(){
 	updateTime = glfwGetTime();
 	deltaTime = updateTime;
 	generateTime = deltaTime;
+}
+
+void Emitter::start(){
+	if (m_output == UNUSED){
+		startTime();
+		setOutputMode(outputType);
+	}
+}
+
+void Emitter::stop(){
+	setOutputMode(-1);
 }
 
 void Emitter::loadBuffer(){
@@ -481,7 +496,20 @@ void Emitter::setPosition(glm::vec3 newPosition)
 {
 	m_emitterPosition = newPosition;
 }
-void Emitter::movePosition(glm::vec3 playerPosition){
+void Emitter::setLocalPosition(glm::vec3 newLocalPosition)
+{
+	glm::vec3 psPosition(
+		m_emitterPosition.x - m_localPosition.x,
+		m_emitterPosition.y - m_localPosition.y,
+		m_emitterPosition.z - m_localPosition.z);
+	m_localPosition = newLocalPosition;
+	setPosition(glm::vec3(
+		psPosition.x + m_localPosition.x,
+		psPosition.y + m_localPosition.y, 
+		psPosition.z + m_localPosition.z));
+}
+void Emitter::movePosition(glm::vec3 playerPosition)
+{
 	setPosition(getPosition()+playerPosition);
 }
 void Emitter::setEmitterMortality(double emitterLifetime)
@@ -694,6 +722,10 @@ glm::vec3 Emitter::getPosition()
 {
 	return m_emitterPosition;
 }
+glm::vec3 Emitter::getLocalPosition()
+{
+	return m_localPosition;
+}
 bool Emitter::getEmitterMortality()
 {
 	return m_emitterMortal;
@@ -810,6 +842,10 @@ float Emitter::getTexBlendingTime(){
 
 //set constructor attributes
 void Emitter::setAttributes(){
+	updateTime = 0.0;
+	deltaTime = 0.0;
+	generateTime = 0.0;
+
 	//Var how the Output should flow
 	m_output = static_cast<FLOW> (-1);
 
@@ -818,6 +854,7 @@ void Emitter::setAttributes(){
 
 	//property of the emitter
 	m_emitterPosition = glm::vec3(0.0, 0.0, 0.0);
+	m_localPosition = glm::vec3(0.0, 0.0, 0.0);
 	m_emitterMortal = false;
 	m_emitLifetime = 0.0;
 	m_emitFrequency = 0.0;

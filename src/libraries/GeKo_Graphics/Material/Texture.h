@@ -13,6 +13,7 @@ class Texture
 public:
 	Texture(char* fileName);	///The file must be in the Ressources folder
 	Texture(GLuint texture);
+	Texture();
 	~Texture();
 
 	bool load(char* fileName);

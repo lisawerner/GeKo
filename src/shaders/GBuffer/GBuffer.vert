@@ -19,8 +19,6 @@ out vec3 passWorldNormal;
 out mat3 normalMatrix;
 
 out vec4 passShadowCoord;
-
-out vec3 passSkyboxTexCoord;
  
 void main(){
 
@@ -34,8 +32,6 @@ void main(){
 	passUV = uv;
 	
 	passWorldNormal = normal;
-
-	passSkyboxTexCoord = position.xyz;
 
 	if(useShadowMap != 0)
 	{

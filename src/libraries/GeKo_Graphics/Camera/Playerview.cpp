@@ -20,6 +20,8 @@ Playerview::Playerview(std::string name){
 	m_mouseSpeed = 10.0f;//0.1f;
 	m_keySpeed = 50.0f;//2.0f;
 	m_sensitivity = 0.01f;
+
+	m_rotationAngle = 0;
 }
 
 Playerview::~Playerview()
@@ -78,6 +80,8 @@ void Playerview::turn(double xpos, double ypos){
 	double changeX =( xpos - m_oldX) *( m_sensitivity* m_mouseSpeed);
 	double changeY = (ypos - m_oldY) *( m_sensitivity* m_mouseSpeed);
 	
+	m_rotationAngle += glm::atan(changeX) * (180 / glm::pi<float>());
+
 	m_theta -= changeY;
 	if (m_theta < 0.01f) m_theta = 0.01f;
 	else if (m_theta > glm::pi<float>() - 0.01f) m_theta = glm::pi<float>() - 0.01f;

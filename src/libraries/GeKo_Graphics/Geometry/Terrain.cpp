@@ -16,7 +16,7 @@ Terrain::Terrain(std::string filename, float resolution, float interval)
 			m_normals.push_back( calculateNormal(x, z));
 			m_vertices.push_back(glm::vec4(x, getHeight(glm::vec2(x, z)), z, 1.0));
 			//m_uvs.push_back(glm::vec2(x / (float)m_resolutionX, z / (float)m_resolutionY));
-			m_uvs.push_back(glm::vec2((float)x/5, (float) z/5));
+			m_uvs.push_back(glm::vec2(x, z));
 		}
 	}
 
@@ -57,7 +57,7 @@ void Terrain::loadHeightmap(std::string fileName) {
 	for (int i = 0; i < m_resolutionX; ++i) {
 		m_heightMap[i] = new float[m_resolutionY];
 		for (int j = 0; j < m_resolutionY; ++j) {
-			m_heightMap[i][j] = (float)image[count++] / 512.0f * 25;
+			m_heightMap[i][j] = (float)image[count++] / 512.0f * 10;
 		}
 	}
 }

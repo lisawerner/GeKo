@@ -2,8 +2,26 @@
 
 DecisionTreeNode::DecisionTreeNode(int nodeID, DecisionTreeNode* defaultNode){
 	m_idNode = nodeID;
+	m_name = "Default";
+
 	m_isLeaf = false;
 	
+	m_stateID = States::DEFAULTSTATE;
+
+	m_leftNode = defaultNode;
+	m_rightNode = defaultNode;
+
+	m_target = TreeOutput::HOME;
+
+	m_condition = NULL;
+}
+
+DecisionTreeNode::DecisionTreeNode(int nodeID, DecisionTreeNode* defaultNode, std::string name){
+	m_idNode = nodeID;
+	m_name = name;
+
+	m_isLeaf = false;
+
 	m_stateID = States::DEFAULTSTATE;
 
 	m_leftNode = defaultNode;
@@ -71,3 +89,11 @@ TreeOutput DecisionTreeNode::getTarget(){
  void DecisionTreeNode::setTarget(TreeOutput target){
 	m_target = target;
 }
+
+ std::string DecisionTreeNode::getName(){
+	 return m_name;
+ }
+
+ void DecisionTreeNode::setName(std::string name){
+	 m_name = name;
+ }
