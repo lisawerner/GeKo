@@ -4,19 +4,30 @@ using namespace tinyxml2;
 
 Effect::Effect()
 {
-	
+	setShader();
 }
 
 
 Effect::Effect(const char*filepath)
 {
-	//TODO
+	setShader();
 	loadEffect(filepath);
 }
 
 Effect::~Effect()
 {
-	//TODO
+	glDeleteShader(emitterShader->handle);
+	glDeleteProgram(emitterShader->handle);
+	delete emitterShader;
+
+	glDeleteShader(emitterShaderGeom->handle);
+	glDeleteProgram(emitterShaderGeom->handle);
+	delete emitterShader;
+
+	glDeleteShader(compute->handle);
+	glDeleteProgram(compute->handle);
+	delete emitterShader;
+
 	emitterVec.~vector();
 }
 
@@ -46,10 +57,11 @@ void Effect::removeEmitter(int arrayPosition)
 void Effect::updateEmitters(Camera &cam)
 {
 	for (auto emitter : emitterVec){
-		if (emitter->getMovable()) 
-			emitter->update(glm::vec3(cam.getPosition().x, cam.getPosition().y, cam.getPosition().z));
+		if (emitter->getMovable()) {
+			emitter->update(compute, glm::vec3(cam.getPosition().x, cam.getPosition().y, cam.getPosition().z));
+		}
 		else {
-			emitter->update();
+			emitter->update(compute);
 		}
 	}
 }
@@ -57,7 +69,12 @@ void Effect::updateEmitters(Camera &cam)
 void Effect::renderEmitters(Camera &cam)
 {
 	for (auto emitter : emitterVec){
-		emitter->render(cam);
+		if (emitter->getUseGeometryShader()){
+			emitter->render(emitterShaderGeom, cam);
+		}
+		else {
+			emitter->render(emitterShader, cam);
+		}
 	}
 }
 
@@ -73,6 +90,26 @@ void Effect::setPosition(glm::vec3 newPosition)
 
 		emitter->setPosition(result);
 	}
+}
+
+void Effect::setShader(){
+	//Point Sprites shader
+	VertexShader vsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemPointSprites.vert")));
+	FragmentShader fsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemPointSprites.frag")));
+	emitterShader = new ShaderProgram(vsParticle, fsParticle);
+	//glDeleteShader(emitterShader->handle);
+
+	//...with Geometry Shader
+	VertexShader vsParticleGeom(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemGeometryShader.vert")));
+	GeometryShader gsParticleGeom(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemGeometryShader.geom")));
+	FragmentShader fsParticleGeom(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemGeometryShader.frag")));
+	emitterShaderGeom = new ShaderProgram(vsParticleGeom, gsParticleGeom, fsParticleGeom);
+	//glDeleteShader(emitterShader->handle);
+
+	//our default compute shader
+	ComputeShader csParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystem.comp")));
+	compute = new ShaderProgram(csParticle);
+	//glDeleteShader(compute->handle);
 }
 
 int Effect::loadEffect(const char* filepath)

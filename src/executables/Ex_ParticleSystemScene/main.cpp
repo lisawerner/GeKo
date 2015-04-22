@@ -139,6 +139,11 @@ int main()
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&whiteSmokeNode);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&snowNode);
 
+	//start the ParticleSystems
+	psSmokeBlack->start();
+	psSmokeWhite->start();
+	psSnow->start();
+
 	// getting the start time
 	double startTime = glfwGetTime();
 

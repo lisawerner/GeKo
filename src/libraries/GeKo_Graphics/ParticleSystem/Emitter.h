@@ -49,7 +49,7 @@ public:
 	void stop();
 
 	//update & generate the particle
-	void update(glm::vec3 playerPosition = glm::vec3(0.0, 0.0, 0.0));
+	void update(ShaderProgram* compute, glm::vec3 playerPosition = glm::vec3(0.0, 0.0, 0.0));
 	void generateParticle(glm::vec3 playerPosition);
 	void pushParticle(int numberNewParticle, glm::vec3 playerPosition);
 	void movePosition(glm::vec3 playerPosition);
@@ -63,7 +63,7 @@ public:
 	void setComputeShader(std::string address);
 
 	//draw the particle
-	void render(Camera &cam);
+	void render(ShaderProgram* emitterShader, Camera &cam);
 
 	//our method & var for velocity
 	void setAreaEmitting(bool areaEmittingXY, bool areaEmittingXZ, float size, int accuracy);
@@ -177,10 +177,6 @@ private:
 	GLuint position_ssbo;
 	GLuint velocity_ssbo;
 	GLuint angle_ssbo;
-
-	//Our Vertex, Fragment & Compute Shader
-	ShaderProgram *emitterShader;
-	ShaderProgram *compute;
 
 	//Var how the Output should flow
 	enum FLOW { UNUSED = -1, CONSTANT = 0, ONCE = 1 } m_output;

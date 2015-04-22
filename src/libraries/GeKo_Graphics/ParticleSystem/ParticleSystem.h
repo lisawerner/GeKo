@@ -1,5 +1,6 @@
 #pragma once
 #include "GeKo_Graphics/ParticleSystem/Effect.h"
+#include "GeKo_Graphics/ParticleSystem/ParticleType.h"
 
 class ParticleSystem{
 public:
@@ -20,6 +21,9 @@ public:
 
 	glm::vec3 getPosition();
 	Effect* getEffect();
+
+	//Game Element:
+	ParticleType m_type;
 
 private:
 	glm::vec3 position;

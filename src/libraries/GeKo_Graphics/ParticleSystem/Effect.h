@@ -26,7 +26,14 @@ public:
 	void setPosition(glm::vec3 newPosition);	//updates the positions of every Emitter
 
 private:
+	void setShader(); //for the constructor
+
 	std::vector<Emitter*> emitterVec;	//contains all Emitters of the Effect
+
+	//Our Vertex, Fragment & Compute Shader
+	ShaderProgram *emitterShader;
+	ShaderProgram *emitterShaderGeom;
+	ShaderProgram *compute;
 
 	//check for a XML Error. Gives feedback what went wrong if something goes wrong
 	int XMLCheckResult(int result);
