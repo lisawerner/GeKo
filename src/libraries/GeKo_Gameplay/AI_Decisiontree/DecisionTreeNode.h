@@ -14,6 +14,7 @@ class DecisionTreeNode
 {
 public: 
 	DecisionTreeNode(int nodeID, DecisionTreeNode* defaultNode);
+	DecisionTreeNode(int nodeID, DecisionTreeNode* defaultNode, std::string name);
 	DecisionTreeNode();
 	~DecisionTreeNode();
 
@@ -37,8 +38,12 @@ public:
 	TreeOutput getTarget();
 	void setTarget(TreeOutput target);
 
+	std::string getName();
+	void setName(std::string name);
+
 protected:
 	int m_idNode;
+	std::string m_name;
 
 	DecisionTreeNode* m_leftNode;
 	DecisionTreeNode* m_rightNode;
