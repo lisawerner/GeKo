@@ -13,11 +13,11 @@
 #include <sstream>
 #include <vector>
 
-class Anthome : public Object{
+class AntHome : public Object{
 public :
-	Anthome();
-	Anthome(glm::vec3 position, AntMesh antMesh, Texture *guardTex, Texture *workerTex, DecisionTree *aggressiveDecisionTree, Graph<AStarNode, AStarAlgorithm> *aggressiveGraph, DecisionTree *afraidDecisionTree, Graph<AStarNode, AStarAlgorithm> *afraidGraph);
-	~Anthome();
+	AntHome();
+	AntHome(glm::vec3 position, AntMesh antMesh, Texture *guardTex, Texture *workerTex, DecisionTree *aggressiveDecisionTree, Graph<AStarNode, AStarAlgorithm> *aggressiveGraph, DecisionTree *afraidDecisionTree, Graph<AStarNode, AStarAlgorithm> *afraidGraph);
+	~AntHome();
 	void generateGuards(int i, ObjectObserver *objectObserver);
 	void generateWorkers(int i, ObjectObserver *objectObserver);
 

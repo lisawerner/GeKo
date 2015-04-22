@@ -1,10 +1,10 @@
-#include "GeKo_Gameplay/Object/Anthome.h"
+#include "GeKo_Gameplay/Object/AntHome.h"
 
-Anthome::Anthome(){
+AntHome::AntHome(){
 
 }
 
-Anthome::Anthome(glm::vec3 position, AntMesh antMesh, Texture *guardTex, Texture *workerTex, DecisionTree *aggressiveDecisionTree, Graph<AStarNode, AStarAlgorithm> *aggressiveGraph, DecisionTree *afraidDecisionTree, Graph<AStarNode, AStarAlgorithm> *afraidGraph){
+AntHome::AntHome(glm::vec3 position, AntMesh antMesh, Texture *guardTex, Texture *workerTex, DecisionTree *aggressiveDecisionTree, Graph<AStarNode, AStarAlgorithm> *aggressiveGraph, DecisionTree *afraidDecisionTree, Graph<AStarNode, AStarAlgorithm> *afraidGraph){
 	m_position = position;
 	m_antMesh = antMesh;
 	//Texture texCV((char*)RESOURCES_PATH "/cv_logo.bmp");
@@ -18,11 +18,11 @@ Anthome::Anthome(glm::vec3 position, AntMesh antMesh, Texture *guardTex, Texture
 	m_numberOfWorkers = 0;
 }
 
-Anthome::~Anthome(){
+AntHome::~AntHome(){
 
 }
 
-void Anthome::generateGuards(int i, ObjectObserver *objectObserver){
+void AntHome::generateGuards(int i, ObjectObserver *objectObserver){
 	if (i < 0)
 		return;
 	glm::vec4 position;
@@ -52,7 +52,7 @@ void Anthome::generateGuards(int i, ObjectObserver *objectObserver){
 	}
 }
 
-void Anthome::generateWorkers(int i, ObjectObserver *objectObserver){
+void AntHome::generateWorkers(int i, ObjectObserver *objectObserver){
 	if (i < 0)
 		return;
 	glm::vec4 position;
@@ -81,7 +81,7 @@ void Anthome::generateWorkers(int i, ObjectObserver *objectObserver){
 	}
 }
 
-void Anthome::addAntsToSceneGraph(Node *rootNode){
+void AntHome::addAntsToSceneGraph(Node *rootNode){
 	for (Node* antNode : m_guards){
 		rootNode->addChildrenNode(antNode);
 	}
@@ -91,7 +91,7 @@ void Anthome::addAntsToSceneGraph(Node *rootNode){
 
 }
 
-void Anthome::updateAnts(){
+void AntHome::updateAnts(){
 	/*for (Node antNode : m_ants){
 		antNode.getAI()->update();
 	}*/
@@ -103,13 +103,13 @@ void Anthome::updateAnts(){
 	}
 }
 
-void Anthome::printPosGuards(){
+void AntHome::printPosGuards(){
 	for (int i = 0; i < m_guards.size(); i++){
 		std::cout << "Guard "<<i<<" Pos : x :" << m_guards[i]->getAI()->getPosition().x << " ; z: " << m_guards[i]->getAI()->getPosition().z << std::endl;
 	}
 }
 
-void Anthome::printPosWorkers(){
+void AntHome::printPosWorkers(){
 	for (int i = 0; i < m_workers.size(); i++){
 		std::cout << "Worker " << i << " Pos : x :" << m_workers[i]->getAI()->getPosition().x << " ; z: " << m_workers[i]->getAI()->getPosition().z << std::endl;
 	}
