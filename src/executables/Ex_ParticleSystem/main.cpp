@@ -586,8 +586,8 @@ int main()
 			//smokeBlack->update();
 			//smokeBlack->render(cam);
 
-			fontaine->update();
-			fontaine->render(cam);
+			//fontaine->update(cam);
+			//fontaine->render(cam);
 
 			//circle->update();
 			//circle->render(cam);
@@ -630,14 +630,14 @@ int main()
 		////////////////////////////////FINAL SCREEN EMITTER//////////////////////////////////////////////////
 		else{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			maximumParticle->update();
-			maximumParticle->render(cam);
+			//maximumParticle->update();
+			//maximumParticle->render(cam);
 			particleCount = particleCountMax;
 		}
 
 		if (useFruitFliesButton->isActive()){
-			screenFruitFlies->update();
-			screenFruitFlies->render(screen);
+			//screenFruitFlies->update();
+			//screenFruitFlies->render(screen);
 		}
 		else{
 			screenFruitFlies->startTime();
@@ -645,24 +645,24 @@ int main()
 
 			////////////////////////////////FINAL GUI EMITTER///////////////////////////////////////////
 		if (useSnowButton->isActive()){
-			snow->update(glm::vec3(cam.getPosition()));
-			snow->render(cam);
+			//snow->update(glm::vec3(cam.getPosition()));
+			//snow->render(cam);
 		}
 		else{
 			snow->startTime();
 		}
 
 		if (useStrongSnowButton->isActive()){
-			snowStrong->update(glm::vec3(cam.getPosition()));
-			snowStrong->render(cam);
+			//snowStrong->update(glm::vec3(cam.getPosition()));
+			//snowStrong->render(cam);
 		}
 		else{
 			snowStrong->startTime();
 		}
 
 		if (useRainButton->isActive()){
-			rain->update(glm::vec3(cam.getPosition()));
-			rain->render(cam);
+			//rain->update(glm::vec3(cam.getPosition()));
+			//rain->render(cam);
 		}{
 			rain->startTime();
 		}

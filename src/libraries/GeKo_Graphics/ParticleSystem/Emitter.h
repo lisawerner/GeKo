@@ -45,9 +45,11 @@ public:
 
 	//set the time for generating and stuff
 	void startTime();
+	void start();
+	void stop();
 
 	//update & generate the particle
-	void update(glm::vec3 playerPosition = glm::vec3(0.0, 0.0, 0.0));
+	void update(ShaderProgram* compute, glm::vec3 playerPosition = glm::vec3(0.0, 0.0, 0.0));
 	void generateParticle(glm::vec3 playerPosition);
 	void pushParticle(int numberNewParticle, glm::vec3 playerPosition);
 	void movePosition(glm::vec3 playerPosition);
@@ -61,7 +63,7 @@ public:
 	void setComputeShader(std::string address);
 
 	//draw the particle
-	void render(Camera &cam);
+	void render(ShaderProgram* emitterShader, Camera &cam);
 
 	//our method & var for velocity
 	void setAreaEmitting(bool areaEmittingXY, bool areaEmittingXZ, float size, int accuracy);
@@ -104,6 +106,7 @@ public:
 	//change properties
 	void setOutputMode(const int OUTPUT);
 	void setPosition(glm::vec3 newPosition);
+	void setLocalPosition(glm::vec3 newLocalPosition);
 	void setEmitterMortality(double emitterLifetime);
 	void setEmitterLifetime(double emitterLifetime);
 	void setEmitFrequency(float newEmitFrequency);
@@ -117,6 +120,7 @@ public:
 	//get properties
 	int getOutputMode();
 	glm::vec3 getPosition();
+	glm::vec3 getLocalPosition();
 	bool getEmitterMortality();
 	double getEmitterLifetime();
 	double getEmitFrequency();
@@ -174,18 +178,16 @@ private:
 	GLuint velocity_ssbo;
 	GLuint angle_ssbo;
 
-	//Our Vertex, Fragment & Compute Shader
-	ShaderProgram *emitterShader;
-	ShaderProgram *compute;
-
 	//Var how the Output should flow
 	enum FLOW { UNUSED = -1, CONSTANT = 0, ONCE = 1 } m_output;
+	int outputType;
 
 	//Var for the buffer iteration
 	int indexBuffer;
 
 	//property of the emitter
-	glm::vec3 m_emitterPosition;
+	glm::vec3 m_emitterPosition;	//this is the position that gets updated constantly during rendering
+	glm::vec3 m_localPosition;		//this is the position that gets added to the ParticleSystem position
 	bool m_emitterMortal;			//if the emitter stops working after emitLifetime
 	double m_emitLifetime;	//if mortal=true: how long the emitter is active
 	float m_emitFrequency;	//After this frequencytime we generate particle
