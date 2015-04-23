@@ -4,29 +4,45 @@ using namespace tinyxml2;
 
 Effect::Effect()
 {
-	
+	setShader();
 }
 
 
 Effect::Effect(const char*filepath)
 {
-	//TODO
+	setShader();
 	loadEffect(filepath);
 }
 
 Effect::~Effect()
 {
-	//TODO
+	glDeleteShader(emitterShader->handle);
+	glDeleteProgram(emitterShader->handle);
+	delete emitterShader;
+
+	glDeleteShader(emitterShaderGeom->handle);
+	glDeleteProgram(emitterShaderGeom->handle);
+	delete emitterShader;
+
+	glDeleteShader(compute->handle);
+	glDeleteProgram(compute->handle);
+	delete emitterShader;
+
 	emitterVec.~vector();
 }
 
 
-//void Effect::active()
-//{
-//	for (auto emitter : emitterVec){
-//		emitter->active();
-//	}
-//}
+void Effect::start(){
+	for (auto emitter : emitterVec){
+		emitter->start();
+	}
+}
+
+void Effect::stop(){
+	for (auto emitter : emitterVec){
+		emitter->stop();
+	}
+}
 
 void Effect::addEmitter(Emitter* emitter)
 {
@@ -41,10 +57,11 @@ void Effect::removeEmitter(int arrayPosition)
 void Effect::updateEmitters(Camera &cam)
 {
 	for (auto emitter : emitterVec){
-		if (emitter->getMovable()) 
-			emitter->update(glm::vec3(cam.getPosition().x, cam.getPosition().y, cam.getPosition().z));
+		if (emitter->getMovable()) {
+			emitter->update(compute, glm::vec3(cam.getPosition().x, cam.getPosition().y, cam.getPosition().z));
+		}
 		else {
-			emitter->update();
+			emitter->update(compute);
 		}
 	}
 }
@@ -52,7 +69,12 @@ void Effect::updateEmitters(Camera &cam)
 void Effect::renderEmitters(Camera &cam)
 {
 	for (auto emitter : emitterVec){
-		emitter->render(cam);
+		if (emitter->getUseGeometryShader()){
+			emitter->render(emitterShaderGeom, cam);
+		}
+		else {
+			emitter->render(emitterShader, cam);
+		}
 	}
 }
 
@@ -60,7 +82,7 @@ void Effect::setPosition(glm::vec3 newPosition)
 {
 	for (auto emitter : emitterVec){
 		//why should I do this glm????:
-		glm::vec3 pos = emitter->getPosition();
+		glm::vec3 pos = emitter->getLocalPosition();
 		glm::vec3 result(0.0, 0.0, 0.0);
 		result.x = pos.x + newPosition.x;
 		result.y = pos.y + newPosition.y;
@@ -68,6 +90,26 @@ void Effect::setPosition(glm::vec3 newPosition)
 
 		emitter->setPosition(result);
 	}
+}
+
+void Effect::setShader(){
+	//Point Sprites shader
+	VertexShader vsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemPointSprites.vert")));
+	FragmentShader fsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemPointSprites.frag")));
+	emitterShader = new ShaderProgram(vsParticle, fsParticle);
+	//glDeleteShader(emitterShader->handle);
+
+	//...with Geometry Shader
+	VertexShader vsParticleGeom(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemGeometryShader.vert")));
+	GeometryShader gsParticleGeom(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemGeometryShader.geom")));
+	FragmentShader fsParticleGeom(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemGeometryShader.frag")));
+	emitterShaderGeom = new ShaderProgram(vsParticleGeom, gsParticleGeom, fsParticleGeom);
+	//glDeleteShader(emitterShader->handle);
+
+	//our default compute shader
+	ComputeShader csParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystem.comp")));
+	compute = new ShaderProgram(csParticle);
+	//glDeleteShader(compute->handle);
 }
 
 int Effect::loadEffect(const char* filepath)
@@ -366,6 +408,11 @@ int Effect::loadEffect(const char* filepath)
 				error = tex->QueryFloatText(&deathTime);
 				XMLCheckResult(error);
 
+				float blendingTime;
+				tex = scaling->FirstChildElement("BlendingTime");
+				error = tex->QueryFloatText(&blendingTime);
+				XMLCheckResult(error);
+
 				bool rotateLeft;
 				tex = scaling->FirstChildElement("RotateLeft");
 				error = tex->QueryBoolText(&rotateLeft);
@@ -403,6 +450,11 @@ int Effect::loadEffect(const char* filepath)
 				error = tex->QueryFloatText(&deathTime);
 				XMLCheckResult(error);
 
+				float blendingTime;
+				tex = scaling->FirstChildElement("BlendingTime");
+				error = tex->QueryFloatText(&blendingTime);
+				XMLCheckResult(error);
+
 				bool rotateLeft;
 				tex = scaling->FirstChildElement("RotateLeft");
 				error = tex->QueryBoolText(&rotateLeft);
@@ -413,8 +465,8 @@ int Effect::loadEffect(const char* filepath)
 				error = tex->QueryFloatText(&rotationSpeed);
 				XMLCheckResult(error);
 
-				emitter->defineLook(useTexture, particleSize, 
-					birthTime, deathTime, rotateLeft, rotationSpeed);
+				emitter->defineLook(useTexture, particleSize,
+					birthTime, deathTime, blendingTime, rotateLeft, rotationSpeed);
 			}
 			
 		}
@@ -444,7 +496,7 @@ int Effect::saveEffect(char* filepath)
 		emitterNode->InsertEndChild(element);
 
 		element = doc.NewElement("Position");
-		glm::vec3 position = emitter->getPosition();
+		glm::vec3 position = emitter->getLocalPosition();
 		element->SetAttribute("x", position.x);
 		element->SetAttribute("y", position.y);
 		element->SetAttribute("z", position.z);
@@ -554,9 +606,9 @@ int Effect::saveEffect(char* filepath)
 			temp->SetText(emitter->getPhysicAttMovementHorizontalZ());
 			physic->InsertEndChild(temp);
 
-			//temp = doc.NewElement("MovementLength");
-			//temp->SetText(emitter->m_movementLength);
-			//physic->InsertEndChild(temp);
+			temp = doc.NewElement("Speed");
+			temp->SetText(emitter->getSpeed());
+			physic->InsertEndChild(temp);
 			element->InsertEndChild(physic);
 		}
 		emitterNode->InsertEndChild(element);
@@ -624,6 +676,10 @@ int Effect::saveEffect(char* filepath)
 			tex->SetText(emitter->getTexDeathTime());
 			scaling->InsertEndChild(tex);
 
+			tex = doc.NewElement("BlendingTime");
+			tex->SetText(emitter->getTexBlendingTime());
+			scaling->InsertEndChild(tex);
+
 			tex = doc.NewElement("RotateLeft");
 			tex->SetText(emitter->getTexRotateLeft());
 			scaling->InsertEndChild(tex);
@@ -651,6 +707,10 @@ int Effect::saveEffect(char* filepath)
 
 			tex = doc.NewElement("DeathTime");
 			tex->SetText(emitter->getTexDeathTime());
+			scaling->InsertEndChild(tex);
+
+			tex = doc.NewElement("BlendingTime");
+			tex->SetText(emitter->getTexBlendingTime());
 			scaling->InsertEndChild(tex);
 
 			tex = doc.NewElement("RotateLeft");

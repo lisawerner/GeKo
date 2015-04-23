@@ -82,6 +82,7 @@ int main()
 	sn->addEmitter(snow);
 	ParticleSystem* psSnow = new ParticleSystem(glm::vec3(0, 2, -5), sn);
 	Node snowNode("snowNode");
+	snowNode.setParticleActive(true);
 	snowNode.setCamera(&cam);
 	snowNode.addParticleSystem(psSnow);
 	
@@ -89,6 +90,7 @@ int main()
 	smWhi->addEmitter(smokeWhite);
 	ParticleSystem* psSmokeWhite = new ParticleSystem(glm::vec3(0, 0, 3), smWhi);
 	Node whiteSmokeNode("whiteSmokeNode");
+	whiteSmokeNode.setParticleActive(true);
 	whiteSmokeNode.setCamera(&cam);
 	whiteSmokeNode.addParticleSystem(psSmokeWhite);
 	
@@ -96,6 +98,7 @@ int main()
 	smBla->addEmitter(smokeBlack);
 	ParticleSystem* psSmokeBlack = new ParticleSystem(glm::vec3(0, 0, -3), smBla);
 	Node blackSmokeNode("blackSmokeNode");
+	blackSmokeNode.setParticleActive(true);
 	blackSmokeNode.setCamera(&cam);
 	blackSmokeNode.addParticleSystem(psSmokeBlack);
 	
@@ -135,6 +138,11 @@ int main()
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&blackSmokeNode);	
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&whiteSmokeNode);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&snowNode);
+
+	//start the ParticleSystems
+	psSmokeBlack->start();
+	psSmokeWhite->start();
+	psSnow->start();
 
 	// getting the start time
 	double startTime = glfwGetTime();

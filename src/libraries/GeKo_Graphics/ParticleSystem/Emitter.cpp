@@ -8,10 +8,12 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 	//set default
 	setAttributes();
 
-	m_output = static_cast<FLOW> (OUTPUT); //set if won't generate (-1), constant (0) or just once (1)
+	m_output = static_cast<FLOW> (-1); //set if won't generate (-1), constant (0) or just once (1)
+	outputType = OUTPUT;
 
 	//set Emitter properties
 	setPosition(position);
+	setLocalPosition(position);
 	setEmitterLifetime(emitterLifetime);
 	setEmitterMortality(emitterLifetime);
 
@@ -23,20 +25,10 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 	setParticleLifetime(particleLifeTime);
 	setParticleMortality(particleMortal);
 
-	//our default shader (Point Sprites)
-	VertexShader vsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemPointSprites.vert")));
-	FragmentShader fsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemPointSprites.frag")));
-	emitterShader = new ShaderProgram(vsParticle, fsParticle);
-	glDeleteShader(emitterShader->handle);
-
-	
-	//our default compute shader
-	ComputeShader csParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystem.comp")));
-	compute = new ShaderProgram(csParticle);
-	glDeleteShader(compute->handle);
-
 	updateSize(); //update the number of max particle and create new buffer for it.
-	startTime();
+	
+	//bullshit
+	//startTime();
 
 	m_scalingData[32] = { 0 };
 	blendingTime[4] = { 0 };
@@ -45,21 +37,23 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 Emitter::~Emitter()
 {
 	m_textureList.clear();
-
-	glDeleteBuffers(1, &position_ssbo);
-	glDeleteBuffers(1, &velocity_ssbo);
-	glDeleteBuffers(1, &angle_ssbo);
-	//maybe transfer to shader class
-	glDeleteProgram(emitterShader->handle);
-	glDeleteProgram(compute->handle);
-	delete emitterShader;
-	delete compute;
 }
 
 void Emitter::startTime(){
 	updateTime = glfwGetTime();
 	deltaTime = updateTime;
 	generateTime = deltaTime;
+}
+
+void Emitter::start(){
+	if (m_output == UNUSED){
+		startTime();
+		setOutputMode(outputType);
+	}
+}
+
+void Emitter::stop(){
+	setOutputMode(-1);
 }
 
 void Emitter::loadBuffer(){
@@ -100,7 +94,7 @@ void Emitter::loadBuffer(){
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 }
 
-void Emitter::update(glm::vec3 playerPosition){
+void Emitter::update(ShaderProgram* compute, glm::vec3 playerPosition){
 
 	generateParticle(playerPosition);
 
@@ -108,12 +102,11 @@ void Emitter::update(glm::vec3 playerPosition){
 	updateTime = glfwGetTime();
 
 	m_emitLifetime -= deltaTime;
-	if (m_emitLifetime < 0 && m_emitterMortal){
+	if (m_emitLifetime < 0 && m_emitterMortal){ //it's only for dying emitters relevant
 		m_output = UNUSED;
 	}
-
-	//Bind CS and all SSBO's
 	compute->bind();
+	//Bind CS and all SSBO's
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, position_ssbo);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, velocity_ssbo);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, angle_ssbo);
@@ -139,8 +132,8 @@ void Emitter::update(glm::vec3 playerPosition){
 
 	//Unbind CD and all SSBO's
 	glDispatchCompute(computeGroupCount, 1, 1); //runs the compute shader
-	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 0);
+	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT); //essential for memory synchronisation
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, 0); //unbind SSBOs
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, 0);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, 0);
 	compute->unbind();
@@ -279,7 +272,7 @@ void Emitter::generateParticle(glm::vec3 playerPosition)
 	}
 }
 
-void Emitter::render(Camera &cam)
+void Emitter::render(ShaderProgram* emitterShader, Camera &cam)
 {
 	auto useTexture = getUseTexture();
 	glDepthMask(GL_FALSE);
@@ -288,7 +281,6 @@ void Emitter::render(Camera &cam)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //how we calculate transperancy
 
 	if (getUsePointSprites()){ //if we dont use a geometry shader..
-
 		emitterShader->bind();
 		glBindBuffer(GL_ARRAY_BUFFER, position_ssbo);
 
@@ -331,7 +323,6 @@ void Emitter::render(Camera &cam)
 		glDrawArrays(GL_POINTS, 0, numMaxParticle);
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-
 		emitterShader->unbind();
 	}
 	else if (getUseGeometryShader() && useTexture){
@@ -402,27 +393,10 @@ void Emitter::updateSize()
 
 //GS & PS swichting
 void Emitter::switchToGeometryShader(){
-	glDeleteProgram(emitterShader->handle);
-	delete emitterShader;
-	//Geometry Shader will be used, instead  of Point Sprites
-	VertexShader vsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemGeometryShader.vert")));
-	GeometryShader gsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemGeometryShader.geom")));
-	FragmentShader fsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemGeometryShader.frag")));
-	emitterShader = new ShaderProgram(vsParticle, gsParticle, fsParticle);
-	glDeleteShader(emitterShader->handle);
-
 	m_usePointSprites = false;
 	m_useGeometryShader = true;
 }
 void Emitter::switchToPointSprites(){
-	glDeleteProgram(emitterShader->handle);
-	delete emitterShader;
-	//Point Sprites Shader will be used instead of Geometry Shader
-	VertexShader vsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemPointSprites.vert")));
-	FragmentShader fsParticle(loadShaderSource(SHADERS_PATH + std::string("/ParticleSystem/ParticleSystemPointSprites.frag")));
-	emitterShader = new ShaderProgram(vsParticle, fsParticle);
-	glDeleteShader(emitterShader->handle);
-
 	m_usePointSprites = true;
 	m_useGeometryShader = false;
 }
@@ -481,7 +455,20 @@ void Emitter::setPosition(glm::vec3 newPosition)
 {
 	m_emitterPosition = newPosition;
 }
-void Emitter::movePosition(glm::vec3 playerPosition){
+void Emitter::setLocalPosition(glm::vec3 newLocalPosition)
+{
+	glm::vec3 psPosition(
+		m_emitterPosition.x - m_localPosition.x,
+		m_emitterPosition.y - m_localPosition.y,
+		m_emitterPosition.z - m_localPosition.z);
+	m_localPosition = newLocalPosition;
+	setPosition(glm::vec3(
+		psPosition.x + m_localPosition.x,
+		psPosition.y + m_localPosition.y, 
+		psPosition.z + m_localPosition.z));
+}
+void Emitter::movePosition(glm::vec3 playerPosition)
+{
 	setPosition(getPosition()+playerPosition);
 }
 void Emitter::setEmitterMortality(double emitterLifetime)
@@ -524,13 +511,13 @@ void Emitter::setGravity(glm::vec4 newGravity)
 {
 	m_gravity = newGravity;
 }
-void Emitter::setComputeShader(std::string address){
-	glDeleteProgram(compute->handle);
-	delete compute;
-	ComputeShader csParticle(loadShaderSource(SHADERS_PATH + address));
-	compute = new ShaderProgram(csParticle);
-	glDeleteShader(compute->handle);
-}
+//void Emitter::setComputeShader(std::string address){
+//	glDeleteProgram(compute.handle);
+//	delete compute;
+//	ComputeShader csParticle(loadShaderSource(SHADERS_PATH + address));
+//	compute = new ShaderProgram(csParticle);
+//	glDeleteShader(compute.handle);
+//}
 void Emitter::setSpeed(float speed){
 	m_speed = speed;
 }
@@ -694,6 +681,10 @@ glm::vec3 Emitter::getPosition()
 {
 	return m_emitterPosition;
 }
+glm::vec3 Emitter::getLocalPosition()
+{
+	return m_localPosition;
+}
 bool Emitter::getEmitterMortality()
 {
 	return m_emitterMortal;
@@ -810,6 +801,10 @@ float Emitter::getTexBlendingTime(){
 
 //set constructor attributes
 void Emitter::setAttributes(){
+	updateTime = 0.0;
+	deltaTime = 0.0;
+	generateTime = 0.0;
+
 	//Var how the Output should flow
 	m_output = static_cast<FLOW> (-1);
 
@@ -818,6 +813,7 @@ void Emitter::setAttributes(){
 
 	//property of the emitter
 	m_emitterPosition = glm::vec3(0.0, 0.0, 0.0);
+	m_localPosition = glm::vec3(0.0, 0.0, 0.0);
 	m_emitterMortal = false;
 	m_emitLifetime = 0.0;
 	m_emitFrequency = 0.0;

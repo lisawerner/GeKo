@@ -18,14 +18,15 @@
 #include "States.h"
 
 enum SoundtypeAI{
-	MOVESOUND_AI, EATSOUND_AI, DEATHSOUND_AI
+	MOVESOUND_AI, EATSOUND_AI, DEATHSOUND_AI, DEATHSOUND_FLIES_AI
 };
 
 class AI : public Object, public Subject<AI, Object_Event>
 {
-public: 
+public:
 
 	AI();
+	AI(glm::vec4 position);
 	~AI();
 
 	AStarNode* getPosHome();
@@ -64,7 +65,9 @@ public:
 	AStarNode* nextNodeOnPatrol();
 
 	void setAntAfraid();
+	void setAntAfraid(std::string name, DecisionTree *tree, Graph<AStarNode, AStarAlgorithm> *antGraph);
 	void setAntAggressiv();
+	void setAntAggressiv(std::string name, DecisionTree *tree, Graph<AStarNode, AStarAlgorithm> *antGraph);
 
 	///Returns the m_sourceName string
 	/**If a Sound-File-Handler was attached, the m_sourceName contains the name of the source which should be played!*/
@@ -72,11 +75,11 @@ public:
 	///Sets a specific source-file to the node
 	/**This method uses the sfh to generate a new sound-source which can be played with the sfh later ingame!*/
 	void setSourceName(SoundtypeAI type, std::string sourceName, const char* filepath);
-	
+
 	void updateSourcesInMap();
 
 	bool hasDied();
-	
+
 protected:
 	float m_epsilon;
 

@@ -5,8 +5,7 @@ MapStrategyCamera::MapStrategyCamera(Camera &activeCam)
 	m_name = "Strategy";
 	m_active = false;
 	update(activeCam);
-
-
+	m_type = MapType::CAMSTRATEGY;
 }
 
 
