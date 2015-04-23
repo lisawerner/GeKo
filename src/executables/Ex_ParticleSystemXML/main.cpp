@@ -45,60 +45,86 @@ int main()
 	Texture* fireTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fire1_M.png");
 	Texture* fireTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fire3_M.png");
 	Texture* fireTex3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/flame02_L.png");
-	Texture* fireSparkleTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fireSparkle1.png");
+	Texture* fireFlickering1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fire_flickering_1.png");
+	Texture* fireFlickering2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fire_flickering_2.png");
+	Texture* fireFlickering3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fire_flickering_3.png");
+	Texture* fireFlickering4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fire_flickering_4.png");
+	Texture* fireSparkleTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fireSparkle1_S.png");
 	Texture* fireSparkleTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fireSparkle2.png");
+
+	Texture* texFireworkBlue = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fireworkParticleBlue.png");
+	Texture* texFireworkRed = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fireworkParticleRed.png");
+	Texture* texFireworkGold = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fireworkParticleGold.png");
+	Texture* texFireworkTail = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fireworkTail.png");
 
 	Texture* smokeWhiteTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/smokeWhite/smokeWhite01.png");
 	Texture* smokeWhiteTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/smokeWhite/smokeWhite02.png");
 	Texture* smokeBlack1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/smokeBlack/smokeBlack01.png");
 	Texture* smokeBlack2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/smokeBlack/smokeBlack02.png");
 
-	Emitter* test = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.1, 100, 4.0, true);
-	test->setVelocity(3);
-	test->usePhysicDirectionGravity(glm::vec4(0.0, 1.0, 0.0, 0.8), 0.8f);
-	Effect* testEff = new Effect();
-	ParticleSystem* testPS = new ParticleSystem(glm::vec3(0, -1, 0), testEff);
-	//testEff->addEmitter(test);
-	Node testNode("testNode");
-	testNode.setCamera(&cam);
-	testNode.addParticleSystem(testPS);
+	//////////////////////Emitter//////////////////////
+
+	//Emitter explosion sparkle
+	Emitter* explosionSparkle = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.25, 0.01, 80, 1.25, true);
+	explosionSparkle->setVelocity(5);
+	//explosionSparkle->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 0.3), 3.0f);
+	explosionSparkle->usePhysicPointGravity(glm::vec3(0.0, 0.0, 0.0), 0.6, 10.0, 2, 4.0f, true);
+	explosionSparkle->addTexture(fireSparkleTex1, 1.0);
+	explosionSparkle->defineLook(true, 0.01, 0.0, 0.1);
+
+	//Emitter explosion fire
+	//TODO
 
 	//Emitter fire smoke
-	Emitter* fire = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.4, 1, 8.0, true);
-	fire->setVelocity(1);
-	fire->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.8), 0.3f);
+	Emitter* fire = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.2, 2, 5.0, true);
+	fire->setVelocity(5);
+	fire->usePhysicDirectionGravity(glm::vec4(0.0, 1.0, 0.0, 5.0), 0.5f);
 	fire->addTexture(fireTex1, 1.0);
 	fire->addTexture(fireTex2, 0.7);
-	fire->addTexture(smokeBlack2, 0.3);
+	fire->addTexture(smokeBlack2, 0.1);
 	//fire->addTexture(smokeBlack2, 0.1);
 	//fire->addTexture(smokeWhiteTex2, 0.25);
-	std::vector<float> sizeF{ 0.05f, 0.5f, 0.75f, 1.2f };
+	std::vector<float> sizeF{ 0.05f, 0.5f, 0.75f, 1.0f };
 	std::vector<float> timeF{ 0.0f, 0.4f, 0.75f, 1.0f };
-	fire->defineLook(true, sizeF, timeF, 1.0, 4.0, 3.0, true, 0.3);
+	fire->defineLook(true, sizeF, timeF, 0.5, 4.0, 3.0, true, 0.3);
 	fire->switchToGeometryShader();
 
+	//Emitter fire flickering
+	Emitter* fireFlickering = new Emitter(0, glm::vec3(0.0, 0.1, 0.0), 0.0, 0.2, 1, 2.0, true);
+	fireFlickering->setVelocity(5);
+	fireFlickering->usePhysicDirectionGravity(glm::vec4(0.0, 1.0, 0.0, 0.5), 0.3f);
+	fireFlickering->addTexture(fireFlickering1, 1.0);
+	fireFlickering->addTexture(fireFlickering2, 0.7);
+	fireFlickering->addTexture(fireFlickering3, 0.5);
+	fireFlickering->addTexture(fireFlickering4, 0.3);
+	fireFlickering->defineLook(true, 0.1, 0.5, 1.0, 0.5, true, 0.3);
+	fireFlickering->switchToGeometryShader();
+	
 	//Emitter fire sparkle
-	Emitter* fireSparkle = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.5, 5, 2.0, true);
-	fireSparkle->setVelocity(6);
-	fireSparkle->usePhysicTrajectory(glm::vec4(0, -1, 0, 1), 1.0);
-	fireSparkle->addTexture(fireTex, 1.0);
-	fireSparkle->defineLook(true, 0.01, 0.0, 1.0);
-	testEff->addEmitter(fireSparkle);
+	Emitter* fireSparkle = new Emitter(0, glm::vec3(0.0, 0.1, 0.0), 0.0, 0.05, 3, 2.5, true);
+	fireSparkle->setVelocity(5);
+	fireSparkle->usePhysicDirectionGravity(glm::vec4(0.0, 1.0, 0.0, 0.8), 0.5f);
+	fireSparkle->addTexture(fireSparkleTex1, 1.0);
+	fireSparkle->defineLook(true, 0.005, 0.5, 0.5);
+	//testEff->addEmitter(fireSparkle);
 
-	//Effect* effect = new Effect(RESOURCES_PATH "/XML/ComicCloudEffect.xml");
-	//ParticleSystem* ps = new ParticleSystem(glm::vec3(0.0, 0.0, 0.0), RESOURCES_PATH "/XML/ComicCloudEffect.xml");
-	Node psNode("psNode");
-	psNode.setCamera(&cam);
-	//psNode.addParticleSystem(ps);
-	//effect->saveEffect(RESOURCES_PATH "/XML/EffectTest.xml");
 
-	Effect* effect = new Effect();
-	effect->addEmitter(fire);
-	effect->addEmitter(fireSparkle);
-	ParticleSystem* psFire = new ParticleSystem(glm::vec3(-2, 0, 3), effect);
-	Node fireNode("fireNode");
-	fireNode.setCamera(&cam);
-	fireNode.addParticleSystem(psFire);
+	//Emitter firework explosion
+	Emitter* fireworkExplosion = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.25, 0.01, 50, 1.5, true);
+	fireworkExplosion->setVelocity(6);
+	fireworkExplosion->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 0.4), 3.0f);
+	//fireworkExplosion->usePhysicPointGravity(glm::vec3(0.0, 0.0, 0.0), 0.6, 10.0, 2, 4.0f, true);
+	//fireworkExplosion->addTexture(texFireworkRed, 1.0);
+	fireworkExplosion->defineLook(true, 0.005, 0.0, 0.1);
+
+	//Emitter firework tail
+	Emitter* fireworkTail = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 2.0, 0.01, 80, .0, true);
+	fireworkTail->setVelocity(5);
+	fireworkTail->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 0.9), 0.5f);
+	//fireworkTail->usePhysicPointGravity(glm::vec3(0.0, 0.0, 0.0), 0.6, 10.0, 2, 4.0f, true);
+	//fireworkTail->addTexture(texFireworkTail, 1.0);
+	fireworkTail->defineLook(true, 0.01, 0.0, 0.1);
+
 
 	//FINAL EMITTER WHITE SMOKE
 	Emitter* smokeWhite = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.4, 1, 8.0, true);
@@ -111,23 +137,46 @@ int main()
 	smokeWhite->defineLook(true, smokeWhiteSize, smokeWhiteTime, 1.0, 4.0, 4.0, false, 0.3);
 	smokeWhite->switchToGeometryShader();
 
+	//////////////////////Effect//////////////////////
+	Effect* efExplosion = new Effect();
+	efExplosion->addEmitter(explosionSparkle);
+	
+	Effect* efFire = new Effect();
+	efFire->addEmitter(fire);
+	//efFire->addEmitter(fireFlickering);
+	efFire->addEmitter(fireSparkle);
+
+	Effect* efFirework = new Effect();
+	efFirework->addEmitter(fireworkTail);
+	//efFirework->addEmitter(fireworkExplosion);
+
 	Effect* smWhi = new Effect();
 	smWhi->addEmitter(smokeWhite);
+
+	//////////////////////ParticleSystem//////////////////////
+	ParticleSystem* psExplosion = new ParticleSystem(glm::vec3(0, -1, 0), efExplosion);
+	ParticleSystem* psFire = new ParticleSystem(glm::vec3(-2, 0, 3), efFire);
+	ParticleSystem* psFirework = new ParticleSystem(glm::vec3(0, 0, 0), efFirework);
 	ParticleSystem* psSmokeWhite = new ParticleSystem(glm::vec3(2, 0, 3), smWhi);
+	
+
+	//////////////////////Node//////////////////////
+	Node nodeExplosion("nodeExplosion");
+	nodeExplosion.setCamera(&cam);
+	nodeExplosion.addParticleSystem(psExplosion);
+
+	Node fireNode("fireNode");
+	fireNode.setCamera(&cam);
+	fireNode.addParticleSystem(psFire);
+
+	Node nodeFirework("fireworkNode");
+	nodeFirework.setCamera(&cam);
+	nodeFirework.addParticleSystem(psFirework);
+
 	Node whiteSmokeNode("whiteSmokeNode");
 	whiteSmokeNode.setCamera(&cam);
 	whiteSmokeNode.addParticleSystem(psSmokeWhite);
 
-	//Flies
-	
-	//Effect* efFly = new Effect();
-	//efFly->addEmitter(fruitFlys);
-	ParticleSystem* psFly = new ParticleSystem(glm::vec3(0, 0, 0), RESOURCES_PATH "/XML/SwarmOfFliesEffect.xml");
-	psFly->start();
-	//efFly->saveEffect(RESOURCES_PATH "/XML/SwarmOfFliesEffect.xml");
-
-	//ParticleSystem* psTest = new ParticleSystem(glm::vec3(0, 0, 0), RESOURCES_PATH "/XML/SwarmOfFliesEffect.xml");
-	//psTest->getEffect()->saveEffect(RESOURCES_PATH "/XML/SwarmOfFlysEffect2.xml");
 
 	// Shader
 	VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader3D/ColorShader3D.vert")));
@@ -152,15 +201,17 @@ int main()
 	iH.setAllInputMaps(*(testScene.getScenegraph()->getActiveCamera()));
 	iH.changeActiveInputMap("Pilotview");
 
-	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&psNode);
-	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&testNode);
+	//add nodes to the scenegraph
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeExplosion);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&fireNode);
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeFirework);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&whiteSmokeNode);
 
 	//start the ParticleSystems
 	psFire->start();
 	psSmokeWhite->start();
-	testPS->start();
+	//psExplosion->start();
+	psFirework->start();
 	//psFly->start();
 
 	double startTime = glfwGetTime();
@@ -187,7 +238,7 @@ int main()
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
 
-		glClearColor(1.0, 1.0, 1.0, 1.0);
+		glClearColor(0.5, 0.5, 0.5, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shader.bind();
 		shader.sendMat4("viewMatrix", cam.getViewMatrix());
