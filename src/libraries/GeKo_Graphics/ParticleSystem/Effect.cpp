@@ -254,20 +254,16 @@ int Effect::loadEffect(const char* filepath)
 			}
 			physicType = item->FirstChildElement("PointGravity");
 			if (physicType != nullptr){
-				XMLElement* physicElement = physicType->FirstChildElement("Point");
+				XMLElement* physicElement = physicType->FirstChildElement("Gravity");
 				if (physicElement == nullptr) return XML_ERROR_PARSING_ELEMENT;
-				glm::vec3 point;
-				error = physicElement->QueryFloatAttribute("x", &point.x);
+				glm::vec4 gravity;
+				error = physicElement->QueryFloatAttribute("x", &gravity.x);
 				XMLCheckResult(error);
-				error = physicElement->QueryFloatAttribute("y", &point.y);
+				error = physicElement->QueryFloatAttribute("y", &gravity.y);
 				XMLCheckResult(error);
-				error = physicElement->QueryFloatAttribute("z", &point.z);
+				error = physicElement->QueryFloatAttribute("z", &gravity.z);
 				XMLCheckResult(error);
-
-				physicElement = physicType->FirstChildElement("GravityImpact");
-				if (physicElement == nullptr) return XML_ERROR_PARSING_ELEMENT;
-				float gravityImpact;
-				error = physicElement->QueryFloatText(&gravityImpact);
+				error = physicElement->QueryFloatAttribute("w", &gravity.w);
 				XMLCheckResult(error);
 
 				physicElement = physicType->FirstChildElement("Speed");
@@ -288,13 +284,7 @@ int Effect::loadEffect(const char* filepath)
 				error = physicElement->QueryIntText(&gravityFunction);
 				XMLCheckResult(error);
 
-				physicElement = physicType->FirstChildElement("BackToSource");
-				if (physicElement == nullptr) return XML_ERROR_PARSING_ELEMENT;
-				bool backToSource;
-				error = physicElement->QueryBoolText(&backToSource);
-				XMLCheckResult(error);
-
-				emitter->usePhysicPointGravity(point, gravityImpact, gravityRange, gravityFunction, speed, backToSource);
+				emitter->usePhysicPointGravity(gravity, gravityRange, gravityFunction, speed);
 			}
 			physicType = item->FirstChildElement("SwarmCircleMotion");
 			if (physicType != nullptr){
@@ -581,11 +571,12 @@ int Effect::saveEffect(char* filepath)
 		}
 		else if (emitter->getPhysicPointGravity()){
 			XMLElement* physic = doc.NewElement("PointGravity");
-			XMLElement* temp = doc.NewElement("Point");
+			XMLElement* temp = doc.NewElement("Gravity");
 			glm::vec4 gravityVec = emitter->getGravity();
 			temp->SetAttribute("x", gravityVec.x);
 			temp->SetAttribute("y", gravityVec.y);
 			temp->SetAttribute("z", gravityVec.z);
+			temp->SetAttribute("w", gravityVec.w);
 			physic->InsertEndChild(temp);
 
 			temp = doc.NewElement("Speed");

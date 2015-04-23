@@ -117,12 +117,7 @@ void Emitter::update(ShaderProgram* compute, glm::vec3 playerPosition){
 	compute->sendFloat("fullLifetime", m_particleLifetime);
 	compute->sendInt("particleMortal", m_particleMortal);
 
-	if (m_usePointGravity && m_backtoSource){
-		compute->sendVec4("gravity", glm::vec4(m_emitterPosition, m_gravityImpact));
-	}
-	else{
-		compute->sendVec4("gravity", m_gravity);
-	}
+	compute->sendVec4("gravity", m_gravity);
 	compute->sendFloat("gravityRange", m_gravityRange);
 	compute->sendInt("gravityFunc", m_gravityFunction);
 
@@ -426,22 +421,12 @@ void Emitter::usePhysicDirectionGravity(glm::vec4 gravity, float speed){
 
 	setSpeed(speed);
 }
-//gravityFunction: 1=constant; 2=x^4; 3=cos
-//backToSource: gravity will be set to the emitter position.
-void Emitter::usePhysicPointGravity(glm::vec3 point, float gravityImpact, float gravityRange, int gravityFunction, float speed, bool backToSource){
+void Emitter::usePhysicPointGravity(glm::vec4 gravity, float gravityRange, int gravityFunction, float speed){
+	setGravity(gravity);
 	m_useTrajectory = false;
 	m_useDirectionGravity = false;
 	m_usePointGravity = true;
 	m_useChaoticSwarmMotion = false;
-
-	if (backToSource){
-		m_gravityImpact = gravityImpact;
-		m_backtoSource = backToSource;
-	}
-	else{
-		setGravity(glm::vec4(point, gravityImpact));
-		m_backtoSource = backToSource;
-	}
 
 	setSpeed(speed);
 	m_gravityFunction = gravityFunction;
@@ -875,9 +860,6 @@ void Emitter::setAttributes(){
 	m_useChaoticSwarmMotion = false;
 
 	//physic attributes
-	float m_gravityImpact = 0.0;
-	glm::vec3 m_point = glm::vec3(0, 0, 0);
-	bool m_backtoSource = false;
 	m_gravityRange = 0.0f;
 	m_gravityFunction = 0;
 	m_speed = 0.0f;
