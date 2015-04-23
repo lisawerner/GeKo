@@ -676,18 +676,14 @@ void Node::render(ShaderProgram &shader)
 	else {
 		//Extra Render-Methode für ein Partikel-System
 		if (m_particleActive){
-			renderParticle(shader);
+			renderParticles();
 		}
 	}
 }
 
-void Node::renderParticle(ShaderProgram &shader)
+void Node::renderParticles()
 
 {
-
-	//TODO: Particle-System muss gerendert werden!
-
 	m_particleSystem->update(*m_camera);
 	m_particleSystem->render(*m_camera);
-
 }

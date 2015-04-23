@@ -48,7 +48,7 @@ void InputHandler::changeActiveInputMap(MapType type){
 // TODO maybe an exception 
 InputMap* InputHandler::getInputMap(std::string name) {
 
-	InputMap* instance = new InputMap();
+	InputMap* instance;
 
 	for (int i = 0; i < m_allInputMaps.size(); i++)
 	{
@@ -64,7 +64,7 @@ InputMap* InputHandler::getInputMap(std::string name) {
 
 InputMap* InputHandler::getInputMap(MapType type) {
 
-	InputMap* instance = new InputMap();
+	InputMap* instance;
 
 	for (int i = 0; i < m_allInputMaps.size(); i++)
 	{
