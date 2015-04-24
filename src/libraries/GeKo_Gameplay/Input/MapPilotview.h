@@ -15,7 +15,4 @@ public:
 	The lambda method gets then mapped to a key in m_map
 	*/
 	void update(Camera &activeCam);
-
-	/// The method considers multiple keys being pressed at the same time
-	void checkMultipleMappedKeys(int key, GLFWwindow &window);
 };

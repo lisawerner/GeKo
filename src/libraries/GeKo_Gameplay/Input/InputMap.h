@@ -40,8 +40,9 @@ public:
 	/// The method return the MapType of the InputMap
 	MapType getType();
 	
-	/// The method checks whether multiple keys are pressed to ensure performing the right action and it's implemented in the specific InputMaps
-	virtual void checkMultipleMappedKeys(int key, GLFWwindow &window);
+	/// The method ensures performing the right action for the mapped keys
+	/** It checks if the key already is in the map or not and whether multiple keys are pressed*/
+	void checkKeys(int key, GLFWwindow &window);
 
 	/// The method fills the m_map considering the parameter (camera or player)
 	// Implemented in the specific Input Maps
@@ -63,6 +64,8 @@ protected:
 	GLFWwindow* m_usedWindow;
 
 	MapType m_type;
+
+	std::vector<int> m_mutlipleKeys;
 
 };
 
