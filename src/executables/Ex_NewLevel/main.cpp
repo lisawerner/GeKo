@@ -22,11 +22,11 @@
 
 #include <GeKo_Physics/CollisionTest.h>
 
-#include <GeKo_Graphics/Observer/ObjectObserver.h>
-#include <GeKo_Graphics/Observer/CollisionObserver.h>
-#include <GeKo_Graphics/Observer/GravityObserver.h>
-#include <GeKo_Graphics/Observer/SoundObserver.h>
-#include <GeKo_Graphics/Observer/QuestObserver.h>
+#include <GeKo_Gameplay/Observer/ObjectObserver.h>
+#include <GeKo_Gameplay/Observer/CollisionObserver.h>
+#include <GeKo_Gameplay/Observer/GravityObserver.h>
+#include <GeKo_Gameplay/Observer/SoundObserver.h>
+#include <GeKo_Gameplay/Observer/QuestObserver.h>
 
 #include <GeKo_Gameplay/Questsystem/ExpReward.h>
 
@@ -187,7 +187,7 @@ int main()
 	//AStarNode defaultASNode("Default");
 	//AI ant_Flick(&defaultTree, &defaultASNode, &aiNode);
 	AI ant_Flick;
-	ant_Flick.setAntAfraid();
+	//ant_Flick.setAntAfraid();
 	/*ant_Flick.setGraph(&testGraph);
 	ant_Flick.setPosition(posSpawn);
 	ant_Flick.setPosHome(testGraph.searchNode("Spawn"));*/
@@ -478,7 +478,7 @@ int main()
 		//==================================================================//
 
 		playKey_callback(testWindow.getWindow());
-		geko.update(deltaTime);
+		//geko.update(deltaTime);
 
 		//===================================================================//
 		//==================Render your Objects==============================//
