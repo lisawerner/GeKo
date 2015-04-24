@@ -1,17 +1,17 @@
 #include "PlayerGUI.h"
 
-PlayerGUI::PlayerGUI(const int hudWidth, const int hudHeight, const int windowWidth, const int windowHeight, const int questHeight, const int questWidth, Player &player)
+PlayerGUI::PlayerGUI(const int hudWidth, const int hudHeight, const int windowWidth, const int windowHeight, const int questHeight, const int questWidth, Player* player)
 {
 	m_HUD_WIDTH = hudWidth;
 	m_HUD_HEIGHT = hudHeight;
 	m_WINDOW_HEIGHT = windowHeight;
 	m_WINDOW_WIDTH = windowWidth;
-	m_QUEST_WIDTH = questWidth; 
+	m_QUEST_WIDTH = questWidth;
 	m_QUEST_HEIGHT = questHeight;
 
 	Texture bricks((char*)RESOURCES_PATH "/bricks_diffuse.png");
 	m_hud = new GUI("testGUI", m_HUD_WIDTH, m_HUD_HEIGHT);
-	m_hud->setPosition((m_WINDOW_WIDTH / 2) - (m_HUD_WIDTH / 2), m_WINDOW_HEIGHT - m_HUD_HEIGHT);
+	m_hud->setPosition(250, 500);
 	m_hud->setCollapsable(false);
 	m_hud->setTitleBarVisible(false);
 	m_hud->setBackgroundAlpha(0.5f);
@@ -20,17 +20,17 @@ PlayerGUI::PlayerGUI(const int hudWidth, const int hudHeight, const int windowWi
 	m_hud->setMoveable(false);
 
 	m_player = player;
-	int hp = m_player.getHealth();
-	int hpMax = m_player.getHealth();
-	int exp = m_player.getExp();
-	int expMax = m_player.getLevelThreshold();
+	hp = m_player->getHealth();
+	hpMax = m_player->getHealth();
+	exp = m_player->getExp();
+	expMax = m_player->getLevelThreshold();
 
-	GuiElement::ProgressBar *hpBar = new GuiElement::ProgressBar(&hp, hpMax, 300, glm::fvec4(1.0f, 0.0f, 0.0f, 1.0f));
+	GuiElement::ProgressBar *hpBar = new GuiElement::ProgressBar(&hp, &hpMax, 300, glm::fvec4(1.0f, 0.0f, 0.0f, 1.0f));
 	m_hud->addElement(hpBar);
 	m_hud->addElement(new GuiElement::SameLine());
 	m_hud->addElement(new GuiElement::Text("HP"));
 
-	GuiElement::ProgressBar *expBar = new GuiElement::ProgressBar(&exp, expMax, 300, glm::fvec4(1.0f, 0.9960784f, 0.9529411f, 1.0f));
+	GuiElement::ProgressBar *expBar = new GuiElement::ProgressBar(&exp, &expMax, 300, glm::fvec4(1.0f, 0.9960784f, 0.9529411f, 1.0f));
 	m_hud->addElement(expBar);
 	m_hud->addElement(new GuiElement::SameLine());
 	m_hud->addElement(new GuiElement::Text("EXP"));
@@ -40,7 +40,7 @@ PlayerGUI::PlayerGUI(const int hudWidth, const int hudHeight, const int windowWi
 	m_hud->addElement(new GuiElement::Spacing());
 	m_hud->addElement(new GuiElement::Text("LVL"));
 
-	int level = m_player.getLvl();
+	level = m_player->getLvl();
 	m_hud->addElement(new GuiElement::SameLine());
 	GuiElement::IntBox *lvlBox = new GuiElement::IntBox(&level, glm::fvec4(1.0f, 1.0f, 1.0f, 1.0f), glm::fvec4(0.7f, 0.7f, 0.7f, 1.0f));
 	m_hud->addElement(lvlBox);
@@ -98,4 +98,13 @@ PlayerGUI::~PlayerGUI()
 GUI* PlayerGUI::getHUD()
 {
 	return m_hud;
+}
+
+void PlayerGUI::update()
+{
+	hp = m_player->getHealth();
+	hpMax = m_player->getHealth();
+	exp = m_player->getExp();
+	expMax = m_player->getLevelThreshold();
+	level = m_player->getLvl();
 }

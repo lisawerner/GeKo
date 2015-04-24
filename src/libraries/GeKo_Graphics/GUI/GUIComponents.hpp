@@ -296,64 +296,65 @@ namespace GuiElement
   {
 
   public:
-    ProgressBar(int *hp, int hpMax, int hpBarWidth, glm::fvec4 color) : m_hp(hp), m_hpMax(hpMax), m_hpBarWidth(hpBarWidth), m_color(color){ }
-    inline void render()
-    {
-      int currentHP = *m_hp;
-      float restHP = static_cast<float>(currentHP) / static_cast<float>(m_hpMax);
+	  ProgressBar(int *hp, int *hpMax, int hpBarWidth, glm::fvec4 color) : m_hp(hp), m_hpMax(hpMax), m_hpBarWidth(hpBarWidth), m_color(color){ }
+	  inline void render()
+	  {
+		  int currentHP = *m_hp;
+		  float restHP = static_cast<float>(currentHP) / static_cast<float>(*m_hpMax);
 
-      if (restHP >= 0 && restHP <= 1)
-      {
+		  if (restHP >= 0 && restHP <= 1)
+		  {
 
-        restHP *= width;
+			  restHP *= width;
 
-        for (int i = width - 1; i >= restHP; i--)
-        {
-          arr[i] = 0.0f;
-        }
+			  for (int i = width - 1; i >= restHP; i--)
+			  {
+				  arr[i] = 0.0f;
+			  }
 
-        for (int i = 0; i < restHP; i++)
-        {
-          arr[i] = 50.0f;
-        }
+			  for (int i = 0; i < restHP; i++)
+			  {
+				  arr[i] = 50.0f;
+			  }
 
-      }
+		  }
 
-      else if (restHP < 0)
-      {
-        for (int i = 0; i < width; i++)
-        {
-          arr[i] = 0.0f;
-        }
+		  else if (restHP < 0)
+		  {
+			  for (int i = 0; i < width; i++)
+			  {
+				  arr[i] = 0.0f;
+			  }
 
-      }
+		  }
 
-      else
-      {
-        for (int i = 0; i < width; i++)
-        {
-          arr[i] = 50.0f;
-        }
+		  else
+		  {
+			  for (int i = 0; i < width; i++)
+			  {
+				  arr[i] = 50.0f;
+			  }
 
-      }
-      ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(m_color.r, m_color.g, m_color.b, m_color.a));
-      ImGui::PushStyleColor(ImGuiCol_PlotHistogramHovered, ImVec4(m_color.r, m_color.g, m_color.b, m_color.a));
-      ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.0f, 0.0f, 0.0f, 00.7f));
-      ImGui::PushStyleColor(ImGuiCol_TooltipBg, ImVec4(0.0, 0.0, 0.0, 0.0));
-      
-      ImGui::PlotHistogram("", arr, ((int)(sizeof(arr) / sizeof(*arr))), 0," ", 0.0f, 50.0f, ImVec2(m_hpBarWidth, 0));
+		  }
+		  ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(m_color.r, m_color.g, m_color.b, m_color.a));
+		  ImGui::PushStyleColor(ImGuiCol_PlotHistogramHovered, ImVec4(m_color.r, m_color.g, m_color.b, m_color.a));
+		  ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.0f, 0.0f, 0.0f, 00.7f));
+		  ImGui::PushStyleColor(ImGuiCol_TooltipBg, ImVec4(0.0, 0.0, 0.0, 0.0));
 
-      if (ImGui::IsItemHovered())
-        ImGui::SetTooltip(" ");
-    }
-    inline void dispose() { delete this; }
+		  ImGui::PlotHistogram("", arr, ((int)(sizeof(arr) / sizeof(*arr))), 0, " ", 0.0f, 50.0f, ImVec2(m_hpBarWidth, 0));
+
+		  if (ImGui::IsItemHovered())
+			  ImGui::SetTooltip(" ");
+	  }
+	  inline void dispose() { delete this; }
+
 
   private:
-    ~ProgressBar() {}
+	  ~ProgressBar() {}
 
-    std::string m_ID;
-    glm::fvec4 m_color;
-    int *m_hp, m_hpMax, m_hpBarWidth;
+	  std::string m_ID;
+	  glm::fvec4 m_color;
+	  int *m_hp, *m_hpMax, m_hpBarWidth;
   };
   
   ///Class to create a nested window inside the current GUI
