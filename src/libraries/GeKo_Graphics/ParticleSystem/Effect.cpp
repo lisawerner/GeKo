@@ -254,16 +254,20 @@ int Effect::loadEffect(const char* filepath)
 			}
 			physicType = item->FirstChildElement("PointGravity");
 			if (physicType != nullptr){
-				XMLElement* physicElement = physicType->FirstChildElement("Gravity");
+				XMLElement* physicElement = physicType->FirstChildElement("Point");
 				if (physicElement == nullptr) return XML_ERROR_PARSING_ELEMENT;
-				glm::vec4 gravity;
-				error = physicElement->QueryFloatAttribute("x", &gravity.x);
+				glm::vec3 point;
+				error = physicElement->QueryFloatAttribute("x", &point.x);
 				XMLCheckResult(error);
-				error = physicElement->QueryFloatAttribute("y", &gravity.y);
+				error = physicElement->QueryFloatAttribute("y", &point.y);
 				XMLCheckResult(error);
-				error = physicElement->QueryFloatAttribute("z", &gravity.z);
+				error = physicElement->QueryFloatAttribute("z", &point.z);
 				XMLCheckResult(error);
-				error = physicElement->QueryFloatAttribute("w", &gravity.w);
+
+				physicElement = physicType->FirstChildElement("GravityImpact");
+				if (physicElement == nullptr) return XML_ERROR_PARSING_ELEMENT;
+				float gravityImpact;
+				error = physicElement->QueryFloatText(&gravityImpact);
 				XMLCheckResult(error);
 
 				physicElement = physicType->FirstChildElement("Speed");
@@ -284,7 +288,13 @@ int Effect::loadEffect(const char* filepath)
 				error = physicElement->QueryIntText(&gravityFunction);
 				XMLCheckResult(error);
 
-				emitter->usePhysicPointGravity(gravity, gravityRange, gravityFunction, speed);
+				physicElement = physicType->FirstChildElement("BackToSource");
+				if (physicElement == nullptr) return XML_ERROR_PARSING_ELEMENT;
+				bool backToSource;
+				error = physicElement->QueryBoolText(&backToSource);
+				XMLCheckResult(error);
+				
+				emitter->usePhysicPointGravity(point, gravityImpact, gravityRange, gravityFunction, speed, backToSource);
 			}
 			physicType = item->FirstChildElement("SwarmCircleMotion");
 			if (physicType != nullptr){
@@ -571,12 +581,16 @@ int Effect::saveEffect(char* filepath)
 		}
 		else if (emitter->getPhysicPointGravity()){
 			XMLElement* physic = doc.NewElement("PointGravity");
-			XMLElement* temp = doc.NewElement("Gravity");
+			XMLElement* temp = doc.NewElement("Point");
 			glm::vec4 gravityVec = emitter->getGravity();
 			temp->SetAttribute("x", gravityVec.x);
 			temp->SetAttribute("y", gravityVec.y);
 			temp->SetAttribute("z", gravityVec.z);
-			temp->SetAttribute("w", gravityVec.w);
+			physic->InsertEndChild(temp);
+
+			//TODO impact + backtosource
+			temp = doc.NewElement("GravityImpact");
+			temp->SetText(emitter->getPhysicAttGravityImpact());
 			physic->InsertEndChild(temp);
 
 			temp = doc.NewElement("Speed");
@@ -591,6 +605,10 @@ int Effect::saveEffect(char* filepath)
 			temp->SetText(emitter->getPhysicAttGravityFunction());
 			physic->InsertEndChild(temp);
 			element->InsertEndChild(physic);
+
+			temp = doc.NewElement("BackToSource");
+			temp->SetText(emitter->getPhysicAttBacktoSource());
+			physic->InsertEndChild(temp);
 		}
 		else if (emitter->getPhysicSwarmCircleMotion()){
 			XMLElement* physic = doc.NewElement("SwarmCircleMotion");

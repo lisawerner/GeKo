@@ -48,7 +48,7 @@ int main()
 
 	Emitter* flower = new Emitter(0, glm::vec3(0.0,-1.0,0.0), 0.0, 0.003, 1, 15.0, true);
 	flower->setVelocity(0);
-	flower->usePhysicPointGravity(glm::vec4(0.5, 0.5, 0.0, 1.0), 1.8, 1, 0.8);
+	//flower->usePhysicPointGravity(glm::vec4(0.5, 0.5, 0.0, 1.0), 1.8, 1, 0.8);
 	//flower->setComputeShader("/ParticleSystem/ParticleSystemFlower.comp");
 	Effect* efFlower = new Effect();
 	efFlower->addEmitter(flower);

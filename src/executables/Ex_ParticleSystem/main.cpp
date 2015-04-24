@@ -293,14 +293,14 @@ int main()
 	//FINAL EMITTER ENERGYBALL
 	Emitter* energyBall = new Emitter(0, glm::vec3(0.0, 0.0, 1.0), 0.0, 0.01, 5, 15.0, true);
 	energyBall->setVelocity(5);
-	energyBall->usePhysicPointGravity(glm::vec4(2.0, 2.0, 2.0, 3.0), 8.0, 2, 1.8);
+	//energyBall->usePhysicPointGravity(glm::vec4(2.0, 2.0, 2.0, 3.0), 8.0, 2, 1.8);
 	energyBall->addTexture(energyTex, 1.0);
 	energyBall->defineLook(true, 0.04);
 
 	//FINAL EMITTER COMIC CLOUD
 	Emitter* cloud01 = new Emitter(0, glm::vec3(0.0, 0.5, 0.0), 0.0, 1.6, 1, 10.0, true);
 	cloud01->setVelocity(4);
-	cloud01->usePhysicPointGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.0, 0, 0.72);
+	//cloud01->usePhysicPointGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.0, 0, 0.72);
 	cloud01->addTexture(comicCloudTex1, 0.0);
 	std::vector<float> cloudSize1{ 0.8f, 1.6f };
 	std::vector<float> cloudTime1{ 0.0f, 1.0f };
@@ -309,7 +309,7 @@ int main()
 
 	Emitter* cloud02 = new Emitter(0, glm::vec3(0.0, 0.5, 0.0), 0.0, 2.3, 1, 10.0, true);
 	cloud02->setVelocity(4);
-	cloud02->usePhysicPointGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.0, 0, 0.6);
+	//cloud02->usePhysicPointGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.0, 0, 0.6);
 	cloud02->addTexture(comicCloudTex3, 0.0);
 	std::vector<float> cloudSize2{ 0.8f, 1.6f };
 	std::vector<float> cloudTime2{ 0.0f, 1.0f };
