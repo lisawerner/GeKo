@@ -76,7 +76,7 @@ int main()
 
 	//our textures
 	Texture bricks((char*)RESOURCES_PATH "/brick.bmp");
-	Texture marble((char*)RESOURCES_PATH "/seamless_marble.jpg");
+	Texture marble((char*)RESOURCES_PATH "/seamless_marble.png");
 	Texture chrome((char*)RESOURCES_PATH "/chrome.jpg");
 
 	//Scene creation 
