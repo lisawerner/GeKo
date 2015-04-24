@@ -55,19 +55,7 @@ public:
 
 	float getViewRadius();
 
-	void decide();
-	void decide2();
-
-	void updatePath();
-	void updatePathPlayer();
-	void updatePathPatrol();
-
-	AStarNode* nextNodeOnPatrol();
-
-	void setAntAfraid();
-	void setAntAfraid(std::string name, DecisionTree *tree, Graph<AStarNode, AStarAlgorithm> *antGraph);
-	void setAntAggressiv();
-	void setAntAggressiv(std::string name, DecisionTree *tree, Graph<AStarNode, AStarAlgorithm> *antGraph);
+	virtual void decide();
 
 	///Returns the m_sourceName string
 	/**If a Sound-File-Handler was attached, the m_sourceName contains the name of the source which should be played!*/
@@ -75,7 +63,7 @@ public:
 	///Sets a specific source-file to the node
 	/**This method uses the sfh to generate a new sound-source which can be played with the sfh later ingame!*/
 	void setSourceName(SoundtypeAI type, std::string sourceName, const char* filepath);
-
+	///Updates the positions of the sources in the map to the most current position of the AI. The Method is called primarily by the event OBJECT_MOVED.
 	void updateSourcesInMap();
 
 	bool hasDied();
@@ -87,7 +75,7 @@ protected:
 	AStarNode* m_lastTargetOnGraph;
 	AStarNode* m_target;
 	std::vector<AStarNode*> m_path;
-	std::vector<AStarNode*> m_pathPatrol;
+
 	AStarNode* m_nextTarget;
 
 	DecisionTree* m_decisionTree;

@@ -35,8 +35,8 @@ Player::Player(std::string playerName, glm::vec3 spawnPoint)
 	m_theta = 2.0;
 	m_alpha = 0;
 
-	m_speed = 0.01;
-	m_speedTurn = 0.1;
+	m_speed = 0.007;
+	m_speedTurn = 0.03;
 }
 
 Player::Player(){
@@ -50,17 +50,12 @@ glm::vec3 Player::getSpawnPoint()
 	return m_spawnPoint;
 }
 
-void Player::move(glm::vec3 newPosition)
-{
-	m_position = glm::vec4(newPosition, 1.0);
-}
-
 void Player::moveForward(){
 	m_position.x += m_speed* m_deltaTime *m_viewDirection.x;
 	m_position.y += m_speed* m_deltaTime *m_viewDirection.y;
 	m_position.z += m_speed* m_deltaTime *m_viewDirection.z;
 
-	//std::cout << "Player moveFwd" << std::endl;
+	std::cout << "Player moveFwd to: x:" << m_position.x << "; z: " << m_position.z << std::endl;
 
 	notify(*this, Object_Event::OBJECT_MOVED);
 }
@@ -70,7 +65,7 @@ void Player::moveBackward(){
 	m_position.y -= m_speed* m_deltaTime *m_viewDirection.y;
 	m_position.z -= m_speed* m_deltaTime *m_viewDirection.z;
 
-//	std::cout << "Player moveBwd" << std::endl;
+	std::cout << "Player moveBwd" << std::endl;
 
 	notify(*this, Object_Event::OBJECT_MOVED);
 }
@@ -81,7 +76,7 @@ void Player::moveLeft(){
 	m_position.y -= m_speed* m_deltaTime*directionOrtho.y;
 	m_position.z -= m_speed* m_deltaTime*directionOrtho.z;
 
-	//std::cout << "Player moveLeft" << std::endl;
+	std::cout << "Player moveLeft" << std::endl;
 
 	notify(*this, Object_Event::OBJECT_MOVED);
 }
@@ -92,7 +87,7 @@ void Player::moveRight(){
 	m_position.y += m_speed* m_deltaTime*directionOrtho.y;
 	m_position.z += m_speed* m_deltaTime*directionOrtho.z;
 
-	//std::cout << "Player moveRight" << std::endl;
+	std::cout << "Player moveRight" << std::endl;
 
 	notify(*this, Object_Event::OBJECT_MOVED);
 }
@@ -180,11 +175,26 @@ void Player::setDeltaTime(float dt){
 	m_deltaTime = dt;
 }
 
-void Player::setFire(){
-	if (m_inventory->countItem(ItemType::BRANCH)){
-		m_inventory->reduceItem(ItemType::BRANCH, 1);
-		notify(*this, Object_Event::PLAYER_SET_ON_FIRE);
-	} else{
-		//TODO: GUI sagt, dass das Inventar keine Branches hat
-	}
+void Player::addKeyInput(int key){
+	m_activeKey.push_back(key);
 }
+
+void Player::deleteKeyInput(){
+	m_activeKey.clear();
+}
+
+bool Player::checkActiveMoveKeys(){
+	auto v = m_activeKey;
+	for (int key : v){
+		if (key == 87 || key == 65 || key == 83 || key == 68){
+			//False für NICHT abbrechen vom Sound
+			return false;
+
+		}
+	}
+	//True für ABBRECHEN vom Sound
+	return true;
+}
+
+// Implemented in the specific AI
+void Player::setFire(){}
