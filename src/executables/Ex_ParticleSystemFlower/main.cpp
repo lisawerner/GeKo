@@ -15,7 +15,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	// You go over the active InputMap, if it's the key that is pressed, a method is called and the mapped action is executed else the key is ignored
 	for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
 		if (it->first == key)
-			iH.getActiveInputMap()->checkMultipleMappedKeys(key, *window);
+			//iH.getActiveInputMap()->checkMultipleMappedKeys(key, *window);
 		if (it == activeMap.end())
 			std::cout << "Key is not mapped to an action" << std::endl;
 	}
@@ -48,7 +48,7 @@ int main()
 
 	Emitter* flower = new Emitter(0, glm::vec3(0.0,-1.0,0.0), 0.0, 0.003, 1, 15.0, true);
 	flower->setVelocity(0);
-	flower->usePhysicPointGravity(glm::vec4(0.5, 0.5, 0.0, 1.0), 1.8, 1, 0.8);
+	//flower->usePhysicPointGravity(glm::vec4(0.5, 0.5, 0.0, 1.0), 1.8, 1, 0.8);
 	//flower->setComputeShader("/ParticleSystem/ParticleSystemFlower.comp");
 	Effect* efFlower = new Effect();
 	efFlower->addEmitter(flower);
