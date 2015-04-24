@@ -117,7 +117,18 @@ void Emitter::update(ShaderProgram* compute, glm::vec3 playerPosition){
 	compute->sendFloat("fullLifetime", m_particleLifetime);
 	compute->sendInt("particleMortal", m_particleMortal);
 
-	compute->sendVec4("gravity", m_gravity);
+	if (m_usePointGravity && m_backtoSource){
+		glm::vec3 newPosition(0,0,0);
+		newPosition.x = m_emitterPosition.x + m_gravity.x;
+		newPosition.y = m_emitterPosition.y + m_gravity.y;
+		newPosition.z = m_emitterPosition.z + m_gravity.z;
+		compute->sendVec4("gravity", glm::vec4(newPosition, m_gravityImpact));
+		
+	}
+	else{
+		compute->sendVec4("gravity", m_gravity);
+		
+	}
 	compute->sendFloat("gravityRange", m_gravityRange);
 	compute->sendInt("gravityFunc", m_gravityFunction);
 
@@ -421,13 +432,16 @@ void Emitter::usePhysicDirectionGravity(glm::vec4 gravity, float speed){
 
 	setSpeed(speed);
 }
-void Emitter::usePhysicPointGravity(glm::vec4 gravity, float gravityRange, int gravityFunction, float speed){
-	setGravity(gravity);
+void Emitter::usePhysicPointGravity(glm::vec3 point, float gravityImpact, float gravityRange, int gravityFunction, float speed, bool backToSource){
 	m_useTrajectory = false;
 	m_useDirectionGravity = false;
 	m_usePointGravity = true;
 	m_useChaoticSwarmMotion = false;
 
+	m_gravityImpact = gravityImpact;
+	m_backtoSource = backToSource;
+	setGravity(glm::vec4(point, gravityImpact));
+	
 	setSpeed(speed);
 	m_gravityFunction = gravityFunction;
 	m_gravityRange = gravityRange;
@@ -755,6 +769,12 @@ bool Emitter::getPhysicPointGravity(){
 bool Emitter::getPhysicSwarmCircleMotion(){
 	return m_useChaoticSwarmMotion;
 }
+float Emitter::getPhysicAttGravityImpact(){
+	return m_gravityImpact;
+}
+bool Emitter::getPhysicAttBacktoSource(){
+	return m_backtoSource;
+}
 float Emitter::getPhysicAttGravityRange(){
 	return m_gravityRange;
 }
@@ -860,6 +880,10 @@ void Emitter::setAttributes(){
 	m_useChaoticSwarmMotion = false;
 
 	//physic attributes
+	float m_gravityImpact = 0.0;
+	glm::vec3 m_point = glm::vec3(0, 0, 0);
+	bool m_backtoSource = false;
+
 	m_gravityRange = 0.0f;
 	m_gravityFunction = 0;
 	m_speed = 0.0f;

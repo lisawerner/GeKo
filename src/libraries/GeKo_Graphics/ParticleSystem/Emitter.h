@@ -83,7 +83,7 @@ public:
 	//our physic possibilities
 	void usePhysicTrajectory(glm::vec4 gravity, float speed);
 	void usePhysicDirectionGravity(glm::vec4 gravity, float speed);
-	void usePhysicPointGravity(glm::vec4 gravity, float gravityRange, int gravityFunction, float speed);
+	void usePhysicPointGravity(glm::vec3 point, float gravityImpact, float gravityRange, int gravityFunction, float speed, bool backToSource);
 	void usePhysicSwarmCircleMotion(bool verticalMovement, bool horizontalXMovement, bool horizontalYMovement, float speed);
 
 	//texturing	
@@ -143,6 +143,8 @@ public:
 	bool getPhysicDirectionGravity();
 	bool getPhysicPointGravity();
 	bool getPhysicSwarmCircleMotion();
+	float getPhysicAttGravityImpact();
+	bool getPhysicAttBacktoSource();
 	float getPhysicAttGravityRange();
 	int getPhysicAttGravityFunction();
 	float getPhysicAttSpeed();
@@ -234,6 +236,10 @@ private:
 	bool m_useChaoticSwarmMotion;
 
 	//physic attributes
+	//for point gravity
+	float m_gravityImpact;
+	bool m_backtoSource;
+
 	float m_gravityRange;
 	int m_gravityFunction;
 	float m_speed;
