@@ -47,16 +47,30 @@ public:
 		 case Collision_Event::COLLISION_KI_PLAYER:
 			 tp = nodeA.getAI()->getInventory()->countItem(ItemType::COOKIE);
 			 nodeA.getBoundingSphere()->setCollisionDetected(true);
-			 nodeA.getAI()->getGraph()->searchNode(GraphNodeType::OBJECT)->setPosition(nodeB.getPlayer()->getPosition());
+			 nodeA.getAI()->getGraph()->searchNode(GraphNodeType::OBJECT)->setPosition(glm::vec3(nodeB.getPlayer()->getPosition()));
 			 nodeA.getAI()->viewArea(true);
 
 			
-			 if (!nodeA.getAI()->getStates(States::HEALTH) &&  (tp > 0))
+			 if (!nodeA.getAI()->getStates(States::HEALTH))
 			 {
-				 nodeB.getPlayer()->collectItem(ItemType::COOKIE, nodeA.getAI()->getInventory()->countItem(ItemType::COOKIE));
 				 nodeB.getPlayer()->eat();
 
-				 nodeA.getAI()->getInventory()->clearInventory();
+				 if (tp > 0){
+					nodeB.getPlayer()->collectItem(ItemType::COOKIE, nodeA.getAI()->getInventory()->countItem(ItemType::COOKIE));
+					nodeA.getAI()->getInventory()->clearInventory();
+				 }
+				 
+				 m_level->getActiveScene()->getScenegraph()->getRootNode()->deleteChildrenNode(nodeA.getNodeName());
+
+				 std::vector<ParticleSystem*>* ps = m_level->getActiveScene()->getScenegraph()->getParticleSet();
+				 for (auto particle : *ps)
+				 {
+					 if (particle->m_type == ParticleType::SWARMOFFLIES)
+					 {
+						 particle->stop();
+						 nodeA.getAI()->getSoundHandler()->stopSource("Flies");
+					 }
+				 }
 
 				 std::vector<Goal*> tmp = m_level->getQuestHandler()->getQuests(GoalType::EATEN);
 
@@ -73,9 +87,27 @@ public:
 			 {
 				 if (nodeA.getAI()->getHealth() > 0)
 				 {
+		/*			 m_level->getFightSystem()->getParticle()->setPosition(glm::vec3(nodeB.getPlayer()->getPosition()));
+					 m_level->getFightSystem()->getParticle()->update(*nodeB.getCamera());
+					 m_level->getFightSystem()->getParticle()->render(*nodeB.getCamera());*/
+					 std::vector<ParticleSystem*>* ps = m_level->getActiveScene()->getScenegraph()->getParticleSet();
+					 for (auto particle : *ps)
+					 {
+						 if (particle->m_type == ParticleType::FIGHT)
+						 {
+							 particle->setPosition(glm::vec3(nodeB.getPlayer()->getPosition()));
+							 particle->start();
+							 particle->update(*nodeB.getCamera());
+							 particle->render(*nodeB.getCamera());
+						 }
+					 }
+
 					 if (m_counter->getTime() <= 0)
 					 {
 						 m_level->getFightSystem()->objectVSobject(nodeA.getAI(), nodeB.getPlayer());
+						/* m_level->getFightSystem()->getParticle()->setPosition(glm::vec3(nodeB.getPlayer()->getPosition()));
+						 m_level->getFightSystem()->getParticle()->update(*nodeB.getCamera());
+						 m_level->getFightSystem()->getParticle()->render(*nodeB.getCamera());*/
 						 if (nodeA.getAI()->getHealth() <= 0){
 
 							 std::vector<Goal*> tmp = m_level->getQuestHandler()->getQuests(GoalType::KILL);
@@ -144,7 +176,6 @@ public:
 					 }
 				 }
 			 }
-			 break;
 		 }
 	 }
 

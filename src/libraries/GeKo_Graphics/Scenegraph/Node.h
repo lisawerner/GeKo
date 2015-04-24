@@ -7,7 +7,6 @@
 #include <GeKo_Graphics/Shader/Shader.h>
 #include <GeKo_Graphics/Geometry/Geometry.h>
 #include <GeKo_Graphics/Material/Texture.h>
-#include <GeKo_Graphics/Camera/StrategyCamera.h>
 
 #include <GeKo_Physics/Gravity.h>
 
@@ -139,6 +138,11 @@ public:
 	bool hasGravity();
 	///Returns true, if a partice system has been attached
 	bool hasParticleSystem();
+	///Return true, if the particle should be rendered
+	bool isParticleActive();
+	///Set the m_particleActive to true or false
+	/**Should be used to activate or deactivate the render loop for particles*/
+	void setParticleActive(bool b);
 
 //==================Functions to add Units to the Node===========================//
 
@@ -167,9 +171,12 @@ public:
 
 	///Returns m_Camera as a Camera Object
 	/**If the node does not have a camera an error will be thrown!*/
-	StrategyCamera* getCamera();
-	void setCamera(StrategyCamera* camera);
+	Camera* getCamera();
 	void setCamera(Camera* camera);
+
+	///Updates the camera in relation to the player
+	/**The cameraposition and its lookat are updated in relation to the player position and viewdirection */
+	void setCameraToPlayer();
 
 	///Return m_boundingSphere of the Node
 	/**If the node does not have a bounding-sphere an error will be thrown!*/
@@ -245,7 +252,7 @@ public:
 
 	///A method to tell the Node to render its Particle-System
 	/**This Method will be used by the Node if a Particle system was attached to it, only!*/
-	void renderParticle(ShaderProgram &shader);
+	void renderParticles();
 
 protected:
 	std::string m_nodeName;
@@ -269,6 +276,7 @@ protected:
 	bool m_hasObject;
 	bool m_hasGravity;
 	bool m_hasParticleSystem;
+	bool m_particleActive;
 
 	Geometry* m_geometry;
 	Texture* m_texture;
@@ -276,8 +284,8 @@ protected:
 	Texture* m_heightmap;
 	float m_heightScale;
 	float m_heightBias;
-	StrategyCamera* m_camera;
-	Camera* m_otherCamera;
+	Camera* m_camera;
+	//Camera* m_otherCamera;
 
 	BoundingSphere* m_sphere;
 	BoundingSphere* m_viewArea;

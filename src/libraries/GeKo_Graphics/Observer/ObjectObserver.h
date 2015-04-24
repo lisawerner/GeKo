@@ -11,52 +11,93 @@ public:
 
 	~ObjectObserver(){}
 
-	void onNotify(AI& node, Collision_Event event)  
-	 {
-		 switch (event)
-		 {
-		 case Collision_Event::COLLISION_KI_PLAYER:
-			 node.viewArea(true);
-			 break;
-			  
-		 case Collision_Event::NO_COLLISION_KI_PLAYER:
-			 node.viewArea(false);
-			 break;
-		 }
-	 }
-
-	void onNotify(AI& node, Object_Event event) 
+	void onNotify(AI& ai, Collision_Event event)
 	{
 		switch (event)
 		{
-		case Object_Event::OBJECT_MOVED:
-			std::string name = node.getNodeName();
-			Node* tmp = m_level->getActiveScene()->getScenegraph()->searchNode(name);
-			tmp->addTranslation(node.getPosition());
+		case Collision_Event::COLLISION_KI_PLAYER:
+			ai.viewArea(true);
+			break;
+
+		case Collision_Event::NO_COLLISION_KI_PLAYER:
+			ai.viewArea(false);
 			break;
 		}
 	}
 
-	void onNotify(Player& node, Object_Event event) 
-	 {
-		 std::string name = node.getNodeName();
-		 Node* tmp = m_level->getActiveScene()->getScenegraph()->searchNode(name);
-		 switch (event)
-		 {
-		 case Object_Event::OBJECT_MOVED:
-			 tmp->addTranslation(node.getPosition());
-			 if (tmp->hasCamera())
-			 {
-				 tmp->getCamera()->setCenter(glm::vec4(node.getPosition().x, tmp->getCamera()->getCenter().y, node.getPosition().z, 1.0));
-			 }
-	
-			 break;
+	void onNotify(AI& ai, Object_Event event)
+	{
+		std::string name;
+		Node* tmp;
+		switch (event)
+		{
+		case Object_Event::OBJECT_MOVED:
+			name = ai.getNodeName();
+			tmp = m_level->getActiveScene()->getScenegraph()->searchNode(name);
+			tmp->addTranslation(glm::vec3(ai.getPosition()));
+			break;
 
-		 case Object_Event::OBJECT_STOPPED:
-			 break;
-		 }
-	 }
+		case Object_Event::OBJECT_DIED:
+			std::vector<ParticleSystem*>* ps = m_level->getActiveScene()->getScenegraph()->getParticleSet();
+			for (auto particle : *ps)
+			{
+				if (particle->m_type == ParticleType::SWARMOFFLIES)
+				{
+					particle->setPosition(glm::vec3(ai.getPosition()));
+					particle->start();
+					particle->update(*m_level->getActiveScene()->getScenegraph()->getActiveCamera());
+					particle->render(*m_level->getActiveScene()->getScenegraph()->getActiveCamera());
+				}
+			}
 
-protected: 
-	Level* m_level;	
+			break;
+		}
+	}
+
+	void onNotify(Player& player, Object_Event event)
+	{
+		std::string name = player.getNodeName();
+		Node* tmp = m_level->getActiveScene()->getScenegraph()->searchNode(name);
+		switch (event)
+		{
+		case Object_Event::OBJECT_MOVED:
+			tmp->addTranslation(glm::vec3(player.getPosition()));
+			if (tmp->hasCamera())
+			{
+				// Camera looks at player position
+				tmp->setCameraToPlayer();
+			}
+
+			break;
+		case Object_Event::OBJECT_ROTATED:
+			tmp->addRotation(player.getPhi(), glm::vec3(0, -1, 0));
+			// tmp->addRotation(player.getAlpha(), glm::vec3(0, 1, 0));
+			if (tmp->hasCamera())
+			{
+				tmp->setCameraToPlayer();
+			}
+			break;
+		case Object_Event::OBJECT_STOPPED:
+
+			break;
+
+		case Object_Event::PLAYER_SET_ON_FIRE:
+			std::vector<ParticleSystem*>* ps = m_level->getActiveScene()->getScenegraph()->getParticleSet();
+			for (auto particle : *ps)
+			{
+				if (particle->m_type == ParticleType::FIRE)
+				{
+					particle->setPosition(glm::vec3(player.getPosition() + (player.getViewDirection() *2.0f)));
+
+					particle->start();
+					particle->update(*m_level->getActiveScene()->getScenegraph()->getActiveCamera());
+					particle->render(*m_level->getActiveScene()->getScenegraph()->getActiveCamera());
+				}
+			}
+			break;
+		}
+	}
+
+protected:
+	Level* m_level;
 };
