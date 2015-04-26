@@ -565,7 +565,7 @@ int main()
 	//GuiElement::Inventory *inventory = new GuiElement::Inventory(inventoryItems, 6);
 	//inventoryWindow->addElement(inventory);
 	
-	PlayerGUI playerGUI(HUD_WIDTH, HUD_HEIGHT, WINDOW_HEIGHT, WINDOW_WIDTH, QUEST_HEIGHT, QUEST_WIDTH, *playerNode.getPlayer());
+	PlayerGUI playerGUI(HUD_WIDTH, HUD_HEIGHT, WINDOW_HEIGHT, WINDOW_WIDTH, QUEST_HEIGHT, QUEST_WIDTH, playerNode.getPlayer());
 
 
 	float testFloat = float(0.0f);
