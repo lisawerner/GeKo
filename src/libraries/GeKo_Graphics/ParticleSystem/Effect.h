@@ -29,6 +29,11 @@ private:
 	void setShader(); //for the constructor
 
 	std::vector<Emitter*> emitterVec;	//contains all Emitters of the Effect
+	
+	//for starting emitters at different moments
+	bool m_isStarted;
+	double m_startTime;
+	std::vector<Emitter*> notStartedEmitters;
 
 	//Our Vertex, Fragment & Compute Shader
 	ShaderProgram *emitterShader;

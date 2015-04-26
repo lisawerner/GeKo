@@ -49,12 +49,13 @@ int main()
 	//Texture* fireFlickering2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fire_flickering_2.png");
 	//Texture* fireFlickering3 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fire_flickering_3.png");
 	//Texture* fireFlickering4 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fire_flickering_4.png");
-	Texture* fireSparkleTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fireSparkle1.png");
+	Texture* fireSparkleTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fireSparkle1_S.png");
 	Texture* fireSparkleTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fireSparkle2.png");
 
-	//Texture* texFireworkBlue = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fireworkParticleBlue.png");
+	Texture* texFireworkBlue = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/firework_blue.png");
 	Texture* texFireworkRed = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/firework_red.png");
-	//Texture* texFireworkGold = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fireworkParticleGold.png");
+	Texture* texFireworkGreen = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/firework_green.png");
+	Texture* texFireworkGold = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/firework_gold.png");
 	Texture* texFireworkTail = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/firework_tail.png");
 
 	Texture* smokeWhiteTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/smokeWhite/smokeWhite01.png");
@@ -105,16 +106,16 @@ int main()
 	fireSparkle->usePhysicDirectionGravity(glm::vec4(0.0, 1.0, 0.0, 0.8), 0.5f);
 	fireSparkle->addTexture(fireSparkleTex1, 1.0);
 	fireSparkle->defineLook(true, 0.005, 0.5, 0.5);
-	//testEff->addEmitter(fireSparkle);
 	
 	
 	//Emitter firework explosion
-	Emitter* fireworkExplosion = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.1, 0.01, 50, 1.8, true);
+	Emitter* fireworkExplosion = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.1, 0.01, 80, 1.8, true);
 	fireworkExplosion->setVelocity(6);
 	//fireworkExplosion->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 0.6), 3.0f);
 	fireworkExplosion->usePhysicPointGravity(glm::vec3(0.0, -2.0, 0.0), 0.9, 5.0, 2, 2.0f, true);
 	fireworkExplosion->addTexture(texFireworkRed, 1.0);
-	fireworkExplosion->defineLook(true, 0.01, 0.0, 0.1);
+	fireworkExplosion->defineLook(true, 0.004, 0.0, 0.1);
+	fireworkExplosion->setStartTime(2.0);
 	
 	//Emitter firework tail
 	Emitter* fireworkTail = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 2.0, 0.01, 20, 0.5, true);
@@ -145,6 +146,10 @@ int main()
 	//efFire->addEmitter(fireFlickering);
 	efFire->addEmitter(fireSparkle);
 	
+	Effect* efFirework = new Effect();
+	efFirework->addEmitter(fireworkTail);
+	efFirework->addEmitter(fireworkExplosion);
+
 	Effect* efFireworkTail = new Effect();
 	efFireworkTail->addEmitter(fireworkTail);
 
@@ -157,6 +162,7 @@ int main()
 	//////////////////////ParticleSystem//////////////////////
 	ParticleSystem* psExplosion = new ParticleSystem(glm::vec3(0, -1, 0), efExplosion);
 	ParticleSystem* psFire = new ParticleSystem(glm::vec3(-2, 0, 3), efFire);
+	ParticleSystem* psFirework = new ParticleSystem(glm::vec3(0, 0, 5), efFirework);
 	ParticleSystem* psFireworkTail = new ParticleSystem(glm::vec3(0, 0, 5), efFireworkTail);
 	ParticleSystem* psFireworkExplosion = new ParticleSystem(glm::vec3(0, 2, 5), efFireworkExplosion);
 	ParticleSystem* psSmokeWhite = new ParticleSystem(glm::vec3(2, 0, 3), smWhi);
@@ -171,6 +177,10 @@ int main()
 	fireNode.setCamera(&cam);
 	fireNode.addParticleSystem(psFire);
 	
+	Node nodeFirework("fireworkNode");
+	nodeFirework.setCamera(&cam);
+	nodeFirework.addParticleSystem(psFirework);
+
 	Node nodeFireworkTail("fireworkTailNode");
 	nodeFireworkTail.setCamera(&cam);
 	nodeFireworkTail.addParticleSystem(psFireworkTail);
@@ -186,6 +196,7 @@ int main()
 	//set nodes active
 	nodeExplosion.setParticleActive(true);
 	fireNode.setParticleActive(true);
+	nodeFirework.setParticleActive(true);
 	nodeFireworkTail.setParticleActive(true);
 	nodeFireworkExplosion.setParticleActive(true);
 	whiteSmokeNode.setParticleActive(true);
@@ -215,17 +226,19 @@ int main()
 	iH.changeActiveInputMap("Pilotview");
 
 	//add nodes to the scenegraph
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeExplosion);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&fireNode);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeFireworkTail);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeFireworkExplosion);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&whiteSmokeNode);
+	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeExplosion);
+	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&fireNode);
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeFirework);
+	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeFireworkTail);
+	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeFireworkExplosion);
+	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&whiteSmokeNode);
 
 	//start the ParticleSystems
-	psFire->start();
-	psSmokeWhite->start();
+	//psFire->start();
+	//psSmokeWhite->start();
 	//psExplosion->start();
-	psFireworkTail->start();
+	psFirework->start();
+	//psFireworkTail->start();
 	//psFireworkExplosion->start();
 
 	double startTime = glfwGetTime();
@@ -260,13 +273,13 @@ int main()
 		testScene.render(shader);
 		shader.unbind();
 
-		if (glfwGetTime() > 2.8 && glfwGetTime() < 2.9) {
+		/*if (glfwGetTime() > 2.8 && glfwGetTime() < 2.9) {
 			psFireworkExplosion->start();
 			psFireworkTail->stop();
-		}
+		}*/
 
-		glm::vec3 pos = psFireworkTail->getPosition();
-		psFireworkTail->setPosition(glm::vec3(pos.x, pos.y + (glfwGetTime() - startTime), pos.z));
+		glm::vec3 pos = psFirework->getPosition();
+		psFirework->setPosition(glm::vec3(pos.x, pos.y + (glfwGetTime() - startTime), pos.z));
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
