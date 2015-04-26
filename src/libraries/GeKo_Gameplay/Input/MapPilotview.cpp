@@ -6,6 +6,11 @@ MapPilotview::MapPilotview(Camera &activeCam)
 	m_name = "Pilotview";
 	update(activeCam);
 	m_type = MapType::CAMPILOTVIEW;
+
+	m_mutlipleKeys.push_back(GLFW_KEY_W);
+	m_mutlipleKeys.push_back(GLFW_KEY_A);
+	m_mutlipleKeys.push_back(GLFW_KEY_S);
+	m_mutlipleKeys.push_back(GLFW_KEY_D);
 }
 
 MapPilotview::~MapPilotview()
@@ -70,23 +75,4 @@ void MapPilotview::update(Camera &activeCam){
 	};
 
 	pilotview(m_map);
-}
-
-void MapPilotview::checkMultipleMappedKeys(int key, GLFWwindow &window){
-
-	if (glfwGetKey(&window, GLFW_KEY_W) == GLFW_PRESS){
-		m_map.at(GLFW_KEY_W)();
-	}
-	if (glfwGetKey(&window, GLFW_KEY_A) == GLFW_PRESS){
-		m_map.at(GLFW_KEY_A)();
-	}
-	if (glfwGetKey(&window, GLFW_KEY_S) == GLFW_PRESS){
-		m_map.at(GLFW_KEY_S)();
-	}
-	if (glfwGetKey(&window, GLFW_KEY_D) == GLFW_PRESS){
-		m_map.at(GLFW_KEY_D)();
-	}
-	if (key != GLFW_KEY_W && key != GLFW_KEY_A && key != GLFW_KEY_S && key != GLFW_KEY_D){
-		m_map.at(key)();
-	}		
 }

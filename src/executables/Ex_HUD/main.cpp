@@ -169,12 +169,12 @@ int main()
   int exp = 10;
   int expMax = 30;
 
-  GuiElement::ProgressBar *hpBar = new GuiElement::ProgressBar(&hp, hpMax, 300, glm::fvec4(1.0f, 0.0f, 0.0f, 1.0f));
+  GuiElement::ProgressBar *hpBar = new GuiElement::ProgressBar(&hp, &hpMax, 300, glm::fvec4(1.0f, 0.0f, 0.0f, 1.0f));
   hud->addElement(hpBar);
   hud->addElement(new GuiElement::SameLine());
   hud->addElement(new GuiElement::Text("HP"));
   
-  GuiElement::ProgressBar *expBar = new GuiElement::ProgressBar(&exp, expMax, 300, glm::fvec4(1.0f, 0.9960784f, 0.9529411f, 1.0f));
+  GuiElement::ProgressBar *expBar = new GuiElement::ProgressBar(&exp, &expMax, 300, glm::fvec4(1.0f, 0.9960784f, 0.9529411f, 1.0f));
   hud->addElement(expBar);
   hud->addElement(new GuiElement::SameLine());
   hud->addElement(new GuiElement::Text("EXP"));

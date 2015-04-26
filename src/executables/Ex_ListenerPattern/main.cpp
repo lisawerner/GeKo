@@ -5,14 +5,15 @@
 
 #include <GeKo_Graphics/InputInclude.h>
 #include <GeKo_Graphics/GeometryInclude.h>
+#include <GeKo_Graphics/ShaderInclude.h>
+
 #include <GeKo_Graphics/Camera/StrategyCamera.h>
 #include <GeKo_Graphics/Camera/Pilotview.h>
-#include <GeKo_Graphics/ShaderInclude.h>
 
 #include <GeKo_Graphics/AIInclude.h>
 #include "GeKo_Gameplay/AI_Decisiontree/DecisionTree.h"
 #include <GeKo_Gameplay/Object/Geko.h>
-#include <GeKo_Gameplay/Object/AI.h>
+#include <GeKo_Gameplay/Object/Ant.h>
 
 #include <GeKo_Graphics/Geometry/AntMesh.h>
 #include <GeKo_Graphics/Geometry/TreeMesh.h>
@@ -23,11 +24,11 @@
 
 #include <GeKo_Physics/CollisionTest.h>
 
-#include <GeKo_Graphics/Observer/ObjectObserver.h>
-#include <GeKo_Graphics/Observer/CollisionObserver.h>
-#include <GeKo_Graphics/Observer/GravityObserver.h>
-#include <GeKo_Graphics/Observer/SoundObserver.h>
-#include <GeKo_Graphics/Observer/QuestObserver.h>
+#include <GeKo_Gameplay/Observer/ObjectObserver.h>
+#include <GeKo_Gameplay/Observer/CollisionObserver.h>
+#include <GeKo_Gameplay/Observer/GravityObserver.h>
+#include <GeKo_Gameplay/Observer/SoundObserver.h>
+#include <GeKo_Gameplay/Observer/QuestObserver.h>
 
 #include <GeKo_Gameplay/Questsystem/ItemReward.h>
 #include <GeKo_Gameplay/Questsystem/ExpReward.h>
@@ -41,7 +42,7 @@
 //===================================================================//
 //==================Things you need globally==========================//
 //==================================================================//
-Player geko("Geko", glm::vec3(-10.0, 1.0,30.0));
+Geko geko("Geko", glm::vec3(-10.0, 1.0,30.0));
 static StrategyCamera cam("PlayerViewCam");
 //Renderer *renderer;
 
@@ -80,15 +81,8 @@ static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos){
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
-	// The active InputMap is fetched
-	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
-	// You go over the active InputMap, if it's the key that is pressed, a method is called and the mapped action is executed else the key is ignored
-	for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
-		if (it->first == key)
-			activeMap.at(key)();
-		if (it == activeMap.end())
-			std::cout << "Key is not mapped to an action" << std::endl;
-	}
+	iH.getActiveInputMap()->checkKeys(key, *window);
+	geko.addKeyInput(key);
 }
 
 //===================================================================//
@@ -179,7 +173,7 @@ int main()
 	SoundFileHandler sfh = SoundFileHandler(1000);
 
 	AStarNode defaultASNode();
-	AI ant_Flick;
+	Ant ant_Flick;
 	ant_Flick.setAntAfraid();
 
 	AntMesh ant;
@@ -571,7 +565,7 @@ int main()
 	//GuiElement::Inventory *inventory = new GuiElement::Inventory(inventoryItems, 6);
 	//inventoryWindow->addElement(inventory);
 	
-	PlayerGUI playerGUI(HUD_WIDTH, HUD_HEIGHT, WINDOW_HEIGHT, WINDOW_WIDTH, QUEST_HEIGHT, QUEST_WIDTH, *playerNode.getPlayer());
+	PlayerGUI playerGUI(HUD_WIDTH, HUD_HEIGHT, WINDOW_HEIGHT, WINDOW_WIDTH, QUEST_HEIGHT, QUEST_WIDTH, playerNode.getPlayer());
 
 
 	float testFloat = float(0.0f);
@@ -587,14 +581,6 @@ int main()
 		float currentTime = glfwGetTime();
 		float deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
-		
-
-
-		
-		//	ant_Flack.update();
-
-		
-		//renderer.renderScene(testScene, testWindow);
 
 		fboGBuffer.bind();
 		glClearColor(0.5, 0.5, 0.5, 1.0);
@@ -603,10 +589,12 @@ int main()
 		shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
 		shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 		
-		
 		testScene.render(shaderGBuffer);
+
+
 		ant_Flick.update();
 		geko.update();
+		geko.deleteKeyInput();
 		geko.setDeltaTime(currentTime);
 		collision.update();
 
@@ -618,7 +606,6 @@ int main()
 	
 		fboGBuffer.unbind();
 
-
 		//ScreenFillingQuad Render Pass
 		shaderSFQ.bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -628,64 +615,8 @@ int main()
 		screenFillingQuad.renderGeometry();
 		shaderSFQ.unbind();
 
-
-
 		glfwSwapBuffers(testWindow.getWindow());
 		glfwPollEvents();
-
-		//float currentTime = glfwGetTime();
-		//float deltaTime = currentTime - lastTime;
-		//lastTime = currentTime;
-
-
-		////===================================================================//
-		////==================Update your Objects per Frame here =============//
-		////==================================================================//
-		//collision.update();
-
-		//ant_Flick.update();
-
-		////===================================================================//
-		////==================Input and update for the Player==================//
-		////==================================================================//
-
-		//geko.update();
-		//geko.setDeltaTime(currentTime);
-
-		////===================================================================//
-		////==================Render your Objects==============================//
-		////==================================================================//
-
-		//fboGBuffer.bind();
-		//glClearColor(0, 0, 0, 0);
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//shaderGBuffer.bind();
-		//shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
-		//shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
-
-		//testScene.render(shaderGBuffer);
-
-		//shaderGBuffer.unbind();
-		//fboGBuffer.unbind();
-
-		////ScreenFillingQuad Render Pass
-		////shaderSFQ.bind();
-		////glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		////shaderSFQ.sendSampler2D("fboTexture", fboGBuffer.getColorTexture(2));
-
-		////screenFillingQuad.renderGeometry();
-		////shaderSFQ.unbind();
-		////renderer.renderGUI(*hud, testWindow);
-		////	renderer.renderGUI(*playerGUI.getHUD(), testWindow);
-
-		////glfwSwapBuffers(testWindow.getWindow());
-		////glfwPollEvents();
-
-		//renderer->renderScene(testScene, testWindow);
-
-
-
 	}
 
 

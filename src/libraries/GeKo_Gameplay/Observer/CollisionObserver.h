@@ -1,6 +1,6 @@
 #pragma once
 #include <glm/ext.hpp>
-#include <GeKo_Graphics/Observer/Observer.h>
+#include <GeKo_Gameplay/Observer/Observer.h>
 #include <GeKo_Graphics/Scenegraph/Node.h>
 #include <GeKo_Gameplay/Object/ObjectType.h>
 #include <GeKo_Gameplay/Questsystem/Goal_Collect.h>

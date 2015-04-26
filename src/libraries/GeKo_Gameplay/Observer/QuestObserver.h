@@ -1,6 +1,6 @@
 #pragma once
 #include <glm/ext.hpp>
-#include <GeKo_Graphics/Observer/Observer.h>
+#include <GeKo_Gameplay/Observer/Observer.h>
 #include <GeKo_Graphics/Scenegraph/Level.h>
 
 

@@ -36,6 +36,10 @@ void Object::setPosition(glm::vec4 pos){
 	m_position = pos;
 }
 
+void Object::setPosition(glm::vec3 pos){
+	m_position = glm::vec4(pos, 1.0);
+}
+
 glm::vec4 Object::getPosition()
 {
 	return m_position;

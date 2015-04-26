@@ -1,6 +1,6 @@
 #pragma once
 #include <glm/ext.hpp>
-#include <GeKo_Graphics/Observer/Observer.h>
+#include <GeKo_Gameplay/Observer/Observer.h>
 #include <GeKo_Graphics/Scenegraph/Level.h>
 
 /**An Obsever for the AI and Player which handles collision between them and lets the object move.*/

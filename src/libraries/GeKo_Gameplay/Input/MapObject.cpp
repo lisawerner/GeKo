@@ -7,6 +7,14 @@ MapObject::MapObject()
 	Player p;
 	update(p);
 	m_type = MapType::OBJECT;
+
+	m_mutlipleKeys.push_back(GLFW_KEY_W);
+	m_mutlipleKeys.push_back(GLFW_KEY_A);
+	m_mutlipleKeys.push_back(GLFW_KEY_S);
+	m_mutlipleKeys.push_back(GLFW_KEY_D);
+	m_mutlipleKeys.push_back(GLFW_KEY_Q);
+	m_mutlipleKeys.push_back(GLFW_KEY_E);
+	m_mutlipleKeys.push_back(GLFW_KEY_F);
 }
 
 MapObject::~MapObject()
