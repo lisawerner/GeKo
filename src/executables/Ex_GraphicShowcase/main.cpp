@@ -202,11 +202,12 @@ int main()
   //our object
 	Cube cube;
 	Teapot teapot;
-	std::string dragonPath = RESOURCES_PATH;
+	
+	/*std::string dragonPath = RESOURCES_PATH;
 	dragonPath.append("/");
 	dragonPath.append("dragon.obj");
 	Mesh dragon = Mesh(dragonPath.c_str());
-	
+	*/
   Rect plane;
   plane.setTcoords(
     glm::vec2(0, 0),
@@ -256,9 +257,9 @@ int main()
   testScene.setSkyboxNode(&skyboxNode);
 
 
-  Node dragonNode("dragonNode");
-  dragonNode.addGeometry(&dragon);
-  dragonNode.setModelMatrix(glm::scale(dragonNode.getModelMatrix(), glm::vec3(0.5, 0.5, 0.5)));
+  //Node dragonNode("dragonNode");
+  //dragonNode.addGeometry(&dragon);
+  //dragonNode.setModelMatrix(glm::scale(dragonNode.getModelMatrix(), glm::vec3(0.5, 0.5, 0.5)));
 
 
 	Node cube1("cube1");

@@ -8,7 +8,7 @@
 #include "GoalType.h"
 #include "GeKo_Gameplay/Item/ItemType.h"
 #include "GeKo_Gameplay/Object/ObjectType.h"
-#include "GeKo_Graphics/Observer/Subject.h"
+#include "GeKo_Gameplay/Observer/Subject.h"
 
 /**A Goal should have a condition which determines when a goal is finished. This condition could be a destination on the map,
 an item to collect or a object to kill or eat.  */

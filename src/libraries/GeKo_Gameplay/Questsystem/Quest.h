@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-#include "GeKo_Graphics/Observer/Subject.h"
+#include "GeKo_Gameplay/Observer/Subject.h"
 #include "Goal.h"
 #include "GeKo_Gameplay/Questsystem/Reward.h"
 

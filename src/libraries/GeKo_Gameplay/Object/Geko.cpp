@@ -9,22 +9,32 @@ Geko::Geko(std::string gekoName, glm::vec3 spawnPoint){
 	m_type = ObjectType::PLAYER;
 	m_class = ClassType::PLAYER;
 
-	m_movementVector = glm::vec3(0.0f);
-	m_viewDirection = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
-
-	m_speed = 8.0f;
-
 	m_spawnPoint = spawnPoint;
-	m_position = glm::vec4(spawnPoint, 1.0);
+	m_position = glm::vec4(m_spawnPoint, 1.0);
 	m_name = gekoName;
 
 	m_hunger = 100;
 	m_hungerMax = 100;
 	m_health = 100;
-	m_health = 100;
+	m_healthMax = 100;
 	m_strength = 1;
 
 	m_inventory = new Inventory();
+
+	std::pair<States, bool> s(States::HUNGER, false);
+	m_states.push_back(s);
+	s.first = States::HEALTH;
+	s.second = true;
+	m_states.push_back(s);
+
+	m_viewDirection = glm::vec4(0.0, 0.0, -1.0, 0.0);
+	m_deltaTime = 0.0;
+	m_phi = 0.0;
+	m_theta = 2.0;
+	m_alpha = 0;
+
+	m_speed = 0.003;
+	m_speedTurn = 0.1;
 }
 
 Geko::Geko(){}
@@ -32,39 +42,12 @@ Geko::Geko(){}
 Geko::~Geko(){
 }
 
-void Geko::moveForward()
-{
-	m_movementVector += glm::vec3(m_viewDirection);
-}
-
-void Geko::moveBackward()
-{
-	m_movementVector -= glm::vec3(m_viewDirection);
-}
-
-void Geko::moveRight()
-{
-	m_movementVector += glm::cross(glm::vec3(m_viewDirection), glm::vec3(0.0f, 1.0f, 0.0f));
-}
-
-void Geko::moveLeft()
-{
-	m_movementVector -= glm::cross(glm::vec3(m_viewDirection), glm::vec3(0.0f, 1.0f, 0.0f));
-}
-
-void Geko::update(float deltaTime)
-{
-	updateStates();
-
-	if (glm::length(m_movementVector))
-	{
-		glm::vec2 newPos = glm::vec2(m_position.x, m_position.z) + glm::normalize(glm::vec2(m_movementVector.x, m_movementVector.z))* m_speed * deltaTime;
-		move(glm::vec3(newPos.x, m_position.y, newPos.y));
-		notify(*this, Object_Event::OBJECT_MOVED);
+void Geko::setFire(){
+	if (m_inventory->countItem(ItemType::BRANCH)){
+		m_inventory->reduceItem(ItemType::BRANCH, 1);
+		notify(*this, Object_Event::PLAYER_SET_ON_FIRE);
 	}
-	else
-	{
-		notify(*this, Object_Event::OBJECT_STOPPED);
+	else{
+		//TODO: GUI sagt, dass das Inventar keine Branches hat
 	}
-	m_movementVector = glm::vec3(0.0f);
 }

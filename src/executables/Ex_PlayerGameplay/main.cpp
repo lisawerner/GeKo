@@ -33,9 +33,9 @@
 #include <GeKo_Gameplay/Questsystem/Quest.h>
 #include <GeKo_Gameplay/Questsystem/Goal_Collect.h>
 
-#include <GeKo_Graphics/Observer/ObjectObserver.h>
-#include <GeKo_Graphics/Observer/CollisionObserver.h>
-#include <GeKo_Graphics/Observer/GravityObserver.h>
+#include <GeKo_Gameplay/Observer/ObjectObserver.h>
+#include <GeKo_Gameplay/Observer/CollisionObserver.h>
+#include <GeKo_Gameplay/Observer/GravityObserver.h>
 
 #include <GeKo_Gameplay/Object/AntHome.h>
 
@@ -214,7 +214,7 @@ int main()
 	//playerNode.addGeometry(&teaPlayer);
 	playerNode.addGeometry(&gekomesh);
 	playerNode.setCamera(&cam);
-	geko.move(glm::vec3(10.0, 0.0, 10.0));
+	geko.setPosition(glm::vec3(10.0, 0.0, 10.0));
 
 	//Add the node to the Scene
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&playerNode);
@@ -297,9 +297,11 @@ int main()
 	Graph<AStarNode, AStarAlgorithm>* antAfraidGraph = new Graph<AStarNode, AStarAlgorithm>();
 	antAfraidGraph->setExampleAntAfraid(posSpawn, posFood, posDefaultPlayer);
 
-	AntHome antHome(posSpawn, antMesh, &texCV, &texCV, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
-	//antHome.generateGuards(5, &aiObserver);
-	antHome.generateWorkers(1, &aiObserver);
+	//AntHome antHome(posSpawn, antMesh, &texCV, &texCV, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
+	////antHome.generateGuards(5, &aiObserver);
+	//antHome.generateWorkers(1, &aiObserver);
+	AntHome antHome(posSpawn, antMesh, &playerObserver, &texCV, &texCV, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
+	antHome.generateWorkers(5, testScene.getScenegraph()->getRootNode());
 	antHome.addAntsToSceneGraph(testScene.getScenegraph()->getRootNode());
 
 

@@ -1,8 +1,8 @@
 #pragma once
 #include <glm/ext.hpp>
-#include <GeKo_Graphics/Observer/Collision_Event.h>
-#include <GeKo_Graphics/Observer/Object_Event.h>
-#include <GeKo_Graphics/Observer/Quest_Event.h>
+#include <GeKo_Gameplay/Observer/Collision_Event.h>
+#include <GeKo_Gameplay/Observer/Object_Event.h>
+#include <GeKo_Gameplay/Observer/Quest_Event.h>
 
 
 template <class Entity, class Event>
