@@ -120,12 +120,12 @@ void Effect::renderEmitters(Camera &cam)
 void Effect::setPosition(glm::vec3 newPosition)
 {
 	for (auto emitter : emitterVec){
-		//this have to be done because glm don't override the '+' operator
 		glm::vec3 pos = emitter->getLocalPosition();
 		glm::vec3 result(0.0, 0.0, 0.0);
-		result.x = pos.x + newPosition.x;
+		result = pos + newPosition;
+		/*result.x = pos.x + newPosition.x;
 		result.y = pos.y + newPosition.y;
-		result.z = pos.z + newPosition.z;
+		result.z = pos.z + newPosition.z;*/
 
 		emitter->setPosition(result);
 	}

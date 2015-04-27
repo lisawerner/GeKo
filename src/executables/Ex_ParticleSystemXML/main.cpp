@@ -1,4 +1,3 @@
-//#include <TinyXML/src/TinyXML/tinyxml2.h>
 #include <vector>
 #include <GL/glew.h>
 #include "GeKo_Graphics/ParticleSystem/ParticleSystem.h"

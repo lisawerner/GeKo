@@ -1,7 +1,4 @@
-#include "GeKo_Graphics/ParticleSystem/Emitter.h" //TODO Delete this line
-#include "GeKo_Graphics/ParticleSystem/Effect.h"  //TODO Delete this line
 #include "GeKo_Graphics/ParticleSystem/ParticleSystem.h"
-
 #include <GL/glew.h>
 #include <GeKo_Graphics/InputInclude.h>
 #include <GeKo_Graphics/MaterialInclude.h>
@@ -19,9 +16,9 @@ GuiElement::Checkbox *useFruitFliesButton;
 GuiElement::Checkbox *useMaximumParticle;
 
 //CAM
-InputHandler iH;
-Pilotview cam("Pilotview");
-Pilotview screen("Screen");
+static InputHandler iH;
+static Pilotview cam("Pilotview");
+static Pilotview screen("Screen");
 
 //RENDERER FOR GUI
 OpenGL3Context context;
@@ -31,16 +28,7 @@ Renderer *renderer;
 enum FLOW { UNUSED = -1, CONSTANT = 0, ONCE = 1 } output;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
-	// The active InputMap is fetched
-	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
-
-	// You go over the active InputMap, if it's the key that is pressed, the mapped action is executed else the key is ignored
-	for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
-		if (it->first == key)
-			activeMap.at(key)();
-		if (it == activeMap.end())
-			std::cout << "Key is not mapped to an action" << std::endl;
-	}
+	iH.getActiveInputMap()->checkKeys(key, *window);
 }
 
 void initGUI()
@@ -88,7 +76,9 @@ int main()
 
 	glfwInit();
 
-	//WINDOW
+	//old
+
+	/*//WINDOW
 	Window window(50, 50, 800, 600, "ParticleSystem");
 	glfwMakeContextCurrent(window.getWindow());
 
@@ -101,10 +91,22 @@ int main()
 	iH.changeActiveInputMap("Pilotview");
 
 	//Callback
-	glfwSetKeyCallback(window.getWindow(), key_callback);
+	glfwSetKeyCallback(window.getWindow(), key_callback);*/
 
 	//More then just 60 fps, vsync off
-	glfwSwapInterval(0);
+	//glfwSwapInterval(0);
+
+
+	//new
+	Window window(500, 50, 800, 600, "testWindow");
+	glfwMakeContextCurrent(window.getWindow());
+
+	// Callback
+	glfwSetKeyCallback(window.getWindow(), key_callback);
+
+	cam.setKeySpeed(8.0);
+	cam.setNearFar(0.1, 100);
+	cam.setPosition(glm::vec4(9, 0, 5, 0));
 
 	glewInit();
 
@@ -175,6 +177,11 @@ int main()
 	psScene.getScenegraph()->addCamera(&cam);
 	psScene.getScenegraph()->getCamera("Pilotview");
 	psScene.getScenegraph()->setActiveCamera("Pilotview");
+
+	//Set Input-Maps and activate one
+	iH.setAllInputMaps(*(psScene.getScenegraph()->getActiveCamera()));
+	iH.changeActiveInputMap(MapType::CAMPILOTVIEW);
+	iH.getActiveInputMap()->update(cam);
 
 	/////////////////////////////////////////TEXTURES//////////////////////////////////////////
 
@@ -303,7 +310,7 @@ int main()
 	fontaine->setVelocity(0);
 	fontaine->usePhysicTrajectory(glm::vec4(0.0, 0.0, 0.0, 1.0), 1.0);
 	//fontaine->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.7f);
-	fontaine->defineLook(false, 0.3, 0.0, 0.5, 0.0, true, 1.0);
+	fontaine->defineLook(false, 0.05, 0.0, 0.5, 0.0, true, 1.0);
 
 	//FINAL EMITTER CIRCLE
 	Emitter* circle = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.2, 50, 4.0, true);
@@ -326,8 +333,9 @@ int main()
 	fruitFlies->usePhysicSwarmCircleMotion(true, true, true, 3.0);
 	fruitFlies->setAreaEmitting(true, true, 0.5, 100);
 	fruitFlies->addTexture(particleBlackTex, 0.0);
-	fruitFlies->defineLook(true, 0.012, 3.0, 3.0, 0.0, true, 1.0);
-	fruitFlies->switchToGeometryShader();
+	//fruitFlies->defineLook(true, 0.022, 3.0, 3.0, 0.0, true, 1.0);
+	fruitFlies->defineLook(true, 0.07, 3.0, 3.0, 0.0);
+	//fruitFlies->switchToGeometryShader();
 
 	//FINAL SCREEN EMITTER FRUITFLIES
 	Emitter* screenFruitFlies = new Emitter(0, glm::vec3(-0.2, 0.2, 7.0), 0.0, 0.1, 2, 10.0, true);
@@ -347,11 +355,11 @@ int main()
 	glowworm->defineLook(true, 0.1, 1.0, 1.5);
 
 	//FINAL EMITTER ENERGYBALL
-	Emitter* energyBall = new Emitter(0, glm::vec3(0.0, 0.0, 1.0), 0.0, 0.01, 5, 15.0, true);
+	Emitter* energyBall = new Emitter(0, glm::vec3(0.0, 0.0, 1.0), 0.0, 0.1, 5, 3.0, true);
 	energyBall->setVelocity(5);
-	//energyBall->usePhysicPointGravity(glm::vec4(2.0, 2.0, 2.0, 3.0), 8.0, 2, 1.8);
+	energyBall->usePhysicPointGravity(glm::vec3(0.0, 0.0, 0.0), 2.0, 8.0, 2, 2.8, true);
 	energyBall->addTexture(energyTex, 1.0);
-	energyBall->defineLook(true, 0.04);
+	energyBall->defineLook(true, 0.1);
 
 	//FINAL EMITTER COMIC CLOUD
 	Emitter* cloud01 = new Emitter(0, glm::vec3(0.0, 0.5, 0.0), 0.0, 1.6, 1, 10.0, true);
@@ -573,13 +581,70 @@ int main()
 	snowNode.setCamera(&cam);
 	snowNode.addParticleSystem(psSnow);
 	snowNode.setParticleActive(true);
-	psSnow->start();
+	//psSnow->start();
+
+	ParticleSystem* psRain = new ParticleSystem(glm::vec3(0, 0, 0), RESOURCES_PATH "/XML/Effect_Rain.xml");
+	psScene.getScenegraph()->addParticleSystem(psRain);
+	//psRain->start();
 
 	ParticleSystem* psSnowStrong = new ParticleSystem(glm::vec3(0, 0, 0), RESOURCES_PATH "/XML/Effect_SnowStrong.xml");
-	psSnow->start();
+	psScene.getScenegraph()->addParticleSystem(psSnowStrong);
+	//psSnow->start();
 
-	ParticleSystem* psSmokeWhite = new ParticleSystem(glm::vec3(0, 0, 0), RESOURCES_PATH "/XML/Effect_SmokeWhite.xml");
+	ParticleSystem* psSmokeBlack = new ParticleSystem(glm::vec3(-15, 0, 1), RESOURCES_PATH "/XML/Effect_SmokeBlack.xml");
+	psScene.getScenegraph()->addParticleSystem(psSmokeBlack);
+	psSmokeBlack->start();
+	
+	ParticleSystem* psSmokeWhite = new ParticleSystem(glm::vec3(-12, 0, 1), RESOURCES_PATH "/XML/Effect_SmokeWhite.xml");
+	psScene.getScenegraph()->addParticleSystem(psSmokeWhite);
 	psSmokeWhite->start();
+
+	ParticleSystem* psSmokeCloud = new ParticleSystem(glm::vec3(-9, 0, 1), RESOURCES_PATH "/XML/Effect_SmokeCloud.xml");
+	psScene.getScenegraph()->addParticleSystem(psSmokeCloud);
+	psSmokeCloud->start();
+
+	ParticleSystem* psFontaine = new ParticleSystem(glm::vec3(-6, 0, 1), RESOURCES_PATH "/XML/Effect_Fontaine.xml");
+	psScene.getScenegraph()->addParticleSystem(psFontaine);
+	psFontaine->start();
+
+	ParticleSystem* psCircle = new ParticleSystem(glm::vec3(-3, 0, 1), RESOURCES_PATH "/XML/Effect_Circle.xml");
+	psScene.getScenegraph()->addParticleSystem(psCircle);
+	psCircle->start();
+
+	ParticleSystem* psQuad = new ParticleSystem(glm::vec3(0, 0, 1), RESOURCES_PATH "/XML/Effect_Quad.xml");
+	psScene.getScenegraph()->addParticleSystem(psQuad);
+	psQuad->start();
+
+	ParticleSystem* psFruitFlies = new ParticleSystem(glm::vec3(3, 0, 1), RESOURCES_PATH "/XML/Effect_FruitFlies.xml");
+	psScene.getScenegraph()->addParticleSystem(psFruitFlies);
+	psFruitFlies->start();
+
+	ParticleSystem* psGlowworm = new ParticleSystem(glm::vec3(6, 0, 1), RESOURCES_PATH "/XML/Effect_Glowworm.xml");
+	psScene.getScenegraph()->addParticleSystem(psGlowworm);
+	psGlowworm->start();
+
+	ParticleSystem* psEnergyBall = new ParticleSystem(glm::vec3(9, 0, 1), RESOURCES_PATH "/XML/Effect_EnergyBall.xml");
+	psScene.getScenegraph()->addParticleSystem(psEnergyBall);
+	psEnergyBall->start();
+
+	ParticleSystem* psComicCloud = new ParticleSystem(glm::vec3(14, 0, 1), RESOURCES_PATH "/XML/ComicCloudEffect.xml");
+	psScene.getScenegraph()->addParticleSystem(psComicCloud);
+	psComicCloud->start();
+
+
+	ParticleSystem* psFireworkRed = new ParticleSystem(glm::vec3(-3, 0, 5), RESOURCES_PATH "/XML/Effect_FireworkRed.xml");
+	psScene.getScenegraph()->addParticleSystem(psFireworkRed);
+	psFireworkRed->start();
+	ParticleSystem* psFireworkBlue = new ParticleSystem(glm::vec3(-1, 0, 5), RESOURCES_PATH "/XML/Effect_FireworkBlue.xml");
+	psScene.getScenegraph()->addParticleSystem(psFireworkBlue);
+	psFireworkBlue->start();
+	ParticleSystem* psFireworkGreen = new ParticleSystem(glm::vec3(1, 0, 5), RESOURCES_PATH "/XML/Effect_FireworkGreen.xml");
+	psScene.getScenegraph()->addParticleSystem(psFireworkGreen);
+	psFireworkGreen->start();
+	ParticleSystem* psFireworkGold = new ParticleSystem(glm::vec3(3, 0, 5), RESOURCES_PATH "/XML/Effect_FireworkGold.xml");
+	psScene.getScenegraph()->addParticleSystem(psFireworkGold);
+	psFireworkGold->start();
+
 
 	//////////////////////////////////////Other Things//////////////////////////////////////////
 
@@ -610,8 +675,8 @@ int main()
 			shaderSkybox.sendSkyboxTexture("testTexture", skybox.getSkyboxTexture());
 			skyboxNode.render();
 			shaderSkybox.unbind();
-
 			glEnable(GL_DEPTH_TEST);
+
 			shaderObject.bind();
 			shaderObject.sendMat4("viewMatrix", cam.getViewMatrix());
 			shaderObject.sendMat4("projectionMatrix", cam.getProjectionMatrix());
@@ -619,16 +684,19 @@ int main()
 			psScene.render(shaderObject);
 			shaderObject.unbind();
 
+			//render ParticleSystems
+			psScene.renderParticleSystems();
+
 			///////////////////////////////////////FINAL EMITTER///////////////////////////////////////
-			glDisable(GL_DEPTH_TEST);
+			//glDisable(GL_DEPTH_TEST);
 
-			psSnow->update(cam);
-			psSnow->render(cam);
+			//psSnow->update(cam);
+			//psSnow->render(cam);
 
-			snowNode.renderParticles();
+			//snowNode.renderParticles();
 
-			psSmokeWhite->render(cam);
-			psSmokeWhite->render(cam);
+			//psSmokeWhite->update(cam);
+			//psSmokeWhite->render(cam);
 
 			//smokeWhite->update();
 			//smokeWhite->render(cam);
@@ -713,7 +781,7 @@ int main()
 			//rain->update(glm::vec3(cam.getPosition()));
 			//rain->render(cam);
 		}{
-			rain->startTime();
+			//rain->startTime();
 		}
 
 		////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////

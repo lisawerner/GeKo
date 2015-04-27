@@ -629,13 +629,13 @@ glm::vec3 Emitter::useVelocityZero(){
 }
 glm::vec3 Emitter::useVelocityLeftQuarterCircle(){
 	return glm::vec3(((rand() % 100) / 100.0f) - 1.0f,
-		((rand() % 100) / 100.0f),
-		0.0f);
+					((rand() % 100) / 100.0f),
+					0.0f);
 }
 glm::vec3 Emitter::useVelocityRightQuarterCircle(){
 	return glm::vec3(((rand() % 100) / 100.0f),
-		((rand() % 100) / 100.0f),
-		0.0f);
+					((rand() % 100) / 100.0f),
+					0.0f);
 }
 glm::vec3 Emitter::useVelocitySemiCircle(){
 	return glm::vec3(((rand() % 200) / 100.0f) - 1.0f,
@@ -644,13 +644,13 @@ glm::vec3 Emitter::useVelocitySemiCircle(){
 }
 glm::vec3 Emitter::useVelocityCircle(){
 	return	glm::vec3(((rand() % 200) / 100.0f) - 1.0f,
-		((rand() % 200) / 100.0f) - 1.0f,
-		0.0f);
+					((rand() % 200) / 100.0f) - 1.0f,
+					0.0f);
 }
 glm::vec3 Emitter::useVelocitySemiSphere(){
 	return glm::vec3(((rand() % 200) / 100.0f) - 1.0f,
-		((rand() % 100) / 100.0f),
-		((rand() % 200) / 100.0f) - 1.0f);
+					((rand() % 100) / 100.0f),
+					((rand() % 200) / 100.0f) - 1.0f);
 }
 glm::vec3 Emitter::useVelocitySphere(){
 	return glm::vec3(((rand() % 200) / 100.0f) - 1.0f,

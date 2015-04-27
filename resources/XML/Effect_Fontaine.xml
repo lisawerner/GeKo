@@ -21,7 +21,7 @@
         <Texture>
             <Size>
                 <UseTexture>0</UseTexture>
-                <ParticleSize>0.30000001</ParticleSize>
+                <ParticleSize>0.050000001</ParticleSize>
                 <BirthTime>0</BirthTime>
                 <DeathTime>0.5</DeathTime>
                 <BlendingTime>0</BlendingTime>
