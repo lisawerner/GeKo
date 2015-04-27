@@ -44,8 +44,6 @@ void InputMap::checkKeys(int key, GLFWwindow &window){
 				if (glfwGetKey(&window, i) == GLFW_PRESS){
 					//multipleKey is pressed
 					m_map.at(i)();
-				}
-				if (key = i){
 					noMultipleKeyPressed = false;
 				}
 			}
