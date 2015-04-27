@@ -1,6 +1,6 @@
 <Effect>
     <Emitter>
-        <OutputType>-1</OutputType>
+        <OutputType>0</OutputType>
         <Position x="0" y="0.5" z="0"/>
         <EmitterLifetime>0</EmitterLifetime>
         <EmitFrequency>1.6000000238418579</EmitFrequency>
@@ -9,14 +9,13 @@
         <ParticleMortal>1</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Movable>0</Movable>
+        <StartTime>0</StartTime>
         <Velocity>4</Velocity>
         <Physic>
-            <PointGravity>
-                <Gravity x="0" y="-1" z="0" w="-0"/>
-                <Speed>0.72000003</Speed>
-                <GravityRange>0</GravityRange>
-                <GravityFunction>0</GravityFunction>
-            </PointGravity>
+            <DirectionGravity>
+                <Gravity x="0" y="-1" z="0" w="1"/>
+                <Speed>0</Speed>
+            </DirectionGravity>
         </Physic>
         <AreaEmitter on="0"/>
         <Texture>
@@ -40,7 +39,7 @@
         </Texture>
     </Emitter>
     <Emitter>
-        <OutputType>-1</OutputType>
+        <OutputType>0</OutputType>
         <Position x="0" y="0.5" z="0"/>
         <EmitterLifetime>0</EmitterLifetime>
         <EmitFrequency>2.2999999523162842</EmitFrequency>
@@ -49,14 +48,13 @@
         <ParticleMortal>1</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Movable>0</Movable>
+        <StartTime>0</StartTime>
         <Velocity>4</Velocity>
         <Physic>
-            <PointGravity>
-                <Gravity x="0" y="-1" z="0" w="-0"/>
-                <Speed>0.60000002</Speed>
-                <GravityRange>0</GravityRange>
-                <GravityFunction>0</GravityFunction>
-            </PointGravity>
+            <DirectionGravity>
+                <Gravity x="0" y="-1" z="0" w="1"/>
+                <Speed>0</Speed>
+            </DirectionGravity>
         </Physic>
         <AreaEmitter on="0"/>
         <Texture>
@@ -80,7 +78,7 @@
         </Texture>
     </Emitter>
     <Emitter>
-        <OutputType>1</OutputType>
+        <OutputType>0</OutputType>
         <Position x="-1" y="1" z="0"/>
         <EmitterLifetime>0</EmitterLifetime>
         <EmitFrequency>0</EmitFrequency>
@@ -89,6 +87,7 @@
         <ParticleMortal>0</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Movable>0</Movable>
+        <StartTime>0</StartTime>
         <Velocity>0</Velocity>
         <Physic>
             <DirectionGravity>
@@ -111,7 +110,7 @@
         </Texture>
     </Emitter>
     <Emitter>
-        <OutputType>1</OutputType>
+        <OutputType>0</OutputType>
         <Position x="1.2" y="2" z="0"/>
         <EmitterLifetime>0</EmitterLifetime>
         <EmitFrequency>0</EmitFrequency>
@@ -120,6 +119,7 @@
         <ParticleMortal>0</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Movable>0</Movable>
+        <StartTime>0</StartTime>
         <Velocity>0</Velocity>
         <Physic>
             <DirectionGravity>
@@ -142,7 +142,7 @@
         </Texture>
     </Emitter>
     <Emitter>
-        <OutputType>1</OutputType>
+        <OutputType>0</OutputType>
         <Position x="-1" y="-1" z="0"/>
         <EmitterLifetime>0</EmitterLifetime>
         <EmitFrequency>0</EmitFrequency>
@@ -151,6 +151,7 @@
         <ParticleMortal>0</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Movable>0</Movable>
+        <StartTime>0</StartTime>
         <Velocity>0</Velocity>
         <Physic>
             <DirectionGravity>
@@ -173,7 +174,7 @@
         </Texture>
     </Emitter>
     <Emitter>
-        <OutputType>1</OutputType>
+        <OutputType>0</OutputType>
         <Position x="1.7" y="0.2" z="0"/>
         <EmitterLifetime>0</EmitterLifetime>
         <EmitFrequency>0</EmitFrequency>
@@ -182,6 +183,7 @@
         <ParticleMortal>0</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Movable>0</Movable>
+        <StartTime>0</StartTime>
         <Velocity>0</Velocity>
         <Physic>
             <DirectionGravity>
@@ -204,7 +206,7 @@
         </Texture>
     </Emitter>
     <Emitter>
-        <OutputType>1</OutputType>
+        <OutputType>0</OutputType>
         <Position x="-2" y="0.69999999" z="0"/>
         <EmitterLifetime>0</EmitterLifetime>
         <EmitFrequency>0</EmitFrequency>
@@ -213,6 +215,7 @@
         <ParticleMortal>0</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Movable>0</Movable>
+        <StartTime>0</StartTime>
         <Velocity>0</Velocity>
         <Physic>
             <DirectionGravity>
@@ -235,7 +238,7 @@
         </Texture>
     </Emitter>
     <Emitter>
-        <OutputType>1</OutputType>
+        <OutputType>0</OutputType>
         <Position x="-1.9" y="2.0999999" z="0"/>
         <EmitterLifetime>0</EmitterLifetime>
         <EmitFrequency>0</EmitFrequency>
@@ -244,6 +247,7 @@
         <ParticleMortal>0</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Movable>0</Movable>
+        <StartTime>0</StartTime>
         <Velocity>0</Velocity>
         <Physic>
             <DirectionGravity>
@@ -266,7 +270,7 @@
         </Texture>
     </Emitter>
     <Emitter>
-        <OutputType>1</OutputType>
+        <OutputType>0</OutputType>
         <Position x="2" y="1.4" z="0"/>
         <EmitterLifetime>0</EmitterLifetime>
         <EmitFrequency>0</EmitFrequency>
@@ -275,6 +279,7 @@
         <ParticleMortal>0</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Movable>0</Movable>
+        <StartTime>0</StartTime>
         <Velocity>0</Velocity>
         <Physic>
             <DirectionGravity>
@@ -297,7 +302,7 @@
         </Texture>
     </Emitter>
     <Emitter>
-        <OutputType>1</OutputType>
+        <OutputType>0</OutputType>
         <Position x="2.7" y="0.80000001" z="0"/>
         <EmitterLifetime>0</EmitterLifetime>
         <EmitFrequency>0</EmitFrequency>
@@ -306,6 +311,7 @@
         <ParticleMortal>0</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Movable>0</Movable>
+        <StartTime>0</StartTime>
         <Velocity>0</Velocity>
         <Physic>
             <DirectionGravity>
@@ -328,7 +334,7 @@
         </Texture>
     </Emitter>
     <Emitter>
-        <OutputType>1</OutputType>
+        <OutputType>0</OutputType>
         <Position x="-0.5" y="2.4000001" z="0"/>
         <EmitterLifetime>0</EmitterLifetime>
         <EmitFrequency>0</EmitFrequency>
@@ -337,6 +343,7 @@
         <ParticleMortal>0</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Movable>0</Movable>
+        <StartTime>0</StartTime>
         <Velocity>0</Velocity>
         <Physic>
             <DirectionGravity>

@@ -74,7 +74,6 @@ void Effect::removeEmitter(int arrayPosition)
 void Effect::updateEmitters(Camera &cam)
 {
 	//start remaining emitters if their startTime is lower than the passed time
-	//WARNING: not fully tested.
 	if (m_isStarted) {
 		double timePassed = glfwGetTime() - m_startTime;
 		int i = 0;
@@ -95,13 +94,12 @@ void Effect::updateEmitters(Camera &cam)
 
 	}
 
-	//this cannot be in the block ahead because there may be living particles when the ParticleSystem gets stopped.
+	//this cannot be in the block above because there may be living particles when the ParticleSystem gets stopped.
 	for (auto emitter : emitterVec) {
 		if (emitter->getMovable()) {
 			emitter->update(compute, glm::vec3(cam.getPosition().x, cam.getPosition().y, cam.getPosition().z));
 		}
 		else {
-			printf("Time: %f : %i\n", glfwGetTime(), emitter->getOutputMode());
 			emitter->update(compute);
 		}
 	}

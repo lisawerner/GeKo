@@ -1,6 +1,6 @@
 <Effect>
     <Emitter>
-        <OutputType>-1</OutputType>
+        <OutputType>0</OutputType>
         <Position x="-0.2" y="0.2" z="7"/>
         <EmitterLifetime>0</EmitterLifetime>
         <EmitFrequency>0.10000000149011612</EmitFrequency>
@@ -9,6 +9,7 @@
         <ParticleMortal>1</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Movable>0</Movable>
+        <StartTime>0</StartTime>
         <Velocity>0</Velocity>
         <Physic>
             <SwarmCircleMotion>

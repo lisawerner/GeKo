@@ -6,41 +6,57 @@
 #include <GeKo_Graphics/ScenegraphInclude.h>
 #include <GeKo_Graphics/ShaderInclude.h>
 
-InputHandler iH;
-Pilotview cam("Pilotview");
+static InputHandler iH;
+static Pilotview cam("Pilotview");
+
+static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos){
+	if (iH.getActiveInputMap()->getType() == MapType::CAMPLAYERVIEW){
+		cam.turn(xpos, ypos);
+	}
+	if (iH.getActiveInputMap()->getType() == MapType::CAMSTRATEGY){
+		if (glfwGetMouseButton(window, 0) == GLFW_PRESS){
+			cam.turn(xpos, ypos);
+		}
+		else{
+			cam.updateCursor(window);
+		}
+	}
+}
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
-	// The active InputMap is fetched
-	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
-
-	// You go over the active InputMap, if it's the key that is pressed, a method is called and the mapped action is executed else the key is ignored
-	for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
-		if (it->first == key)
-			//iH.getActiveInputMap()->checkMultipleMappedKeys(key, *window);
-		if (it == activeMap.end())
-			std::cout << "Key is not mapped to an action" << std::endl;
-	}
+	iH.getActiveInputMap()->checkKeys(key, *window);
 }
 
 int main()
 {
 	glfwInit();
 
-	//our window
-	GLFWwindow* window;
-	window = glfwCreateWindow(800, 600, "ParticleSystemXML", NULL, NULL);
-	glfwMakeContextCurrent(window);
-	
-	//CAM
-	cam.setKeySpeed(4.0);
-	iH.setAllInputMaps(cam);
-	glfwSetKeyCallback(window, key_callback);
-	cam.setFOV(50);
-	cam.setNearFar(1, 100);
+	////our window
+	//GLFWwindow* window;
+	//window = glfwCreateWindow(800, 600, "ParticleSystemXML", NULL, NULL);
+	//glfwMakeContextCurrent(window);
+	//
+	////CAM
+	//cam.setKeySpeed(4.0);
+	//iH.setAllInputMaps(cam);
+	//glfwSetKeyCallback(window, key_callback);
+	//cam.setFOV(50);
+	//cam.setNearFar(1, 100);
+
+	Window testWindow(500, 50, 800, 600, "testWindow");
+	glfwMakeContextCurrent(testWindow.getWindow());
+
+	// Callback
+	glfwSetKeyCallback(testWindow.getWindow(), key_callback);
+
+	cam.setKeySpeed(2.0);
+	cam.setNearFar(0.1, 100);
 
 	glewInit();
 
-	//Textures
+
+	//////////////////////Textures//////////////////////
+
 	Texture* fireTex = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/Fire2_M.png");
 	Texture* fireTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fire1_M.png");
 	Texture* fireTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fire3_M.png");
@@ -52,11 +68,11 @@ int main()
 	Texture* fireSparkleTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fireSparkle1_S.png");
 	Texture* fireSparkleTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fireSparkle2.png");
 
-	Texture* texFireworkBlue = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/firework_blue.png");
-	Texture* texFireworkRed = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/firework_red.png");
-	Texture* texFireworkGreen = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/firework_green.png");
-	Texture* texFireworkGold = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/firework_gold.png");
-	Texture* texFireworkTail = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/firework_tail.png");
+	Texture* texFireworkBlue = new Texture((char*)RESOURCES_PATH "/ParticleSystem/firework/firework_blue.png");
+	Texture* texFireworkRed = new Texture((char*)RESOURCES_PATH "/ParticleSystem/firework/firework_red.png");
+	Texture* texFireworkGreen = new Texture((char*)RESOURCES_PATH "/ParticleSystem/firework/firework_green.png");
+	Texture* texFireworkGold = new Texture((char*)RESOURCES_PATH "/ParticleSystem/firework/firework_gold.png");
+	Texture* texFireworkTail = new Texture((char*)RESOURCES_PATH "/ParticleSystem/firework/firework_tail.png");
 
 	Texture* smokeWhiteTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/smokeWhite/smokeWhite01.png");
 	Texture* smokeWhiteTex2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/smokeWhite/smokeWhite02.png");
@@ -105,16 +121,16 @@ int main()
 	fireSparkle->setVelocity(5);
 	fireSparkle->usePhysicDirectionGravity(glm::vec4(0.0, 1.0, 0.0, 0.8), 0.5f);
 	fireSparkle->addTexture(fireSparkleTex1, 1.0);
-	fireSparkle->defineLook(true, 0.005, 0.5, 0.5);
+	fireSparkle->defineLook(true, 0.05, 0.5, 0.5);
 	
 	
 	//Emitter firework explosion
-	Emitter* fireworkExplosion = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.1, 0.01, 80, 1.8, true);
+	Emitter* fireworkExplosion = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.1, 0.01, 80, 2.0, true);
 	fireworkExplosion->setVelocity(6);
 	//fireworkExplosion->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, 0.6), 3.0f);
 	fireworkExplosion->usePhysicPointGravity(glm::vec3(0.0, -2.0, 0.0), 0.9, 5.0, 2, 2.0f, true);
 	fireworkExplosion->addTexture(texFireworkRed, 1.0);
-	fireworkExplosion->defineLook(true, 0.004, 0.0, 0.1);
+	fireworkExplosion->defineLook(true, 0.04, 0.0, 0.5);
 	fireworkExplosion->setStartTime(2.0);
 	
 	//Emitter firework tail
@@ -167,39 +183,53 @@ int main()
 	ParticleSystem* psFireworkExplosion = new ParticleSystem(glm::vec3(0, 2, 5), efFireworkExplosion);
 	ParticleSystem* psSmokeWhite = new ParticleSystem(glm::vec3(2, 0, 3), smWhi);
 
+	ParticleSystem* psFireworkRed = new ParticleSystem(glm::vec3(-3, -1, 5), RESOURCES_PATH "/XML/Effect_FireworkRed.xml");
+	ParticleSystem* psFireworkBlue = new ParticleSystem(glm::vec3(-1, -1, 5), RESOURCES_PATH "/XML/Effect_FireworkBlue.xml");
+	ParticleSystem* psFireworkGreen = new ParticleSystem(glm::vec3(1, -1, 5), RESOURCES_PATH "/XML/Effect_FireworkGreen.xml");
+	ParticleSystem* psFireworkGold = new ParticleSystem(glm::vec3(3, -1, 5), RESOURCES_PATH "/XML/Effect_FireworkGold.xml");
+
 
 	//////////////////////Node//////////////////////
 	Node nodeExplosion("nodeExplosion");
 	nodeExplosion.setCamera(&cam);
 	nodeExplosion.addParticleSystem(psExplosion);
+	nodeExplosion.setParticleActive(true);
 	
 	Node fireNode("fireNode");
 	fireNode.setCamera(&cam);
 	fireNode.addParticleSystem(psFire);
+	fireNode.setParticleActive(true);
 	
 	Node nodeFirework("fireworkNode");
 	nodeFirework.setCamera(&cam);
 	nodeFirework.addParticleSystem(psFirework);
-
-	Node nodeFireworkTail("fireworkTailNode");
-	nodeFireworkTail.setCamera(&cam);
-	nodeFireworkTail.addParticleSystem(psFireworkTail);
-
-	Node nodeFireworkExplosion("fireworkExplosionNode");
-	nodeFireworkExplosion.setCamera(&cam);
-	nodeFireworkExplosion.addParticleSystem(psFireworkExplosion);
+	nodeFirework.setParticleActive(true);
 	
 	Node whiteSmokeNode("whiteSmokeNode");
 	whiteSmokeNode.setCamera(&cam);
 	whiteSmokeNode.addParticleSystem(psSmokeWhite);
-
-	//set nodes active
-	nodeExplosion.setParticleActive(true);
-	fireNode.setParticleActive(true);
-	nodeFirework.setParticleActive(true);
-	nodeFireworkTail.setParticleActive(true);
-	nodeFireworkExplosion.setParticleActive(true);
 	whiteSmokeNode.setParticleActive(true);
+
+	//Firework
+	Node nodeFireworkRed("fireworkRedNode");
+	nodeFireworkRed.setCamera(&cam);
+	nodeFireworkRed.addParticleSystem(psFireworkRed);
+	nodeFireworkRed.setParticleActive(true);
+
+	Node nodeFireworkBlue("fireworBlueNode");
+	nodeFireworkBlue.setCamera(&cam);
+	nodeFireworkBlue.addParticleSystem(psFireworkBlue);
+	nodeFireworkBlue.setParticleActive(true);
+
+	Node nodeFireworkGreen("fireworkGreenNode");
+	nodeFireworkGreen.setCamera(&cam);
+	nodeFireworkGreen.addParticleSystem(psFireworkGreen);
+	nodeFireworkGreen.setParticleActive(true);
+
+	Node nodeFireworkGold("fireworkGoldNode");
+	nodeFireworkGold.setCamera(&cam);
+	nodeFireworkGold.addParticleSystem(psFireworkGold);
+	nodeFireworkGold.setParticleActive(true);
 
 
 	// Shader
@@ -223,30 +253,44 @@ int main()
 
 	//Set Input-Maps and activate one
 	iH.setAllInputMaps(*(testScene.getScenegraph()->getActiveCamera()));
-	iH.changeActiveInputMap("Pilotview");
+	iH.changeActiveInputMap(MapType::CAMPILOTVIEW);
+	iH.getActiveInputMap()->update(cam);
 
 	//add nodes to the scenegraph
 	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeExplosion);
 	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&fireNode);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeFirework);
-	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeFireworkTail);
-	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeFireworkExplosion);
 	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&whiteSmokeNode);
+	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeFirework);
+	/*testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeFireworkRed);
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeFireworkBlue);
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeFireworkGreen);
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeFireworkGold);*/
+
+	//using this, the ParticleSystems get rendered in order of their distance to the camera
+	testScene.getScenegraph()->addParticleSystem(psFire);
+	testScene.getScenegraph()->addParticleSystem(psSmokeWhite);
+	testScene.getScenegraph()->addParticleSystem(psFireworkBlue);
+	testScene.getScenegraph()->addParticleSystem(psFireworkRed);
+	testScene.getScenegraph()->addParticleSystem(psFireworkGreen);
+	testScene.getScenegraph()->addParticleSystem(psFireworkGold);
+
 
 	//start the ParticleSystems
-	//psFire->start();
-	//psSmokeWhite->start();
+	psFire->start();
+	psSmokeWhite->start();
 	//psExplosion->start();
-	psFirework->start();
-	//psFireworkTail->start();
-	//psFireworkExplosion->start();
+	//psFirework->start();
+	psFireworkRed->start();
+	psFireworkBlue->start();
+	psFireworkGreen->start();
+	psFireworkGold->start();
 
 	double startTime = glfwGetTime();
 	
 	double lastTime = glfwGetTime();
 	int nbFrames = 0;
 
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
 		// Measure speed
 		double currentTime = glfwGetTime();
@@ -271,6 +315,7 @@ int main()
 		shader.sendMat4("viewMatrix", cam.getViewMatrix());
 		shader.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 		testScene.render(shader);
+		testScene.renderParticleSystems();
 		shader.unbind();
 
 		/*if (glfwGetTime() > 2.8 && glfwGetTime() < 2.9) {
@@ -278,13 +323,24 @@ int main()
 			psFireworkTail->stop();
 		}*/
 
-		glm::vec3 pos = psFirework->getPosition();
-		psFirework->setPosition(glm::vec3(pos.x, pos.y + (glfwGetTime() - startTime), pos.z));
+		//update Positions of firework ParticleSystems
+		glm::vec3 pos = psFireworkRed->getPosition();
+		psFireworkRed->setPosition(glm::vec3(pos.x, pos.y + (glfwGetTime() - startTime), pos.z));
+		
+		pos = psFireworkBlue->getPosition();
+		psFireworkBlue->setPosition(glm::vec3(pos.x, pos.y + (glfwGetTime() - startTime), pos.z));
+		
+		pos = psFireworkGreen->getPosition();
+		psFireworkGreen->setPosition(glm::vec3(pos.x, pos.y + (glfwGetTime() - startTime), pos.z));
+		
+		pos = psFireworkGold->getPosition();
+		psFireworkGold->setPosition(glm::vec3(pos.x, pos.y + (glfwGetTime() - startTime), pos.z));
 
-		glfwSwapBuffers(window);
+
+		glfwSwapBuffers(testWindow.getWindow());
 		glfwPollEvents();
 	}
-	glfwDestroyWindow(window);
+	glfwDestroyWindow(testWindow.getWindow());
 	glfwTerminate();
 	
 	return 0;
