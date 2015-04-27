@@ -182,7 +182,7 @@ namespace GuiElement
       ImGui::GetWindowDrawList()->AddRectFilled(pos, size, ImGui::ColorConvertFloat4ToU32(ImVec4(m_borderColor.r, m_borderColor.g, m_borderColor.b, m_borderColor.a)));
       ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + wrapWidth);
       ImGui::TextColored(ImVec4(m_textColor.r, m_textColor.g, m_textColor.b, m_textColor.a), strInteger.c_str(), wrapWidth);
-      //ImGui::GetWindowDrawList()->AddRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax(), ImGui::ColorConvertFloat4ToU32(ImVec4(m_borderColor.r, m_borderColor.g, m_borderColor.b, m_borderColor.a)));
+      ImGui::GetWindowDrawList()->AddRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax(), ImGui::ColorConvertFloat4ToU32(ImVec4(m_borderColor.r, m_borderColor.g, m_borderColor.b, m_borderColor.a)));
       ImGui::PopTextWrapPos();
     }
 
