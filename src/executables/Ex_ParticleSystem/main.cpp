@@ -17,7 +17,6 @@ GuiElement::Checkbox *useStrongSnowButton;
 GuiElement::Checkbox *useRainButton;
 GuiElement::Checkbox *useFruitFliesButton;
 GuiElement::Checkbox *useMaximumParticle;
-int particleCount = 0;
 
 //CAM
 InputHandler iH;
@@ -44,7 +43,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 }
 
-//TODO ausklappen
 void initGUI()
 {
 	gui = new GUI("Particlesystem Settings - Hide [F10]", 300, 250);
@@ -79,7 +77,7 @@ void initGUI()
 	gui->addElement(maxParticleHeader);
 
 	renderer = new Renderer(context);
-	//renderer->addGui(gui);
+	renderer->addGui(gui);
 }
 
 int main()
@@ -88,14 +86,14 @@ int main()
 
 	srand(time(NULL));
 
-	//glfwInit();
+	glfwInit();
 
 	//WINDOW
 	Window window(50, 50, 800, 600, "ParticleSystem");
 	glfwMakeContextCurrent(window.getWindow());
 
 	//CAM
-	cam.setPosition(glm::vec4(-15.0, 0.0, 7.0, 1.0));
+	cam.setPosition(glm::vec4(0.0, 0.0, 7.0, 1.0));
 	cam.setNearFar(0.1f, 100.0f);
 	cam.setLookAt(glm::vec3(cam.getPosition().x, cam.getPosition().y, cam.getPosition().z - 1.0));
 	cam.setKeySpeed(8.0);
@@ -118,6 +116,65 @@ int main()
 	VertexShader vsObject(loadShaderSource(SHADERS_PATH + std::string("/TextureShader3D/TextureShader3D.vert")));
 	FragmentShader fsObject(loadShaderSource(SHADERS_PATH + std::string("/TextureShader3D/TextureShader3D.frag")));
 	ShaderProgram shaderObject(vsObject, fsObject);
+
+	//////////////////////////////////////OUR SCENE///////////////////////////////////////////////
+
+	//SKYBOX
+	Cube cube;
+	const char *textureNames[6] = {
+		/*(char*)RESOURCES_PATH "/PereaBeach1/posx.jpg",
+		(char*)RESOURCES_PATH "/PereaBeach1/negx.jpg",
+		(char*)RESOURCES_PATH "/PereaBeach1/posy.jpg",
+		(char*)RESOURCES_PATH "/PereaBeach1/negy.jpg",
+		(char*)RESOURCES_PATH "/PereaBeach1/posz.jpg",
+		(char*)RESOURCES_PATH "/PereaBeach1/negz.jpg"*/
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png" };
+	Skybox skybox(textureNames);
+	Node skyboxNode("skybox");
+	skyboxNode.addGeometry(&cube);
+
+	//OBJECTS
+	Rect plane;
+	plane.loadBufferData();
+
+	//TEXTURES
+	Texture chrome((char*)RESOURCES_PATH "/Metal/chrome.jpg");
+	Texture marble((char*)RESOURCES_PATH "/Wall/seamless_marble.png"); //TODO JPG
+	Texture cvLogo((char*)RESOURCES_PATH "/Symbol/cv_logo.bmp");
+	Texture bricks((char*)RESOURCES_PATH "/Wall/brick.bmp");
+
+	//CREATING NODES
+	Level psLevel("psLevel");
+	Scene psScene("psScene");
+	psLevel.addScene(&psScene);
+	psLevel.changeScene("psScene");
+
+	Node wallNode1("wall1");
+	wallNode1.addGeometry(&plane);
+	wallNode1.addTexture(&marble);
+	wallNode1.setModelMatrix(glm::translate(wallNode1.getModelMatrix(), glm::vec3(0.0, -1.0, 0.0)));
+	wallNode1.setModelMatrix(glm::rotate(wallNode1.getModelMatrix(), 90.0f, glm::vec3(1.0, 0.0, 0.0)));
+	wallNode1.setModelMatrix(glm::scale(wallNode1.getModelMatrix(), glm::vec3(25.0, 2.0, 1.0)));
+
+	Node wallNode2("wall2");
+	wallNode2.addGeometry(&plane);
+	wallNode2.addTexture(&bricks);
+	wallNode2.setModelMatrix(glm::translate(wallNode2.getModelMatrix(), glm::vec3(0.0, 0.0, 0.0)));
+	wallNode2.setModelMatrix(glm::scale(wallNode2.getModelMatrix(), glm::vec3(25.0, 2.5, 1.0)));
+
+	//CREATING A SCENEGRAPH
+	psScene.getScenegraph()->getRootNode()->addChildrenNode(&wallNode1);
+	psScene.getScenegraph()->getRootNode()->addChildrenNode(&wallNode2);
+
+	//ADD CAMERA TO SCENEGRAPH
+	psScene.getScenegraph()->addCamera(&cam);
+	psScene.getScenegraph()->getCamera("Pilotview");
+	psScene.getScenegraph()->setActiveCamera("Pilotview");
 
 	/////////////////////////////////////////TEXTURES//////////////////////////////////////////
 
@@ -240,7 +297,6 @@ int main()
 	rain->setAreaEmitting(false, true, 8.0, 10000);
 	rain->addTexture(rainTex, 0.0);
 	rain->defineLook(true, 0.03, 1.0, 0.0);
-	particleCount += (50 * 5.0 / 0.02);
 
 	//FINAL EMITTER FONTAINE
 	Emitter* fontaine = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.05, 5, 2.0, true);
@@ -377,7 +433,6 @@ int main()
 	maximumParticle->setVelocity(3);
 	maximumParticle->usePhysicDirectionGravity(glm::vec4(0.0, 1.0, 0.0, 0.2), 0.5);
 	maximumParticle->defineLook(false, 0.01);
-	int particleCountMax = 5000 * 12 / 0.2;
 
 	//particleMax with Texture
 
@@ -432,95 +487,104 @@ int main()
 	//firework2->defineLook(true, 0.8, 0.1, 0.2);
 
 	//////////////////////////////////////Effect//////////////////////////////////////////////////
-	//Effect* ef
+	
+	Effect* effect = new Effect();
+	
+	effect->addEmitter(snow);
+	effect->saveEffect(RESOURCES_PATH "/XML/Effect_Snow.xml");
+	effect->removeEmitter(0);
 
+	effect->addEmitter(snowStrong);
+	effect->saveEffect(RESOURCES_PATH "/XML/Effect_SnowStrong.xml");
+	effect->removeEmitter(0);
+	
+	effect->addEmitter(smokeWhite);
+	effect->saveEffect(RESOURCES_PATH "/XML/Effect_SmokeWhite.xml");
+	effect->removeEmitter(0);
 
-	//////////////////////////////////////OUR SCENE///////////////////////////////////////////////
+	effect->addEmitter(smokeBlack);
+	effect->saveEffect(RESOURCES_PATH "/XML/Effect_SmokeBlack.xml");
+	effect->removeEmitter(0);
 
-	//SKYBOX
-	Cube cube;
-	const char *textureNames[6] = { 
-		/*(char*)RESOURCES_PATH "/PereaBeach1/posx.jpg",
-		(char*)RESOURCES_PATH "/PereaBeach1/negx.jpg",
-		(char*)RESOURCES_PATH "/PereaBeach1/posy.jpg",
-		(char*)RESOURCES_PATH "/PereaBeach1/negy.jpg",
-		(char*)RESOURCES_PATH "/PereaBeach1/posz.jpg",
-		(char*)RESOURCES_PATH "/PereaBeach1/negz.jpg"*/
-		(char*)RESOURCES_PATH "/Color/testTex.png",
-		(char*)RESOURCES_PATH "/Color/testTex.png",
-		(char*)RESOURCES_PATH "/Color/testTex.png",
-		(char*)RESOURCES_PATH "/Color/testTex.png",
-		(char*)RESOURCES_PATH "/Color/testTex.png",
-		(char*)RESOURCES_PATH "/Color/testTex.png" };
-	Skybox skybox(textureNames);
-	Node skyboxNode("skybox");
-	skyboxNode.addGeometry(&cube);
+	effect->addEmitter(smokeCloud);
+	effect->saveEffect(RESOURCES_PATH "/XML/Effect_SmokeCloud.xml");
+	effect->removeEmitter(0);
 
-	//OBJECTS
-	Teapot teapot;
-	teapot.loadBufferData();
-	Sphere sphere;
-	sphere.loadBufferData();
-	Rect plane;
-	plane.loadBufferData();
+	effect->addEmitter(rain);
+	effect->saveEffect(RESOURCES_PATH "/XML/Effect_Rain.xml");
+	effect->removeEmitter(0);
 
-	//TEXTURES
-	Texture chrome((char*)RESOURCES_PATH "/Metal/chrome.jpg");
-	Texture marble((char*)RESOURCES_PATH "/Wall/seamless_marble.png"); //TODO JPG
-	Texture cvLogo((char*)RESOURCES_PATH "/Symbol/cv_logo.bmp");
-	Texture bricks((char*)RESOURCES_PATH "/Wall/brick.bmp");
+	effect->addEmitter(fontaine);
+	effect->saveEffect(RESOURCES_PATH "/XML/Effect_Fontaine.xml");
+	effect->removeEmitter(0);
 
-	//CREATING NODES
-	Level testLevel("testLevel");
-	Scene testScene("testScene");
-	testLevel.addScene(&testScene);
-	testLevel.changeScene("testScene");
+	effect->addEmitter(circle);
+	effect->saveEffect(RESOURCES_PATH "/XML/Effect_Circle.xml");
+	effect->removeEmitter(0);
 
-	Node cube1("cube1");
-	cube1.addGeometry(&cube);
-	cube1.addTexture(&chrome);
-	cube1.setModelMatrix(glm::translate(cube1.getModelMatrix(), glm::vec3(-0.3, 0.25, 0.4)));
-	cube1.setModelMatrix(glm::scale(cube1.getModelMatrix(), glm::vec3(0.3, 0.3, 0.3)));
+	effect->addEmitter(quad);
+	effect->saveEffect(RESOURCES_PATH "/XML/Effect_Quad.xml");
+	effect->removeEmitter(0);
 
-	Node cube2("cube2");
-	cube2.addGeometry(&cube);
-	cube2.addTexture(&chrome);
-	cube2.setModelMatrix(glm::translate(cube2.getModelMatrix(), glm::vec3(0.7, 0.25, 0.4)));
-	cube2.setModelMatrix(glm::scale(cube2.getModelMatrix(), glm::vec3(0.3, 0.3, 0.3)));
+	effect->addEmitter(fruitFlies);
+	effect->saveEffect(RESOURCES_PATH "/XML/Effect_FruitFlies.xml");
+	effect->removeEmitter(0);
 
-	Node wallNode1("wall1");
-	wallNode1.addGeometry(&plane);
-	wallNode1.addTexture(&marble);
-	wallNode1.setModelMatrix(glm::translate(wallNode1.getModelMatrix(), glm::vec3(0.0, -1.0, 0.0)));
-	wallNode1.setModelMatrix(glm::rotate(wallNode1.getModelMatrix(), 90.0f, glm::vec3(1.0, 0.0, 0.0)));
-	wallNode1.setModelMatrix(glm::scale(wallNode1.getModelMatrix(), glm::vec3(25.0, 2.0, 1.0)));
+	effect->addEmitter(screenFruitFlies);
+	effect->saveEffect(RESOURCES_PATH "/XML/Effect_ScreenFruitFlies.xml");
+	effect->removeEmitter(0);
 
-	Node wallNode2("wall2");
-	wallNode2.addGeometry(&plane);
-	wallNode2.addTexture(&bricks);
-	wallNode2.setModelMatrix(glm::translate(wallNode2.getModelMatrix(), glm::vec3(0.0, 0.0, 0.0)));
-	wallNode2.setModelMatrix(glm::scale(wallNode2.getModelMatrix(), glm::vec3(25.0, 2.5, 1.0)));
+	effect->addEmitter(glowworm);
+	effect->saveEffect(RESOURCES_PATH "/XML/Effect_Glowworm.xml");
+	effect->removeEmitter(0);
 
-	Node teaNode("teaNode");
-	teaNode.addGeometry(&teapot);
-	teaNode.addTexture(&cvLogo);
-	teaNode.setModelMatrix(glm::translate(teaNode.getModelMatrix(), glm::vec3(0.2, 0.3, 1.0)));
-	teaNode.setModelMatrix(glm::scale(teaNode.getModelMatrix(), glm::vec3(0.3, 0.3, 0.3)));
+	effect->addEmitter(energyBall);
+	effect->saveEffect(RESOURCES_PATH "/XML/Effect_EnergyBall.xml");
+	effect->removeEmitter(0);
 
-	//CREATING A SCENEGRAPH
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&wallNode1);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&wallNode2);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube1);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube2);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&teaNode);
+	effect->addEmitter(cloud01);
+	effect->addEmitter(cloud02);
+	effect->addEmitter(cloud03);
+	effect->addEmitter(cloud04);
+	effect->addEmitter(cloud05);
+	effect->addEmitter(cloud06);
+	effect->addEmitter(cloud07);
+	effect->addEmitter(cloud08);
+	effect->addEmitter(cloud09);
+	effect->addEmitter(cloud10);
+	effect->addEmitter(cloud11);
+	effect->saveEffect(RESOURCES_PATH "/XML/Effect_ComicCloud.xml");
+	effect->removeEmitter(10);
+	effect->removeEmitter(9);
+	effect->removeEmitter(8);
+	effect->removeEmitter(7);
+	effect->removeEmitter(6);
+	effect->removeEmitter(5);
+	effect->removeEmitter(4);
+	effect->removeEmitter(3);
+	effect->removeEmitter(2);
+	effect->removeEmitter(1);
+	effect->removeEmitter(0);
 
-	//ADD CAMERA TO SCENEGRAPH
-	testScene.getScenegraph()->addCamera(&cam);
-	testScene.getScenegraph()->getCamera("Pilotview");
-	testScene.getScenegraph()->setActiveCamera("Pilotview");
+	//////////////////////////////////////Particle System//////////////////////////////////////////
+
+	ParticleSystem* psSnow = new ParticleSystem(glm::vec3(0, 0, 0), RESOURCES_PATH "/XML/Effect_Snow.xml");
+	Node snowNode("snowNode");
+	snowNode.setCamera(&cam);
+	snowNode.addParticleSystem(psSnow);
+	snowNode.setParticleActive(true);
+	psSnow->start();
+
+	ParticleSystem* psSnowStrong = new ParticleSystem(glm::vec3(0, 0, 0), RESOURCES_PATH "/XML/Effect_SnowStrong.xml");
+	psSnow->start();
+
+	ParticleSystem* psSmokeWhite = new ParticleSystem(glm::vec3(0, 0, 0), RESOURCES_PATH "/XML/Effect_SmokeWhite.xml");
+	psSmokeWhite->start();
+
+	//////////////////////////////////////Other Things//////////////////////////////////////////
 
 	//GUI
-	//initGUI();
+	initGUI();
 
 	double startCamTime = glfwGetTime();
 
@@ -544,7 +608,7 @@ int main()
 			shaderSkybox.sendMat4("viewMatrix", cam.getViewMatrix());
 			shaderSkybox.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 			shaderSkybox.sendSkyboxTexture("testTexture", skybox.getSkyboxTexture());
-			//skyboxNode.render();
+			skyboxNode.render();
 			shaderSkybox.unbind();
 
 			glEnable(GL_DEPTH_TEST);
@@ -552,14 +616,19 @@ int main()
 			shaderObject.sendMat4("viewMatrix", cam.getViewMatrix());
 			shaderObject.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 			shaderObject.sendInt("useTexture", 1);
-			teaNode.setModelMatrix(glm::rotate(teaNode.getModelMatrix(), 3.0f, glm::vec3(0.0, 1.0, 0.0)));
-			cube1.setModelMatrix(glm::rotate(cube1.getModelMatrix(), 3.0f, glm::vec3(0.0, 1.0, 0.0)));
-			cube2.setModelMatrix(glm::rotate(cube2.getModelMatrix(), 3.0f, glm::vec3(0.0, 1.0, 0.0)));
-			//testScene.render(shaderObject);
+			psScene.render(shaderObject);
 			shaderObject.unbind();
 
 			///////////////////////////////////////FINAL EMITTER///////////////////////////////////////
 			glDisable(GL_DEPTH_TEST);
+
+			psSnow->update(cam);
+			psSnow->render(cam);
+
+			snowNode.renderParticles();
+
+			psSmokeWhite->render(cam);
+			psSmokeWhite->render(cam);
 
 			//smokeWhite->update();
 			//smokeWhite->render(cam);
@@ -613,7 +682,6 @@ int main()
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			//maximumParticle->update();
 			//maximumParticle->render(cam);
-			particleCount = particleCountMax;
 		}
 
 		if (useFruitFliesButton->isActive()){
@@ -672,7 +740,7 @@ int main()
 
 		////////////////////////////////BASICS///////////////////////////////////////////////////////
 
-		//renderer->renderGUI(*gui, window);
+		renderer->renderGUI(*gui, window);
 
 		//WINDOW
 		window.swapAndPoll();
