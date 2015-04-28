@@ -53,5 +53,17 @@ void Scene::setSkyboxNode(Node* skyboxNode)
 void Scene::render(ShaderProgram &shader)
 {
 	m_sceneGraph->getRootNode()->render(shader);
+}
 
+void Scene::renderParticleSystems()
+{
+	std::vector<int> vec;
+	m_sceneGraph->sortParticleSet(vec);
+	std::vector<ParticleSystem*> psVec = *m_sceneGraph->getParticleSet();
+
+	auto cam = *m_sceneGraph->getActiveCamera();
+	for (auto entry : vec) {
+		psVec.at(entry)->update(cam);
+		psVec.at(entry)->render(cam);
+	}
 }

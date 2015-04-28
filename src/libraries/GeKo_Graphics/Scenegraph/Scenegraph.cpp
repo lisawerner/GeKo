@@ -134,3 +134,38 @@ std::vector<ParticleSystem*>* Scenegraph::getParticleSet()
 {
 	return &m_particleSet;
 }
+
+//the comparison function to compare the distance, saved in a vector.
+bool comparisonFunction(std::vector<double> vec1, std::vector<double> vec2) { return (vec1.at(1) > vec2.at(1)); }
+
+void Scenegraph::sortParticleSet(std::vector<int> &rvec)
+{
+	rvec.clear();
+	//new vec that will be sorted
+	std::vector<std::vector<double>> arr;
+
+	glm::vec3 camPos = glm::vec3(m_activeCamera->getPosition().x, m_activeCamera->getPosition().y, m_activeCamera->getPosition().z);
+
+	//fill arr
+	int i = 0;
+	for (auto ps : m_particleSet) {
+		//compute distance from camera to ParticleSystem
+		glm::vec3 psPos = ps->getPosition();
+		double distance = sqrt(pow((camPos.x - psPos.x), 2) + pow((camPos.y - psPos.y), 2) + pow((camPos.z - psPos.z), 2));
+
+		std::vector<double> temp;
+		temp.push_back((double)i); //push back entry index
+		temp.push_back(distance);
+
+		arr.push_back(temp);
+		i++;
+	}
+
+	//sort arr by distance(arr.at(1))
+	std::sort(arr.begin(), arr.end(), comparisonFunction);
+
+	//fill rvec
+	for (auto entry : arr) {
+		rvec.push_back((int)entry.at(0));
+	}
+}

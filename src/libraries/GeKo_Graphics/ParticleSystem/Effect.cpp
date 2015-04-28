@@ -4,12 +4,18 @@ using namespace tinyxml2;
 
 Effect::Effect()
 {
+	emitterVec.clear();
+	notStartedEmitters.clear();
+	m_isStarted = false;
 	setShader();
 }
 
 
 Effect::Effect(const char*filepath)
 {
+	emitterVec.clear();
+	notStartedEmitters.clear();
+	m_isStarted = false;
 	setShader();
 	loadEffect(filepath);
 }
@@ -33,8 +39,17 @@ Effect::~Effect()
 
 
 void Effect::start(){
-	for (auto emitter : emitterVec){
-		emitter->start();
+	if (!m_isStarted) {
+		m_isStarted = true;
+		m_startTime = glfwGetTime();
+		for (auto emitter : emitterVec){
+			if (emitter->getStartTime() == 0.0) {
+				emitter->start();
+			}
+			else {
+				notStartedEmitters.push_back(emitter);
+			}
+		}
 	}
 }
 
@@ -42,6 +57,8 @@ void Effect::stop(){
 	for (auto emitter : emitterVec){
 		emitter->stop();
 	}
+	m_isStarted = false;
+	notStartedEmitters.clear();
 }
 
 void Effect::addEmitter(Emitter* emitter)
@@ -56,7 +73,29 @@ void Effect::removeEmitter(int arrayPosition)
 
 void Effect::updateEmitters(Camera &cam)
 {
-	for (auto emitter : emitterVec){
+	//start remaining emitters if their startTime is lower than the passed time
+	if (m_isStarted) {
+		double timePassed = glfwGetTime() - m_startTime;
+		int i = 0;
+		std::vector<int> toDelete;
+		for (auto emitter : notStartedEmitters) {
+			if (emitter->getStartTime() < timePassed) {
+				emitter->start();
+				toDelete.push_back(i);
+			}
+			i++;
+		}
+		//delete started emitters from vector
+		int k = 0;
+		for (auto j : toDelete) {
+			notStartedEmitters.erase(notStartedEmitters.begin() + j - k);
+			k++;
+		}
+
+	}
+
+	//this cannot be in the block above because there may be living particles when the ParticleSystem gets stopped.
+	for (auto emitter : emitterVec) {
 		if (emitter->getMovable()) {
 			emitter->update(compute, glm::vec3(cam.getPosition().x, cam.getPosition().y, cam.getPosition().z));
 		}
@@ -81,12 +120,12 @@ void Effect::renderEmitters(Camera &cam)
 void Effect::setPosition(glm::vec3 newPosition)
 {
 	for (auto emitter : emitterVec){
-		//why should I do this glm????:
 		glm::vec3 pos = emitter->getLocalPosition();
 		glm::vec3 result(0.0, 0.0, 0.0);
-		result.x = pos.x + newPosition.x;
+		result = pos + newPosition;
+		/*result.x = pos.x + newPosition.x;
 		result.y = pos.y + newPosition.y;
-		result.z = pos.z + newPosition.z;
+		result.z = pos.z + newPosition.z;*/
 
 		emitter->setPosition(result);
 	}
@@ -193,6 +232,15 @@ int Effect::loadEffect(const char* filepath)
 			error = item->QueryBoolText(&mov);
 			XMLCheckResult(error);
 			if (mov) emitter->setMovable(mov);
+		}
+
+		//Start time
+		item = emitterNode->FirstChildElement("StartTime");
+		if (item != nullptr){
+			double st;
+			error = item->QueryDoubleText(&st);
+			XMLCheckResult(error);
+			emitter->setStartTime(st);
 		}
 			
 		//Velocity
@@ -502,7 +550,7 @@ int Effect::saveEffect(char* filepath)
 		effect->InsertEndChild(emitterNode);
 
 		XMLElement* element = doc.NewElement("OutputType");
-		element->SetText(emitter->getOutputMode());
+		element->SetText(emitter->getOutputType());
 		emitterNode->InsertEndChild(element);
 
 		element = doc.NewElement("Position");
@@ -538,8 +586,14 @@ int Effect::saveEffect(char* filepath)
 		element->SetText(emitter->getUseGeometryShader());
 		emitterNode->InsertEndChild(element);
 
+		//Movable
 		element = doc.NewElement("Movable");
 		element->SetText(emitter->getMovable());
+		emitterNode->InsertEndChild(element);
+
+		//Start time
+		element = doc.NewElement("StartTime");
+		element->SetText(emitter->getStartTime());
 		emitterNode->InsertEndChild(element);
 		
 		//Velocity

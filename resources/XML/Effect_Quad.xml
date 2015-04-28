@@ -1,6 +1,6 @@
 <Effect>
     <Emitter>
-        <OutputType>-1</OutputType>
+        <OutputType>0</OutputType>
         <Position x="0" y="0" z="0"/>
         <EmitterLifetime>0</EmitterLifetime>
         <EmitFrequency>1</EmitFrequency>
@@ -9,6 +9,7 @@
         <ParticleMortal>1</ParticleMortal>
         <UseGeometryShader>0</UseGeometryShader>
         <Movable>0</Movable>
+        <StartTime>0</StartTime>
         <Velocity>0</Velocity>
         <Physic>
             <DirectionGravity>

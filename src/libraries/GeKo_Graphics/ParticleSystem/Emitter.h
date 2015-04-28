@@ -104,10 +104,11 @@ public:
 	std::vector<Texture*> m_textureList;
 
 	//change properties
-	void setOutputMode(const int OUTPUT);
+	void setOutputMode(const int OUTPUT);	//the currently used output mode (depends on emitter start/stop)
+	void setOutputType(const int OUTPUT);	//the emitter output type (everytime the emitter starts, this value will be set as output mode)
 	void setPosition(glm::vec3 newPosition);
 	void setLocalPosition(glm::vec3 newLocalPosition);
-	void setEmitterMortality(double emitterLifetime);
+	//void setEmitterMortality(double emitterLifetime); //not necessary. Merged in setEmitterLifetime
 	void setEmitterLifetime(double emitterLifetime);
 	void setEmitFrequency(float newEmitFrequency);
 	void setParticlesPerEmit(int numberParticles);
@@ -116,9 +117,11 @@ public:
 	void setGravity(glm::vec4 newGravity);
 	void setSpeed(float speed);
 	void setMovable(bool on);
+	void setStartTime(double time); //amount of seconds after the PS starts
 
 	//get properties
-	int getOutputMode();
+	int getOutputMode();	//the currently used output mode (depends on emitter start/stop)
+	int getOutputType();	//the emitter output type (everytime the emitter starts, this value will be set as output mode)
 	glm::vec3 getPosition();
 	glm::vec3 getLocalPosition();
 	bool getEmitterMortality();
@@ -138,6 +141,7 @@ public:
 	bool getUsePointSprites();
 	float getRotationSpeed();
 	bool getMovable();
+	double getStartTime();
 
 	bool getPhysicTrajectory();
 	bool getPhysicDirectionGravity();
@@ -182,7 +186,7 @@ private:
 
 	//Var how the Output should flow
 	enum FLOW { UNUSED = -1, CONSTANT = 0, ONCE = 1 } m_output;
-	int outputType;
+	int m_outputType;
 
 	//Var for the buffer iteration
 	int indexBuffer;
@@ -193,6 +197,8 @@ private:
 	bool m_emitterMortal;			//if the emitter stops working after emitLifetime
 	double m_emitLifetime;	//if mortal=true: how long the emitter is active
 	float m_emitFrequency;	//After this frequencytime we generate particle
+	double m_startTime;		//after the PS starts, it takes 'startTime' seconds until this emitter starts
+	bool m_isStarted;
 
 	//Number of particles
 	int numMaxParticle;		//How many particles we has as maximum
