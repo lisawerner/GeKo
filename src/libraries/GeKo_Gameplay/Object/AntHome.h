@@ -14,10 +14,10 @@
 #include <sstream>
 #include <vector>
 
-class AntHome : public Object{
+class AntHome : public StaticObject{
 public:
 	AntHome();
-	AntHome(glm::vec3 position, AntMesh antMesh, ObjectObserver *objectObserver, Texture *guardTex, Texture *workerTex, DecisionTree *aggressiveDecisionTree, Graph<AStarNode, AStarAlgorithm> *aggressiveGraph, DecisionTree *afraidDecisionTree, Graph<AStarNode, AStarAlgorithm> *afraidGraph);
+	AntHome(glm::vec3 position, Geometry antMesh, ObjectObserver *objectObserver, Texture *guardTex, Texture *workerTex, DecisionTree *aggressiveDecisionTree, Graph<AStarNode, AStarAlgorithm> *aggressiveGraph, DecisionTree *afraidDecisionTree, Graph<AStarNode, AStarAlgorithm> *afraidGraph);
 	~AntHome();
 	void generateGuards(int i, Node* root);
 	void generateWorkers(int i);
@@ -34,7 +34,7 @@ protected:
 	std::vector<Node*> m_guards;
 	std::vector<Node*> m_workers;
 	glm::vec3 m_position;
-	AntMesh m_antMesh;
+	Geometry m_antMesh;
 	Texture *m_guardTexture;
 	Texture *m_workerTexture;
 	Gravity *m_gravity;

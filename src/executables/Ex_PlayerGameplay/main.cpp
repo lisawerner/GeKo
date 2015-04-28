@@ -181,26 +181,6 @@ int main()
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&treeNode);
 
 	// ==============================================================
-	// == Object (AntHome) ==========================================
-	// ==============================================================
-
-	//TreeMesh treeMesh;
-	AntHomeMesh homeMesh;
-
-	Node homeNode("AntHome");
-	StaticObject home;
-	//home.setTree();
-
-	homeNode.setObject(&home);
-	homeNode.addTexture(&texBrick);
-	homeNode.addGeometry(&homeMesh);
-	glm::vec3 posHome(1.0, 0.0, 1.0);
-	homeNode.addTranslation(posHome);
-	homeNode.getBoundingSphere()->radius = 0.5;
-
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&homeNode);
-
-	// ==============================================================
 	// == Player ====================================================
 	// ==============================================================
 
@@ -281,6 +261,23 @@ int main()
 	// ==============================================================
 	// == Object (Anthome) ==========================================
 	// ==============================================================
+
+	//TreeMesh treeMesh;
+	AntHomeMesh homeMesh;
+
+	Node homeNode("AntHome");
+	StaticObject home;
+	//home.setTree();
+
+	homeNode.setObject(&home);
+	homeNode.addTexture(&texBrick);
+	homeNode.addGeometry(&homeMesh);
+	glm::vec3 posHome(1.0, 0.0, 1.0);
+	homeNode.addTranslation(posHome);
+	homeNode.getBoundingSphere()->radius = 0.5;
+
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&homeNode);
+
 	glm::vec3 posFood2(10.0, 0.0, -5.0);
 	glm::vec3 posSpawn(3.0, 0.0, 3.0);
 	glm::vec3 posDefaultPlayer(0.0, 0.0, 0.0);

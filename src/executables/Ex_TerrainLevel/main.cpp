@@ -15,6 +15,7 @@
 #include <GeKo_Gameplay/Object/AI.h>
 
 #include <GeKo_Graphics/Geometry/AntMesh.h>
+#include <GeKo_Graphics/Geometry/AntHomeMesh.h>
 #include <GeKo_Graphics/Geometry/TreeMesh.h>
 #include <GeKo_Graphics/Geometry/GekoMesh.h>
 #include <GeKo_Graphics/Geometry/Plane.h>
@@ -107,13 +108,15 @@ int main()
 	glfwSetKeyCallback(testWindow.getWindow(), key_callback);
 
 	cam.setKeySpeed(2.0);
-	cam.setNearFar(0.01, 100);
+	cam.setNearFar(0.01, 10000);
 
 	glewInit();
 
 	OpenGL3Context context;
 	//renderer = new Renderer(context);
 	Renderer renderer(context);
+
+	ResourceManager manager;
 
 	//===================================================================//
 	//==================Shaders for your program========================//
@@ -161,7 +164,10 @@ int main()
 	//==================Object declarations - Geometry, Texture, Node=== //
 	//==========================Object: Player===========================//
 
-	Texture texCV((char*)RESOURCES_PATH "/cv_logo.bmp");
+	Texture texGeko((char*)RESOURCES_PATH "/Snake.jpg");
+
+	auto gekoHandle = manager.loadStaticMesh(RESOURCES_PATH "/Geko.ply");
+	auto gekoGeometry = gekoHandle.get().toGeometry();
 
 	GekoMesh gekoMesh;
 	geko.setExp(0.0);
@@ -170,9 +176,9 @@ int main()
 
 	Node playerNode("Player");
 
-	playerNode.addGeometry(&gekoMesh);
+	playerNode.addGeometry(&gekoGeometry);
 	playerNode.setObject(&geko);
-	playerNode.addTexture(&texCV);
+	playerNode.addTexture(&texGeko);
 
 	/*sfh.generateSource(glm::vec3(geko.getPosition()), RESOURCES_PATH "/Sound/Rascheln.wav");*/
 	geko.setSoundHandler(&sfh);
@@ -189,7 +195,7 @@ int main()
 	sfh.disableLooping("Essen");
 	sfh.disableLooping("Quest");
 	sfh.disableLooping("Item");
-	geko.setPosition(glm::vec4(terrain2.getResolutionX() / 2.0f, 10.0f, terrain2.getResolutionY() / 2.0f, 1.0));
+	geko.setPosition(glm::vec4(terrain2.getResolutionX() / 2.0f + 10.0f, 10.0f, terrain2.getResolutionY() / 2.0f + 10.0f, 1.0));
 	//sfh.generateSource("Feuer",posFood, RESOURCES_PATH "/Sound/Feuer kurz.wav");
 	playerNode.setCamera(&cam);
 
@@ -223,6 +229,28 @@ int main()
 	//testScene.getScenegraph()->getRootNode()->getChildrenNode("Translate")->addChildrenNode(&playerNode);
 
 
+	const char *textureNames[6] = {
+		(char*)RESOURCES_PATH "/Skybox_Data/Sky/bluesky_left.jpg",
+		(char*)RESOURCES_PATH "/Skybox_Data/Sky/bluesky_right.jpg",
+		(char*)RESOURCES_PATH "/Skybox_Data/Sky/bluesky_top.jpg",
+		(char*)RESOURCES_PATH "/Skybox_Data/Sky/bluesky_top.jpg",
+		(char*)RESOURCES_PATH "/Skybox_Data/Sky/bluesky_back.jpg",
+		(char*)RESOURCES_PATH "/Skybox_Data/Sky/bluesky_front.jpg"
+		/*(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png" */
+	};
+	Skybox skybox = Skybox(textureNames);
+	Node skyboxNode = Node("skybox");
+	skyboxNode.addGeometry(&skybox);
+	skyboxNode.addTranslation(glm::vec3(geko.getPosition()));
+	skyboxNode.setModelMatrix(glm::scale(skyboxNode.getModelMatrix(), glm::vec3(200, 200, 200)));
+	//skyboxNode.addTranslation(glm::vec3(terrain2.getResolutionX() / 2.0f, 0.0, terrain2.getResolutionY() / 2.0f));
+
+	testScene.setSkyboxNode(&skyboxNode);
 
 	//===================================================================//
 	//==================Setting up the Observers========================//
@@ -237,7 +265,11 @@ int main()
 	// ==============================================================
 	// == Object (Forest) ==========================================
 	// ==============================================================
-	TreeMesh tree;
+
+	Texture texTree((char*)RESOURCES_PATH "/Texture/cookie.jpg");
+
+	auto treeHandle = manager.loadStaticMesh(RESOURCES_PATH "/Tree.ply");
+	auto treeGeometry = treeHandle.get().toGeometry();
 
 	glm::vec3 tmp;
 	std::stringstream name;
@@ -248,7 +280,8 @@ int main()
 		StaticObject *treeStatic = new StaticObject();
 		treeStatic->setTree(50 / TreeData::forest1.size());
 		Node *treeNode = new Node(stringname);
-		treeNode->addGeometry(&tree);
+		treeNode->addGeometry(&treeGeometry);
+		treeNode->addTexture(&texTree);
 		treeNode->setObject(treeStatic);
 		tmp.x = TreeData::forest1[i].x;
 		tmp.z = TreeData::forest1[i].z;
@@ -266,9 +299,9 @@ int main()
 		StaticObject *treeStatic = new StaticObject();
 		treeStatic->setTree(50 / TreeData::forest2.size());
 		Node *treeNode = new Node(stringname);
-		treeNode->addGeometry(&tree);
+		treeNode->addGeometry(&treeGeometry);
+		treeNode->addTexture(&texTree);
 		treeNode->setObject(treeStatic);
-
 		tmp.x = TreeData::forest2[i].x;
 		tmp.z = TreeData::forest2[i].z;
 		tmp.y = terrain2.getHeight(glm::vec2(tmp.x, tmp.z));
@@ -282,9 +315,14 @@ int main()
 	// ==============================================================
 	// == Object (Anthome) ==========================================
 	// ==============================================================
+	Texture texAntHome((char*)RESOURCES_PATH "/Texture/antHome.jpg");
+
+	auto antHomeHandler = manager.loadStaticMesh(RESOURCES_PATH "/AntHome.ply");
+	auto antHomeGeometry = antHomeHandler.get().toGeometry();
+
 	glm::vec3 posFood(10.0, 0.0, -5.0);
 	glm::vec3 posFood2((terrain2.getResolutionX() / 2.0f) + 10.0, 0.0, (terrain2.getResolutionY() / 2.0f) - 5.0);
-	glm::vec3 posSpawn(terrain2.getResolutionX() / 2.0f, 10.0, terrain2.getResolutionY() / 2.0f);
+	glm::vec3 posSpawn(terrain2.getResolutionX() / 2.0f, 3.0, terrain2.getResolutionY() / 2.0f);
 	glm::vec3 posDefaultPlayer(0.0, 0.0, 0.0);
 	AntMesh antMesh;
 
@@ -303,13 +341,22 @@ int main()
 	possFoods.push_back(TreeData::forest2);
 	antAfraidGraph->setExampleAntAfraid2(posSpawn, possFoods, posDefaultPlayer);
 
-	AntHome antHome(posSpawn, antMesh, &playerObserver, &texCV, &texCV, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
-	//antHome.generateGuards(5, &aiObserver, testScene.getScenegraph()->getRootNode());
+	Texture texAnt((char*)RESOURCES_PATH "/Texture/ant.jpg");
+	auto antHandler = manager.loadStaticMesh(RESOURCES_PATH "/Ant.ply");
+	auto antGeometry = antHandler.get().toGeometry();
+
+	AntHome antHome(posSpawn, antGeometry, &playerObserver, &texAnt, &texAnt, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
 	antHome.generateWorkers(5, testScene.getScenegraph()->getRootNode());
-	/*antHome.addAntsToSceneGraph(testScene.getScenegraph()->getRootNode());*/
 
+	Node homeNode("AntHome");
 
+	homeNode.setObject(&antHome);
+	homeNode.addTexture(&texAntHome);
+	homeNode.addGeometry(&antHomeGeometry);
+	homeNode.addTranslation(posSpawn);
+	homeNode.getBoundingSphere()->radius = 0.5;
 
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&homeNode);
 
 
 	//===================================================================//
@@ -411,33 +458,34 @@ int main()
 		//==================Render your Objects==============================//
 		//==================================================================//
 		//renderer.renderScene(testScene, testWindow);
+		renderer.renderScene(testScene, testWindow);
+
+		//fboGBuffer.bind();
+		//glClearColor(0.5, 0.5, 0.5, 0);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//shaderGBuffer.bind();
+		//shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
+		//shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+
+		//testScene.render(shaderGBuffer);
 
 
-		fboGBuffer.bind();
-		glClearColor(0.5, 0.5, 0.5, 0);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shaderGBuffer.bind();
-		shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
-		shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
+		//shaderGBuffer.unbind();
+		//fboGBuffer.unbind();
 
-		testScene.render(shaderGBuffer);
+		////ScreenFillingQuad Render Pass
+		//shaderSFQ.bind();
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		//shaderSFQ.sendSampler2D("fboTexture", fboGBuffer.getColorTexture(2));
 
-		shaderGBuffer.unbind();
-		fboGBuffer.unbind();
+		//screenFillingQuad.renderGeometry();
+		//shaderSFQ.unbind();
+		//playerGUI.update();
 
-		//ScreenFillingQuad Render Pass
-		shaderSFQ.bind();
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		shaderSFQ.sendSampler2D("fboTexture", fboGBuffer.getColorTexture(2));
-
-		screenFillingQuad.renderGeometry();
-		shaderSFQ.unbind();
-		playerGUI.update();
-		renderer.renderGUI(*testLevel.getPlayerGUI()->getHUD(), testWindow);
-		glfwSwapBuffers(testWindow.getWindow());
-		glfwPollEvents();
+		//renderer.renderGUI(*testLevel.getPlayerGUI()->getHUD(), testWindow);
+		//glfwSwapBuffers(testWindow.getWindow());
+		//glfwPollEvents();
 		testScene.getScenegraph()->searchNode("Player")->getPlayer()->setPosition(testScene.getScenegraph()->searchNode("Player")->getPlayer()->getPosition() - glm::vec4(normalFromTerrain * 0.2f, 1.0));
 		//std::cout << "FPS " << 1 / deltaTime << std::endl;
 

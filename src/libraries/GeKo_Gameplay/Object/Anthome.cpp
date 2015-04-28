@@ -4,7 +4,7 @@ AntHome::AntHome(){
 
 }
 
-AntHome::AntHome(glm::vec3 position, AntMesh antMesh, ObjectObserver *objectObserver, Texture *guardTex, Texture *workerTex, DecisionTree *aggressiveDecisionTree, Graph<AStarNode, AStarAlgorithm> *aggressiveGraph, DecisionTree *afraidDecisionTree, Graph<AStarNode, AStarAlgorithm> *afraidGraph){
+AntHome::AntHome(glm::vec3 position, Geometry antMesh, ObjectObserver *objectObserver, Texture *guardTex, Texture *workerTex, DecisionTree *aggressiveDecisionTree, Graph<AStarNode, AStarAlgorithm> *aggressiveGraph, DecisionTree *afraidDecisionTree, Graph<AStarNode, AStarAlgorithm> *afraidGraph){
 	m_position = position;
 	m_antMesh = antMesh;
 	//Texture texCV((char*)RESOURCES_PATH "/cv_logo.bmp");
@@ -75,7 +75,7 @@ void AntHome::generateWorkers(int i, Node* root){
 		//position.z = rand() * 1.0f / 32767.0f;
 		//position.y = 10.0f;
 		//position.w = 0.0;
-		Ant *antAI = new Ant(glm::vec4(m_position, 1.0) ,(rand()* 5.0f / 32767.0f));
+		Ant *antAI = new Ant(glm::vec4(m_position.x, m_position.y + 10, m_position.z, 1.0), (rand()* 5.0f / 32767.0f));
 		//Ant *antAI = new Ant(glm::vec4(m_position, 1.0) + position);
 		antAI->setAntAfraid(name.str(), m_afraidDecisionTree, m_afraidGraph);
 		//antAI->setAntAfraid();
