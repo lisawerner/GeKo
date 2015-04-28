@@ -45,7 +45,7 @@ public:
 					 float height = tmp->getHeight(glm::vec2(node.getAI()->getPosition().x, node.getAI()->getPosition().z));
 					 if (node.getAI()->getPosition().y < height + 0.5f){
 						 node.setGravity(false);
-						 node.getAI()->setPosition(glm::vec4(node.getAI()->getPosition().x, height + 0.5f, node.getAI()->getPosition().z, 1.0));
+						 node.getAI()->setPosition(glm::vec4(node.getAI()->getPosition().x, height + 1.5f, node.getAI()->getPosition().z, 1.0));
 					 }
 					 else if (true)
 					 {
