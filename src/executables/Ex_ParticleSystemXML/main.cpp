@@ -284,6 +284,11 @@ int main()
 	testScene.getScenegraph()->addParticleSystem(psFireworkGreen);
 	testScene.getScenegraph()->addParticleSystem(psFireworkGold);
 
+	//TEST
+	ParticleSystem* psComicCloud = new ParticleSystem(glm::vec3(0, -1, 4), RESOURCES_PATH "/XML/ComicCloudEffect - Kopie.xml");
+	testScene.getScenegraph()->addParticleSystem(psComicCloud);
+	psComicCloud->start();
+
 
 	//start the ParticleSystems
 	psFire->start();
