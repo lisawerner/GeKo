@@ -145,6 +145,35 @@ void AI::addFoodNodes(){
 	}
 }
 
+void AI::deleteFoodNode(glm::vec3 pos){
+	for (int i = 0; i < m_foodNodes.size(); i++){
+		if (m_foodNodes.at(i)->getPosition() == pos){
+			m_foodNodes.erase(m_foodNodes.begin()+i);
+		}
+	}
+}
+
+AStarNode* AI::nearestFoodNode(){
+	if (m_foodNodes.size() == 1){
+		if (m_foodNodes.at(0)->getNodeType() != GraphNodeType::DEFAULT){
+			return m_foodNodes.at(0);
+		}
+	}
+
+	AStarNode* tempReturn;
+	m_graph->getAlgorithm()->startAlgorithm2(m_lastTarget, m_foodNodes.at(0), m_path);
+	tempReturn = m_path.at(m_path.size() - 1);
+
+	for (int i = 0; i < m_foodNodes.size() - 1; i++){
+		m_graph->getAlgorithm()->startAlgorithm2(m_lastTarget, m_foodNodes.at(i + 1), m_path);
+		if (tempReturn->getDistanceTravelled() > m_path.at(m_path.size() - 1)->getDistanceTravelled()){
+			tempReturn = m_path.at(m_path.size() - 1);
+		}
+	}
+
+	return tempReturn;
+}
+
 void AI::update(){
 	if (m_health <= 0){
 		//std::cout << "Object" << m_name << ": is dead!" << std::endl;
@@ -242,27 +271,6 @@ bool AI::checkPosition(glm::vec3 p1, glm::vec3 p2){
 		rb = false;
 	}
 	return rb;
-}
-
-AStarNode* AI::nearestFoodNode(){
-	if (m_foodNodes.size() == 1){
-		if (m_foodNodes.at(0)->getNodeType() != GraphNodeType::DEFAULT){
-			return m_foodNodes.at(0);
-		}
-	}
-
-	AStarNode* tempReturn;
-	m_graph->getAlgorithm()->startAlgorithm2(m_lastTarget, m_foodNodes.at(0), m_path);
-	tempReturn = m_path.at(m_path.size() - 1);
-
-	for (int i = 0; i < m_foodNodes.size() - 1; i++){
-		m_graph->getAlgorithm()->startAlgorithm2(m_lastTarget, m_foodNodes.at(i + 1), m_path);
-		if (tempReturn->getDistanceTravelled() > m_path.at(m_path.size() - 1)->getDistanceTravelled()){
-			tempReturn = m_path.at(m_path.size() - 1);
-		}
-	}
-
-	return tempReturn;
 }
 
 void AI::decide(){

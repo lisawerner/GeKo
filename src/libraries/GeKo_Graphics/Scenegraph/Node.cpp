@@ -128,7 +128,7 @@ glm::mat4 Node::getRotationMatrix()
 
 void Node::addRotation(float angle, glm::vec3 axis)
 {
-	glm::mat4 newRotationMatrix = glm::rotate(glm::mat4(1.0), angle, axis);
+	glm::mat4 newRotationMatrix = glm::rotate(m_rotationMatrix, angle, axis);
 	m_rotationMatrix = newRotationMatrix;
 
 	updateModelMatrix();

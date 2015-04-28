@@ -265,18 +265,23 @@ public:
 
 	 ///Another Example-Graph for a AI which will react afraid while the player is nearby
 	 /***/
-	 void setExampleAntAfraid2(glm::vec3 posSpawn, glm::vec3 posPlayer)
+	 void setExampleAntAfraid2(glm::vec3 posSpawn, std::vector<std::vector<glm::vec3>> possFoods, glm::vec3 posPlayer)
 	 {
 		 AStarNode* defaultNode = new AStarNode();
 
 		 AStarNode* nodeSpawn = new AStarNode("Spawn", defaultNode, posSpawn, GraphNodeType::HOME);
-		 std::vector<glm::vec3> trees;
-		 trees.push_back(glm::vec3(16.0, 0.0, 76.0));
-		 trees.push_back(glm::vec3(23.0, 0.0, 74.0));
-		 trees.push_back(glm::vec3(21.5, 0.0, 78.5));
-		 trees.push_back(glm::vec3(15.0, 0.0, 81.5));
-		 trees.push_back(glm::vec3(27.5, 0.0, 88.5));
-		 generateForest(trees, nodeSpawn, defaultNode);
+
+		 //std::vector<glm::vec3> trees;
+		 //trees.push_back(glm::vec3(16.0, 0.0, 76.0));
+		 //trees.push_back(glm::vec3(23.0, 0.0, 74.0));
+		 //trees.push_back(glm::vec3(21.5, 0.0, 78.5));
+		 //trees.push_back(glm::vec3(15.0, 0.0, 81.5));
+		 //trees.push_back(glm::vec3(27.5, 0.0, 88.5));
+
+		 for (int i = 0; i < possFoods.size(); i++){
+			 generateForest(possFoods.at(i), nodeSpawn, defaultNode);
+		 }
+		 
 
 		 addGraphNode(nodeSpawn);
 

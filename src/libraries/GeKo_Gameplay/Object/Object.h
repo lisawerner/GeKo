@@ -1,7 +1,6 @@
 #pragma once
-
+//
 #include <glm/glm.hpp>
-#include <vector>
 #include <iostream>
 #include <string>
 
@@ -12,6 +11,7 @@
 #include "ObjectType.h"
 #include "ClassType.h"
 #include "States.h"
+
 
 class Object
 {
@@ -40,7 +40,7 @@ public:
 	ClassType getClassType();
 
 	glm::vec4 getViewDirection();
-
+	void setViewDirection(glm::vec4 viewDirection);
 	bool getStates(States state);
 	void setStates(States state, bool b);
 
