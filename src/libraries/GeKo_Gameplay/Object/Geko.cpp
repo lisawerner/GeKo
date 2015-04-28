@@ -33,7 +33,7 @@ Geko::Geko(std::string gekoName, glm::vec3 spawnPoint){
 	m_theta = 2.0;
 	m_alpha = 0;
 
-	m_speed = 0.003;
+	m_speed = 0.03;
 	m_speedTurn = 0.1;
 }
 

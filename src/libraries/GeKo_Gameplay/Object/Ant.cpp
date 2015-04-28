@@ -9,6 +9,7 @@ Ant::Ant(){
 	m_myNodeName = "NULL";
 
 	m_hunger = 10;
+
 	m_hungerMax = 10;
 	m_health = 1000;
 	m_healthMax = 1000;
@@ -245,17 +246,11 @@ void Ant::setAntAfraid(std::string name, DecisionTree *tree, Graph<AStarNode, AS
 
 	m_speed = 0.1;
 
-	glm::vec3 posFood(10.0, 0.0, -5.0);
-	glm::vec3 posSpawn(3.0, 0.0, 3.0);
-	glm::vec3 posDefaultPlayer(0.0, 0.0, 0.0);
-	/*Graph<AStarNode, AStarAlgorithm>* antGraph = new Graph<AStarNode, AStarAlgorithm>();
-	antGraph->setExampleAntAfraid(posSpawn, posFood, posDefaultPlayer);*/
 	m_graph = antGraph;
 
 	m_lastTarget = antGraph->searchNode(GraphNodeType::HOME);
 	m_target = antGraph->searchNode(GraphNodeType::HOME);
 
-	//m_position = glm::vec4(posSpawn, 1.0);
 	m_homeNode = antGraph->searchNode(GraphNodeType::HOME);
 	m_foodNodes.pop_back();
 	addFoodNodes();

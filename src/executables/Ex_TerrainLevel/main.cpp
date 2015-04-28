@@ -37,9 +37,9 @@
 
 #include <GeKo_Gameplay/Object/AntHome.h>
 
-#include <GeKo_Graphics/GUI/GUI.h>
-#include <GeKo_Graphics/GUI/GUIComponents.hpp>
-#include <GeKo_Graphics/GUI/PlayerGUI.h>
+//#include <GeKo_Graphics/GUI/GUI.h>
+//#include <GeKo_Graphics/GUI/GUIComponents.hpp>
+//#include <GeKo_Graphics/GUI/PlayerGUI.h>
 
 //===================================================================//
 //==================Things you need globally==========================//
@@ -54,8 +54,8 @@ const int HUD_HEIGHT = 100;
 const int HUD_WIDTH = 350;
 const int QUEST_WIDTH = 325;
 const int QUEST_HEIGHT = 300;
-
-GUI *hud;
+//
+//GUI *hud;
 
 //===================================================================//
 //==================Callbacks for the Input==========================//
@@ -174,15 +174,17 @@ int main()
 	playerNode.setObject(&geko);
 	playerNode.addTexture(&texCV);
 
-	sfh.generateSource(glm::vec3(geko.getPosition()), RESOURCES_PATH "/Sound/Rascheln.wav");
+	/*sfh.generateSource(glm::vec3(geko.getPosition()), RESOURCES_PATH "/Sound/Rascheln.wav");*/
 	geko.setSoundHandler(&sfh);
+	geko.setSourceName(FIRESOUND, "Fire", RESOURCES_PATH "/Sound/Feuer_kurz.wav");
 	geko.setSourceName(MOVESOUND, "SpielerFootsteps", RESOURCES_PATH "/Sound/Rascheln.wav");
-	//geko.setSourceName(BACKGROUNDMUSIC, "Hintergrund", RESOURCES_PATH "/Sound/jingle2.wav");
+	geko.setSourceName(BACKGROUNDMUSIC, "Hintergrund", RESOURCES_PATH "/Sound/jingle2.wav");
 	geko.setSourceName(FIGHTSOUND, "Kampfsound", RESOURCES_PATH "/Sound/punch.wav");
 	geko.setSourceName(EATSOUND, "Essen", RESOURCES_PATH "/Sound/Munching.wav");
 	geko.setSourceName(QUESTSOUND, "Quest", RESOURCES_PATH "/Sound/jingle.wav");
 	geko.setSourceName(ITEMSOUND, "Item", RESOURCES_PATH "/Sound/itempickup.wav");
-	geko.setSourceName(FIRESOUND, "Fire", RESOURCES_PATH "/Sound/Feuer_kurz.wav");
+
+	sfh.setGain("SpielerFootsteps", 0.1);
 
 	sfh.disableLooping("Essen");
 	sfh.disableLooping("Quest");
@@ -252,6 +254,7 @@ int main()
 		tmp.z = TreeData::forest1[i].z;
 		tmp.y = terrain2.getHeight(glm::vec2(tmp.x, tmp.z));
 		treeNode->addTranslation(tmp);
+		treeNode->getStaticObject()->setPosition(tmp);
 		treeNode->getBoundingSphere()->radius = 2.5;
 		testScene.getScenegraph()->getRootNode()->addChildrenNode(treeNode);
 		name.str("");
@@ -270,6 +273,7 @@ int main()
 		tmp.z = TreeData::forest2[i].z;
 		tmp.y = terrain2.getHeight(glm::vec2(tmp.x, tmp.z));
 		treeNode->addTranslation(tmp);
+		treeNode->getStaticObject()->setPosition(tmp);
 		treeNode->getBoundingSphere()->radius = 2.5;
 		testScene.getScenegraph()->getRootNode()->addChildrenNode(treeNode);
 		name.str("");
@@ -294,7 +298,10 @@ int main()
 	antAggressiveGraph->setExampleAntAggressiv(posSpawn, posFood2, posDefaultPlayer);
 
 	Graph<AStarNode, AStarAlgorithm>* antAfraidGraph = new Graph<AStarNode, AStarAlgorithm>();
-	antAfraidGraph->setExampleAntAfraid2(posSpawn, posDefaultPlayer);
+	std::vector<std::vector<glm::vec3>> possFoods;
+	possFoods.push_back(TreeData::forest1);
+	possFoods.push_back(TreeData::forest2);
+	antAfraidGraph->setExampleAntAfraid2(posSpawn, possFoods, posDefaultPlayer);
 
 	AntHome antHome(posSpawn, antMesh, &playerObserver, &texCV, &texCV, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
 	//antHome.generateGuards(5, &aiObserver, testScene.getScenegraph()->getRootNode());
@@ -330,6 +337,7 @@ int main()
 	//==================Setting up the Gravity===========================//
 	//==================================================================//
 	PlayerGUI playerGUI(HUD_WIDTH, HUD_HEIGHT, WINDOW_HEIGHT, WINDOW_WIDTH, QUEST_HEIGHT, QUEST_WIDTH, playerNode.getPlayer());
+	testLevel.setGUI(&playerGUI);
 
 	//===================================================================//
 	//==================The Render-Loop==================================//
@@ -349,12 +357,13 @@ int main()
 	float lengthFromNormal;
 	float lengthFromUp;
 	float phi;
-
-
-
+	glm::vec4 tangente;
+	float dot;
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
 
+		testScene.getScenegraph()->searchNode("Player")->setIdentityMatrix_Rotation();
+		//testScene.getScenegraph()->searchNode("Player")->setIdentityMatrix_Translate();
 
 		float currentTime = glfwGetTime();
 		float deltaTime = currentTime - lastTime;
@@ -374,23 +383,30 @@ int main()
 		geko.update();
 		geko.setDeltaTime(currentTime);
 
-		tmpPos = testScene.getScenegraph()->searchNode("Player")->getPlayer()->getPosition();
-		viewDirFromPlayer = testScene.getScenegraph()->searchNode("Player")->getPlayer()->getViewDirection();
-		//ToDo calculate Normal funktioniert evtl falsch
-		normalFromTerrain = terrain2.calculateNormal(tmpPos.x, tmpPos.z);
-		rotateAxis = glm::cross(glm::vec3(viewDirFromPlayer), normalFromTerrain );
-	//	lengthFromNormal = glm::length(normalFromTerrain);
-	//	lengthFromUp = glm::length(up);
-		normalFromTerrain = glm::normalize(normalFromTerrain);
-		up = glm::normalize(up);
-		phi = glm::dot(up, normalFromTerrain);
-		phi = glm::atan(phi) * (180 / glm::pi<float>());
-	//	phi = glm::acos(glm::dot(normalFromTerrain, up) / (lengthFromNormal * lengthFromUp));
-		//ToDo Rotation überschreibt die frühere Rotation
-		testScene.getScenegraph()->searchNode("Player")->addRotation(phi, rotateAxis);
 
+		tmpPos = testScene.getScenegraph()->searchNode("Player")->getPlayer()->getPosition();
+
+		viewDirFromPlayer = glm::normalize(testScene.getScenegraph()->searchNode("Player")->getPlayer()->getViewDirection());
+
+		//ToDo calculate Normal funktioniert evtl falsch
+		normalFromTerrain = glm::normalize(terrain2.calculateNormal(tmpPos.x, tmpPos.z));
+		rotateAxis = glm::cross(glm::vec3(normalFromTerrain), up );
+		lengthFromNormal = glm::length(normalFromTerrain);
+		lengthFromUp = glm::length(up);
+		up = glm::normalize(up);
+		dot = glm::dot(normalFromTerrain, up);
+
+		phi = glm::acos(dot / (lengthFromNormal * lengthFromUp));
+		phi = phi * (180 / glm::pi<float>());
+		//std::cout << phi << std::endl;
+		
+		if (dot <0.99)
+			testScene.getScenegraph()->searchNode("Player")->addRotation(-phi, rotateAxis);
+
+		testScene.getScenegraph()->searchNode("Player")->getPlayer()->setPosition(testScene.getScenegraph()->searchNode("Player")->getPlayer()->getPosition() + glm::vec4(normalFromTerrain * 0.2f, 1.0));
 		antHome.updateAnts();
 
+		testScene.getScenegraph()->searchNode("Player")->addRotation(testScene.getScenegraph()->searchNode("Player")->getPlayer()->getPhi(), glm::vec3(0, -1, 0));
 		//===================================================================//
 		//==================Render your Objects==============================//
 		//==================================================================//
@@ -418,10 +434,12 @@ int main()
 
 		screenFillingQuad.renderGeometry();
 		shaderSFQ.unbind();
-
-		renderer.renderGUI(*playerGUI.getHUD(), testWindow);
+		playerGUI.update();
+		renderer.renderGUI(*testLevel.getPlayerGUI()->getHUD(), testWindow);
 		glfwSwapBuffers(testWindow.getWindow());
 		glfwPollEvents();
+		testScene.getScenegraph()->searchNode("Player")->getPlayer()->setPosition(testScene.getScenegraph()->searchNode("Player")->getPlayer()->getPosition() - glm::vec4(normalFromTerrain * 0.2f, 1.0));
+		//std::cout << "FPS " << 1 / deltaTime << std::endl;
 
 
 	}

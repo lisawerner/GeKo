@@ -71,11 +71,12 @@ void AntHome::generateWorkers(int i, Node* root){
 		aiWorkerNode->addGeometry(&m_antMesh);
 		aiWorkerNode->addTexture(m_guardTexture);
 		aiWorkerNode->addGravity(m_gravity);
-		position.x = rand() * 5.0f / 32767.0f;
-		position.z = rand() * 5.0f / 32767.0f;
-		position.y = 10.0f;
-		position.w = 0.0;
-		Ant *antAI = new Ant(glm::vec4(m_position, 1.0) + position);
+		//position.x = rand() * 1.0f / 32767.0f;
+		//position.z = rand() * 1.0f / 32767.0f;
+		//position.y = 10.0f;
+		//position.w = 0.0;
+		Ant *antAI = new Ant(glm::vec4(m_position, 1.0) ,(rand()* 5.0f / 32767.0f));
+		//Ant *antAI = new Ant(glm::vec4(m_position, 1.0) + position);
 		antAI->setAntAfraid(name.str(), m_afraidDecisionTree, m_afraidGraph);
 		//antAI->setAntAfraid();
 		aiWorkerNode->setObject(antAI);

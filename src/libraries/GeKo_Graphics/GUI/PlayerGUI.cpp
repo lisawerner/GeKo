@@ -9,7 +9,7 @@ PlayerGUI::PlayerGUI(const int hudWidth, const int hudHeight, const int windowWi
 	m_QUEST_WIDTH = questWidth;
 	m_QUEST_HEIGHT = questHeight;
 
-	Texture bricks((char*)RESOURCES_PATH "/bricks_diffuse.png");
+	Texture bricks((char*)RESOURCES_PATH "/bricks.bmp");
 	m_hud = new GUI("testGUI", m_HUD_WIDTH, m_HUD_HEIGHT);
 	m_hud->setPosition(250, 500);
 	m_hud->setCollapsable(false);
@@ -46,10 +46,10 @@ PlayerGUI::PlayerGUI(const int hudWidth, const int hudHeight, const int windowWi
 	m_hud->addElement(lvlBox);
 
 	m_hud->addElement(new GuiElement::SameLine());
-	GuiElement::PushButton *inventoryButton = new GuiElement::PushButton("Inventory");
+	inventoryButton = new GuiElement::PushButton("Inventory");
 	m_hud->addElement(inventoryButton);
 	m_hud->addElement(new GuiElement::SameLine());
-	GuiElement::PushButton *questButton = new GuiElement::PushButton("Quests");
+	questButton = new GuiElement::PushButton("Quests");
 	m_hud->addElement(questButton);
 
 	m_questWindow = new GuiElement::NestedWindow();
@@ -107,4 +107,14 @@ void PlayerGUI::update()
 	exp = m_player->getExp();
 	expMax = m_player->getLevelThreshold();
 	level = m_player->getLvl();
+
+	if (inventoryButton->isPushed())
+	{
+		m_inventoryWindow->toggleVisibility();
+	}
+
+	if (questButton->isPushed())
+	{
+		m_questWindow->toggleVisibility();
+	}
 }

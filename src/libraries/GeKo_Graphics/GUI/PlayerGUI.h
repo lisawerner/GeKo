@@ -9,8 +9,7 @@
 //#include<imgui.cpp>
 
 // Shader variables
-class PlayerGUI
-{
+class PlayerGUI{
 public:
 	PlayerGUI(const int hudWidth, const int hudHeight, const int windowHeight, const int windowWidth, const int questHeight, const int questWidth, Player* player);
 	~PlayerGUI();
@@ -25,4 +24,6 @@ protected:
 	int m_HUD_WIDTH, m_HUD_HEIGHT, m_WINDOW_WIDTH, m_WINDOW_HEIGHT, m_QUEST_WIDTH, m_QUEST_HEIGHT;
 	GuiElement::NestedWindow* m_questWindow, *m_inventoryWindow;
 	Player* m_player;
+
+	GuiElement::PushButton *inventoryButton, *questButton;
 };
