@@ -74,7 +74,7 @@ void Geometry::renderGeometry()
 	}
 	else
 	{
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, m_vertices.size());
+		glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
 	}
 
 	glBindVertexArray(0);
