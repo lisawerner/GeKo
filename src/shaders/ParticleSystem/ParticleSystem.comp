@@ -117,9 +117,6 @@ void main(){
 		//set remainLifetime
 		if(particleMortal == 1)
 			pos.w -= deltaTime;
-		else{
-			pos.w -= deltaTime; //Warning: Breaks Numeric Domain!!
-		}
 
 		//sync
 		positions[gid] = pos;
