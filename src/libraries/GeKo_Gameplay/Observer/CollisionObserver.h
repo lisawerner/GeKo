@@ -155,14 +155,20 @@ public:
 					 }
 				 }
 				 nodeB.getStaticObject()->getInventory()->reduceItem(ItemType::COOKIE, 3);
+				 //TODO: Wahlweise aus ALLEN AI-FoodNodes
+				 if (nodeB.getStaticObject()->getInventory()->countItem(ItemType::COOKIE) == 0){
+					nodeA.getAI()->deleteFoodNode(glm::vec3(nodeB.getStaticObject()->getPosition()));
+				 }
 			 }
 			 break;
 
 		 case Collision_Event::PLAYER_STATIC_COLLISION:
+			 //TODO: GUI mit Bildern aktualisieren 
 			 if (nodeB.getStaticObject()->getObjectType() == ObjectType::TREE)
 			 {
 				 int count = nodeB.getStaticObject()->getInventory()->countItem(ItemType::BRANCH);
 				 nodeA.getPlayer()->collectItem(ItemType::BRANCH, count);
+
 				 nodeB.getStaticObject()->getInventory()->clearInventory();
 				 std::vector<Goal*> tmp = m_level->getQuestHandler()->getQuests(GoalType::COLLECT);
 				 for (int i = 0; i < tmp.size(); i++)

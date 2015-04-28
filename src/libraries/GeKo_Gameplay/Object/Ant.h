@@ -7,6 +7,10 @@ class Ant : public AI
 public:
 
 	Ant();
+	Ant(glm::vec4 position, int hunger) :Ant(){
+			m_hunger = hunger;
+			m_position = position;
+	};
 	Ant(glm::vec4 position);
 	~Ant();
 

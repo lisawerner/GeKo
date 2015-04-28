@@ -121,3 +121,13 @@ GUI* Level::getGUI(std::string name)
 
 	return tmp;
 }
+
+void Level::setGUI(PlayerGUI* playerGUI)
+{
+	m_playerGui = playerGUI;
+}
+
+PlayerGUI* Level::getPlayerGUI()
+{
+	return m_playerGui;
+}

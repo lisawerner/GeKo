@@ -39,6 +39,8 @@ public:
 	void setDecisionTree(DecisionTree* tree);
 
 	void addFoodNodes();
+	void deleteFoodNode(glm::vec3 pos);
+	AStarNode* nearestFoodNode();
 
 	//Per Frame
 	void update();
@@ -50,8 +52,6 @@ public:
 
 	/// A method to check if p1 and p2 are very near each other
 	bool checkPosition(glm::vec3 p1, glm::vec3 p2);
-
-	AStarNode* nearestFoodNode();
 
 	float getViewRadius();
 

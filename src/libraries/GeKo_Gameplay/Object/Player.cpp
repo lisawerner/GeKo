@@ -55,7 +55,7 @@ void Player::moveForward(){
 	m_position.y += m_speed* m_deltaTime *m_viewDirection.y;
 	m_position.z += m_speed* m_deltaTime *m_viewDirection.z;
 
-	std::cout << "Player moveFwd to: x:" << m_position.x << "; z: " << m_position.z << std::endl;
+	//std::cout << "Player moveFwd to: x:" << m_position.x << "; z: " << m_position.z << std::endl;
 
 	notify(*this, Object_Event::OBJECT_MOVED);
 }
@@ -65,7 +65,7 @@ void Player::moveBackward(){
 	m_position.y -= m_speed* m_deltaTime *m_viewDirection.y;
 	m_position.z -= m_speed* m_deltaTime *m_viewDirection.z;
 
-	std::cout << "Player moveBwd" << std::endl;
+	//std::cout << "Player moveBwd" << std::endl;
 
 	notify(*this, Object_Event::OBJECT_MOVED);
 }
@@ -76,7 +76,7 @@ void Player::moveLeft(){
 	m_position.y -= m_speed* m_deltaTime*directionOrtho.y;
 	m_position.z -= m_speed* m_deltaTime*directionOrtho.z;
 
-	std::cout << "Player moveLeft" << std::endl;
+	//std::cout << "Player moveLeft" << std::endl;
 
 	notify(*this, Object_Event::OBJECT_MOVED);
 }
@@ -87,7 +87,7 @@ void Player::moveRight(){
 	m_position.y += m_speed* m_deltaTime*directionOrtho.y;
 	m_position.z += m_speed* m_deltaTime*directionOrtho.z;
 
-	std::cout << "Player moveRight" << std::endl;
+	//std::cout << "Player moveRight" << std::endl;
 
 	notify(*this, Object_Event::OBJECT_MOVED);
 }

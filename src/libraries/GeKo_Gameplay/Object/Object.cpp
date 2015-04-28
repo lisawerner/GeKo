@@ -87,6 +87,11 @@ glm::vec4 Object::getViewDirection()
 	return m_viewDirection;
 }
 
+void Object::setViewDirection(glm::vec4 viewDirection)
+{
+	 m_viewDirection = viewDirection;
+}
+
 bool Object::getStates(States state){
 	for (int i = 0; i < m_states.size(); i++){
 		if (m_states.at(i).first == state) {

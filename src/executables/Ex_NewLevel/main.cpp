@@ -12,7 +12,7 @@
 #include <GeKo_Graphics/AIInclude.h>
 #include <GeKo_Gameplay/AI_Decisiontree/DecisionTree.h>
 #include <GeKo_Gameplay/Object/Geko.h>
-#include <GeKo_Gameplay/Object/AI.h>
+#include <GeKo_Gameplay/Object/Ant.h>
 
 #include <GeKo_Graphics/Geometry/AntMesh.h>
 #include <GeKo_Graphics/Geometry/TreeMesh.h>
@@ -186,8 +186,8 @@ int main()
 
 	//AStarNode defaultASNode("Default");
 	//AI ant_Flick(&defaultTree, &defaultASNode, &aiNode);
-	AI ant_Flick;
-	//ant_Flick.setAntAfraid();
+	Ant ant_Flick;
+	ant_Flick.setAntAfraid();
 	/*ant_Flick.setGraph(&testGraph);
 	ant_Flick.setPosition(posSpawn);
 	ant_Flick.setPosHome(testGraph.searchNode("Spawn"));*/
