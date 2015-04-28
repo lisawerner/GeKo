@@ -53,6 +53,11 @@ int main()
 
 	glewInit();
 
+	//our renderer
+	OpenGL3Context context;
+	Renderer *renderer;
+	renderer = new Renderer(context);
+
 
 	//////////////////////Textures//////////////////////
 
@@ -235,11 +240,7 @@ int main()
 	VertexShader vs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader3D/ColorShader3D.vert")));
 	FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/ColorShader3D/ColorShader3D.frag")));
 	ShaderProgram shader(vs, fs);
-
-	// Renderer
-	OpenGL3Context context;
-	Renderer renderer(context);
-
+	
 	//need scene here mainly because of input
 	Level testLevel("testLevel");
 	Scene testScene("testScene");
@@ -255,6 +256,16 @@ int main()
 	iH.changeActiveInputMap(MapType::CAMPILOTVIEW);
 	iH.getActiveInputMap()->update(cam);
 
+	//Object
+	Cube cube;
+	Texture bricks((char*)RESOURCES_PATH "/Wall/bricks_diffuse.png");
+	Node cube1("cube");
+	cube1.addGeometry(&cube);
+	cube1.addTexture(&bricks);
+	cube1.setModelMatrix(glm::translate(cube1.getModelMatrix(), glm::vec3(0.0, 0.0, 0.0)));
+	//cube1.setModelMatrix(glm::scale(cube1.getModelMatrix(), glm::vec3(0.5, 0.5, 0.5)));
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube1);
+	
 	//add nodes to the scenegraph
 	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&nodeExplosion);
 	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&fireNode);
@@ -304,7 +315,7 @@ int main()
 		cam.setSensitivity(glfwGetTime() - startTime);
 		startTime = glfwGetTime();
 
-		glEnable(GL_DEPTH);
+		/*glEnable(GL_DEPTH);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
 
@@ -315,12 +326,10 @@ int main()
 		shader.sendMat4("projectionMatrix", cam.getProjectionMatrix());
 		testScene.render(shader);
 		testScene.renderParticleSystems();
-		shader.unbind();
+		shader.unbind();*/
 
-		/*if (glfwGetTime() > 2.8 && glfwGetTime() < 2.9) {
-			psFireworkExplosion->start();
-			psFireworkTail->stop();
-		}*/
+		//renderer->useBloom(true);
+		renderer->renderScene(testScene, testWindow);
 
 		//update Positions of firework ParticleSystems
 		glm::vec3 pos = psFireworkRed->getPosition();
@@ -336,8 +345,8 @@ int main()
 		psFireworkGold->setPosition(glm::vec3(pos.x, pos.y + (glfwGetTime() - startTime), pos.z));
 
 
-		glfwSwapBuffers(testWindow.getWindow());
-		glfwPollEvents();
+		/*glfwSwapBuffers(testWindow.getWindow());
+		glfwPollEvents();*/
 	}
 	glfwDestroyWindow(testWindow.getWindow());
 	glfwTerminate();

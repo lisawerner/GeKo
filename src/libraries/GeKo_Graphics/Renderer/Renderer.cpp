@@ -268,7 +268,11 @@ void Renderer::renderScene(Scene& scene, Window& window)
   
   scene.render(*m_shaderGBuffer);
   m_shaderGBuffer->unbind();
+  
+  //renderParticleSystems
+  scene.renderParticleSystems();
   m_gBuffer->unbind();
+
 
   if (m_useSSAO)
     renderSSAO();
