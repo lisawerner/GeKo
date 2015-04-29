@@ -71,6 +71,7 @@ namespace GuiElement
     }
 
     inline void addElement(Element *child) { m_childElements.push_back(child); }
+	inline void clearElements(){ m_childElements.clear(); }
     inline void dispose() { delete this;}
 
   private:
@@ -413,6 +414,7 @@ namespace GuiElement
     
     inline void dispose(){ delete this; }
     inline void addElement(GuiElement::Element *comp) { m_guiElements->push_back(comp); }
+	inline void clearElements(){ m_guiElements->clear(); }
     inline bool isVisible() { return m_visible; }
     inline void show() { m_visible = true; }
     inline void hide() { m_visible = false;}

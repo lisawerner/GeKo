@@ -58,6 +58,7 @@ public:
 	{
 		std::string name = player.getNodeName();
 		Node* tmp = m_level->getActiveScene()->getScenegraph()->searchNode(name);
+		std::vector<ParticleSystem*>* ps = m_level->getActiveScene()->getScenegraph()->getParticleSet();
 		switch (event)
 		{
 		case Object_Event::OBJECT_MOVED:
@@ -82,7 +83,7 @@ public:
 			break;
 
 		case Object_Event::PLAYER_SET_ON_FIRE:
-			std::vector<ParticleSystem*>* ps = m_level->getActiveScene()->getScenegraph()->getParticleSet();
+			
 			for (auto particle : *ps)
 			{
 				if (particle->m_type == ParticleType::FIRE)
@@ -94,6 +95,9 @@ public:
 					particle->render(*m_level->getActiveScene()->getScenegraph()->getActiveCamera());
 				}
 			}
+			break;
+		case Object_Event::PLAYER_DIED:
+
 			break;
 		}
 	}

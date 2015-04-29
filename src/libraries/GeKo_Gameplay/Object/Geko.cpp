@@ -15,9 +15,9 @@ Geko::Geko(std::string gekoName, glm::vec3 spawnPoint){
 
 	m_hunger = 100;
 	m_hungerMax = 100;
-	m_health = 100;
-	m_healthMax = 100;
-	m_strength = 1;
+	m_health = 10000;
+	m_healthMax = 10000;
+	m_strength = 3;
 
 	m_inventory = new Inventory();
 
@@ -33,7 +33,7 @@ Geko::Geko(std::string gekoName, glm::vec3 spawnPoint){
 	m_theta = 2.0;
 	m_alpha = 0;
 
-	m_speed = 0.03;
+	m_speed = 0.01;
 	m_speedTurn = 0.1;
 }
 
@@ -43,11 +43,13 @@ Geko::~Geko(){
 }
 
 void Geko::setFire(){
-	if (m_inventory->countItem(ItemType::BRANCH)){
-		m_inventory->reduceItem(ItemType::BRANCH, 1);
-		notify(*this, Object_Event::PLAYER_SET_ON_FIRE);
-	}
-	else{
-		//TODO: GUI sagt, dass das Inventar keine Branches hat
+	if (getStates(States::HEALTH)){
+		if (m_inventory->countItem(ItemType::BRANCH)){
+			m_inventory->reduceItem(ItemType::BRANCH, 1);
+			notify(*this, Object_Event::PLAYER_SET_ON_FIRE);
+		}
+		else{
+			//TODO: GUI sagt, dass das Inventar keine Branches hat
+		}
 	}
 }

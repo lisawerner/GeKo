@@ -4,7 +4,7 @@ AntHome::AntHome(){
 
 }
 
-AntHome::AntHome(glm::vec3 position, Geometry antMesh, ObjectObserver *objectObserver, Texture *guardTex, Texture *workerTex, DecisionTree *aggressiveDecisionTree, Graph<AStarNode, AStarAlgorithm> *aggressiveGraph, DecisionTree *afraidDecisionTree, Graph<AStarNode, AStarAlgorithm> *afraidGraph){
+AntHome::AntHome(glm::vec3 position, SoundFileHandler *sfh, Geometry antMesh, SoundObserver *soundObserver, ObjectObserver *objectObserver, Texture *guardTex, Texture *workerTex, DecisionTree *aggressiveDecisionTree, Graph<AStarNode, AStarAlgorithm> *aggressiveGraph, DecisionTree *afraidDecisionTree, Graph<AStarNode, AStarAlgorithm> *afraidGraph){
 	m_position = position;
 	m_antMesh = antMesh;
 	//Texture texCV((char*)RESOURCES_PATH "/cv_logo.bmp");
@@ -17,7 +17,9 @@ AntHome::AntHome(glm::vec3 position, Geometry antMesh, ObjectObserver *objectObs
 	m_numberOfGuards = 0;
 	m_numberOfWorkers = 0;
 	m_objectObserver = objectObserver;
+	m_soundObserver = soundObserver;
 	m_gravity = new Gravity();
+	m_sfh = sfh;
 }
 
 AntHome::~AntHome(){
@@ -81,12 +83,41 @@ void AntHome::generateWorkers(int i, Node* root){
 		//antAI->setAntAfraid();
 		aiWorkerNode->setObject(antAI);
 		antAI->addObserver(m_objectObserver);
+		antAI->setSoundHandler(m_sfh);
+		antAI->addObserver(m_soundObserver);
+		generateSound(antAI);
 		name.str("");
 		root->addChildrenNode(aiWorkerNode);
 		m_workers.push_back(aiWorkerNode);
 		i--;
 		//printPosWorkers();
 	}
+}
+
+
+void AntHome::generateSound(AI *ai){
+	std::stringstream name;
+	name << "AIFootsteps" << m_numberOfWorkers + 1;
+	std::string namestring;
+	namestring = name.str();
+	ai->setSourceName(MOVESOUND_AI, namestring, RESOURCES_PATH "/Sound/Footsteps.wav");
+	m_sfh->disableLooping(namestring);
+	name.str("");
+	name << "AIDeath" << m_numberOfWorkers + 1;
+	namestring = name.str();
+	ai->setSourceName(DEATHSOUND_AI, namestring, RESOURCES_PATH "/Sound/death.wav");
+	m_sfh->disableLooping(namestring);
+	name.str("");
+	name << "AIEssen" << m_numberOfWorkers + 1;
+	namestring = name.str();
+	ai->setSourceName(EATSOUND_AI, namestring, RESOURCES_PATH "/Sound/Munching.wav");
+	m_sfh->disableLooping(namestring);
+	name.str("");
+	name << "Flies" << m_numberOfWorkers + 1;
+	namestring = name.str();
+	ai->setSourceName(DEATHSOUND_FLIES_AI, namestring, RESOURCES_PATH "/Sound/Fliege_kurz.wav");
+	m_sfh->setGain(namestring, 7.0);
+	name.str("");
 }
 
 void AntHome::addAntsToSceneGraph(Node *rootNode){

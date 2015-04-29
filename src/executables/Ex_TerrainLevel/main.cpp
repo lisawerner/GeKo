@@ -38,6 +38,8 @@
 
 #include <GeKo_Gameplay/Object/AntHome.h>
 
+#include <GeKo_Graphics/ParticleSystem/ParticleSystem.h>
+
 //#include <GeKo_Graphics/GUI/GUI.h>
 //#include <GeKo_Graphics/GUI/GUIComponents.hpp>
 //#include <GeKo_Graphics/GUI/PlayerGUI.h>
@@ -45,7 +47,7 @@
 //===================================================================//
 //==================Things you need globally==========================//
 //==================================================================//
-Player geko("Geko", glm::vec3(-10.0, 1.0, 30.0));
+Geko geko("Geko", glm::vec3(-10.0, 1.0, 30.0));
 static StrategyCamera cam("PlayerViewCam");
 static InputHandler iH;
 
@@ -145,13 +147,34 @@ int main()
 	screenFillingQuad.loadBufferData();
 
 	//===================================================================//
+	//================== PArticle System ================================ //
+	//===================================================================//
+
+	ParticleSystem* particle = new ParticleSystem(glm::vec3(0, 0, 0), (char*)RESOURCES_PATH "/XML/ComicCloudEffect.xml");
+	particle->m_type = ParticleType::FIGHT;
+	ParticleSystem* particle2 = new ParticleSystem(glm::vec3(0, 0, 0), (char*)RESOURCES_PATH "/XML/SwarmOfFliesEffect.xml");
+	particle2->m_type = ParticleType::SWARMOFFLIES;
+	ParticleSystem* particleFire = new ParticleSystem(glm::vec3(0, 0, 0), (char*)RESOURCES_PATH "/XML/Effect_Fire.xml");
+	particleFire->m_type = ParticleType::FIRE;
+
+	Node particleNode("ParticleNode");
+	particleNode.addParticleSystem(particle2);
+	particleNode.setCamera(&cam);
+	particleNode.setParticleActive(true);
+
+	Node particleNodeFire("ParticleNodeFire");
+	particleNodeFire.addParticleSystem(particleFire);
+	particleNodeFire.setCamera(&cam);
+	particleNodeFire.setParticleActive(true);
+
+	//===================================================================//
 	//==================Object declarations - Geometry, Texture, Node=== //
 	//==========================Object: Terrain===========================//
 
 	StaticObject terrainObject;
 	terrainObject.setClassType(ClassType::TERRAIN);
 
-	Texture terrainTex((char*)RESOURCES_PATH "/Grass2.jpg");
+	Texture terrainTex((char*)RESOURCES_PATH "/Texture/Grass2.jpg");
 
 	Terrain terrain2((char*)RESOURCES_PATH "/heightmap.jpg", 0.0f, 0.0f);
 	Node terrainNode2("Terrain");
@@ -164,7 +187,7 @@ int main()
 	//==================Object declarations - Geometry, Texture, Node=== //
 	//==========================Object: Player===========================//
 
-	Texture texGeko((char*)RESOURCES_PATH "/Snake.jpg");
+	Texture texGeko((char*)RESOURCES_PATH "/Texture/Snake.jpg");
 
 	auto gekoHandle = manager.loadStaticMesh(RESOURCES_PATH "/Geko.ply");
 	auto gekoGeometry = gekoHandle.get().toGeometry();
@@ -180,22 +203,27 @@ int main()
 	playerNode.setObject(&geko);
 	playerNode.addTexture(&texGeko);
 
+	geko.setPosition(glm::vec4(terrain2.getResolutionX() / 2.0f + 10.0f, 5.0f, terrain2.getResolutionY() / 2.0f + 10.0f, 1.0));
 	/*sfh.generateSource(glm::vec3(geko.getPosition()), RESOURCES_PATH "/Sound/Rascheln.wav");*/
 	geko.setSoundHandler(&sfh);
 	geko.setSourceName(FIRESOUND, "Fire", RESOURCES_PATH "/Sound/Feuer_kurz.wav");
 	geko.setSourceName(MOVESOUND, "SpielerFootsteps", RESOURCES_PATH "/Sound/Rascheln.wav");
-	geko.setSourceName(BACKGROUNDMUSIC, "Hintergrund", RESOURCES_PATH "/Sound/jingle2.wav");
+	geko.setSourceName(BACKGROUNDMUSIC, "Hintergrund", RESOURCES_PATH "/Sound/cantina.wav");
 	geko.setSourceName(FIGHTSOUND, "Kampfsound", RESOURCES_PATH "/Sound/punch.wav");
 	geko.setSourceName(EATSOUND, "Essen", RESOURCES_PATH "/Sound/Munching.wav");
 	geko.setSourceName(QUESTSOUND, "Quest", RESOURCES_PATH "/Sound/jingle.wav");
 	geko.setSourceName(ITEMSOUND, "Item", RESOURCES_PATH "/Sound/itempickup.wav");
 
-	sfh.setGain("SpielerFootsteps", 0.1);
-
+	sfh.generateSource("Lademusik", glm::vec3(geko.getPosition()), RESOURCES_PATH "/Sound/jingle2.wav");
+	sfh.playSource("Lademusik");
+	geko.updateSourcesInMap();
+	sfh.setGain("Hintergrund", 0.15f);
+	sfh.setGain("Lademusik", 0.4f);
 	sfh.disableLooping("Essen");
 	sfh.disableLooping("Quest");
 	sfh.disableLooping("Item");
-	geko.setPosition(glm::vec4(terrain2.getResolutionX() / 2.0f + 10.0f, 10.0f, terrain2.getResolutionY() / 2.0f + 10.0f, 1.0));
+	
+	sfh.updateListenerPosition(glm::vec3(geko.getPosition()));
 	//sfh.generateSource("Feuer",posFood, RESOURCES_PATH "/Sound/Feuer kurz.wav");
 	playerNode.setCamera(&cam);
 
@@ -251,6 +279,11 @@ int main()
 	//skyboxNode.addTranslation(glm::vec3(terrain2.getResolutionX() / 2.0f, 0.0, terrain2.getResolutionY() / 2.0f));
 
 	testScene.setSkyboxNode(&skyboxNode);
+
+	//================== Particles ========================//
+	testScene.getScenegraph()->addParticleSystem(particle);
+	testScene.getScenegraph()->addParticleSystem(particle2);
+	testScene.getScenegraph()->addParticleSystem(particleFire);
 
 	//===================================================================//
 	//==================Setting up the Observers========================//
@@ -315,6 +348,7 @@ int main()
 	// ==============================================================
 	// == Object (Anthome) ==========================================
 	// ==============================================================
+	
 	Texture texAntHome((char*)RESOURCES_PATH "/Texture/antHome.jpg");
 
 	auto antHomeHandler = manager.loadStaticMesh(RESOURCES_PATH "/AntHome.ply");
@@ -344,11 +378,12 @@ int main()
 	Texture texAnt((char*)RESOURCES_PATH "/Texture/ant.jpg");
 	auto antHandler = manager.loadStaticMesh(RESOURCES_PATH "/Ant.ply");
 	auto antGeometry = antHandler.get().toGeometry();
-
-	AntHome antHome(posSpawn, antGeometry, &playerObserver, &texAnt, &texAnt, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
+	sfh.generateSource("tst", glm::vec3(geko.getPosition()), RESOURCES_PATH "/Sound/jingle2.wav");
+	AntHome antHome(posSpawn, &sfh, antGeometry, &soundPlayerObserver, &playerObserver, &texAnt, &texAnt, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
 	antHome.generateWorkers(5, testScene.getScenegraph()->getRootNode());
 
 	Node homeNode("AntHome");
+
 
 	homeNode.setObject(&antHome);
 	homeNode.addTexture(&texAntHome);
@@ -362,6 +397,7 @@ int main()
 	//===================================================================//
 	//==================Setting up the Collision=========================//
 	//==================================================================//
+	
 	CollisionTest collision;
 	collision.collectNodes(testScene.getScenegraph()->getRootNode());
 
@@ -372,27 +408,93 @@ int main()
 	GravityObserver gravityObserver(&testLevel);
 	collision.addObserver(&gravityObserver);
 
-
-
 	//===================================================================//
 	//==================Setting up the Gravity===========================//
 	//==================================================================//
+	
 	Gravity gravity;
 	playerNode.addGravity(&gravity);
 
+	// ==============================================================
+	// == Questsystem ===============================================
+	// ==============================================================
+	QuestHandler questhandler;
+
+	Quest questKillAnt(1);
+	Quest questEatAnt(2);
+	Quest questCollectBranch(3);
+
+	questKillAnt.setDescription("Kill one ant.");
+	questEatAnt.setDescription("Eat two ants.");
+	questCollectBranch.setDescription("Collect ten branches.");
+
+	Goal_Kill killAnt(1);
+	Goal_Eaten eatAnt(2);
+	Goal_Collect collectBranch(3);
+
+	questKillAnt.addGoal(&killAnt);
+	questEatAnt.addGoal(&eatAnt);
+	questCollectBranch.addGoal(&collectBranch);
+
+	killAnt.setGoalCount(2);
+	eatAnt.setGoalCount(2);
+	collectBranch.setGoalCount(10);
+
+	collectBranch.setItemType(ItemType::BRANCH);
+
+	ExpReward expReward(1);
+	expReward.setExp(100);
+
+	questKillAnt.addReward(&expReward);
+	questEatAnt.addReward(&expReward);
+	questCollectBranch.addReward(&expReward);
+
+	QuestGraph questGraph;
+	QuestGraphNode nodeStart;
+	nodeStart.setQuest(&questKillAnt);
+	questGraph.addNode(&nodeStart);
+	questKillAnt.setActive(true);
+
+	QuestGraphNode nodeSecond;
+	nodeSecond.setQuest(&questEatAnt);
+	nodeSecond.setParent(&nodeStart);
+	questGraph.addNode(&nodeSecond);
+
+	QuestGraphNode nodeThird;
+	nodeThird.setQuest(&questCollectBranch);
+	nodeThird.setParent(&nodeSecond);
+	questGraph.addNode(&nodeThird);
+	questCollectBranch.setActive(true);
+
+	testLevel.getQuestHandler()->addQuest(&questKillAnt);
+	testLevel.getQuestHandler()->addQuest(&questEatAnt);
+	testLevel.getQuestHandler()->addQuest(&questCollectBranch);
+
+	testLevel.getQuestHandler()->setGraph(&questGraph);
+
+	QuestObserver questObserver(&testLevel);
+
+	questKillAnt.addObserver(&questObserver);
+	questEatAnt.addObserver(&questObserver);
+	questCollectBranch.addObserver(&questObserver);
+
+	killAnt.addObserver(&questObserver);
+	eatAnt.addObserver(&questObserver);
+	collectBranch.addObserver(&questObserver);
+
+	testLevel.getFightSystem()->addObserver(&questObserver);
+
 	//===================================================================//
-	//==================Setting up the Gravity===========================//
+	//================== Setting up the playerGUI ========================//
 	//==================================================================//
-	PlayerGUI playerGUI(HUD_WIDTH, HUD_HEIGHT, WINDOW_HEIGHT, WINDOW_WIDTH, QUEST_HEIGHT, QUEST_WIDTH, playerNode.getPlayer());
+
+	PlayerGUI playerGUI(HUD_WIDTH, HUD_HEIGHT, WINDOW_HEIGHT, WINDOW_WIDTH, QUEST_HEIGHT, QUEST_WIDTH, playerNode.getPlayer(), testLevel.getQuestHandler());
 	testLevel.setGUI(&playerGUI);
 
 	//===================================================================//
 	//==================The Render-Loop==================================//
 	//==================================================================//
 	float lastTime = glfwGetTime();
-
-	sfh.playSource("Hintergrund");
-	sfh.setGain("Hintergrund", 0.5f);
 
 
 	//TODO adjust the Rotation,to match the Terrain
@@ -406,6 +508,10 @@ int main()
 	float phi;
 	glm::vec4 tangente;
 	float dot;
+
+	sfh.stopSource("Lademusik");
+	sfh.playSource("Hintergrund");
+
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
 
@@ -458,37 +564,16 @@ int main()
 		//==================Render your Objects==============================//
 		//==================================================================//
 		//renderer.renderScene(testScene, testWindow);
+		playerGUI.update();
 		renderer.renderScene(testScene, testWindow);
+		renderer.renderGUI(*playerGUI.getHUD(), testWindow);
 
-		//fboGBuffer.bind();
-		//glClearColor(0.5, 0.5, 0.5, 0);
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//shaderGBuffer.bind();
-		//shaderGBuffer.sendMat4("viewMatrix", cam.getViewMatrix());
-		//shaderGBuffer.sendMat4("projectionMatrix", cam.getProjectionMatrix());
-
-		//testScene.render(shaderGBuffer);
-
-
-		//shaderGBuffer.unbind();
-		//fboGBuffer.unbind();
-
-		////ScreenFillingQuad Render Pass
-		//shaderSFQ.bind();
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		//shaderSFQ.sendSampler2D("fboTexture", fboGBuffer.getColorTexture(2));
-
-		//screenFillingQuad.renderGeometry();
-		//shaderSFQ.unbind();
-		//playerGUI.update();
-
-		//renderer.renderGUI(*testLevel.getPlayerGUI()->getHUD(), testWindow);
-		//glfwSwapBuffers(testWindow.getWindow());
-		//glfwPollEvents();
+	
 		testScene.getScenegraph()->searchNode("Player")->getPlayer()->setPosition(testScene.getScenegraph()->searchNode("Player")->getPlayer()->getPosition() - glm::vec4(normalFromTerrain * 0.2f, 1.0));
 		//std::cout << "FPS " << 1 / deltaTime << std::endl;
 
+		glfwSwapBuffers(testWindow.getWindow());
+		glfwPollEvents();
 
 	}
 

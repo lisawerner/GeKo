@@ -17,9 +17,9 @@ Player::Player(std::string playerName, glm::vec3 spawnPoint)
 
 	m_hunger = 100;
 	m_hungerMax = 100;
-	m_health = 100;
-	m_healthMax = 100;
-	m_strength = 1;
+	m_health = 1000;
+	m_healthMax = 1000;
+	m_strength = 10;
 
 	m_inventory = new Inventory();
 
@@ -51,72 +51,84 @@ glm::vec3 Player::getSpawnPoint()
 }
 
 void Player::moveForward(){
-	m_position.x += m_speed* m_deltaTime *m_viewDirection.x;
-	m_position.y += m_speed* m_deltaTime *m_viewDirection.y;
-	m_position.z += m_speed* m_deltaTime *m_viewDirection.z;
+	if (getStates(States::HEALTH)){
+		m_position.x += m_speed* m_deltaTime *m_viewDirection.x;
+		m_position.y += m_speed* m_deltaTime *m_viewDirection.y;
+		m_position.z += m_speed* m_deltaTime *m_viewDirection.z;
 
-	//std::cout << "Player moveFwd to: x:" << m_position.x << "; z: " << m_position.z << std::endl;
+		//std::cout << "Player moveFwd to: x:" << m_position.x << "; z: " << m_position.z << std::endl;
 
-	notify(*this, Object_Event::OBJECT_MOVED);
+		notify(*this, Object_Event::OBJECT_MOVED);
+	}
 }
 
 void Player::moveBackward(){
-	m_position.x -= m_speed* m_deltaTime *m_viewDirection.x;
-	m_position.y -= m_speed* m_deltaTime *m_viewDirection.y;
-	m_position.z -= m_speed* m_deltaTime *m_viewDirection.z;
+	if (getStates(States::HEALTH)){
+		m_position.x -= m_speed* m_deltaTime *m_viewDirection.x;
+		m_position.y -= m_speed* m_deltaTime *m_viewDirection.y;
+		m_position.z -= m_speed* m_deltaTime *m_viewDirection.z;
 
-	//std::cout << "Player moveBwd" << std::endl;
+		//std::cout << "Player moveBwd" << std::endl;
 
-	notify(*this, Object_Event::OBJECT_MOVED);
+		notify(*this, Object_Event::OBJECT_MOVED);
+	}
 }
 
 void Player::moveLeft(){
-	glm::vec3 directionOrtho = glm::cross(glm::vec3(m_viewDirection), glm::vec3(0, 1, 0));
-	m_position.x -= m_speed* m_deltaTime*directionOrtho.x;
-	m_position.y -= m_speed* m_deltaTime*directionOrtho.y;
-	m_position.z -= m_speed* m_deltaTime*directionOrtho.z;
+	if (getStates(States::HEALTH)){
+		glm::vec3 directionOrtho = glm::cross(glm::vec3(m_viewDirection), glm::vec3(0, 1, 0));
+		m_position.x -= m_speed* m_deltaTime*directionOrtho.x;
+		m_position.y -= m_speed* m_deltaTime*directionOrtho.y;
+		m_position.z -= m_speed* m_deltaTime*directionOrtho.z;
 
-	//std::cout << "Player moveLeft" << std::endl;
+		//std::cout << "Player moveLeft" << std::endl;
 
-	notify(*this, Object_Event::OBJECT_MOVED);
+		notify(*this, Object_Event::OBJECT_MOVED);
+	}
 }
 
 void Player::moveRight(){
-	glm::vec3 directionOrtho = glm::cross(glm::vec3(m_viewDirection), glm::vec3(0, 1, 0));
-	m_position.x += m_speed* m_deltaTime*directionOrtho.x;
-	m_position.y += m_speed* m_deltaTime*directionOrtho.y;
-	m_position.z += m_speed* m_deltaTime*directionOrtho.z;
+	if (getStates(States::HEALTH)){
+		glm::vec3 directionOrtho = glm::cross(glm::vec3(m_viewDirection), glm::vec3(0, 1, 0));
+		m_position.x += m_speed* m_deltaTime*directionOrtho.x;
+		m_position.y += m_speed* m_deltaTime*directionOrtho.y;
+		m_position.z += m_speed* m_deltaTime*directionOrtho.z;
 
-	//std::cout << "Player moveRight" << std::endl;
+		//std::cout << "Player moveRight" << std::endl;
 
-	notify(*this, Object_Event::OBJECT_MOVED);
+		notify(*this, Object_Event::OBJECT_MOVED);
+	}
 }
 
 void Player::turnLeft(){
+	if (getStates(States::HEALTH)){
+		m_phi -= m_speedTurn* m_deltaTime;
+		if (m_phi < 0) m_phi += 360.0;
+		else if (m_phi > 360) m_phi -= 360;
 
-	m_phi -= m_speedTurn* m_deltaTime;
-	if (m_phi < 0) m_phi += 360.0;
-	else if (m_phi > 360) m_phi -= 360;
+		rotateView(m_phi, m_theta);
 
-	rotateView(m_phi, m_theta);
-
-	notify(*this, Object_Event::OBJECT_ROTATED);
+		notify(*this, Object_Event::OBJECT_ROTATED);
+	}
 }
 
 void Player::turnRight(){
-	m_phi += m_speedTurn* m_deltaTime;
-	if (m_phi < 0) m_phi += 360.0;
-	else if (m_phi > 360) m_phi -= 360;
+	if (getStates(States::HEALTH)){
+		m_phi += m_speedTurn* m_deltaTime;
+		if (m_phi < 0) m_phi += 360.0;
+		else if (m_phi > 360) m_phi -= 360;
 
-	rotateView(m_phi, m_theta);
+		rotateView(m_phi, m_theta);
 
-	notify(*this, Object_Event::OBJECT_ROTATED);
+		notify(*this, Object_Event::OBJECT_ROTATED);
+	}
 }
 
 void Player::update(){
 	if (m_health == 0){
 		std::cout << "Player: Died" << std::endl;
 		//TODO OBJECT_DIED, Weil "stopped" den Observervorgang bescheibt , wenn sich das Object nicht mehr bewegt
+		notify(*this, Object_Event::PLAYER_DIED);
 		notify(*this, Object_Event::OBJECT_STOPPED);
 		setStates(States::HEALTH, false);
 	}
@@ -125,7 +137,12 @@ void Player::update(){
 		updateStates();
 		//std::cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
 	}
-	notify(*this, Object_Event::OBJECT_STOPPED);
+	if (m_i > 20){
+		m_i = 0;
+		notify(*this, Object_Event::OBJECT_STOPPED);
+	}
+	m_i++;
+
 }
 
 void Player::rotateView(float leftRight, float upDown)

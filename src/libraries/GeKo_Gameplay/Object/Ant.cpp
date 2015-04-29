@@ -119,9 +119,7 @@ void Ant::decide(){
 		break;
 	case TreeOutput::FOOD:
 		if (lastOutput != m_targetType){
-			std::cout << "Pos 2.1.2 FOOD.1" << std::endl;
 			m_target = nearestFoodNode();
-			std::cout << "Pos 2.1.2 FOOD.2" << std::endl;
 			updatePath();
 		}
 		break;

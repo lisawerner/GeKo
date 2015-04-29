@@ -27,11 +27,12 @@ public:
 	std::vector<Quest*> getActiveAndNotFinished();
 	///Returns all the quests which are not finished but active and have the given gType
 	std::vector<Goal*> getQuests(GoalType gType);
+	///Returns all quests which are finished
+	std::vector<Quest*> getFinished();
 	
 	///Returns the m_graph of the questhandler
 	QuestGraph* getGraph();
 	void setGraph(QuestGraph* g);
-	
 
 protected:
 	std::vector<Quest*> m_questLog;
