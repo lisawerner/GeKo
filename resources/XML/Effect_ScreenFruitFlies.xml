@@ -26,7 +26,7 @@
             <Accuracy>1000</Accuracy>
         </AreaEmitter>
         <Texture>
-            <Tex>/ParticleSystem/particle/virus.png</Tex>
+            <Tex time="1">/ParticleSystem/particle/virus.png</Tex>
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.02</ParticleSize>

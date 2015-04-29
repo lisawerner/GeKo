@@ -24,7 +24,7 @@
             <Accuracy>10000</Accuracy>
         </AreaEmitter>
         <Texture>
-            <Tex>/ParticleSystem/rain/rain.png</Tex>
+            <Tex time="1">/ParticleSystem/rain/rain.png</Tex>
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.029999999</ParticleSize>

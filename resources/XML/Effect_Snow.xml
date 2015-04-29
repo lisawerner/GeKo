@@ -24,7 +24,7 @@
             <Accuracy>10000</Accuracy>
         </AreaEmitter>
         <Texture>
-            <Tex>/ParticleSystem/particle/snowflake.png</Tex>
+            <Tex time="1">/ParticleSystem/particle/snowflake.png</Tex>
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.039999999</ParticleSize>

@@ -144,11 +144,11 @@ void main(){
 
 	//fade in
 	if(passedLifetime <= birthTime && passedLifetime > 0){
-		color.w *= min(passedLifetime / birthTime, color.w);
+		color.w *= min(passedLifetime / birthTime, 1);
 	}
 	// fade out
 	else if (lifetime <= deathTime && particleMortal == 1){
-		color.w *= min(lifetime / deathTime, color.w);
+		color.w *= min(lifetime / deathTime, 1);
 	}
 
 	fragmentColor= color;

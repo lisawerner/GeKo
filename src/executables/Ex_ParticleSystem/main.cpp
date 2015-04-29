@@ -61,8 +61,8 @@ void initGUI()
 	maxParticleHeader->addElement(new GuiElement::Spacing);
 
 	gui->addElement(moveableParticleHeader);
-	gui->addElement(screenParticleHeader);
-	gui->addElement(maxParticleHeader);
+	//gui->addElement(screenParticleHeader);
+	//gui->addElement(maxParticleHeader);
 
 	renderer = new Renderer(context);
 	renderer->addGui(gui);
@@ -98,15 +98,15 @@ int main()
 
 
 	//new
-	Window window(500, 50, 800, 600, "testWindow");
+	Window window(500, 50, 1280, 720, "testWindow");
 	glfwMakeContextCurrent(window.getWindow());
 
 	// Callback
 	glfwSetKeyCallback(window.getWindow(), key_callback);
 
-	cam.setKeySpeed(8.0);
+	cam.setKeySpeed(7.0);
 	cam.setNearFar(0.1, 100);
-	cam.setPosition(glm::vec4(9, 0, 5, 0));
+	cam.setPosition(glm::vec4(-21, 0, 5, 0));
 
 	glewInit();
 
@@ -312,7 +312,7 @@ int main()
 	rain->defineLook(true, 0.03, 1.0, 0.0);
 
 	//FINAL EMITTER FONTAINE
-	Emitter* fontaine = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.05, 5, 2.0, true);
+	Emitter* fontaine = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.05, 1, 2.0, true);
 	fontaine->setVelocity(0);
 	fontaine->usePhysicTrajectory(glm::vec4(0.0, 0.0, 0.0, 1.0), 1.0);
 	//fontaine->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.0), 0.7f);
@@ -440,6 +440,37 @@ int main()
 	cloud11->defineLook(true, 0.5, 2.0);
 	cloud11->switchToGeometryShader();
 
+	//////////////////Presentation/////////////////////////
+	Texture* texFire1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fire1_M.png");
+	Texture* texFire2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fire3_M.png");
+	Texture* texfireSparkleTex1 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/fire/fireSparkle1_S.png");
+	Texture* texsmokeBlack2 = new Texture((char*)RESOURCES_PATH "/ParticleSystem/smoke/smokeBlack/smokeBlack02.png");
+	//Emitter fire smoke
+	Emitter* fire = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.2, 2, 5.0, true);
+	fire->setVelocity(5);
+	fire->usePhysicDirectionGravity(glm::vec4(0.0, 1.0, 0.0, 5.0), 0.5f);
+	fire->addTexture(texFire1, 1.0);
+	fire->addTexture(texFire2, 0.7);
+	fire->addTexture(texsmokeBlack2, 0.1);
+	//fire->addTexture(smokeBlack2, 0.1);
+	//fire->addTexture(smokeWhiteTex2, 0.25);
+	std::vector<float> sizeF{ 0.05f, 0.5f, 0.75f, 1.0f };
+	std::vector<float> timeF{ 0.0f, 0.4f, 0.75f, 1.0f };
+	fire->defineLook(true, sizeF, timeF, 0.5, 4.0, 3.0, true, 0.3);
+	fire->switchToGeometryShader();
+
+	Emitter* fireSparkle = new Emitter(0, glm::vec3(0.0, 0.1, 0.0), 0.0, 0.05, 3, 2.5, true);
+	fireSparkle->setVelocity(5);
+	fireSparkle->usePhysicDirectionGravity(glm::vec4(0.0, 1.0, 0.0, 0.8), 0.5f);
+	fireSparkle->addTexture(texfireSparkleTex1, 1.0);
+	fireSparkle->defineLook(true, 0.05, 0.5, 0.5);
+
+	Effect* efFire = new Effect();
+	efFire->addEmitter(fire);
+	efFire->addEmitter(fireSparkle);
+
+
+
 	////////////////////////////////NOT FINAL EMITTER////////////////////////////////
 
 	//FINAL EMITTER MAXIMUM; SET POSITION
@@ -556,30 +587,6 @@ int main()
 	effect->saveEffect(RESOURCES_PATH "/XML/Effect_EnergyBall.xml");
 	effect->removeEmitter(0);
 
-	effect->addEmitter(cloud01);
-	effect->addEmitter(cloud02);
-	effect->addEmitter(cloud03);
-	effect->addEmitter(cloud04);
-	effect->addEmitter(cloud05);
-	effect->addEmitter(cloud06);
-	effect->addEmitter(cloud07);
-	effect->addEmitter(cloud08);
-	effect->addEmitter(cloud09);
-	effect->addEmitter(cloud10);
-	effect->addEmitter(cloud11);
-	effect->saveEffect(RESOURCES_PATH "/XML/Effect_ComicCloud.xml");
-	effect->removeEmitter(10);
-	effect->removeEmitter(9);
-	effect->removeEmitter(8);
-	effect->removeEmitter(7);
-	effect->removeEmitter(6);
-	effect->removeEmitter(5);
-	effect->removeEmitter(4);
-	effect->removeEmitter(3);
-	effect->removeEmitter(2);
-	effect->removeEmitter(1);
-	effect->removeEmitter(0);
-
 	//////////////////////////////////////Particle System//////////////////////////////////////////
 
 	ParticleSystem* psSnow = new ParticleSystem(glm::vec3(0, 0, 0), RESOURCES_PATH "/XML/Effect_Snow.xml");
@@ -597,45 +604,50 @@ int main()
 	psScene.getScenegraph()->addParticleSystem(psSnowStrong);
 	//psSnow->start();
 
-	ParticleSystem* psSmokeBlack = new ParticleSystem(glm::vec3(-15, 0, 1), RESOURCES_PATH "/XML/Effect_SmokeBlack.xml");
+	ParticleSystem* psSmokeBlack = new ParticleSystem(glm::vec3(-5, -0.5, 1), RESOURCES_PATH "/XML/Effect_SmokeBlack.xml");
 	psScene.getScenegraph()->addParticleSystem(psSmokeBlack);
 	psSmokeBlack->start();
 	
-	ParticleSystem* psSmokeWhite = new ParticleSystem(glm::vec3(-12, 0, 1), RESOURCES_PATH "/XML/Effect_SmokeWhite.xml");
+	ParticleSystem* psSmokeWhite = new ParticleSystem(glm::vec3(-2, -0.5, 1), RESOURCES_PATH "/XML/Effect_SmokeWhite.xml");
 	psScene.getScenegraph()->addParticleSystem(psSmokeWhite);
 	psSmokeWhite->start();
 
-	ParticleSystem* psSmokeCloud = new ParticleSystem(glm::vec3(-9, 0, 1), RESOURCES_PATH "/XML/Effect_SmokeCloud.xml");
+	ParticleSystem* psSmokeCloud = new ParticleSystem(glm::vec3(1, -0.5, 1), RESOURCES_PATH "/XML/Effect_SmokeCloud.xml");
 	psScene.getScenegraph()->addParticleSystem(psSmokeCloud);
 	psSmokeCloud->start();
 
-	ParticleSystem* psFontaine = new ParticleSystem(glm::vec3(-6, 0, 1), RESOURCES_PATH "/XML/Effect_Fontaine.xml");
+	ParticleSystem* psFontaine = new ParticleSystem(glm::vec3(-21, 0, 1), RESOURCES_PATH "/XML/Effect_Fontaine.xml");
 	psScene.getScenegraph()->addParticleSystem(psFontaine);
 	psFontaine->start();
 
-	ParticleSystem* psCircle = new ParticleSystem(glm::vec3(-3, 0, 1), RESOURCES_PATH "/XML/Effect_Circle.xml");
+	ParticleSystem* psCircle = new ParticleSystem(glm::vec3(-8, 0, 1), RESOURCES_PATH "/XML/Effect_Circle.xml");
 	psScene.getScenegraph()->addParticleSystem(psCircle);
 	psCircle->start();
 
-	ParticleSystem* psQuad = new ParticleSystem(glm::vec3(0, 0, 1), RESOURCES_PATH "/XML/Effect_Quad.xml");
+	ParticleSystem* psQuad = new ParticleSystem(glm::vec3(-18, 0, 1), RESOURCES_PATH "/XML/Effect_Quad.xml");
 	psScene.getScenegraph()->addParticleSystem(psQuad);
 	psQuad->start();
 
-	ParticleSystem* psFruitFlies = new ParticleSystem(glm::vec3(3, 0, 1), RESOURCES_PATH "/XML/Effect_FruitFlies.xml");
+	ParticleSystem* psFruitFlies = new ParticleSystem(glm::vec3(-15, 0, 1), RESOURCES_PATH "/XML/Effect_FruitFlies.xml");
 	psScene.getScenegraph()->addParticleSystem(psFruitFlies);
 	psFruitFlies->start();
 
-	ParticleSystem* psGlowworm = new ParticleSystem(glm::vec3(6, 0, 1), RESOURCES_PATH "/XML/Effect_Glowworm.xml");
+	ParticleSystem* psGlowworm = new ParticleSystem(glm::vec3(-14, 0, 1), RESOURCES_PATH "/XML/Effect_Glowworm.xml");
 	psScene.getScenegraph()->addParticleSystem(psGlowworm);
 	psGlowworm->start();
 
-	ParticleSystem* psEnergyBall = new ParticleSystem(glm::vec3(9, 0, 1), RESOURCES_PATH "/XML/Effect_EnergyBall.xml");
+	ParticleSystem* psEnergyBall = new ParticleSystem(glm::vec3(-11, 0, 1), RESOURCES_PATH "/XML/Effect_EnergyBall.xml");
 	psScene.getScenegraph()->addParticleSystem(psEnergyBall);
 	psEnergyBall->start();
 
-	ParticleSystem* psComicCloud = new ParticleSystem(glm::vec3(14, 0, 1), RESOURCES_PATH "/XML/ComicCloudEffect.xml");
+	ParticleSystem* psComicCloud = new ParticleSystem(glm::vec3(8, 0, 1), RESOURCES_PATH "/XML/Effect_ComicCloud.xml");
 	psScene.getScenegraph()->addParticleSystem(psComicCloud);
 	psComicCloud->start();
+
+	//ParticleSystem* psFire = new ParticleSystem(glm::vec3(4, -0.5, 1), efFire);
+	ParticleSystem* psFire = new ParticleSystem(glm::vec3(4, -0.5, 1), RESOURCES_PATH "/XML/Effect_Fire.xml");
+	psScene.getScenegraph()->addParticleSystem(psFire);
+	psFire->start();
 
 
 	ParticleSystem* psFireworkRed = new ParticleSystem(glm::vec3(-3, 0, 5), RESOURCES_PATH "/XML/Effect_FireworkRed.xml");
@@ -669,6 +681,27 @@ int main()
 		cam.setSensitivity(dTime);
 		startCamTime = glfwGetTime();
 
+		if (useSnowButton->isActive()){
+			psSnow->start();
+		}
+		else{
+			psSnow->stop();
+		}
+
+		if (useStrongSnowButton->isActive()){
+			psSnowStrong->start();
+		}
+		else{
+			psSnowStrong->stop();
+		}
+
+		if (useRainButton->isActive()){
+			psRain->start();
+		}
+		else{
+			psRain->stop();
+		}
+
 		//Maximum Particle
 		if (!useMaximumParticle->isActive()){
 
@@ -692,64 +725,6 @@ int main()
 
 			//render ParticleSystems
 			psScene.renderParticleSystems();
-
-			///////////////////////////////////////FINAL EMITTER///////////////////////////////////////
-			//glDisable(GL_DEPTH_TEST);
-
-			//psSnow->update(cam);
-			//psSnow->render(cam);
-
-			//snowNode.renderParticles();
-
-			//psSmokeWhite->update(cam);
-			//psSmokeWhite->render(cam);
-
-			//smokeWhite->update();
-			//smokeWhite->render(cam);
-
-			//smokeBlack->update();
-			//smokeBlack->render(cam);
-
-			//fontaine->update(cam);
-			//fontaine->render(cam);
-
-			//circle->update();
-			//circle->render(cam);
-
-			//quad->update();
-			//quad->render(cam);
-
-			//glowworm->update();
-			//glowworm->render(cam);
-
-			//fruitFlies->update();
-			//fruitFlies->render(cam);
-
-			//energyBall->update();
-			//energyBall->render(cam);
-
-			//cloud01->update();
-			//cloud01->render(cam);
-			//cloud02->update();
-			//cloud02->render(cam);
-			//cloud03->update();
-			//cloud03->render(cam);
-			//cloud04->update();
-			//cloud04->render(cam);
-			//cloud05->update();
-			//cloud05->render(cam);
-			//cloud06->update();
-			//cloud06->render(cam);
-			//cloud07->update();
-			//cloud07->render(cam);
-			//cloud08->update();
-			//cloud08->render(cam);
-			//cloud09->update();
-			//cloud09->render(cam);
-			//cloud10->update();
-			//cloud10->render(cam);
-			//cloud11->update();
-			//cloud11->render(cam);
 		}
 		////////////////////////////////FINAL SCREEN EMITTER//////////////////////////////////////////////////
 		else{
@@ -758,59 +733,13 @@ int main()
 			//maximumParticle->render(cam);
 		}
 
-		if (useFruitFliesButton->isActive()){
-			//screenFruitFlies->update();
-			//screenFruitFlies->render(screen);
-		}
-		else{
-			screenFruitFlies->startTime();
-		}
-
-			////////////////////////////////FINAL GUI EMITTER///////////////////////////////////////////
-		if (useSnowButton->isActive()){
-			//snow->update(glm::vec3(cam.getPosition()));
-			//snow->render(cam);
-		}
-		else{
-			snow->startTime();
-		}
-
-		if (useStrongSnowButton->isActive()){
-			//snowStrong->update(glm::vec3(cam.getPosition()));
-			//snowStrong->render(cam);
-		}
-		else{
-			snowStrong->startTime();
-		}
-
-		if (useRainButton->isActive()){
-			//rain->update(glm::vec3(cam.getPosition()));
-			//rain->render(cam);
-		}{
-			//rain->startTime();
-		}
-
-		////////////////////////////////WAITING FOR TEXTURES EMITTER////////////////////////////////
-
-		//todo: flamme
-		//fireMiddle->update();
-		//fireMiddle->render(cam);
-		//fireSmoke->update();
-		//fireSmoke->render(cam);
-		//firefly->update();
-		//firefly->render(cam);
-		//fireSparkOrange->update();
-		//fireSparkOrange->render(cam);
-		//fireSparkRed->update();
-		//fireSparkRed->render(cam);
-
-		// todo all
-		//firework->update();
-		//firework->render(cam);
-
-		//smokeCloud
-		//smokeCloud->update();
-		//smokeCloud->render(cam);
+		//if (useFruitFliesButton->isActive()){
+		//	//screenFruitFlies->update();
+		//	//screenFruitFlies->render(screen);
+		//}
+		//else{
+		//	//screenFruitFlies->startTime();
+		//}
 
 		////////////////////////////////BASICS///////////////////////////////////////////////////////
 
