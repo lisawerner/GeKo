@@ -8,7 +8,7 @@
         <ParticleLiftime>15</ParticleLiftime>
         <ParticleMortal>1</ParticleMortal>
         <UseGeometryShader>0</UseGeometryShader>
-        <Movable>0</Movable>
+        <Movable>1</Movable>
         <StartTime>0</StartTime>
         <Velocity>2</Velocity>
         <Physic>

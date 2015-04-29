@@ -261,6 +261,7 @@ int main()
 	snow->setAreaEmitting(false,true, 10.0, 10000);
 	snow->addTexture(snowTex, 0.0);
 	snow->defineLook(true, 0.04, 2.0);
+	snow->setMovable(true);
 
 	//FINAL EMITTER STRONG SNOW
 	Emitter* snowStrong = new Emitter(0, glm::vec3(-3.5, 4.0, 0.0), 0.0, 0.166, 100, 15.0, true);
@@ -269,6 +270,7 @@ int main()
 	snowStrong->setAreaEmitting(false, true, 8.0, 10000);
 	snowStrong->addTexture(snowTex, 0.0);
 	snowStrong->defineLook(true, 0.03, 1.0, 3.0);
+	snowStrong->setMovable(true);
 
 	//FINAL EMITTER WHITE SMOKE
 	Emitter* smokeWhite = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.4, 1, 8.0, true);
@@ -310,6 +312,7 @@ int main()
 	rain->setAreaEmitting(false, true, 8.0, 10000);
 	rain->addTexture(rainTex, 0.0);
 	rain->defineLook(true, 0.03, 1.0, 0.0);
+	rain->setMovable(true);
 
 	//FINAL EMITTER FONTAINE
 	Emitter* fontaine = new Emitter(0, glm::vec3(0.0, 0.0, 0.0), 0.0, 0.05, 1, 2.0, true);
@@ -590,11 +593,7 @@ int main()
 	//////////////////////////////////////Particle System//////////////////////////////////////////
 
 	ParticleSystem* psSnow = new ParticleSystem(glm::vec3(0, 0, 0), RESOURCES_PATH "/XML/Effect_Snow.xml");
-	Node snowNode("snowNode");
-	snowNode.setCamera(&cam);
-	snowNode.addParticleSystem(psSnow);
-	snowNode.setParticleActive(true);
-	//psSnow->start();
+	psScene.getScenegraph()->addParticleSystem(psSnow);
 
 	ParticleSystem* psRain = new ParticleSystem(glm::vec3(0, 0, 0), RESOURCES_PATH "/XML/Effect_Rain.xml");
 	psScene.getScenegraph()->addParticleSystem(psRain);
