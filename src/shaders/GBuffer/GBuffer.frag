@@ -8,7 +8,7 @@ uniform int useHeightMap;
 uniform int useHeightMapShadows;
 uniform int useShadowMap;
 
-uniform int useLinear;
+uniform int shadowMode;
 
 uniform sampler2D fboTexture;
 uniform sampler2D normalMap;
@@ -91,6 +91,49 @@ float sampleShadowMap_Linear(sampler2D shadowMap, vec3 shadowCoord)
 	return mix(mixA,mixB,fracPart.x);
 }
 
+float sampleShadowMap_PCF(sampler2D shadowMap, vec3 shadowCoord) 
+{
+
+	const float f_PCFsize = 5.0f;				//3x3 Area, 5x5...
+	const float start = (f_PCFsize-1.0f)/2.0f;
+	const float f_PCFsizeSquared = f_PCFsize * f_PCFsize;
+
+	vec2 texelSize	= vec2(1.0f/1024.0f, 1.0f/1024.0f);
+	float result = 0.0f;
+
+	for(float y = -start; y <= start; y += 1.0f) {
+		for(float x = -start; x <= start; x += 1.0f) {
+				vec2 coordsOffset = vec2(x,y)*texelSize;
+				vec3 samplingPoint = vec3(shadowCoord.x + coordsOffset.x,shadowCoord.y + coordsOffset.y,shadowCoord.z);
+				result += sampleShadowMap(shadowMap,samplingPoint);
+			}
+		}
+
+		return result/f_PCFsizeSquared;
+}
+
+
+float sampleShadowMap_PCF_linear(sampler2D shadowMap, vec3 shadowCoord) 
+{
+
+	const float f_PCFsize = 5.0f;				//3x3 Area, 5x5...
+	const float start = (f_PCFsize-1.0f)/2.0f;
+	const float f_PCFsizeSquared = f_PCFsize * f_PCFsize;
+
+	vec2 texelSize	= vec2(1.0f/1024.0f, 1.0f/1024.0f);
+	float result = 0.0f;
+
+	for(float y = -start; y <= start; y += 1.0f) {
+		for(float x = -start; x <= start; x += 1.0f) {
+				vec2 coordsOffset = vec2(x,y)*texelSize;
+				vec3 samplingPoint = vec3(shadowCoord.x + coordsOffset.x,shadowCoord.y + coordsOffset.y,shadowCoord.z);
+				result += sampleShadowMap_Linear(shadowMap,samplingPoint);
+			}
+		}
+
+		return result/f_PCFsizeSquared;
+}
+
 vec4 shadowMapping(vec4 baseColor)
 {
 	vec3 lightVector;
@@ -135,13 +178,23 @@ vec4 shadowMapping(vec4 baseColor)
 	vec3 shadowCoord = passShadowCoord.xyz / passShadowCoord.w;
 
 	//NORMAL
-	if(useLinear == 0) {
+	if(shadowMode == 0) {
 		inShadow = sampleShadowMap(depthTexture,shadowCoord);
 	}
 
 	//LINEAR FILTERING
-	else if(useLinear == 1) {
+	else if(shadowMode == 1) {
 	inShadow = sampleShadowMap_Linear(depthTexture,shadowCoord);
+	}
+
+	//PCF FILTERING
+	else if(shadowMode == 2) {
+	inShadow = sampleShadowMap_PCF(depthTexture,shadowCoord);
+	}
+
+	//PCF LINEAR FILTERING
+	else if (shadowMode == 3) {
+	inShadow = sampleShadowMap_PCF_linear(depthTexture,shadowCoord);
 	}
 
 	vec4 fragmentColor = vec4(1.0f,1.0f,1.0f,1.0f);

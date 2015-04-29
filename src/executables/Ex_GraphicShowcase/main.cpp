@@ -9,8 +9,8 @@
 #include "GeKo_Graphics/Geometry/Mesh.h"
 
 
-const int WINDOW_WIDTH = 800;
-const int WINDOW_HEIGHT = 600;
+const int WINDOW_WIDTH = 1920;
+const int WINDOW_HEIGHT = 1080;
 
 InputHandler iH;
 Pilotview cam("Pilotview");
@@ -24,11 +24,13 @@ float *blurStrength;
 float *radialBlurStrength;
 float *focusDepth;
 float *bloomStrength;
-int *useLinear;
+int *useShadowMode;
 GUI *gui;
 
 GuiElement::Checkbox *useShadowMappingButton;
+GuiElement::Checkbox *useLinearButton;
 GuiElement::Checkbox *usePCFButton;
+GuiElement::Checkbox *usePCFLinearButton;
 GuiElement::Checkbox *useDeferredShadingButton;
 GuiElement::Checkbox *deferredShadingRotationButton;
 GuiElement::Checkbox *useSSAOButton;
@@ -53,7 +55,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			std::cout << "Key is not mapped to an action" << std::endl;
 	}
 
-  if (glfwGetKey(window, GLFW_KEY_F10))
+  if (glfwGetKey(window, GLFW_KEY_F7))
     if (gui->visible()) gui->hide(); else gui->show();
 }
 
@@ -61,18 +63,22 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void initGUI()
 {
   //INIT GUI
-  gui = new GUI("Settings - Hide [F10]", 400, 400);
+  gui = new GUI("Settings - Hide [F7]", 400, 400);
 
   GuiElement::Header *shadowMappingHeader = new GuiElement::Header("Shadow Mapping");
   useShadowMappingButton = new GuiElement::Checkbox("Use Shadow Mapping");
   shadowMappingHeader->addElement(useShadowMappingButton);
   shadowMappingHeader->addElement(new GuiElement::Spacing);
 
-  //TODO ADD FUNCTIONALITY
-  usePCFButton = new GuiElement::Checkbox("Use linear filtering");
+  useLinearButton = new GuiElement::Checkbox("Use linear filtering");
+  shadowMappingHeader->addElement(useLinearButton);
+
+  usePCFButton = new GuiElement::Checkbox("Use PCF filtering");
   shadowMappingHeader->addElement(usePCFButton);
 
-  //TODO add Light Position
+  usePCFLinearButton = new GuiElement::Checkbox("Use PCF linear filtering");
+  shadowMappingHeader->addElement(usePCFLinearButton);
+
   gui->addElement(shadowMappingHeader);
   //===============================================================================================
 
@@ -128,8 +134,6 @@ void initGUI()
   postProcessingHeader->addElement(new GuiElement::Spacing);
   postProcessingHeader->addElement(new GuiElement::SliderFloat("Bloom Strength", bloomStrength, 0.0f, 2.0f));
   postProcessingHeader->addElement(new GuiElement::Spacing);
-
-  //TODO ADD BLOOM STRENGTH SLIDER
 
   //FXAA
   useFXAAButton = new GuiElement::Checkbox("Use FXAA");
@@ -202,12 +206,8 @@ int main()
   //our object
 	Cube cube;
 	Teapot teapot;
+	Sphere sphere;
 	
-	/*std::string dragonPath = RESOURCES_PATH;
-	dragonPath.append("/");
-	dragonPath.append("dragon.obj");
-	Mesh dragon = Mesh(dragonPath.c_str());
-	*/
   Rect plane;
   plane.setTcoords(
     glm::vec2(0, 0),
@@ -217,12 +217,30 @@ int main()
   );
 
 	//our textures
-  Texture bricks((char*)RESOURCES_PATH "/bricks_diffuse.png");
-  Texture bricks_normal((char*)RESOURCES_PATH "/bricks_normal.png");
-  Texture bricks_height((char*)RESOURCES_PATH "/bricks_height.png");
+
+	Texture planks((char*)RESOURCES_PATH "/Vintage Plank_DIFFUSE.jpg");
+	Texture planks_normal((char*)RESOURCES_PATH "/Vintage Plank_NORMAL.jpg");
+	Texture planks_height((char*)RESOURCES_PATH "/Vintage Plank_DISP.jpg");
+
+	Texture santao((char*)RESOURCES_PATH "/Santao Rosewood_DIFFUSE.jpg");
+	Texture santao_normal((char*)RESOURCES_PATH "/Santao Rosewood_NORMAL.jpg");
+	Texture santao_height((char*)RESOURCES_PATH "/Santao Rosewood_DISP.jpg");
+
+	Texture stones((char*)RESOURCES_PATH "/18_DIFFUSE.jpg");
+	Texture stones_normal((char*)RESOURCES_PATH "/18_NORMAL.jpg");
+	Texture stones_height((char*)RESOURCES_PATH "/18_DISP.jpg");
+
+	Texture tiles((char*)RESOURCES_PATH "/05_DIFFUSE.jpg");
+	Texture tiles_normal((char*)RESOURCES_PATH "/05_NORMAL.jpg");
+	Texture tiles_height((char*)RESOURCES_PATH "/05_DISP.jpg");
+
+	Texture bricks((char*)RESOURCES_PATH "/01_DIFFUSE.jpg");
+	Texture bricks_normal((char*)RESOURCES_PATH "/01_NORMAL.jpg");
+	Texture bricks_height((char*)RESOURCES_PATH "/01_DISP.jpg");
 
 	Texture marble((char*)RESOURCES_PATH "/seamless_marble.png");
 	Texture chrome((char*)RESOURCES_PATH "/chrome.jpg");
+	Texture cv((char*)RESOURCES_PATH "/cv_logo.bmp");
 
 	//Scene creation 
 	Level testLevel("testLevel");
@@ -233,73 +251,47 @@ int main()
 	//Add Camera to scenegraph
 	testScene.getScenegraph()->addCamera(&cam);
 	testScene.getScenegraph()->getCamera("PilotviewCam");
-  testScene.getScenegraph()->setActiveCamera("PilotviewCam");
+    testScene.getScenegraph()->setActiveCamera("PilotviewCam");
 
-  //SKYBOX
-  const char *textureNames[6] = {
-	  (char*)RESOURCES_PATH "/Skybox_Data/PereaBeach1/posx.jpg",
-	  (char*)RESOURCES_PATH "/Skybox_Data/PereaBeach1/negx.jpg",
-	  (char*)RESOURCES_PATH "/Skybox_Data/PereaBeach1/posy.jpg",
-	  (char*)RESOURCES_PATH "/Skybox_Data/PereaBeach1/negy.jpg",
-	  (char*)RESOURCES_PATH "/Skybox_Data/PereaBeach1/posz.jpg",
-	  (char*)RESOURCES_PATH "/Skybox_Data/PereaBeach1/negz.jpg"
-	  /*(char*)RESOURCES_PATH "/Color/testTex.png",
-	  (char*)RESOURCES_PATH "/Color/testTex.png",
-	  (char*)RESOURCES_PATH "/Color/testTex.png",
-	  (char*)RESOURCES_PATH "/Color/testTex.png",
-	  (char*)RESOURCES_PATH "/Color/testTex.png",
-	  (char*)RESOURCES_PATH "/Color/testTex.png" */
-  };
-  Skybox skybox = Skybox(textureNames);
-  Node skyboxNode = Node("skybox");
-  skyboxNode.addGeometry(&skybox);
-  skyboxNode.setModelMatrix(glm::scale(skyboxNode.getModelMatrix(), glm::vec3(6, 6, 6)));
-  testScene.setSkyboxNode(&skyboxNode);
+	Node sphere1("sphere1");
+	sphere1.addGeometry(&sphere);
+	sphere1.addTexture(&tiles);
+	sphere1.setModelMatrix(glm::translate(sphere1.getModelMatrix(), glm::vec3(-0.7, 0.30, -0.7)));
+	sphere1.setModelMatrix(glm::scale(sphere1.getModelMatrix(), glm::vec3(0.2, 0.2, 0.2)));
 
+	Node sphere2("sphere2");
+	sphere2.addGeometry(&sphere);
+	sphere2.addTexture(&planks);
+	sphere2.addNormalMap(&planks_normal);
+	sphere2.addHeightMap(&planks_height, 0.07, 0.1, false);
+	sphere2.setModelMatrix(glm::translate(sphere2.getModelMatrix(), glm::vec3(1.3, 0.30, 0.7)));
+	sphere2.setModelMatrix(glm::scale(sphere2.getModelMatrix(), glm::vec3(0.2, 0.2, 0.2)));
 
-  //Node dragonNode("dragonNode");
-  //dragonNode.addGeometry(&dragon);
-  //dragonNode.setModelMatrix(glm::scale(dragonNode.getModelMatrix(), glm::vec3(0.5, 0.5, 0.5)));
-
-
-	Node cube1("cube1");
-	cube1.addGeometry(&cube);
-  cube1.addTexture(&marble);
-	cube1.setModelMatrix(glm::translate(cube1.getModelMatrix(), glm::vec3(-0.7, 0.35, 0.0)));
-  cube1.setModelMatrix(glm::scale(cube1.getModelMatrix(), glm::vec3(0.5, 0.5, 0.5)));
-
-	Node cube2("cube2");
-	cube2.addGeometry(&cube);
-	cube2.addTexture(&bricks);
-  cube2.addNormalMap(&bricks_normal);
-  cube2.addHeightMap(&bricks_height,0.07, 0.1, false);
-	cube2.setModelMatrix(glm::translate(cube2.getModelMatrix(), glm::vec3(0.8, 0.35, 0.5)));
-  cube2.setModelMatrix(glm::scale(cube2.getModelMatrix(), glm::vec3(0.5, 0.5, 0.5)));
-
+	Node sphere3("sphere3");
+	sphere3.addGeometry(&sphere);
+	sphere3.addTexture(&marble);
+	sphere3.setModelMatrix(glm::translate(sphere3.getModelMatrix(), glm::vec3(-1.2, 0.30, 1.8)));
+	sphere3.setModelMatrix(glm::scale(sphere3.getModelMatrix(), glm::vec3(0.2, 0.2, 0.2)));
 
 	Node wallNode1("wall1");
 	wallNode1.addGeometry(&plane);
-  wallNode1.addTexture(&bricks);
-  wallNode1.addNormalMap(&bricks_normal);
-  wallNode1.addHeightMap(&bricks_height, 0.07, 0.1, false);
+	wallNode1.addTexture(&santao);
 	wallNode1.setModelMatrix(glm::translate(wallNode1.getModelMatrix(), glm::vec3(0.0, 0.1, 0.2)));
 	wallNode1.setModelMatrix(glm::rotate(wallNode1.getModelMatrix(), -90.0f, glm::vec3(1.0, 0.0, 0.0)));
-	wallNode1.setModelMatrix(glm::scale(wallNode1.getModelMatrix(), glm::vec3(1.5, 1.5, 1.5)));
-  
+	wallNode1.setModelMatrix(glm::scale(wallNode1.getModelMatrix(), glm::vec3(2.5, 2.5, 2.5)));
+
 	Node teaNode("teaNode");
 	teaNode.addGeometry(&teapot);
-	teaNode.addTexture(&chrome);
-	teaNode.setModelMatrix(glm::translate(teaNode.getModelMatrix(), glm::vec3(0.2, 0.3, 1.0)));
+	teaNode.addTexture(&cv);
+	teaNode.setModelMatrix(glm::translate(teaNode.getModelMatrix(), glm::vec3(0.0, 0.3, 0.6)));
 	teaNode.setModelMatrix(glm::scale(teaNode.getModelMatrix(), glm::vec3(0.3, 0.3, 0.3)));
-
 
 	//Creating a scenegraph
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&wallNode1);
-	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&wallNode2);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube1);
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&cube2);
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&sphere1);
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&sphere2);
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&sphere3);
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&teaNode);
-	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&dragonNode);
 	
   Node lights = Node("Root");
   Sphere lightSphere = Sphere();
@@ -331,15 +323,15 @@ int main()
   newLight4->setModelMatrix(glm::scale(newLight4->getModelMatrix(), glm::vec3(3.0, 3.0, 3.0)));
   lights.addChildrenNode(newLight4);
 
-  ssaoQuality = new float(30.0f);
+  ssaoQuality = new float(2.0f);
   ssaoRadius = new float(0.1f);
 
   reflectionStrength = new float(0.2f);
   blurStrength = new float(1.0f);
-  radialBlurStrength = new float(1.0f);
+  radialBlurStrength = new float(0.10f);
   focusDepth = new float(0.04);
-  bloomStrength = new float(1.0f);
-  useLinear = new int(0);
+  bloomStrength = new float(0.20f);
+  useShadowMode = new int(0);
 
   initGUI();
 
@@ -349,16 +341,23 @@ int main()
   int outputFPS = 0;
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
-		if (usePCFButton->isActive() == true)
-		{
-			*useLinear = 1;
-		}
-		else
-		{
-			*useLinear = 0;
-		}
 
-	renderer->useShadowMapping(useShadowMappingButton->isActive(), useLinear, &slight);
+			if (useLinearButton->isActive() == true)
+			{
+				*useShadowMode = 1;
+			}
+			else if (usePCFButton->isActive() == true)
+			{
+				*useShadowMode = 2;
+			}
+			else if (usePCFLinearButton->isActive() == true)
+			{
+				*useShadowMode = 3;
+			}
+			else
+				*useShadowMode = 0;
+
+	renderer->useShadowMapping(useShadowMappingButton->isActive(), useShadowMode, &slight);
     renderer->useDeferredShading(useDeferredShadingButton->isActive(), &lights, dsLightColor);
     renderer->useSSAO(useSSAOButton->isActive(), ssaoQuality, ssaoRadius);
     renderer->useReflections(useReflectionsButton->isActive(), reflectionStrength);
@@ -367,6 +366,20 @@ int main()
 	renderer->useBlur(useBlurButton->isActive(), blurStrength);
 	renderer->useRadialBlur(useRadialBlurButton->isActive(), radialBlurStrength);
 	renderer->useDoF(useDepthOfFieldButton->isActive(), focusDepth);
+
+	teaNode.setModelMatrix(glm::rotate(teaNode.getModelMatrix(), 0.5f, glm::vec3(0.0, 1.0, 0.0)));
+
+	sphere1.setModelMatrix(glm::translate(sphere1.getModelMatrix(), glm::vec3(0.7, -0.30, 0.7)));
+	sphere1.setModelMatrix(glm::rotate(sphere1.getModelMatrix(), 0.5f, glm::vec3(0.0, 1.0, 0.0)));
+	sphere1.setModelMatrix(glm::translate(sphere1.getModelMatrix(), glm::vec3(-0.7, 0.30, -0.7)));
+
+	sphere2.setModelMatrix(glm::translate(sphere2.getModelMatrix(), glm::vec3(-1.3, -0.30, -0.7)));
+	sphere2.setModelMatrix(glm::rotate(sphere2.getModelMatrix(), 0.5f, glm::vec3(0.0, 1.0, 0.0)));
+	sphere2.setModelMatrix(glm::translate(sphere2.getModelMatrix(), glm::vec3(1.3, 0.30, 0.7)));
+
+	sphere3.setModelMatrix(glm::translate(sphere3.getModelMatrix(), glm::vec3(1.2, -0.30, -1.8)));
+	sphere3.setModelMatrix(glm::rotate(sphere3.getModelMatrix(), 0.5f, glm::vec3(0.0, 1.0, 0.0)));
+	sphere3.setModelMatrix(glm::translate(sphere3.getModelMatrix(), glm::vec3(-1.2, 0.30, 1.8)));
 
     // You have to compute the delta time
     float dTime = glfwGetTime() - startTime;
@@ -383,6 +396,10 @@ int main()
 
     startTime = glfwGetTime();
     renderer->renderScene(testScene, testWindow);
+
+	glfwSwapBuffers(testWindow.getWindow());
+	glfwPollEvents();
+
 	}
 
 	glfwDestroyWindow(testWindow.getWindow());
