@@ -19,8 +19,8 @@
         </Physic>
         <AreaEmitter on="0"/>
         <Texture>
-            <Tex>/ParticleSystem/smoke/smokeWhite/smokeWhite01.png</Tex>
-            <Tex>/ParticleSystem/smoke/smokeWhite/smokeWhite02.png</Tex>
+            <Tex time="1">/ParticleSystem/smoke/smokeWhite/smokeWhite01.png</Tex>
+            <Tex time="0.079999998">/ParticleSystem/smoke/smokeWhite/smokeWhite02.png</Tex>
             <Scaling>
                 <UseTexture>1</UseTexture>
                 <ScalingSize>

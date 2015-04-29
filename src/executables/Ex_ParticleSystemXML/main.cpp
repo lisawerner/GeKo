@@ -48,7 +48,7 @@ int main()
 	// Callback
 	glfwSetKeyCallback(testWindow.getWindow(), key_callback);
 
-	cam.setKeySpeed(2.0);
+	cam.setKeySpeed(4.0);
 	cam.setNearFar(0.1, 100);
 
 	glewInit();
@@ -152,9 +152,9 @@ int main()
 	smokeWhite->usePhysicDirectionGravity(glm::vec4(0.0, -1.0, 0.0, -0.8), 0.3f);
 	smokeWhite->addTexture(smokeWhiteTex1, 1.0);
 	smokeWhite->addTexture(smokeWhiteTex2, 0.25);
-	std::vector<float> smokeWhiteSize{ 0.05f, 0.5f, 0.75f, 1.2f };
+	std::vector<float> smokeWhiteSize{ 0.05f, 0.5f, 0.75f, 1.0f };
 	std::vector<float> smokeWhiteTime{ 0.0f, 0.4f, 0.75f, 1.0f };
-	smokeWhite->defineLook(true, smokeWhiteSize, smokeWhiteTime, 1.0, 4.0, 4.0, false, 0.3);
+	smokeWhite->defineLook(true, smokeWhiteSize, smokeWhiteTime, 1.0, 2.0, 1.0, false, 0.3);
 	smokeWhite->switchToGeometryShader();
 
 	//////////////////////Effect//////////////////////
@@ -165,10 +165,12 @@ int main()
 	efFire->addEmitter(fire);
 	//efFire->addEmitter(fireFlickering);
 	efFire->addEmitter(fireSparkle);
+	efFire->saveEffect(RESOURCES_PATH "/XML/Effect_Fire.xml");
 	
 	Effect* efFirework = new Effect();
 	efFirework->addEmitter(fireworkTail);
 	efFirework->addEmitter(fireworkExplosion);
+	//efFirework->saveEffect(RESOURCES_PATH "/XML/Effect_Firework.xml");
 
 	Effect* efFireworkTail = new Effect();
 	efFireworkTail->addEmitter(fireworkTail);
@@ -176,16 +178,20 @@ int main()
 	Effect* efFireworkExplosion = new Effect();
 	efFireworkExplosion->addEmitter(fireworkExplosion);
 
-	Effect* smWhi = new Effect();
-	smWhi->addEmitter(smokeWhite);
+	Effect* efSmWhi = new Effect();
+	efSmWhi->addEmitter(smokeWhite);
+	efSmWhi->saveEffect(RESOURCES_PATH "/XML/Effect_SmokeWhite.xml");
+	
 
 	//////////////////////ParticleSystem//////////////////////
-	ParticleSystem* psExplosion = new ParticleSystem(glm::vec3(0, -1, 0), efExplosion);
-	ParticleSystem* psFire = new ParticleSystem(glm::vec3(-2, 0, 3), efFire);
+	//ParticleSystem* psExplosion = new ParticleSystem(glm::vec3(0, -1, 0), efExplosion);
+	//ParticleSystem* psFire = new ParticleSystem(glm::vec3(-2, 0, 3), efFire);
+	ParticleSystem* psFire = new ParticleSystem(glm::vec3(-2, 0, 3), RESOURCES_PATH "/XML/Effect_Fire.xml");
 	ParticleSystem* psFirework = new ParticleSystem(glm::vec3(0, 0, 5), efFirework);
 	ParticleSystem* psFireworkTail = new ParticleSystem(glm::vec3(0, 0, 5), efFireworkTail);
 	ParticleSystem* psFireworkExplosion = new ParticleSystem(glm::vec3(0, 2, 5), efFireworkExplosion);
-	ParticleSystem* psSmokeWhite = new ParticleSystem(glm::vec3(2, 0, 3), smWhi);
+	ParticleSystem* psSmokeWhite = new ParticleSystem(glm::vec3(2, 0, 3), efSmWhi);
+	//ParticleSystem* psSmokeWhite = new ParticleSystem(glm::vec3(2, 0, 3), RESOURCES_PATH "/XML/Effect_SmokeWhite.xml");
 
 	ParticleSystem* psFireworkRed = new ParticleSystem(glm::vec3(-3, -1, 5), RESOURCES_PATH "/XML/Effect_FireworkRed.xml");
 	ParticleSystem* psFireworkBlue = new ParticleSystem(glm::vec3(-1, -1, 5), RESOURCES_PATH "/XML/Effect_FireworkBlue.xml");
@@ -194,46 +200,46 @@ int main()
 
 
 	//////////////////////Node//////////////////////
-	Node nodeExplosion("nodeExplosion");
-	nodeExplosion.setCamera(&cam);
-	nodeExplosion.addParticleSystem(psExplosion);
-	nodeExplosion.setParticleActive(true);
-	
-	Node fireNode("fireNode");
-	fireNode.setCamera(&cam);
-	fireNode.addParticleSystem(psFire);
-	fireNode.setParticleActive(true);
-	
-	Node nodeFirework("fireworkNode");
-	nodeFirework.setCamera(&cam);
-	nodeFirework.addParticleSystem(psFirework);
-	nodeFirework.setParticleActive(true);
-	
-	Node whiteSmokeNode("whiteSmokeNode");
-	whiteSmokeNode.setCamera(&cam);
-	whiteSmokeNode.addParticleSystem(psSmokeWhite);
-	whiteSmokeNode.setParticleActive(true);
+	//Node nodeExplosion("nodeExplosion");
+	//nodeExplosion.setCamera(&cam);
+	//nodeExplosion.addParticleSystem(psExplosion);
+	//nodeExplosion.setParticleActive(true);
+	//
+	//Node fireNode("fireNode");
+	//fireNode.setCamera(&cam);
+	//fireNode.addParticleSystem(psFire);
+	//fireNode.setParticleActive(true);
+	//
+	//Node nodeFirework("fireworkNode");
+	//nodeFirework.setCamera(&cam);
+	//nodeFirework.addParticleSystem(psFirework);
+	//nodeFirework.setParticleActive(true);
+	//
+	//Node whiteSmokeNode("whiteSmokeNode");
+	//whiteSmokeNode.setCamera(&cam);
+	//whiteSmokeNode.addParticleSystem(psSmokeWhite);
+	//whiteSmokeNode.setParticleActive(true);
 
-	//Firework
-	Node nodeFireworkRed("fireworkRedNode");
-	nodeFireworkRed.setCamera(&cam);
-	nodeFireworkRed.addParticleSystem(psFireworkRed);
-	nodeFireworkRed.setParticleActive(true);
+	////Firework
+	//Node nodeFireworkRed("fireworkRedNode");
+	//nodeFireworkRed.setCamera(&cam);
+	//nodeFireworkRed.addParticleSystem(psFireworkRed);
+	//nodeFireworkRed.setParticleActive(true);
 
-	Node nodeFireworkBlue("fireworBlueNode");
-	nodeFireworkBlue.setCamera(&cam);
-	nodeFireworkBlue.addParticleSystem(psFireworkBlue);
-	nodeFireworkBlue.setParticleActive(true);
+	//Node nodeFireworkBlue("fireworBlueNode");
+	//nodeFireworkBlue.setCamera(&cam);
+	//nodeFireworkBlue.addParticleSystem(psFireworkBlue);
+	//nodeFireworkBlue.setParticleActive(true);
 
-	Node nodeFireworkGreen("fireworkGreenNode");
-	nodeFireworkGreen.setCamera(&cam);
-	nodeFireworkGreen.addParticleSystem(psFireworkGreen);
-	nodeFireworkGreen.setParticleActive(true);
+	//Node nodeFireworkGreen("fireworkGreenNode");
+	//nodeFireworkGreen.setCamera(&cam);
+	//nodeFireworkGreen.addParticleSystem(psFireworkGreen);
+	//nodeFireworkGreen.setParticleActive(true);
 
-	Node nodeFireworkGold("fireworkGoldNode");
-	nodeFireworkGold.setCamera(&cam);
-	nodeFireworkGold.addParticleSystem(psFireworkGold);
-	nodeFireworkGold.setParticleActive(true);
+	//Node nodeFireworkGold("fireworkGoldNode");
+	//nodeFireworkGold.setCamera(&cam);
+	//nodeFireworkGold.addParticleSystem(psFireworkGold);
+	//nodeFireworkGold.setParticleActive(true);
 
 
 	// Shader
@@ -283,6 +289,11 @@ int main()
 	testScene.getScenegraph()->addParticleSystem(psFireworkRed);
 	testScene.getScenegraph()->addParticleSystem(psFireworkGreen);
 	testScene.getScenegraph()->addParticleSystem(psFireworkGold);
+
+	//TEST
+	/*ParticleSystem* psComicCloud = new ParticleSystem(glm::vec3(0, -1, 4), RESOURCES_PATH "/XML/ComicCloudEffect - Kopie.xml");
+	testScene.getScenegraph()->addParticleSystem(psComicCloud);
+	psComicCloud->start();*/
 
 
 	//start the ParticleSystems
