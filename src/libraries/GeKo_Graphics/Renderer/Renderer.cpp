@@ -187,7 +187,7 @@ void Renderer::renderScene(Scene& scene, Window& window)
   if (!m_ping || !m_pong)
     init(window.getWidth(), window.getHeight());
   
-  glClearColor(0.5, 0.5, 0.5, 1);
+  glClearColor(0.0, 0.0, 0.0, 1);
   
   if (m_useShadowMapping)
     renderShadowMapping(scene);
@@ -217,7 +217,7 @@ void Renderer::renderScene(Scene& scene, Window& window)
   if (m_useShadowMapping)
   {
 
-	m_shaderGBuffer->sendInt("useLinear", *m_pcf);
+	m_shaderGBuffer->sendInt("shadowMode", *m_pcf);
 
     m_shaderGBuffer->sendVec4("light.pos", m_smConeLight->m_position);
     m_shaderGBuffer->sendVec3("light.col", glm::vec3(m_smConeLight->m_color));
