@@ -176,6 +176,7 @@ AStarNode* AStarAlgorithm::startAlgorithm(AStarNode* startNode, AStarNode* endNo
 
 std::vector<AStarNode*>* AStarAlgorithm::startAlgorithm2(AStarNode* startNode, AStarNode* endNode, std::vector<AStarNode*> &path)
 {
+	path.clear();
 	std::vector<AStarNode*> pathList;
 	pathList.push_back(startNode);
 

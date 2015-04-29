@@ -313,9 +313,6 @@ void Renderer::renderScene(Scene& scene, Window& window)
       (*it)->render(window);
     }
   }
-
-  glfwSwapBuffers(window.getWindow());
-  glfwPollEvents();
 }
 
 void Renderer::renderGUI(GUI &guiToRender, Window &window)

@@ -258,6 +258,8 @@ int main()
 	GravityObserver gravityObserver(&testLevel);
 	collision.addObserver(&gravityObserver);
 
+	SoundObserver soundObserver(&testLevel);
+
 	// ==============================================================
 	// == Object (Anthome) ==========================================
 	// ==============================================================
@@ -297,7 +299,8 @@ int main()
 	//AntHome antHome(posSpawn, antMesh, &texCV, &texCV, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
 	////antHome.generateGuards(5, &aiObserver);
 	//antHome.generateWorkers(1, &aiObserver);
-	AntHome antHome(posSpawn, antMesh, &playerObserver, &texCV, &texCV, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
+	SoundFileHandler sfh(1000);
+	AntHome antHome(posSpawn, &sfh, antMesh, &soundObserver, &playerObserver, &texCV, &texCV, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
 	antHome.generateWorkers(5, testScene.getScenegraph()->getRootNode());
 	antHome.addAntsToSceneGraph(testScene.getScenegraph()->getRootNode());
 

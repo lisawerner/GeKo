@@ -61,6 +61,7 @@ class SoundFileHandler{
 
 
 	protected:
+		std::map<std::string, int> m_sourceMap;
 		ALenum m_tempformat;
 		int m_maxNumberOfSources;
 		int m_numberOfSources;
@@ -70,7 +71,6 @@ class SoundFileHandler{
 		int generateBufferData(const char *filepath, int numberOfSources);
 		int endWithError(char* msg);
 
-		std::map<std::string, int> m_sourceMap;
 		char m_type[4];
 		int m_size, m_chunkSize;
 		short m_formatType, m_channels;

@@ -69,3 +69,11 @@ bool Quest::getFinished(){
 int Quest::getID(){
 	return m_id;
 }
+
+std::string Quest::getDescription(){
+	return m_text;
+}
+
+void Quest::setDescription(std::string tex){
+	m_text = tex;
+}

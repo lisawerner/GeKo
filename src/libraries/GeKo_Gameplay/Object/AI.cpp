@@ -160,18 +160,20 @@ AStarNode* AI::nearestFoodNode(){
 		}
 	}
 
-	AStarNode* tempReturn;
+	AStarNode* tempDistance;
 	m_graph->getAlgorithm()->startAlgorithm2(m_lastTarget, m_foodNodes.at(0), m_path);
-	tempReturn = m_path.at(m_path.size() - 1);
+	tempDistance = m_path.at(m_path.size() - 1);
+	std::vector<AStarNode*> shortestPath = m_path;
 
 	for (int i = 0; i < m_foodNodes.size() - 1; i++){
 		m_graph->getAlgorithm()->startAlgorithm2(m_lastTarget, m_foodNodes.at(i + 1), m_path);
-		if (tempReturn->getDistanceTravelled() > m_path.at(m_path.size() - 1)->getDistanceTravelled()){
-			tempReturn = m_path.at(m_path.size() - 1);
+		if (tempDistance->getDistanceTravelled() > m_path.at(m_path.size() - 1)->getDistanceTravelled()){
+			tempDistance = m_path.at(m_path.size() - 1);
+			shortestPath = m_path;
 		}
 	}
 
-	return tempReturn;
+	return shortestPath.at(0);
 }
 
 void AI::update(){

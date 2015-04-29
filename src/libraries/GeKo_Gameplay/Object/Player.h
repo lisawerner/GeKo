@@ -100,4 +100,6 @@ protected:
 	//For adjustment of the player's step-sound
 	int m_StoppSoundCounter;
 	std::vector<int> m_activeKey;
+
+	int m_i;
 };

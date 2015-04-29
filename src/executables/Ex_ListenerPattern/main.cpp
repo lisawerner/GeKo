@@ -169,7 +169,7 @@ int main()
 
 	Teapot teaAnt;
 
-	Texture texPlayer((char*)RESOURCES_PATH "/Snake.jpg");
+	Texture texPlayer((char*)RESOURCES_PATH "/Mesh/Snake.jpg");
 	SoundFileHandler sfh = SoundFileHandler(1000);
 
 	AStarNode defaultASNode();
