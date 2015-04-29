@@ -4,7 +4,7 @@
         <Position x="0" y="0" z="0"/>
         <EmitterLifetime>0</EmitterLifetime>
         <EmitFrequency>0.05000000074505806</EmitFrequency>
-        <ParticlesPerEmit>5</ParticlesPerEmit>
+        <ParticlesPerEmit>1</ParticlesPerEmit>
         <ParticleLiftime>2</ParticleLiftime>
         <ParticleMortal>1</ParticleMortal>
         <UseGeometryShader>0</UseGeometryShader>

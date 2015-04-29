@@ -417,7 +417,12 @@ int Effect::loadEffect(const char* filepath)
 				strcpy(cpath, spath.c_str());
 
 				Texture* texture = new Texture(cpath);
-				emitter->addTexture(texture, 0.0);
+				
+				float time;
+				error = tex->QueryFloatAttribute("time", &time);
+				XMLCheckResult(error);
+				
+				emitter->addTexture(texture, time);
 
 				tex = tex->NextSiblingElement("Tex");
 			}
@@ -482,7 +487,7 @@ int Effect::loadEffect(const char* filepath)
 				XMLCheckResult(error);
 
 				emitter->defineLook(useTexture, scalingSize, scalingMoment, 
-					birthTime, deathTime, rotateLeft, rotationSpeed);
+					birthTime, deathTime, blendingTime, rotateLeft, rotationSpeed);
 			}
 			else {
 				scaling = item->FirstChildElement("Size");
@@ -710,11 +715,14 @@ int Effect::saveEffect(char* filepath)
 
 		//Textures
 		element = doc.NewElement("Texture");
+		int k = 0;
 		for (auto texture : emitter->m_textureList)
 		{
 			XMLElement* tex = doc.NewElement("Tex");
 			tex->SetText(texture->getFilepath());
+			tex->SetAttribute("time", emitter->blendingTime[k]);
 			element->InsertEndChild(tex);
+			k++;
 		}
 
 		if (emitter->getTexUseScaling()) {

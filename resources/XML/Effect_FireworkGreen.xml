@@ -23,7 +23,7 @@
         </Physic>
         <AreaEmitter on="0"/>
         <Texture>
-            <Tex>/ParticleSystem/firework/firework_tail.png</Tex>
+            <Tex time="1">/ParticleSystem/firework/firework_tail.png</Tex>
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.001</ParticleSize>
@@ -59,7 +59,7 @@
         </Physic>
         <AreaEmitter on="0"/>
         <Texture>
-            <Tex>/ParticleSystem/firework/firework_green.png</Tex>
+            <Tex time="1">/ParticleSystem/firework/firework_green.png</Tex>
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.039999999</ParticleSize>

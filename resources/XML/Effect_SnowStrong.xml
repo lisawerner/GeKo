@@ -8,7 +8,7 @@
         <ParticleLiftime>15</ParticleLiftime>
         <ParticleMortal>1</ParticleMortal>
         <UseGeometryShader>0</UseGeometryShader>
-        <Movable>0</Movable>
+        <Movable>1</Movable>
         <StartTime>0</StartTime>
         <Velocity>2</Velocity>
         <Physic>
@@ -24,7 +24,7 @@
             <Accuracy>10000</Accuracy>
         </AreaEmitter>
         <Texture>
-            <Tex>/ParticleSystem/particle/snowflake.png</Tex>
+            <Tex time="1">/ParticleSystem/particle/snowflake.png</Tex>
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.029999999</ParticleSize>
