@@ -76,7 +76,7 @@ void GUI::render(Window& window)
   if (!m_titlebar)  window_flags |= ImGuiWindowFlags_NoTitleBar;
   if (m_border)     window_flags |= ImGuiWindowFlags_ShowBorders;
   if (!m_resize)    window_flags |= ImGuiWindowFlags_NoResize;
-  if (!m_move)      window_flags |= ImGuiWindowFlags_NoMove;
+  if (!m_move)       window_flags |= ImGuiWindowFlags_NoMove;
   if (!m_scrollbar) window_flags |= ImGuiWindowFlags_NoScrollbar;
   if (!m_collapse)  window_flags |= ImGuiWindowFlags_NoCollapse;
 
@@ -96,6 +96,10 @@ void GUI::render(Window& window)
     m_windowWidth  = newSize.x;
     m_windowHeight = newSize.y;
   }
+
+  ImVec2 newPos = ImGui::GetWindowPos();
+  m_windowPosX = newPos.x;
+  m_windowPosY = newPos.y;
 
   ImGui::End();
 

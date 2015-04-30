@@ -4,7 +4,7 @@
 Node::Node(std::string nodeName)
 {
 	m_nodeName = nodeName;
-
+	m_parentNode = nullptr;
 	m_modelMatrix = glm::mat4(1.0);
 	m_scaleMatrix = glm::mat4(1.0);
 	m_rotationMatrix = glm::mat4(1.0);
@@ -128,7 +128,7 @@ glm::mat4 Node::getRotationMatrix()
 
 void Node::addRotation(float angle, glm::vec3 axis)
 {
-	glm::mat4 newRotationMatrix = glm::rotate(glm::mat4(1.0), angle, axis);
+	glm::mat4 newRotationMatrix = glm::rotate(m_rotationMatrix, angle, axis);
 	m_rotationMatrix = newRotationMatrix;
 
 	updateModelMatrix();
@@ -619,8 +619,10 @@ void Node::render(ShaderProgram &shader)
 					m_camera->setLookAt(glm::vec3(m_player->getPosition() + m_player->getViewDirection()));*/
 				}
 			}
-
-			modelMatrix = getParentNode()->getModelMatrix() * m_modelMatrix;
+			if(m_parentNode)
+				modelMatrix = getParentNode()->getModelMatrix() * m_modelMatrix;
+			else
+				modelMatrix = m_modelMatrix;
 			shader.sendMat4("modelMatrix", modelMatrix);
 			shader.sendMat4("previousModelMatrix", m_PrevModelMatrix);
 			m_PrevModelMatrix = modelMatrix;

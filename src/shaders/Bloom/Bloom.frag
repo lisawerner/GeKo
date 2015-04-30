@@ -4,6 +4,8 @@ in vec2 passUV;
 
 uniform sampler2D bgl_RenderedTexture;
 
+uniform float bloomStrength;
+
 layout(location = 2) out vec4 colorOutput;
 
 void main()
@@ -17,7 +19,7 @@ for( i= -4 ;i < 4; i++)
 {
 for (j = -4; j < 4; j++)
 {
-sum += texture2D(bgl_RenderedTexture, texcoord + vec2(j, i)*0.0015) * 0.20; 
+sum += texture2D(bgl_RenderedTexture, texcoord + vec2(j, i)*0.0015) * bloomStrength; 
 }
 }
 

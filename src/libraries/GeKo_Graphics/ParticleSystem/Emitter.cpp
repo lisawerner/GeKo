@@ -9,13 +9,13 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 	setAttributes();
 
 	m_output = static_cast<FLOW> (-1); //set if won't generate (-1), constant (0) or just once (1)
-	outputType = OUTPUT;
+	m_outputType = OUTPUT;
 
 	//set Emitter properties
 	setPosition(position);
 	setLocalPosition(position);
 	setEmitterLifetime(emitterLifetime);
-	setEmitterMortality(emitterLifetime);
+	//setEmitterMortality(emitterLifetime);
 
 	//set properties for the emitting
 	setEmitFrequency(emitFrequency);
@@ -26,9 +26,6 @@ Emitter::Emitter(const int OUTPUT, glm::vec3 position, double emitterLifetime, d
 	setParticleMortality(particleMortal);
 
 	updateSize(); //update the number of max particle and create new buffer for it.
-	
-	//bullshit
-	//startTime();
 
 	m_scalingData[32] = { 0 };
 	blendingTime[4] = { 0 };
@@ -47,12 +44,14 @@ void Emitter::startTime(){
 
 void Emitter::start(){
 	if (m_output == UNUSED){
+		m_isStarted = true;
 		startTime();
-		setOutputMode(outputType);
+		setOutputMode(m_outputType);
 	}
 }
 
 void Emitter::stop(){
+	m_isStarted = false;
 	setOutputMode(-1);
 }
 
@@ -101,7 +100,9 @@ void Emitter::update(ShaderProgram* compute, glm::vec3 playerPosition){
 	deltaTime = glfwGetTime() - updateTime; //time remain since last update
 	updateTime = glfwGetTime();
 
-	m_emitLifetime -= deltaTime;
+	if (m_isStarted) {
+		m_emitLifetime -= deltaTime;
+	}
 	if (m_emitLifetime < 0 && m_emitterMortal){ //it's only for dying emitters relevant
 		m_output = UNUSED;
 	}
@@ -117,7 +118,18 @@ void Emitter::update(ShaderProgram* compute, glm::vec3 playerPosition){
 	compute->sendFloat("fullLifetime", m_particleLifetime);
 	compute->sendInt("particleMortal", m_particleMortal);
 
-	compute->sendVec4("gravity", m_gravity);
+	if (m_usePointGravity && m_backtoSource){
+		glm::vec3 newPosition(0,0,0);
+		newPosition.x = m_emitterPosition.x + m_gravity.x;
+		newPosition.y = m_emitterPosition.y + m_gravity.y;
+		newPosition.z = m_emitterPosition.z + m_gravity.z;
+		compute->sendVec4("gravity", glm::vec4(newPosition, m_gravityImpact));
+		
+	}
+	else{
+		compute->sendVec4("gravity", m_gravity);
+		
+	}
 	compute->sendFloat("gravityRange", m_gravityRange);
 	compute->sendInt("gravityFunc", m_gravityFunction);
 
@@ -421,13 +433,16 @@ void Emitter::usePhysicDirectionGravity(glm::vec4 gravity, float speed){
 
 	setSpeed(speed);
 }
-void Emitter::usePhysicPointGravity(glm::vec4 gravity, float gravityRange, int gravityFunction, float speed){
-	setGravity(gravity);
+void Emitter::usePhysicPointGravity(glm::vec3 point, float gravityImpact, float gravityRange, int gravityFunction, float speed, bool backToSource){
 	m_useTrajectory = false;
 	m_useDirectionGravity = false;
 	m_usePointGravity = true;
 	m_useChaoticSwarmMotion = false;
 
+	m_gravityImpact = gravityImpact;
+	m_backtoSource = backToSource;
+	setGravity(glm::vec4(point, gravityImpact));
+	
 	setSpeed(speed);
 	m_gravityFunction = gravityFunction;
 	m_gravityRange = gravityRange;
@@ -451,6 +466,10 @@ void Emitter::setOutputMode(const int OUTPUT)
 {
 	m_output = static_cast<FLOW> (OUTPUT);
 }
+void Emitter::setOutputType(int outputType)
+{
+	m_outputType = outputType;
+}
 void Emitter::setPosition(glm::vec3 newPosition)
 {
 	m_emitterPosition = newPosition;
@@ -471,15 +490,19 @@ void Emitter::movePosition(glm::vec3 playerPosition)
 {
 	setPosition(getPosition()+playerPosition);
 }
-void Emitter::setEmitterMortality(double emitterLifetime)
+//void Emitter::setEmitterMortality(double emitterLifetime)
+//{
+//	if (emitterLifetime < 0.001)
+//		m_emitterMortal = false;
+//	else
+//		m_emitterMortal = true;
+//}
+void Emitter::setEmitterLifetime(double emitterLifetime)
 {
 	if (emitterLifetime < 0.001)
 		m_emitterMortal = false;
 	else
 		m_emitterMortal = true;
-}
-void Emitter::setEmitterLifetime(double emitterLifetime)
-{
 	m_emitLifetime = emitterLifetime;
 }
 void Emitter::setEmitFrequency(float newEmitFrequency)
@@ -532,6 +555,10 @@ void Emitter::setAreaEmitting(bool areaEmittingXY, bool areaEmittingXZ, float si
 }
 void Emitter::setMovable(bool on){
 	m_movable = on;
+}
+void Emitter::setStartTime(double time)
+{
+	m_startTime = time;
 }
 
 void Emitter::addTexture(Texture* texture, float time){
@@ -602,13 +629,13 @@ glm::vec3 Emitter::useVelocityZero(){
 }
 glm::vec3 Emitter::useVelocityLeftQuarterCircle(){
 	return glm::vec3(((rand() % 100) / 100.0f) - 1.0f,
-		((rand() % 100) / 100.0f),
-		0.0f);
+					((rand() % 100) / 100.0f),
+					0.0f);
 }
 glm::vec3 Emitter::useVelocityRightQuarterCircle(){
 	return glm::vec3(((rand() % 100) / 100.0f),
-		((rand() % 100) / 100.0f),
-		0.0f);
+					((rand() % 100) / 100.0f),
+					0.0f);
 }
 glm::vec3 Emitter::useVelocitySemiCircle(){
 	return glm::vec3(((rand() % 200) / 100.0f) - 1.0f,
@@ -617,13 +644,13 @@ glm::vec3 Emitter::useVelocitySemiCircle(){
 }
 glm::vec3 Emitter::useVelocityCircle(){
 	return	glm::vec3(((rand() % 200) / 100.0f) - 1.0f,
-		((rand() % 200) / 100.0f) - 1.0f,
-		0.0f);
+					((rand() % 200) / 100.0f) - 1.0f,
+					0.0f);
 }
 glm::vec3 Emitter::useVelocitySemiSphere(){
 	return glm::vec3(((rand() % 200) / 100.0f) - 1.0f,
-		((rand() % 100) / 100.0f),
-		((rand() % 200) / 100.0f) - 1.0f);
+					((rand() % 100) / 100.0f),
+					((rand() % 200) / 100.0f) - 1.0f);
 }
 glm::vec3 Emitter::useVelocitySphere(){
 	return glm::vec3(((rand() % 200) / 100.0f) - 1.0f,
@@ -676,6 +703,10 @@ int Emitter::getVelocityType()
 int Emitter::getOutputMode()
 {
 	return m_output;
+}
+int Emitter::getOutputType()
+{
+	return m_outputType;
 }
 glm::vec3 Emitter::getPosition()
 {
@@ -742,6 +773,9 @@ float Emitter::getRotationSpeed(){
 bool Emitter::getMovable(){
 	return m_movable;
 }
+double Emitter::getStartTime(){
+	return m_startTime;
+}
 
 bool Emitter::getPhysicTrajectory(){
 	return m_useTrajectory;
@@ -754,6 +788,12 @@ bool Emitter::getPhysicPointGravity(){
 }
 bool Emitter::getPhysicSwarmCircleMotion(){
 	return m_useChaoticSwarmMotion;
+}
+float Emitter::getPhysicAttGravityImpact(){
+	return m_gravityImpact;
+}
+bool Emitter::getPhysicAttBacktoSource(){
+	return m_backtoSource;
 }
 float Emitter::getPhysicAttGravityRange(){
 	return m_gravityRange;
@@ -807,6 +847,7 @@ void Emitter::setAttributes(){
 
 	//Var how the Output should flow
 	m_output = static_cast<FLOW> (-1);
+	m_outputType = -1;
 
 	//Var for the buffer iteration
 	indexBuffer = 0;
@@ -817,6 +858,8 @@ void Emitter::setAttributes(){
 	m_emitterMortal = false;
 	m_emitLifetime = 0.0;
 	m_emitFrequency = 0.0;
+	m_startTime = 0.0;
+	m_isStarted = false;
 
 	//Number of particles
 	numMaxParticle = 0;
@@ -860,6 +903,10 @@ void Emitter::setAttributes(){
 	m_useChaoticSwarmMotion = false;
 
 	//physic attributes
+	float m_gravityImpact = 0.0;
+	glm::vec3 m_point = glm::vec3(0, 0, 0);
+	bool m_backtoSource = false;
+
 	m_gravityRange = 0.0f;
 	m_gravityFunction = 0;
 	m_speed = 0.0f;

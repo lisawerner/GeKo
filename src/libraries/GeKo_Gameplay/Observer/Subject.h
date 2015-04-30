@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/ext.hpp>
 #include <vector>
-#include <GeKo_Graphics/Observer/Observer.h>
+#include <GeKo_Gameplay/Observer/Observer.h>
 #include <typeinfo>
 
 

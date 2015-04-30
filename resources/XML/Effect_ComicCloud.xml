@@ -11,15 +11,17 @@
         <Velocity>4</Velocity>
         <Physic>
             <PointGravity>
-                <Gravity x="0" y="-1" z="0" w="-0"/>
+                <Point x="0" y="-1" z="0"/>
+				<GravityImpact>0</GravityImpact>
                 <Speed>0.62</Speed>
                 <GravityRange>0</GravityRange>
                 <GravityFunction>0</GravityFunction>
+				<BackToSource>1</BackToSource>
             </PointGravity>
         </Physic>
         <AreaEmitter on="0"/>
         <Texture>
-            <Tex>/ParticleSystem/comicCloud/cloud01.png</Tex>
+            <Tex time="1">/ParticleSystem/comicCloud/cloud01.png</Tex>
             <Scaling>
                 <UseTexture>1</UseTexture>
                 <ScalingSize>
@@ -50,15 +52,17 @@
         <Velocity>4</Velocity>
         <Physic>
             <PointGravity>
-                <Gravity x="0" y="-1" z="0" w="-0"/>
+                <Point x="0" y="-1" z="0"/>
+				<GravityImpact>0</GravityImpact>
                 <Speed>0.5</Speed>
                 <GravityRange>0</GravityRange>
                 <GravityFunction>0</GravityFunction>
+				<BackToSource>1</BackToSource>
             </PointGravity>
         </Physic>
         <AreaEmitter on="0"/>
         <Texture>
-            <Tex>/ParticleSystem/comicCloud/cloud03.png</Tex>
+            <Tex time="1">/ParticleSystem/comicCloud/cloud03.png</Tex>
             <Scaling>
                 <UseTexture>1</UseTexture>
                 <ScalingSize>
@@ -95,7 +99,7 @@
         </Physic>
         <AreaEmitter on="0"/>
         <Texture>
-            <Tex>/ParticleSystem/comicCloud/balloon04.png</Tex>
+            <Tex time="1">/ParticleSystem/comicCloud/balloon04.png</Tex>
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.80000001</ParticleSize>
@@ -125,7 +129,7 @@
         </Physic>
         <AreaEmitter on="0"/>
         <Texture>
-            <Tex>/ParticleSystem/comicCloud/star02.png</Tex>
+            <Tex time="1">/ParticleSystem/comicCloud/star02.png</Tex>
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.30000001</ParticleSize>
@@ -155,7 +159,7 @@
         </Physic>
         <AreaEmitter on="0"/>
         <Texture>
-            <Tex>/ParticleSystem/comicCloud/star02.png</Tex>
+            <Tex time="1">/ParticleSystem/comicCloud/star02.png</Tex>
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.5</ParticleSize>
@@ -185,7 +189,7 @@
         </Physic>
         <AreaEmitter on="0"/>
         <Texture>
-            <Tex>/ParticleSystem/comicCloud/spiral05.png</Tex>
+            <Tex time="1">/ParticleSystem/comicCloud/spiral05.png</Tex>
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.30000001</ParticleSize>
@@ -215,7 +219,7 @@
         </Physic>
         <AreaEmitter on="0"/>
         <Texture>
-            <Tex>/ParticleSystem/comicCloud/spiral03.png</Tex>
+            <Tex time="1">/ParticleSystem/comicCloud/spiral03.png</Tex>
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.30000001</ParticleSize>
@@ -245,7 +249,7 @@
         </Physic>
         <AreaEmitter on="0"/>
         <Texture>
-            <Tex>/ParticleSystem/comicCloud/lightning01.png</Tex>
+            <Tex time="1">/ParticleSystem/comicCloud/lightning01.png</Tex>
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.60000002</ParticleSize>
@@ -275,7 +279,7 @@
         </Physic>
         <AreaEmitter on="0"/>
         <Texture>
-            <Tex>/ParticleSystem/comicCloud/lightning04.png</Tex>
+            <Tex time="1">/ParticleSystem/comicCloud/lightning04.png</Tex>
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.5</ParticleSize>
@@ -305,7 +309,7 @@
         </Physic>
         <AreaEmitter on="0"/>
         <Texture>
-            <Tex>/ParticleSystem/comicCloud/exclamationMark03.png</Tex>
+            <Tex time="1">/ParticleSystem/comicCloud/exclamationMark03.png</Tex>
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.30000001</ParticleSize>
@@ -335,7 +339,7 @@
         </Physic>
         <AreaEmitter on="0"/>
         <Texture>
-            <Tex>/ParticleSystem/comicCloud/exclamationMark02.png</Tex>
+            <Tex time="1">/ParticleSystem/comicCloud/exclamationMark02.png</Tex>
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.5</ParticleSize>

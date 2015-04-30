@@ -1,17 +1,17 @@
 #pragma once
-
+//
 #include <glm/glm.hpp>
-#include <vector>
 #include <iostream>
 #include <string>
 
-#include "GeKo_Graphics/Observer/Subject.h"
+#include "GeKo_Gameplay/Observer/Subject.h"
 #include "GeKo_Gameplay/Item/Inventory.h"
 #include "GeKo_Sound/SoundFileHandler.h"
 
 #include "ObjectType.h"
 #include "ClassType.h"
 #include "States.h"
+
 
 class Object
 {
@@ -20,7 +20,7 @@ public:
 	~Object();
 
 	void setPosition(glm::vec4 pos);
-
+	void setPosition(glm::vec3 pos);
 	glm::vec4 getPosition();
 
 	float getStrength();
@@ -40,7 +40,7 @@ public:
 	ClassType getClassType();
 
 	glm::vec4 getViewDirection();
-
+	void setViewDirection(glm::vec4 viewDirection);
 	bool getStates(States state);
 	void setStates(States state, bool b);
 

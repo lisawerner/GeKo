@@ -1,6 +1,6 @@
 #pragma once
 #include <glm/ext.hpp>
-#include <GeKo_Graphics/Observer/Observer.h>
+#include <GeKo_Gameplay/Observer/Observer.h>
 #include <GeKo_Graphics/Scenegraph/Level.h>
 
 
@@ -17,6 +17,7 @@ public:
 		switch (event){
 		case Quest_Event::QUEST_FINISHED:
 
+			//Sets children quests active
 			if (m_level->getQuestHandler()->getGraph()->hasChildren())
 			{
 				std::vector<QuestGraphNode*> tmp = m_level->getQuestHandler()->getGraph()->search(&quest)->getChildren();
@@ -25,6 +26,7 @@ public:
 				}
 			}
 
+			//Search player node from scenegraph and save in tmp2 to give him rewards
 			std::vector<Node*>* tmp = m_level->getActiveScene()->getScenegraph()->getRootNode()->getChildrenSet();
 			Node* tmp2;
 			for (int i = 0; i < tmp->size(); i++)
@@ -51,8 +53,11 @@ public:
 					
 				}
 			}
-			
+
+			//Check if all quests are finished
+
 			break;
+	
 		}
 	 }
 
@@ -85,6 +90,7 @@ public:
 		}
 	
 	}
+
 protected: 
 	Level* m_level;
 };

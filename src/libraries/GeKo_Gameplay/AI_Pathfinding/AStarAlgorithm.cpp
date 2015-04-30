@@ -176,6 +176,7 @@ AStarNode* AStarAlgorithm::startAlgorithm(AStarNode* startNode, AStarNode* endNo
 
 std::vector<AStarNode*>* AStarAlgorithm::startAlgorithm2(AStarNode* startNode, AStarNode* endNode, std::vector<AStarNode*> &path)
 {
+	path.clear();
 	std::vector<AStarNode*> pathList;
 	pathList.push_back(startNode);
 
@@ -191,7 +192,7 @@ std::vector<AStarNode*>* AStarAlgorithm::startAlgorithm2(AStarNode* startNode, A
 	AStarNode* returnNode;
 	returnNode = startNode;
 
-	while (pathList.back()->getName() != endNode->getName() && !pathList.empty())
+	while (pathList.size() != 0 && pathList.back()->getName() != endNode->getName() && !pathList.empty())
 	{
 		tmp = pathList.back();
 		wastedList.push_back(pathList.back());
@@ -222,7 +223,7 @@ std::vector<AStarNode*>* AStarAlgorithm::startAlgorithm2(AStarNode* startNode, A
 						copyNode->setPathList(*pathList.at(j)->getPaths());
 						copyNode->setName(pathList.at(j)->getName());
 						copyNode->setDistanceToGoal(pathList.at(j)->getDistanceToGoal());
-						copyNode->setPosition(wastedList.at(j)->getPosition());
+						//copyNode->setPosition(wastedList.at(j)->getPosition());
 						break;
 					}
 				}

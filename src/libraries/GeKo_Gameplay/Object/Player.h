@@ -31,9 +31,6 @@ public:
 	//Updates the object per Frame
 	void update();
 
-	//Moves Object on Terrain
-	void move(glm::vec3 newPosition);
-
 	///A method to move forward in view Direction
 	/**Changes the position vector*/
 	void moveForward();
@@ -67,26 +64,42 @@ public:
 	///Sets a specific source-file to the node
 	/**This method uses the sfh to generate a new sound-source which can be played with the sfh later ingame!*/
 	void setSourceName(Soundtype type, std::string sourceName, const char* filepath);
-
+	///Updates the positions of the sources in the map to the most current position of the Player. The Method is called primarily by the event OBJECT_MOVED.
 	void updateSourcesInMap();
 
 	void setDeltaTime(float dt);
 
-	///Sets a fire into the world
-	/**This method deletes one branch in the inventory and creates a fire with the help of the particlesystem*/
-	void setFire();
-
 	//TODO: Open/Close Inventory: Prüfen ob Inventar offen oder geschlossen ist; Inventar mit GUI öffnen
 	void showInventory();
+
+	///Adds all pressed keys to m_activeKey
+	/**Filled in key_callback*/
+	void addKeyInput(int key);
+	///Clears m_activeKey
+	/**Should be used in the render-loop*/
+	void deleteKeyInput();
+	///Checks if W, A, S, D are active
+	/**Used for activating/deactivating the sound*/
+	bool checkActiveMoveKeys();
+
+	//Implemented in the specific AI
+	virtual void setFire();
 
 protected:
 	glm::vec3 m_spawnPoint;
 
 	float m_deltaTime;
-	//Phi: Winkel-Schritt um x-Achse; Theta: Winkel um Bla-Achse; Alpha: Winkel-Gesamt um x-Achse
+
+	//Phi: step-size of x-axis-angle; Theta: step-size of y-axis-angle; Alpha: complete size of x-axis-angle
 	float m_phi, m_theta, m_alpha;
 
 	float m_speedTurn;
 
 	std::map<Soundtype, std::string> m_soundMap;
+
+	//For adjustment of the player's step-sound
+	int m_StoppSoundCounter;
+	std::vector<int> m_activeKey;
+
+	int m_i;
 };

@@ -19,6 +19,9 @@ public:
 
 	float getHeight(glm::vec2 position);
 
+	float getResolutionX();
+	float getResolutionY();
+
 protected:
 	std::vector<float> m_height;
 	int m_resolutionX, m_resolutionY;

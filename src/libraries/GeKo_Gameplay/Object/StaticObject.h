@@ -14,6 +14,7 @@ public:
 	~StaticObject();
 
 	void setTree();
+	void setTree(int i);
 	void setExampleAntHome();
 
 };

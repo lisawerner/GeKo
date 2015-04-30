@@ -81,7 +81,7 @@ InputMap* InputHandler::getInputMap(MapType type) {
 InputMap* InputHandler::getActiveInputMap() {
 
 	int i = 0;
-	InputMap* activeInputMap = new InputMap();
+	InputMap* activeInputMap;
 
 	for (int j = 0; j < m_allInputMaps.size(); j++)
 	{

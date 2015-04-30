@@ -1,6 +1,6 @@
 #pragma once
 #include <glm/ext.hpp>
-#include <GeKo_Graphics/Observer/Observer.h>
+#include <GeKo_Gameplay/Observer/Observer.h>
 #include <GeKo_Graphics/Scenegraph/Node.h>
 #include <GeKo_Gameplay/Object/ObjectType.h>
 #include <GeKo_Gameplay/Questsystem/Goal_Collect.h>
@@ -57,6 +57,8 @@ public:
 
 				 if (tp > 0){
 					nodeB.getPlayer()->collectItem(ItemType::COOKIE, nodeA.getAI()->getInventory()->countItem(ItemType::COOKIE));
+					m_level->getPlayerGUI()->setTexture((char*)RESOURCES_PATH "/Texture/Cookie_02.png");
+					m_level->getPlayerGUI()->getInventory()->insert(std::pair<std::string, Texture*>(std::string("Cookie"), m_level->getPlayerGUI()->getTextures()->back()));
 					nodeA.getAI()->getInventory()->clearInventory();
 				 }
 				 
@@ -87,9 +89,6 @@ public:
 			 {
 				 if (nodeA.getAI()->getHealth() > 0)
 				 {
-		/*			 m_level->getFightSystem()->getParticle()->setPosition(glm::vec3(nodeB.getPlayer()->getPosition()));
-					 m_level->getFightSystem()->getParticle()->update(*nodeB.getCamera());
-					 m_level->getFightSystem()->getParticle()->render(*nodeB.getCamera());*/
 					 std::vector<ParticleSystem*>* ps = m_level->getActiveScene()->getScenegraph()->getParticleSet();
 					 for (auto particle : *ps)
 					 {
@@ -105,9 +104,6 @@ public:
 					 if (m_counter->getTime() <= 0)
 					 {
 						 m_level->getFightSystem()->objectVSobject(nodeA.getAI(), nodeB.getPlayer());
-						/* m_level->getFightSystem()->getParticle()->setPosition(glm::vec3(nodeB.getPlayer()->getPosition()));
-						 m_level->getFightSystem()->getParticle()->update(*nodeB.getCamera());
-						 m_level->getFightSystem()->getParticle()->render(*nodeB.getCamera());*/
 						 if (nodeA.getAI()->getHealth() <= 0){
 
 							 std::vector<Goal*> tmp = m_level->getQuestHandler()->getQuests(GoalType::KILL);
@@ -116,7 +112,7 @@ public:
 								 tmp.at(i)->increase();
 							 }
 						 }
-						 m_counter->setTime(20);
+						 m_counter->setTime(0);
 						 m_counter->start();
 					 }
 					 else{
@@ -155,14 +151,25 @@ public:
 					 }
 				 }
 				 nodeB.getStaticObject()->getInventory()->reduceItem(ItemType::COOKIE, 3);
+				 //TODO: Wahlweise aus ALLEN AI-FoodNodes
+				 if (nodeB.getStaticObject()->getInventory()->countItem(ItemType::COOKIE) == 0){
+					nodeA.getAI()->deleteFoodNode(glm::vec3(nodeB.getStaticObject()->getPosition()));
+				 }
 			 }
 			 break;
 
 		 case Collision_Event::PLAYER_STATIC_COLLISION:
+			 //TODO: GUI mit Bildern aktualisieren 
 			 if (nodeB.getStaticObject()->getObjectType() == ObjectType::TREE)
 			 {
 				 int count = nodeB.getStaticObject()->getInventory()->countItem(ItemType::BRANCH);
 				 nodeA.getPlayer()->collectItem(ItemType::BRANCH, count);
+
+				 if (count != 0){
+					 m_level->getPlayerGUI()->setTexture((char*)RESOURCES_PATH "/Texture/Branch_cookie.png");
+					 m_level->getPlayerGUI()->getInventory()->insert(std::pair<std::string, Texture*>(std::string("Branch"), m_level->getPlayerGUI()->getTextures()->back()));
+				 }
+
 				 nodeB.getStaticObject()->getInventory()->clearInventory();
 				 std::vector<Goal*> tmp = m_level->getQuestHandler()->getQuests(GoalType::COLLECT);
 				 for (int i = 0; i < tmp.size(); i++)
@@ -183,4 +190,6 @@ public:
 		Level* m_level;
 		
 		Counter* m_counter;
+
+		std::vector<Texture*> m_textures;
 };

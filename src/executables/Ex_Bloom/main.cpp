@@ -75,9 +75,9 @@ int main()
 	screenFillingQuad.loadBufferData();
 
 	//our textures
-	Texture bricks((char*)RESOURCES_PATH "/brick.bmp");
-	Texture marble((char*)RESOURCES_PATH "/seamless_marble.jpg");
-	Texture chrome((char*)RESOURCES_PATH "/chrome.jpg");
+	Texture bricks((char*)RESOURCES_PATH "/Texture/brick.bmp");
+	Texture marble((char*)RESOURCES_PATH "/Texture/seamless_marble.png");
+	Texture chrome((char*)RESOURCES_PATH "/Texture/chrome.jpg");
 
 	//Scene creation 
 	Level testLevel("testLevel");

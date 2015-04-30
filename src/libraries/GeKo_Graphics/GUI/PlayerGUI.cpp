@@ -1,17 +1,17 @@
 #include "PlayerGUI.h"
 
-PlayerGUI::PlayerGUI(const int hudWidth, const int hudHeight, const int windowWidth, const int windowHeight, const int questHeight, const int questWidth, Player &player)
+PlayerGUI::PlayerGUI(const int hudWidth, const int hudHeight, const int windowWidth, const int windowHeight, const int questHeight, const int questWidth, Player* player, QuestHandler* qH)
 {
 	m_HUD_WIDTH = hudWidth;
 	m_HUD_HEIGHT = hudHeight;
 	m_WINDOW_HEIGHT = windowHeight;
 	m_WINDOW_WIDTH = windowWidth;
-	m_QUEST_WIDTH = questWidth; 
+	m_QUEST_WIDTH = questWidth;
 	m_QUEST_HEIGHT = questHeight;
 
-	Texture bricks((char*)RESOURCES_PATH "/bricks_diffuse.png");
+	Texture bricks((char*)RESOURCES_PATH "/Texture/bricks.bmp");
 	m_hud = new GUI("testGUI", m_HUD_WIDTH, m_HUD_HEIGHT);
-	m_hud->setPosition((m_WINDOW_WIDTH / 2) - (m_HUD_WIDTH / 2), m_WINDOW_HEIGHT - m_HUD_HEIGHT);
+	m_hud->setPosition(250, 500);
 	m_hud->setCollapsable(false);
 	m_hud->setTitleBarVisible(false);
 	m_hud->setBackgroundAlpha(0.5f);
@@ -19,18 +19,20 @@ PlayerGUI::PlayerGUI(const int hudWidth, const int hudHeight, const int windowWi
 	m_hud->setUseScrollbar(false);
 	m_hud->setMoveable(false);
 
+	//Generate GUI for EXP, LVL, HP
 	m_player = player;
-	int hp = m_player.getHealth();
-	int hpMax = m_player.getHealth();
-	int exp = m_player.getExp();
-	int expMax = m_player.getLevelThreshold();
+	m_questhandler = qH;
+	hp = m_player->getHealth();
+	hpMax = m_player->getHealth();
+	exp = m_player->getExp();
+	expMax = m_player->getLevelThreshold();
 
-	GuiElement::ProgressBar *hpBar = new GuiElement::ProgressBar(&hp, hpMax, 300, glm::fvec4(1.0f, 0.0f, 0.0f, 1.0f));
+	GuiElement::ProgressBar *hpBar = new GuiElement::ProgressBar(&hp, &hpMax, 300, glm::fvec4(1.0f, 0.0f, 0.0f, 1.0f));
 	m_hud->addElement(hpBar);
 	m_hud->addElement(new GuiElement::SameLine());
 	m_hud->addElement(new GuiElement::Text("HP"));
 
-	GuiElement::ProgressBar *expBar = new GuiElement::ProgressBar(&exp, expMax, 300, glm::fvec4(1.0f, 0.9960784f, 0.9529411f, 1.0f));
+	GuiElement::ProgressBar *expBar = new GuiElement::ProgressBar(&exp, &expMax, 300, glm::fvec4(1.0f, 0.9960784f, 0.9529411f, 1.0f));
 	m_hud->addElement(expBar);
 	m_hud->addElement(new GuiElement::SameLine());
 	m_hud->addElement(new GuiElement::Text("EXP"));
@@ -40,35 +42,52 @@ PlayerGUI::PlayerGUI(const int hudWidth, const int hudHeight, const int windowWi
 	m_hud->addElement(new GuiElement::Spacing());
 	m_hud->addElement(new GuiElement::Text("LVL"));
 
-	int level = m_player.getLvl();
+	level = m_player->getLvl();
 	m_hud->addElement(new GuiElement::SameLine());
 	GuiElement::IntBox *lvlBox = new GuiElement::IntBox(&level, glm::fvec4(1.0f, 1.0f, 1.0f, 1.0f), glm::fvec4(0.7f, 0.7f, 0.7f, 1.0f));
 	m_hud->addElement(lvlBox);
-
+	
+	//Generate GUI for buttons to open/close the Inventory and Quests
 	m_hud->addElement(new GuiElement::SameLine());
-	GuiElement::PushButton *inventoryButton = new GuiElement::PushButton("Inventory");
+	inventoryButton = new GuiElement::PushButton("Inventory");
 	m_hud->addElement(inventoryButton);
 	m_hud->addElement(new GuiElement::SameLine());
-	GuiElement::PushButton *questButton = new GuiElement::PushButton("Quests");
+	questButton = new GuiElement::PushButton("Quests");
 	m_hud->addElement(questButton);
 
 	m_questWindow = new GuiElement::NestedWindow();
 	m_questWindow->hide();
-	GuiElement::Header *quest1 = new GuiElement::Header("Test the Quest");
-	quest1->addElement(new GuiElement::Text("Quest description here bla bla bla"));
-	GuiElement::Header *quest2 = new GuiElement::Header("Testwindow Questwindow");
-	quest2->addElement(new GuiElement::Text("Quest description here too bla bla bla"));
-	m_questWindow->addElement(quest1);
-	m_questWindow->addElement(quest2);
+	
+	//Generate GUI output for active an finished quests
+	actQuests = new GuiElement::Header("Active quests");
+	activeQuests = m_questhandler->getActiveAndNotFinished();
+	for (int i = 0; i < activeQuests.size(); i++){
+		actQuests->addElement(new GuiElement::Text(activeQuests.at(i)->getDescription()));
+	}
+	
+	finQuests = new GuiElement::Header("Finished quests");
+	finishedQuests = m_questhandler->getFinished();
+	if (finishedQuests.size() == 0){
+		finQuests->addElement(new GuiElement::Text("No finished quests available."));
+	}
+	else{
+		for (int i = 0; i < finishedQuests.size(); i++){
+			finQuests->addElement(new GuiElement::Text(finishedQuests.at(i)->getDescription()));
+		}
+	}
+	
+	m_questWindow->addElement(actQuests);
+	m_questWindow->addElement(finQuests);
 	m_questWindow->setName("Quests");
 	m_questWindow->setCollapsable(false);
 	m_questWindow->setPosition(m_WINDOW_WIDTH - m_QUEST_WIDTH, (m_WINDOW_HEIGHT / 2) - (m_QUEST_HEIGHT / 2));
 	m_questWindow->setSize(m_QUEST_WIDTH, m_QUEST_HEIGHT);
 	m_hud->addNestedWindow(m_questWindow);
 
+	//Generate GUI for Inventory
 	m_inventoryWindow = new GuiElement::NestedWindow();
 	m_inventoryWindow->hide();
-
+	
 	m_inventoryWindow->setName("Inventory");
 	m_inventoryWindow->setCollapsable(false);
 	m_inventoryWindow->setResizable(false);
@@ -76,18 +95,22 @@ PlayerGUI::PlayerGUI(const int hudWidth, const int hudHeight, const int windowWi
 	m_inventoryWindow->setSize(m_QUEST_WIDTH, m_QUEST_HEIGHT);
 	m_hud->addNestedWindow(m_inventoryWindow);
 
-	std::map<std::string, Texture*> *inventoryItems = new std::map<std::string, Texture*>();
-	inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem1"), &bricks));
-	inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem2"), &bricks));
-	inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem3"), &bricks));
-	inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem4"), &bricks));
-	inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem5"), &bricks));
-	inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem6"), &bricks));
-	inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem7"), &bricks));
-	inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem8"), &bricks));
-	inventoryItems->insert(std::pair<std::string, Texture*>(std::string("bricksItem9"), &bricks));
-	GuiElement::Inventory *inventory = new GuiElement::Inventory(inventoryItems, 6);
-	m_inventoryWindow->addElement(inventory);
+	m_inventoryItems = new std::map<std::string, Texture*>();
+	m_inventory = new GuiElement::Inventory(m_inventoryItems, 6);
+	m_inventoryWindow->addElement(m_inventory);
+
+	//Generate GUI for win or loose game
+	m_endGameWindow = new GuiElement::NestedWindow();
+	m_endGameWindow->hide();
+
+	m_endGameWindow->setName("EndGame");
+	m_endGameWindow->setCollapsable(false);
+	m_endGameWindow->setResizable(false);
+	m_endGameWindow->setPosition(25,25);
+	m_endGameWindow->setSize(m_WINDOW_HEIGHT - 50, m_WINDOW_WIDTH - 50);
+	m_hud->addNestedWindow(m_endGameWindow);
+
+	m_endGameWindow->addElement(new GuiElement::Text("Already running."));
 }
 
 PlayerGUI::~PlayerGUI()
@@ -98,4 +121,67 @@ PlayerGUI::~PlayerGUI()
 GUI* PlayerGUI::getHUD()
 {
 	return m_hud;
+}
+
+void PlayerGUI::update()
+{
+	hp = m_player->getHealth();
+	hpMax = m_player->getHealth();
+	exp = m_player->getExp();
+	expMax = m_player->getLevelThreshold();
+	level = m_player->getLvl();
+
+	activeQuests = m_questhandler->getActiveAndNotFinished();
+	actQuests->clearElements();
+	for (int i = 0; i < activeQuests.size(); i++){
+		actQuests->addElement(new GuiElement::Text(activeQuests.at(i)->getDescription()));
+	}
+
+	finishedQuests = m_questhandler->getFinished();
+	finQuests->clearElements();
+	if (finishedQuests.size() == 0){
+		finQuests->addElement(new GuiElement::Text("No finished quests available."));
+	}
+	else{
+		for (int i = 0; i < finishedQuests.size(); i++){
+			finQuests->addElement(new GuiElement::Text(finishedQuests.at(i)->getDescription()));
+		}
+	}
+
+	if (finishedQuests.size() == m_questhandler->getQuests().size()){
+		m_endGameWindow->clearElements();
+		m_endGameWindow->show();
+		m_endGameWindow->addElement(new GuiElement::Text("YOU WON! :-D"));
+		//TODO: Notify Sound
+	}
+
+	if (m_player->getHealth() <= 0){
+		m_endGameWindow->clearElements();
+		m_endGameWindow->show();
+		m_endGameWindow->addElement(new GuiElement::Text("GAME OVER! YOU LOST! :-("));
+		//TODO Notify Sound
+	}
+
+	if (inventoryButton->isPushed())
+	{
+		m_inventoryWindow->toggleVisibility();
+	}
+
+	if (questButton->isPushed())
+	{
+		m_questWindow->toggleVisibility();
+	}
+}
+
+std::map<std::string, Texture*>* PlayerGUI::getInventory(){
+	return m_inventoryItems;
+}
+
+void PlayerGUI::setTexture(char* fileName){
+	Texture* tex = new Texture(fileName);
+	m_textures.push_back(tex);
+}
+
+std::vector<Texture*>* PlayerGUI::getTextures(){
+	return &m_textures;
 }

@@ -1,4 +1,8 @@
 #pragma once
+#include <assimp/scene.h>
+#include <assimp/mesh.h>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
 #include <glm/glm.hpp>
 #include "GeKo_Graphics/StaticMesh.h"
 #include<vector>
@@ -118,4 +122,9 @@ private:
 	bool m_hasIndex;
 	bool m_hasNormals;
 	bool m_hasUV;
+};
+
+struct ResourceManager{
+  Handle::HandleManager<StaticMesh> meshes;
+  Handle::Handle<StaticMesh> loadStaticMesh(std::string filepath);
 };

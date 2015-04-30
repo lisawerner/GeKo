@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-#include "GeKo_Graphics/Observer/Subject.h"
+#include "GeKo_Gameplay/Observer/Subject.h"
 #include "Goal.h"
 #include "GeKo_Gameplay/Questsystem/Reward.h"
 
@@ -37,8 +37,12 @@ public:
 	/**If all goals are finished, the quest will be set inactive and finished!*/
 	void isFinished();
 	
-	///Return m_id of the Quest
+	///Returns m_id of the Quest
 	int getID();
+
+	///Returns m_text which contains the quest's description
+	std::string getDescription();
+	void setDescription(std::string tex);
 
 protected:
 

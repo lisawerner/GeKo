@@ -18,17 +18,23 @@ The uniform matrices of the camera have to be send to the shader in the render l
 InputHandler iH;
 Pilotview cam("Pilotview");
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
-	// The active InputMap is fetched
-	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
-	
-	// You go over the active InputMap, if it's the key that is pressed, a method is called and the mapped action is executed else the key is ignored
-	for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
-		if (it->first == key)
-			iH.getActiveInputMap()->checkMultipleMappedKeys(key, *window);
-		if (it == activeMap.end())
-			std::cout << "Key is not mapped to an action" << std::endl;
+static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos){
+	if (iH.getActiveInputMap()->getType() == MapType::CAMPLAYERVIEW){
+		cam.turn(xpos, ypos);
 	}
+	if (iH.getActiveInputMap()->getType() == MapType::CAMSTRATEGY){
+		if (glfwGetMouseButton(window, 0) == GLFW_PRESS){
+			cam.turn(xpos, ypos);
+		}
+		else{
+			cam.updateCursor(window);
+		}
+	}
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
+	iH.getActiveInputMap()->checkKeys(key, *window);
+	//geko.addKeyInput(key);
 }
 
 int main()

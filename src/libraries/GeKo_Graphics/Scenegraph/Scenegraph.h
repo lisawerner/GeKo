@@ -1,5 +1,6 @@
 #pragma once
 #include <GeKo_Graphics/Scenegraph/Node.h>
+#include <algorithm>
 
 ///Scenegraph contains Node
 /**Every scenegraph is connected with one scene and its name is the same as the scenes name it belongs to.
@@ -46,6 +47,7 @@ public:
 
 	void addParticleSystem(ParticleSystem* ps);
 	std::vector<ParticleSystem*>* getParticleSet();
+	void sortParticleSet(std::vector<int> &rvec);
 
 protected:
 

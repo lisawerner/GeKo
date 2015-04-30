@@ -18,6 +18,8 @@ enum class Object_Event
 
 	PLAYER_LVLUP, 
 
-	PLAYER_SET_ON_FIRE
+	PLAYER_SET_ON_FIRE,
+
+	PLAYER_DIED
 
 };

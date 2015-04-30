@@ -1,7 +1,6 @@
 #include "GeKo_Gameplay/Questsystem/QuestHandler.h"
 
 QuestHandler::QuestHandler(){
-	m_questLog.push_back(new Quest());
 	m_questGraph = new QuestGraph();
 }
 
@@ -37,6 +36,16 @@ std::vector<Goal*> QuestHandler::getQuests(GoalType gType){
 		}
 	}
 	return goals;
+}
+
+std::vector<Quest*> QuestHandler::getFinished(){
+	std::vector<Quest*> quests;
+	for (int i = 0; i < m_questLog.size(); i++){
+		if (m_questLog.at(i)->getFinished()){
+			quests.push_back(m_questLog.at(i));
+		}
+	}
+	return quests;
 }
 
 void QuestHandler::setGraph(QuestGraph* g){

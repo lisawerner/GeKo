@@ -12,7 +12,7 @@
 #include <GeKo_Graphics/AIInclude.h>
 #include <GeKo_Gameplay/AI_Decisiontree/DecisionTree.h>
 #include <GeKo_Gameplay/Object/Geko.h>
-#include <GeKo_Gameplay/Object/AI.h>
+#include <GeKo_Gameplay/Object/Ant.h>
 
 #include <GeKo_Graphics/Geometry/AntMesh.h>
 #include <GeKo_Graphics/Geometry/TreeMesh.h>
@@ -22,11 +22,11 @@
 
 #include <GeKo_Physics/CollisionTest.h>
 
-#include <GeKo_Graphics/Observer/ObjectObserver.h>
-#include <GeKo_Graphics/Observer/CollisionObserver.h>
-#include <GeKo_Graphics/Observer/GravityObserver.h>
-#include <GeKo_Graphics/Observer/SoundObserver.h>
-#include <GeKo_Graphics/Observer/QuestObserver.h>
+#include <GeKo_Gameplay/Observer/ObjectObserver.h>
+#include <GeKo_Gameplay/Observer/CollisionObserver.h>
+#include <GeKo_Gameplay/Observer/GravityObserver.h>
+#include <GeKo_Gameplay/Observer/SoundObserver.h>
+#include <GeKo_Gameplay/Observer/QuestObserver.h>
 
 #include <GeKo_Gameplay/Questsystem/ExpReward.h>
 
@@ -186,7 +186,7 @@ int main()
 
 	//AStarNode defaultASNode("Default");
 	//AI ant_Flick(&defaultTree, &defaultASNode, &aiNode);
-	AI ant_Flick;
+	Ant ant_Flick;
 	ant_Flick.setAntAfraid();
 	/*ant_Flick.setGraph(&testGraph);
 	ant_Flick.setPosition(posSpawn);
@@ -478,7 +478,7 @@ int main()
 		//==================================================================//
 
 		playKey_callback(testWindow.getWindow());
-		geko.update(deltaTime);
+		//geko.update(deltaTime);
 
 		//===================================================================//
 		//==================Render your Objects==============================//

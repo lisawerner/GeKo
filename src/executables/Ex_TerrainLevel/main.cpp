@@ -15,121 +15,80 @@
 #include <GeKo_Gameplay/Object/AI.h>
 
 #include <GeKo_Graphics/Geometry/AntMesh.h>
+#include <GeKo_Graphics/Geometry/AntHomeMesh.h>
 #include <GeKo_Graphics/Geometry/TreeMesh.h>
 #include <GeKo_Graphics/Geometry/GekoMesh.h>
 #include <GeKo_Graphics/Geometry/Plane.h>
+#include <GeKo_Graphics/Geometry/ForestData.h>
 
 #include <GeKo_Graphics/Geometry/Terrain.h>
 
 #include <GeKo_Physics/CollisionTest.h>
 
-#include <GeKo_Graphics/Observer/ObjectObserver.h>
-#include <GeKo_Graphics/Observer/CollisionObserver.h>
-#include <GeKo_Graphics/Observer/GravityObserver.h>
-#include <GeKo_Graphics/Observer/SoundObserver.h>
-#include <GeKo_Graphics/Observer/QuestObserver.h>
+#include <GeKo_Gameplay/Observer/ObjectObserver.h>
+#include <GeKo_Gameplay/Observer/CollisionObserver.h>
+#include <GeKo_Gameplay/Observer/GravityObserver.h>
+#include <GeKo_Gameplay/Observer/SoundObserver.h>
+#include <GeKo_Gameplay/Observer/QuestObserver.h>
 
 #include <GeKo_Gameplay/Questsystem/ItemReward.h>
 #include <GeKo_Gameplay/Questsystem/ExpReward.h>
 #include <GeKo_Gameplay/Questsystem/Goal_Kill.h>
 #include <GeKo_Gameplay/Questsystem/Goal_Eaten.h>
 
-#include <GeKo_Graphics/GUI/GUI.h>
-#include <GeKo_Graphics/GUI/GUIComponents.hpp>
+#include <GeKo_Gameplay/Object/AntHome.h>
+
+#include <GeKo_Graphics/ParticleSystem/ParticleSystem.h>
+
+//#include <GeKo_Graphics/GUI/GUI.h>
+//#include <GeKo_Graphics/GUI/GUIComponents.hpp>
+//#include <GeKo_Graphics/GUI/PlayerGUI.h>
 
 //===================================================================//
 //==================Things you need globally==========================//
 //==================================================================//
-InputHandler iH;
-StrategyCamera cam("StrategyCam");
-Geko geko("Geko", glm::vec3(10.0f, 3.0, -5.0));
-Renderer *renderer;
-GUI *gui;
-SoundFileHandler sfh = SoundFileHandler(1000);
+Geko geko("Geko", glm::vec3(-10.0, 1.0, 30.0));
+static StrategyCamera cam("PlayerViewCam");
+static InputHandler iH;
+
+const int WINDOW_WIDTH = 800;
+const int WINDOW_HEIGHT = 600;
+const int HUD_HEIGHT = 100;
+const int HUD_WIDTH = 350;
+const int QUEST_WIDTH = 325;
+const int QUEST_HEIGHT = 300;
+//
+//GUI *hud;
 
 //===================================================================//
 //==================Callbacks for the Input==========================//
 //==================================================================//
 
-void playKey_callback(GLFWwindow* window)
-{
-	//Recognizing if the player wants to move its character
-	if (glfwGetKey(window, GLFW_KEY_UP))
-	{
-		geko.moveForward();
+// As we do not use the Node class, we can't set the teapot into the middle of the window, therefore is the change of the direction improperly limited
+// just needed in the player mode
+static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos){
+	if (iH.getActiveInputMap()->getType() == MapType::CAMPLAYERVIEW){
+		cam.turn(xpos, ypos);
 	}
-	if (glfwGetKey(window, GLFW_KEY_DOWN))
-	{
-		geko.moveBackward();
+	if (iH.getActiveInputMap()->getType() == MapType::CAMSTRATEGY){
+		if (glfwGetMouseButton(window, 0) == GLFW_PRESS){
+			cam.turn(xpos, ypos);
+		}
+		else{
+			cam.updateCursor(window);
+		}
 	}
-	if (glfwGetKey(window, GLFW_KEY_RIGHT))
-	{
-		geko.moveRight();
-	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT))
-	{
-		geko.moveLeft();
-	}
-
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
+	// The active InputMap is fetched
 	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
-
-	iH.getActiveInputMap()->setGLFWwindow(window);
-
+	// You go over the active InputMap, if it's the key that is pressed, a method is called and the mapped action is executed else the key is ignored
 	for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
 		if (it->first == key)
 			activeMap.at(key)();
 		if (it == activeMap.end())
 			std::cout << "Key is not mapped to an action" << std::endl;
-	}
-}
-
-void mouse_callback(GLFWwindow* window)
-{
-	int i = 0;
-	if (glfwGetMouseButton(window, i) == GLFW_PRESS)
-	{
-		std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
-
-		iH.getActiveInputMap()->setGLFWwindow(window);
-
-		for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
-			if (it->first == i)
-				activeMap.at(i)();
-			if (it == activeMap.end())
-				std::cout << "Key is not mapped to an action" << std::endl;
-		}
-	}
-	else{
-		cam.updateCursor(window);
-	}
-}
-
-void mouseScroll_callback(GLFWwindow* window, double offsetX, double offSetY)
-{
-
-	std::map<int, std::function<void()>> activeMap = iH.getActiveInputMap()->getMap();
-
-	iH.getActiveInputMap()->setGLFWwindow(window);
-
-	if (offSetY < 0)
-	{
-		for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
-			if (it->first == 001)
-				activeMap.at(001)();
-			if (it == activeMap.end())
-				std::cout << "Key is not mapped to an action" << std::endl;
-		}
-	}
-	else{
-		for (std::map<int, std::function<void()>>::iterator it = activeMap.begin(); it != activeMap.end(); it++){
-			if (it->first == 002)
-				activeMap.at(002)();
-			if (it == activeMap.end())
-				std::cout << "Key is not mapped to an action" << std::endl;
-		}
 	}
 }
 
@@ -144,21 +103,22 @@ int main()
 	//==================================================================//
 	glfwInit();
 
-	Window testWindow(500, 50, 800, 600, "testWindow");
+	Window testWindow(500, 50, 800, 600, "Demo");
 	glfwMakeContextCurrent(testWindow.getWindow());
 
-	cam.setCenter(glm::vec4(40.0, 40.0, 40.0, 1.0));
-	cam.setName("StrategyCam");
-	cam.setKeySpeed(2.0);
-	cam.setNearFar(0.01, 100);
-
+	// Callback
 	glfwSetKeyCallback(testWindow.getWindow(), key_callback);
-	glfwSetScrollCallback(testWindow.getWindow(), mouseScroll_callback);
+
+	cam.setKeySpeed(2.0);
+	cam.setNearFar(0.01, 10000);
 
 	glewInit();
 
 	OpenGL3Context context;
-	renderer = new Renderer(context);
+	//renderer = new Renderer(context);
+	Renderer renderer(context);
+
+	ResourceManager manager;
 
 	//===================================================================//
 	//==================Shaders for your program========================//
@@ -167,17 +127,70 @@ int main()
 	FragmentShader fs(loadShaderSource(SHADERS_PATH + std::string("/Fragment-Shaders/TextureShader3D.frag")));
 	ShaderProgram shader(vs, fs);
 
-	//SHADER
+	VertexShader vsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.vert")));
+	FragmentShader fsGBuffer(loadShaderSource(SHADERS_PATH + std::string("/GBuffer/GBuffer.frag")));
+	ShaderProgram shaderGBuffer(vsGBuffer, fsGBuffer);
+
+	VertexShader vsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.vert")));
+	FragmentShader fsSfq(loadShaderSource(SHADERS_PATH + std::string("/ScreenFillingQuad/ScreenFillingQuad.frag")));
+	ShaderProgram shaderSFQ(vsSfq, fsSfq);
+
 	VertexShader vsSkybox(loadShaderSource(SHADERS_PATH + std::string("/SkyboxShader/SkyboxShader.vert")));
 	FragmentShader fsSkybox(loadShaderSource(SHADERS_PATH + std::string("/SkyboxShader/SkyboxShader.frag")));
 	ShaderProgram shaderSkybox(vsSkybox, fsSkybox);
+
+	FBO fboGBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, 3, true, false);
+
+	SoundFileHandler sfh = SoundFileHandler(1000);
+
+	Rect screenFillingQuad;
+	screenFillingQuad.loadBufferData();
+
+	//===================================================================//
+	//================== PArticle System ================================ //
+	//===================================================================//
+
+	ParticleSystem* particle = new ParticleSystem(glm::vec3(0, 0, 0), (char*)RESOURCES_PATH "/XML/ComicCloudEffect.xml");
+	particle->m_type = ParticleType::FIGHT;
+	ParticleSystem* particle2 = new ParticleSystem(glm::vec3(0, 0, 0), (char*)RESOURCES_PATH "/XML/SwarmOfFliesEffect.xml");
+	particle2->m_type = ParticleType::SWARMOFFLIES;
+	ParticleSystem* particleFire = new ParticleSystem(glm::vec3(0, 0, 0), (char*)RESOURCES_PATH "/XML/Effect_Fire.xml");
+	particleFire->m_type = ParticleType::FIRE;
+
+	Node particleNode("ParticleNode");
+	particleNode.addParticleSystem(particle2);
+	particleNode.setCamera(&cam);
+	particleNode.setParticleActive(true);
+
+	Node particleNodeFire("ParticleNodeFire");
+	particleNodeFire.addParticleSystem(particleFire);
+	particleNodeFire.setCamera(&cam);
+	particleNodeFire.setParticleActive(true);
+
+	//===================================================================//
+	//==================Object declarations - Geometry, Texture, Node=== //
+	//==========================Object: Terrain===========================//
+
+	StaticObject terrainObject;
+	terrainObject.setClassType(ClassType::TERRAIN);
+
+	Texture terrainTex((char*)RESOURCES_PATH "/Texture/Grass2.jpg");
+
+	Terrain terrain2((char*)RESOURCES_PATH "/heightmap.jpg", 0.0f, 0.0f);
+	Node terrainNode2("Terrain");
+	terrainNode2.addGeometry(&terrain2);
+	terrainNode2.addTexture(&terrainTex);
+	terrainNode2.setObject(&terrainObject);
 
 
 	//===================================================================//
 	//==================Object declarations - Geometry, Texture, Node=== //
 	//==========================Object: Player===========================//
-	Teapot teaPlayer;
-	Texture texCV((char*)RESOURCES_PATH "/cv_logo.bmp");
+
+	Texture texGeko((char*)RESOURCES_PATH "/Texture/Snake.jpg");
+
+	auto gekoHandle = manager.loadStaticMesh(RESOURCES_PATH "/Geko.ply");
+	auto gekoGeometry = gekoHandle.get().toGeometry();
 
 	GekoMesh gekoMesh;
 	geko.setExp(0.0);
@@ -186,62 +199,33 @@ int main()
 
 	Node playerNode("Player");
 
-	playerNode.addGeometry(&gekoMesh);
+	playerNode.addGeometry(&gekoGeometry);
 	playerNode.setObject(&geko);
-	playerNode.addTexture(&texCV);
+	playerNode.addTexture(&texGeko);
 
+	geko.setPosition(glm::vec4(terrain2.getResolutionX() / 2.0f + 10.0f, 5.0f, terrain2.getResolutionY() / 2.0f + 10.0f, 1.0));
+	/*sfh.generateSource(glm::vec3(geko.getPosition()), RESOURCES_PATH "/Sound/Rascheln.wav");*/
 	geko.setSoundHandler(&sfh);
+	geko.setSourceName(FIRESOUND, "Fire", RESOURCES_PATH "/Sound/Feuer_kurz.wav");
 	geko.setSourceName(MOVESOUND, "SpielerFootsteps", RESOURCES_PATH "/Sound/Rascheln.wav");
-	geko.setSourceName(BACKGROUNDMUSIC, "Hintergrund", RESOURCES_PATH "/Sound/jingle2.wav");
+	geko.setSourceName(BACKGROUNDMUSIC, "Hintergrund", RESOURCES_PATH "/Sound/cantina.wav");
 	geko.setSourceName(FIGHTSOUND, "Kampfsound", RESOURCES_PATH "/Sound/punch.wav");
 	geko.setSourceName(EATSOUND, "Essen", RESOURCES_PATH "/Sound/Munching.wav");
 	geko.setSourceName(QUESTSOUND, "Quest", RESOURCES_PATH "/Sound/jingle.wav");
 	geko.setSourceName(ITEMSOUND, "Item", RESOURCES_PATH "/Sound/itempickup.wav");
 
+	sfh.generateSource("Lademusik", glm::vec3(geko.getPosition()), RESOURCES_PATH "/Sound/jingle2.wav");
+	sfh.playSource("Lademusik");
+	geko.updateSourcesInMap();
+	sfh.setGain("Hintergrund", 0.15f);
+	sfh.setGain("Lademusik", 0.4f);
 	sfh.disableLooping("Essen");
 	sfh.disableLooping("Quest");
 	sfh.disableLooping("Item");
-
-	playerNode.setCamera(&cam);
-
-
-	//===================================================================//
-	//==================Object declarations - Geometry, Texture, Node=== //
-	//==========================Object: Terrain===========================//
-
-	StaticObject terrainObject;
-	terrainObject.setClassType(ClassType::TERRAIN);
 	
-	Texture terrainTex((char*)RESOURCES_PATH "/Grass.jpg");
-
-	Terrain terrain2((char*)RESOURCES_PATH "/heightmap.jpg", 0.0f, 0.0f);
-	Node terrainNode2("Terrain");
-	terrainNode2.addGeometry(&terrain2);
-	terrainNode2.addTexture(&terrainTex);
-	terrainNode2.setObject(&terrainObject);
-	//terrainNode2.addTranslation(-50.0f, -50.0f, 35.0f);
-	/*terrainNode2.addRotation(180, glm::vec3(0.0, 1.0, 0.0));*/
-
-	//===================================================================//
-	//==================Object declarations - Geometry, Texture, Node=== //
-	//==========================Object: Skybox===========================//
-	Cube cube;
-	const char *textureNames[6] = {
-		(char*)RESOURCES_PATH "/Skybox/PereaBeach1/posx.jpg",
-		(char*)RESOURCES_PATH "/Skybox/PereaBeach1/negx.jpg",
-		(char*)RESOURCES_PATH "/Skybox/PereaBeach1/posy.jpg",
-		(char*)RESOURCES_PATH "/Skybox/PereaBeach1/negy.jpg",
-		(char*)RESOURCES_PATH "/Skybox/PereaBeach1/posz.jpg",
-		(char*)RESOURCES_PATH "/Skybox/PereaBeach1/negz.jpg"
-		/*(char*)RESOURCES_PATH "/Color/testTex.png",
-		(char*)RESOURCES_PATH "/Color/testTex.png",
-		(char*)RESOURCES_PATH "/Color/testTex.png",
-		(char*)RESOURCES_PATH "/Color/testTex.png",
-		(char*)RESOURCES_PATH "/Color/testTex.png",
-		(char*)RESOURCES_PATH "/Color/testTex.png"*/ };
-	Skybox skybox(textureNames);
-	Node skyboxNode("skybox");
-	skyboxNode.addGeometry(&cube);
+	sfh.updateListenerPosition(glm::vec3(geko.getPosition()));
+	//sfh.generateSource("Feuer",posFood, RESOURCES_PATH "/Sound/Feuer kurz.wav");
+	playerNode.setCamera(&cam);
 
 	//===================================================================//
 	//==================Setting up the Level and Scene==================//
@@ -255,24 +239,51 @@ int main()
 
 	//==================Add Camera to Scene============================//
 	testScene.getScenegraph()->addCamera(&cam);
-	testScene.getScenegraph()->setActiveCamera("StrategyCam");
+	testScene.getScenegraph()->setActiveCamera("PlayerViewCam");
 
 	//==================Set Input-Maps and activate one================//
 	iH.setAllInputMaps(*(testScene.getScenegraph()->getActiveCamera()));
-	iH.changeActiveInputMap("Strategy");
+	iH.changeActiveInputMap(MapType::OBJECT);
+	iH.getActiveInputMap()->update(geko);
 
 	//==================Add Objects to the Scene=======================//
 	//==================Update the Bounding-Sphere 1st time============//
-
-	testScene.getScenegraph()->getRootNode()->addChildrenNode(&playerNode);
+	/*Node translateNode("Translate");
+	translateNode.addTranslation(glm::vec3(terrain2.getResolutionX() / 2.0f, 0.0, terrain2.getResolutionY() / 2.0f));*/
 
 	testScene.getScenegraph()->getRootNode()->addChildrenNode(&terrainNode2);
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&playerNode);
+	//testScene.getScenegraph()->getRootNode()->addChildrenNode(&translateNode);
+	//testScene.getScenegraph()->getRootNode()->getChildrenNode("Translate")->addChildrenNode(&playerNode);
 
-	//===================================================================//
-	//==================Setting up the Collision=========================//
-	//==================================================================//
-	CollisionTest collision;
-	collision.collectNodes(testScene.getScenegraph()->getRootNode());
+
+	const char *textureNames[6] = {
+		(char*)RESOURCES_PATH "/Skybox_Data/Sky/bluesky_left.jpg",
+		(char*)RESOURCES_PATH "/Skybox_Data/Sky/bluesky_right.jpg",
+		(char*)RESOURCES_PATH "/Skybox_Data/Sky/bluesky_top.jpg",
+		(char*)RESOURCES_PATH "/Skybox_Data/Sky/bluesky_top.jpg",
+		(char*)RESOURCES_PATH "/Skybox_Data/Sky/bluesky_back.jpg",
+		(char*)RESOURCES_PATH "/Skybox_Data/Sky/bluesky_front.jpg"
+		/*(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png",
+		(char*)RESOURCES_PATH "/Color/testTex.png" */
+	};
+	Skybox skybox = Skybox(textureNames);
+	Node skyboxNode = Node("skybox");
+	skyboxNode.addGeometry(&skybox);
+	skyboxNode.addTranslation(glm::vec3(geko.getPosition()));
+	skyboxNode.setModelMatrix(glm::scale(skyboxNode.getModelMatrix(), glm::vec3(200, 200, 200)));
+	//skyboxNode.addTranslation(glm::vec3(terrain2.getResolutionX() / 2.0f, 0.0, terrain2.getResolutionY() / 2.0f));
+
+	testScene.setSkyboxNode(&skyboxNode);
+
+	//================== Particles ========================//
+	testScene.getScenegraph()->addParticleSystem(particle);
+	testScene.getScenegraph()->addParticleSystem(particle2);
+	testScene.getScenegraph()->addParticleSystem(particleFire);
 
 	//===================================================================//
 	//==================Setting up the Observers========================//
@@ -283,6 +294,113 @@ int main()
 	geko.addObserver(&playerObserver);
 	geko.addObserver(&soundPlayerObserver);
 
+
+	// ==============================================================
+	// == Object (Forest) ==========================================
+	// ==============================================================
+
+	Texture texTree((char*)RESOURCES_PATH "/Texture/cookie.jpg");
+
+	auto treeHandle = manager.loadStaticMesh(RESOURCES_PATH "/Tree.ply");
+	auto treeGeometry = treeHandle.get().toGeometry();
+
+	glm::vec3 tmp;
+	std::stringstream name;
+	for (int i = 0; i<TreeData::forest1.size(); i++)
+	{
+		name << "Forest1Tree" << i;
+		std::string stringname = name.str();
+		StaticObject *treeStatic = new StaticObject();
+		treeStatic->setTree(50 / TreeData::forest1.size());
+		Node *treeNode = new Node(stringname);
+		treeNode->addGeometry(&treeGeometry);
+		treeNode->addTexture(&texTree);
+		treeNode->setObject(treeStatic);
+		tmp.x = TreeData::forest1[i].x;
+		tmp.z = TreeData::forest1[i].z;
+		tmp.y = terrain2.getHeight(glm::vec2(tmp.x, tmp.z));
+		treeNode->addTranslation(tmp);
+		treeNode->getStaticObject()->setPosition(tmp);
+		treeNode->getBoundingSphere()->radius = 2.5;
+		testScene.getScenegraph()->getRootNode()->addChildrenNode(treeNode);
+		name.str("");
+	}
+	for (int i = 0; i<TreeData::forest2.size(); i++)
+	{
+		name << "Forest2Tree" << i;
+		std::string stringname = name.str();
+		StaticObject *treeStatic = new StaticObject();
+		treeStatic->setTree(50 / TreeData::forest2.size());
+		Node *treeNode = new Node(stringname);
+		treeNode->addGeometry(&treeGeometry);
+		treeNode->addTexture(&texTree);
+		treeNode->setObject(treeStatic);
+		tmp.x = TreeData::forest2[i].x;
+		tmp.z = TreeData::forest2[i].z;
+		tmp.y = terrain2.getHeight(glm::vec2(tmp.x, tmp.z));
+		treeNode->addTranslation(tmp);
+		treeNode->getStaticObject()->setPosition(tmp);
+		treeNode->getBoundingSphere()->radius = 2.5;
+		testScene.getScenegraph()->getRootNode()->addChildrenNode(treeNode);
+		name.str("");
+	}
+
+	// ==============================================================
+	// == Object (Anthome) ==========================================
+	// ==============================================================
+	
+	Texture texAntHome((char*)RESOURCES_PATH "/Texture/antHome.jpg");
+
+	auto antHomeHandler = manager.loadStaticMesh(RESOURCES_PATH "/AntHome.ply");
+	auto antHomeGeometry = antHomeHandler.get().toGeometry();
+
+	glm::vec3 posFood(10.0, 0.0, -5.0);
+	glm::vec3 posFood2((terrain2.getResolutionX() / 2.0f) + 10.0, 0.0, (terrain2.getResolutionY() / 2.0f) - 5.0);
+	glm::vec3 posSpawn(terrain2.getResolutionX() / 2.0f, 3.0, terrain2.getResolutionY() / 2.0f);
+	glm::vec3 posDefaultPlayer(0.0, 0.0, 0.0);
+	AntMesh antMesh;
+
+	DecisionTree *aggressivedecisionTree = new DecisionTree();
+	aggressivedecisionTree->setAntTreeAggressiv();
+
+	DecisionTree *afraidDecisionTree = new DecisionTree();
+	afraidDecisionTree->setAntTreeAfraid();
+
+	Graph<AStarNode, AStarAlgorithm>* antAggressiveGraph = new Graph<AStarNode, AStarAlgorithm>();
+	antAggressiveGraph->setExampleAntAggressiv(posSpawn, posFood2, posDefaultPlayer);
+
+	Graph<AStarNode, AStarAlgorithm>* antAfraidGraph = new Graph<AStarNode, AStarAlgorithm>();
+	std::vector<std::vector<glm::vec3>> possFoods;
+	possFoods.push_back(TreeData::forest1);
+	possFoods.push_back(TreeData::forest2);
+	antAfraidGraph->setExampleAntAfraid2(posSpawn, possFoods, posDefaultPlayer);
+
+	Texture texAnt((char*)RESOURCES_PATH "/Texture/ant.jpg");
+	auto antHandler = manager.loadStaticMesh(RESOURCES_PATH "/Ant.ply");
+	auto antGeometry = antHandler.get().toGeometry();
+	sfh.generateSource("tst", glm::vec3(geko.getPosition()), RESOURCES_PATH "/Sound/jingle2.wav");
+	AntHome antHome(posSpawn, &sfh, antGeometry, &soundPlayerObserver, &playerObserver, &texAnt, &texAnt, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
+	antHome.generateWorkers(5, testScene.getScenegraph()->getRootNode());
+
+	Node homeNode("AntHome");
+
+
+	homeNode.setObject(&antHome);
+	homeNode.addTexture(&texAntHome);
+	homeNode.addGeometry(&antHomeGeometry);
+	homeNode.addTranslation(posSpawn);
+	homeNode.getBoundingSphere()->radius = 0.5;
+
+	testScene.getScenegraph()->getRootNode()->addChildrenNode(&homeNode);
+
+
+	//===================================================================//
+	//==================Setting up the Collision=========================//
+	//==================================================================//
+	
+	CollisionTest collision;
+	collision.collectNodes(testScene.getScenegraph()->getRootNode());
+
 	CollisionObserver colObserver(&testLevel);
 	collision.addObserver(&colObserver);
 	collision.addObserver(&soundPlayerObserver);
@@ -290,34 +408,121 @@ int main()
 	GravityObserver gravityObserver(&testLevel);
 	collision.addObserver(&gravityObserver);
 
-
-
 	//===================================================================//
 	//==================Setting up the Gravity===========================//
 	//==================================================================//
+	
 	Gravity gravity;
 	playerNode.addGravity(&gravity);
+
+	// ==============================================================
+	// == Questsystem ===============================================
+	// ==============================================================
+	QuestHandler questhandler;
+
+	Quest questKillAnt(1);
+	Quest questEatAnt(2);
+	Quest questCollectBranch(3);
+
+	questKillAnt.setDescription("Kill one ant.");
+	questEatAnt.setDescription("Eat two ants.");
+	questCollectBranch.setDescription("Collect ten branches.");
+
+	Goal_Kill killAnt(1);
+	Goal_Eaten eatAnt(2);
+	Goal_Collect collectBranch(3);
+
+	questKillAnt.addGoal(&killAnt);
+	questEatAnt.addGoal(&eatAnt);
+	questCollectBranch.addGoal(&collectBranch);
+
+	killAnt.setGoalCount(2);
+	eatAnt.setGoalCount(2);
+	collectBranch.setGoalCount(10);
+
+	collectBranch.setItemType(ItemType::BRANCH);
+
+	ExpReward expReward(1);
+	expReward.setExp(100);
+
+	questKillAnt.addReward(&expReward);
+	questEatAnt.addReward(&expReward);
+	questCollectBranch.addReward(&expReward);
+
+	QuestGraph questGraph;
+	QuestGraphNode nodeStart;
+	nodeStart.setQuest(&questKillAnt);
+	questGraph.addNode(&nodeStart);
+	questKillAnt.setActive(true);
+
+	QuestGraphNode nodeSecond;
+	nodeSecond.setQuest(&questEatAnt);
+	nodeSecond.setParent(&nodeStart);
+	questGraph.addNode(&nodeSecond);
+
+	QuestGraphNode nodeThird;
+	nodeThird.setQuest(&questCollectBranch);
+	nodeThird.setParent(&nodeSecond);
+	questGraph.addNode(&nodeThird);
+	questCollectBranch.setActive(true);
+
+	testLevel.getQuestHandler()->addQuest(&questKillAnt);
+	testLevel.getQuestHandler()->addQuest(&questEatAnt);
+	testLevel.getQuestHandler()->addQuest(&questCollectBranch);
+
+	testLevel.getQuestHandler()->setGraph(&questGraph);
+
+	QuestObserver questObserver(&testLevel);
+
+	questKillAnt.addObserver(&questObserver);
+	questEatAnt.addObserver(&questObserver);
+	questCollectBranch.addObserver(&questObserver);
+
+	killAnt.addObserver(&questObserver);
+	eatAnt.addObserver(&questObserver);
+	collectBranch.addObserver(&questObserver);
+
+	testLevel.getFightSystem()->addObserver(&questObserver);
+
+	//===================================================================//
+	//================== Setting up the playerGUI ========================//
+	//==================================================================//
+
+	PlayerGUI playerGUI(HUD_WIDTH, HUD_HEIGHT, WINDOW_HEIGHT, WINDOW_WIDTH, QUEST_HEIGHT, QUEST_WIDTH, playerNode.getPlayer(), testLevel.getQuestHandler());
+	testLevel.setGUI(&playerGUI);
 
 	//===================================================================//
 	//==================The Render-Loop==================================//
 	//==================================================================//
 	float lastTime = glfwGetTime();
 
-	sfh.playSource("Hintergrund");
-	sfh.setGain("Hintergrund", 0.5f);
 
+	//TODO adjust the Rotation,to match the Terrain
+	glm::vec4 tmpPos;
+	glm::vec3 normalFromTerrain;
+	glm::vec3 rotateAxis;
+	glm::vec4 viewDirFromPlayer;
+	glm::vec3 up(0.0, 1.0, 0.0);
+	float lengthFromNormal;
+	float lengthFromUp;
+	float phi;
+	glm::vec4 tangente;
+	float dot;
+
+	sfh.stopSource("Lademusik");
+	sfh.playSource("Hintergrund");
 
 	while (!glfwWindowShouldClose(testWindow.getWindow()))
 	{
-	
+
+		testScene.getScenegraph()->searchNode("Player")->setIdentityMatrix_Rotation();
+		//testScene.getScenegraph()->searchNode("Player")->setIdentityMatrix_Translate();
 
 		float currentTime = glfwGetTime();
 		float deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
-		
-		mouse_callback(testWindow.getWindow());
 
-		
+
 		//===================================================================//
 		//==================Update your Objects per Frame here =============//
 		//==================================================================//
@@ -328,29 +533,48 @@ int main()
 		//==================Input and update for the Player==================//
 		//==================================================================//
 
-		playKey_callback(testWindow.getWindow());
-		geko.update(deltaTime);
+		geko.update();
+		geko.setDeltaTime(currentTime);
 
+
+		tmpPos = testScene.getScenegraph()->searchNode("Player")->getPlayer()->getPosition();
+
+		viewDirFromPlayer = glm::normalize(testScene.getScenegraph()->searchNode("Player")->getPlayer()->getViewDirection());
+
+		//ToDo calculate Normal funktioniert evtl falsch
+		normalFromTerrain = glm::normalize(terrain2.calculateNormal(tmpPos.x, tmpPos.z));
+		rotateAxis = glm::cross(glm::vec3(normalFromTerrain), up );
+		lengthFromNormal = glm::length(normalFromTerrain);
+		lengthFromUp = glm::length(up);
+		up = glm::normalize(up);
+		dot = glm::dot(normalFromTerrain, up);
+
+		phi = glm::acos(dot / (lengthFromNormal * lengthFromUp));
+		phi = phi * (180 / glm::pi<float>());
+		//std::cout << phi << std::endl;
+		
+		if (dot <0.99)
+			testScene.getScenegraph()->searchNode("Player")->addRotation(-phi, rotateAxis);
+
+		testScene.getScenegraph()->searchNode("Player")->getPlayer()->setPosition(testScene.getScenegraph()->searchNode("Player")->getPlayer()->getPosition() + glm::vec4(normalFromTerrain * 0.2f, 1.0));
+		antHome.updateAnts();
+
+		testScene.getScenegraph()->searchNode("Player")->addRotation(testScene.getScenegraph()->searchNode("Player")->getPlayer()->getPhi(), glm::vec3(0, -1, 0));
 		//===================================================================//
 		//==================Render your Objects==============================//
 		//==================================================================//
+		//renderer.renderScene(testScene, testWindow);
+		playerGUI.update();
+		renderer.renderScene(testScene, testWindow);
+		renderer.renderGUI(*playerGUI.getHUD(), testWindow);
 
-		//SKYBOX
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shaderSkybox.bind();
-		glDisable(GL_DEPTH_TEST);
-		shaderSkybox.sendMat4("viewMatrix", cam.getViewMatrix());
-		shaderSkybox.sendMat4("projectionMatrix", cam.getProjectionMatrix());
-		shaderSkybox.sendSkyboxTexture("testTexture", skybox.getSkyboxTexture());
-		skyboxNode.render();
-		shaderSkybox.unbind();
+	
+		testScene.getScenegraph()->searchNode("Player")->getPlayer()->setPosition(testScene.getScenegraph()->searchNode("Player")->getPlayer()->getPosition() - glm::vec4(normalFromTerrain * 0.2f, 1.0));
+		//std::cout << "FPS " << 1 / deltaTime << std::endl;
 
-		glEnable(GL_DEPTH_TEST);
-		renderer->renderScene(testScene, testWindow);
+		glfwSwapBuffers(testWindow.getWindow());
+		glfwPollEvents();
 
-		
-
-		//glEnable(GL_DEPTH_TEST);
 	}
 
 
@@ -358,7 +582,7 @@ int main()
 	glfwDestroyWindow(testWindow.getWindow());
 	glfwTerminate();
 
-	
+
 	return 0;
 
 }

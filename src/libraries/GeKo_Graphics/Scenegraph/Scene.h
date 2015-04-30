@@ -32,6 +32,7 @@ public:
 	///The render call which will be forwarded to the scenegraph object of the scene
 	/**Each Render call needs a shader-Unit, with which the rendering progress will be startet*/
 	void render(ShaderProgram &shader);
+	void renderParticleSystems();
 
 protected:
 	std::string m_sceneName;

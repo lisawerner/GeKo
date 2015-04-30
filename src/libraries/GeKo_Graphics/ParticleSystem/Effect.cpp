@@ -4,12 +4,18 @@ using namespace tinyxml2;
 
 Effect::Effect()
 {
+	emitterVec.clear();
+	notStartedEmitters.clear();
+	m_isStarted = false;
 	setShader();
 }
 
 
 Effect::Effect(const char*filepath)
 {
+	emitterVec.clear();
+	notStartedEmitters.clear();
+	m_isStarted = false;
 	setShader();
 	loadEffect(filepath);
 }
@@ -33,8 +39,17 @@ Effect::~Effect()
 
 
 void Effect::start(){
-	for (auto emitter : emitterVec){
-		emitter->start();
+	if (!m_isStarted) {
+		m_isStarted = true;
+		m_startTime = glfwGetTime();
+		for (auto emitter : emitterVec){
+			if (emitter->getStartTime() == 0.0) {
+				emitter->start();
+			}
+			else {
+				notStartedEmitters.push_back(emitter);
+			}
+		}
 	}
 }
 
@@ -42,6 +57,8 @@ void Effect::stop(){
 	for (auto emitter : emitterVec){
 		emitter->stop();
 	}
+	m_isStarted = false;
+	notStartedEmitters.clear();
 }
 
 void Effect::addEmitter(Emitter* emitter)
@@ -56,7 +73,29 @@ void Effect::removeEmitter(int arrayPosition)
 
 void Effect::updateEmitters(Camera &cam)
 {
-	for (auto emitter : emitterVec){
+	//start remaining emitters if their startTime is lower than the passed time
+	if (m_isStarted) {
+		double timePassed = glfwGetTime() - m_startTime;
+		int i = 0;
+		std::vector<int> toDelete;
+		for (auto emitter : notStartedEmitters) {
+			if (emitter->getStartTime() < timePassed) {
+				emitter->start();
+				toDelete.push_back(i);
+			}
+			i++;
+		}
+		//delete started emitters from vector
+		int k = 0;
+		for (auto j : toDelete) {
+			notStartedEmitters.erase(notStartedEmitters.begin() + j - k);
+			k++;
+		}
+
+	}
+
+	//this cannot be in the block above because there may be living particles when the ParticleSystem gets stopped.
+	for (auto emitter : emitterVec) {
 		if (emitter->getMovable()) {
 			emitter->update(compute, glm::vec3(cam.getPosition().x, cam.getPosition().y, cam.getPosition().z));
 		}
@@ -81,12 +120,12 @@ void Effect::renderEmitters(Camera &cam)
 void Effect::setPosition(glm::vec3 newPosition)
 {
 	for (auto emitter : emitterVec){
-		//why should I do this glm????:
 		glm::vec3 pos = emitter->getLocalPosition();
 		glm::vec3 result(0.0, 0.0, 0.0);
-		result.x = pos.x + newPosition.x;
+		result = pos + newPosition;
+		/*result.x = pos.x + newPosition.x;
 		result.y = pos.y + newPosition.y;
-		result.z = pos.z + newPosition.z;
+		result.z = pos.z + newPosition.z;*/
 
 		emitter->setPosition(result);
 	}
@@ -194,6 +233,15 @@ int Effect::loadEffect(const char* filepath)
 			XMLCheckResult(error);
 			if (mov) emitter->setMovable(mov);
 		}
+
+		//Start time
+		item = emitterNode->FirstChildElement("StartTime");
+		if (item != nullptr){
+			double st;
+			error = item->QueryDoubleText(&st);
+			XMLCheckResult(error);
+			emitter->setStartTime(st);
+		}
 			
 		//Velocity
 		item = emitterNode->FirstChildElement("Velocity");
@@ -254,16 +302,20 @@ int Effect::loadEffect(const char* filepath)
 			}
 			physicType = item->FirstChildElement("PointGravity");
 			if (physicType != nullptr){
-				XMLElement* physicElement = physicType->FirstChildElement("Gravity");
+				XMLElement* physicElement = physicType->FirstChildElement("Point");
 				if (physicElement == nullptr) return XML_ERROR_PARSING_ELEMENT;
-				glm::vec4 gravity;
-				error = physicElement->QueryFloatAttribute("x", &gravity.x);
+				glm::vec3 point;
+				error = physicElement->QueryFloatAttribute("x", &point.x);
 				XMLCheckResult(error);
-				error = physicElement->QueryFloatAttribute("y", &gravity.y);
+				error = physicElement->QueryFloatAttribute("y", &point.y);
 				XMLCheckResult(error);
-				error = physicElement->QueryFloatAttribute("z", &gravity.z);
+				error = physicElement->QueryFloatAttribute("z", &point.z);
 				XMLCheckResult(error);
-				error = physicElement->QueryFloatAttribute("w", &gravity.w);
+
+				physicElement = physicType->FirstChildElement("GravityImpact");
+				if (physicElement == nullptr) return XML_ERROR_PARSING_ELEMENT;
+				float gravityImpact;
+				error = physicElement->QueryFloatText(&gravityImpact);
 				XMLCheckResult(error);
 
 				physicElement = physicType->FirstChildElement("Speed");
@@ -284,7 +336,13 @@ int Effect::loadEffect(const char* filepath)
 				error = physicElement->QueryIntText(&gravityFunction);
 				XMLCheckResult(error);
 
-				emitter->usePhysicPointGravity(gravity, gravityRange, gravityFunction, speed);
+				physicElement = physicType->FirstChildElement("BackToSource");
+				if (physicElement == nullptr) return XML_ERROR_PARSING_ELEMENT;
+				bool backToSource;
+				error = physicElement->QueryBoolText(&backToSource);
+				XMLCheckResult(error);
+				
+				emitter->usePhysicPointGravity(point, gravityImpact, gravityRange, gravityFunction, speed, backToSource);
 			}
 			physicType = item->FirstChildElement("SwarmCircleMotion");
 			if (physicType != nullptr){
@@ -359,7 +417,12 @@ int Effect::loadEffect(const char* filepath)
 				strcpy(cpath, spath.c_str());
 
 				Texture* texture = new Texture(cpath);
-				emitter->addTexture(texture, 0.0);
+				
+				float time;
+				error = tex->QueryFloatAttribute("time", &time);
+				XMLCheckResult(error);
+				
+				emitter->addTexture(texture, time);
 
 				tex = tex->NextSiblingElement("Tex");
 			}
@@ -424,7 +487,7 @@ int Effect::loadEffect(const char* filepath)
 				XMLCheckResult(error);
 
 				emitter->defineLook(useTexture, scalingSize, scalingMoment, 
-					birthTime, deathTime, rotateLeft, rotationSpeed);
+					birthTime, deathTime, blendingTime, rotateLeft, rotationSpeed);
 			}
 			else {
 				scaling = item->FirstChildElement("Size");
@@ -492,7 +555,7 @@ int Effect::saveEffect(char* filepath)
 		effect->InsertEndChild(emitterNode);
 
 		XMLElement* element = doc.NewElement("OutputType");
-		element->SetText(emitter->getOutputMode());
+		element->SetText(emitter->getOutputType());
 		emitterNode->InsertEndChild(element);
 
 		element = doc.NewElement("Position");
@@ -528,8 +591,14 @@ int Effect::saveEffect(char* filepath)
 		element->SetText(emitter->getUseGeometryShader());
 		emitterNode->InsertEndChild(element);
 
+		//Movable
 		element = doc.NewElement("Movable");
 		element->SetText(emitter->getMovable());
+		emitterNode->InsertEndChild(element);
+
+		//Start time
+		element = doc.NewElement("StartTime");
+		element->SetText(emitter->getStartTime());
 		emitterNode->InsertEndChild(element);
 		
 		//Velocity
@@ -571,12 +640,16 @@ int Effect::saveEffect(char* filepath)
 		}
 		else if (emitter->getPhysicPointGravity()){
 			XMLElement* physic = doc.NewElement("PointGravity");
-			XMLElement* temp = doc.NewElement("Gravity");
+			XMLElement* temp = doc.NewElement("Point");
 			glm::vec4 gravityVec = emitter->getGravity();
 			temp->SetAttribute("x", gravityVec.x);
 			temp->SetAttribute("y", gravityVec.y);
 			temp->SetAttribute("z", gravityVec.z);
-			temp->SetAttribute("w", gravityVec.w);
+			physic->InsertEndChild(temp);
+
+			//TODO impact + backtosource
+			temp = doc.NewElement("GravityImpact");
+			temp->SetText(emitter->getPhysicAttGravityImpact());
 			physic->InsertEndChild(temp);
 
 			temp = doc.NewElement("Speed");
@@ -591,6 +664,10 @@ int Effect::saveEffect(char* filepath)
 			temp->SetText(emitter->getPhysicAttGravityFunction());
 			physic->InsertEndChild(temp);
 			element->InsertEndChild(physic);
+
+			temp = doc.NewElement("BackToSource");
+			temp->SetText(emitter->getPhysicAttBacktoSource());
+			physic->InsertEndChild(temp);
 		}
 		else if (emitter->getPhysicSwarmCircleMotion()){
 			XMLElement* physic = doc.NewElement("SwarmCircleMotion");
@@ -638,11 +715,14 @@ int Effect::saveEffect(char* filepath)
 
 		//Textures
 		element = doc.NewElement("Texture");
+		int k = 0;
 		for (auto texture : emitter->m_textureList)
 		{
 			XMLElement* tex = doc.NewElement("Tex");
 			tex->SetText(texture->getFilepath());
+			tex->SetAttribute("time", emitter->blendingTime[k]);
 			element->InsertEndChild(tex);
+			k++;
 		}
 
 		if (emitter->getTexUseScaling()) {

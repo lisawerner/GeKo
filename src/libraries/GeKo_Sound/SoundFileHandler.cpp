@@ -136,7 +136,7 @@ You should use this method primarily for creating Sources.
 ///Generates a Source at Position position with the filepath and a name
 void SoundFileHandler::generateSource(std::string name, ALfloat position[3], const char *filepath){
 	try{
-		std::cout << m_sourceMap.at(name) << std::endl;
+		m_sourceMap.at(name);
 		std::cout << "Name allready taken" << std::endl;
 		return;
 	}
