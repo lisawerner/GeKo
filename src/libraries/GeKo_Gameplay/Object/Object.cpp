@@ -57,6 +57,10 @@ float Object::getHealth(){
 	return m_health;
 }
 
+float Object::getHealthMax(){
+	return m_healthMax;
+}
+
 void Object::setNodeName(std::string nodeName)
 {
 	m_myNodeName = nodeName;
@@ -121,7 +125,7 @@ void Object::updateStates(){
 		}
 		else {
 			if (m_health < m_healthMax)
-				m_health++;
+				m_health += 10;
 		}
 	}
 	else {
@@ -129,7 +133,7 @@ void Object::updateStates(){
 		//::cout << "Object " << m_name << ": Looses health because it is too hungry!" << std::endl;
 	}
 	if (m_health == 0){
-		std::cout << "Object " << m_name << ": Died because he was too hungry" << std::endl;
+		std::cout << "Object " << m_name << ": Died" << std::endl;
 		setStates(States::HEALTH, false);
 		
 	}

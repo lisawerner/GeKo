@@ -97,13 +97,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 //==================================================================//
 int main()
 {
-
+	SoundFileHandler sfh = SoundFileHandler(1000);
+	sfh.generateSource("Lademusik", glm::vec3(0.0,0.0,0.0), RESOURCES_PATH "/Sound/jingle2.wav");
+	sfh.playSource("Lademusik");
+	sfh.setGain("Lademusik", 0.4f);
 	//===================================================================//
 	//==================Things you need to start with====================//
 	//==================================================================//
 	glfwInit();
 
-	Window testWindow(500, 50, 800, 600, "Demo");
+	Window testWindow(50, 50, 900, 600, "Demo");
 	glfwMakeContextCurrent(testWindow.getWindow());
 
 	// Callback
@@ -141,7 +144,6 @@ int main()
 
 	FBO fboGBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, 3, true, false);
 
-	SoundFileHandler sfh = SoundFileHandler(1000);
 
 	Rect screenFillingQuad;
 	screenFillingQuad.loadBufferData();
@@ -150,7 +152,7 @@ int main()
 	//================== PArticle System ================================ //
 	//===================================================================//
 
-	ParticleSystem* particle = new ParticleSystem(glm::vec3(0, 0, 0), (char*)RESOURCES_PATH "/XML/ComicCloudEffect.xml");
+	ParticleSystem* particle = new ParticleSystem(glm::vec3(0, 0, 0), (char*)RESOURCES_PATH "/XML/Effect_ComicCloud.xml");
 	particle->m_type = ParticleType::FIGHT;
 	ParticleSystem* particle2 = new ParticleSystem(glm::vec3(0, 0, 0), (char*)RESOURCES_PATH "/XML/SwarmOfFliesEffect.xml");
 	particle2->m_type = ParticleType::SWARMOFFLIES;
@@ -213,17 +215,16 @@ int main()
 	geko.setSourceName(EATSOUND, "Essen", RESOURCES_PATH "/Sound/Munching.wav");
 	geko.setSourceName(QUESTSOUND, "Quest", RESOURCES_PATH "/Sound/jingle.wav");
 	geko.setSourceName(ITEMSOUND, "Item", RESOURCES_PATH "/Sound/itempickup.wav");
-
-	sfh.generateSource("Lademusik", glm::vec3(geko.getPosition()), RESOURCES_PATH "/Sound/jingle2.wav");
-	sfh.playSource("Lademusik");
 	geko.updateSourcesInMap();
 	sfh.setGain("Hintergrund", 0.15f);
-	sfh.setGain("Lademusik", 0.4f);
 	sfh.disableLooping("Essen");
 	sfh.disableLooping("Quest");
 	sfh.disableLooping("Item");
-	
+	sfh.setGain("Quest", 10.0);
+	sfh.setPitch("Quest", 4.0);
+	sfh.setGain("Kampfsound", 0.8f);
 	sfh.updateListenerPosition(glm::vec3(geko.getPosition()));
+	sfh.updateSourcePosition("Lademusik", glm::vec3(geko.getPosition()));
 	//sfh.generateSource("Feuer",posFood, RESOURCES_PATH "/Sound/Feuer kurz.wav");
 	playerNode.setCamera(&cam);
 
@@ -376,11 +377,14 @@ int main()
 	antAfraidGraph->setExampleAntAfraid2(posSpawn, possFoods, posDefaultPlayer);
 
 	Texture texAnt((char*)RESOURCES_PATH "/Texture/ant.jpg");
+	Texture texAnt2((char*)RESOURCES_PATH "/Texture/ant2.jpg");
 	auto antHandler = manager.loadStaticMesh(RESOURCES_PATH "/Ant.ply");
 	auto antGeometry = antHandler.get().toGeometry();
 	sfh.generateSource("tst", glm::vec3(geko.getPosition()), RESOURCES_PATH "/Sound/jingle2.wav");
-	AntHome antHome(posSpawn, &sfh, antGeometry, &soundPlayerObserver, &playerObserver, &texAnt, &texAnt, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
+	AntHome antHome(posSpawn, &sfh, antGeometry, &soundPlayerObserver, &playerObserver, &texAnt2, &texAnt, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
 	antHome.generateWorkers(5, testScene.getScenegraph()->getRootNode());
+	antHome.generateGuards(1, testScene.getScenegraph()->getRootNode());
+
 
 	Node homeNode("AntHome");
 
@@ -419,12 +423,12 @@ int main()
 	// == Questsystem ===============================================
 	// ==============================================================
 	QuestHandler questhandler;
-
+	
 	Quest questKillAnt(1);
 	Quest questEatAnt(2);
 	Quest questCollectBranch(3);
 
-	questKillAnt.setDescription("Kill one ant.");
+	questKillAnt.setDescription("Kill one worker ant.");
 	questEatAnt.setDescription("Eat two ants.");
 	questCollectBranch.setDescription("Collect ten branches.");
 
@@ -475,14 +479,19 @@ int main()
 	QuestObserver questObserver(&testLevel);
 
 	questKillAnt.addObserver(&questObserver);
+	questKillAnt.addObserver(&soundPlayerObserver);
 	questEatAnt.addObserver(&questObserver);
+	questEatAnt.addObserver(&soundPlayerObserver);
+
 	questCollectBranch.addObserver(&questObserver);
+	questCollectBranch.addObserver(&soundPlayerObserver);
 
 	killAnt.addObserver(&questObserver);
 	eatAnt.addObserver(&questObserver);
 	collectBranch.addObserver(&questObserver);
 
 	testLevel.getFightSystem()->addObserver(&questObserver);
+	
 
 	//===================================================================//
 	//================== Setting up the playerGUI ========================//

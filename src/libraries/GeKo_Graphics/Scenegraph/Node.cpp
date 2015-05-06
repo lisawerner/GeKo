@@ -26,6 +26,11 @@ Node::Node(std::string nodeName)
 
 Node::~Node()
 {
+	if (m_hasObject && m_type == ClassType::AI)
+	{
+		m_ai->stopSourcesInMap();
+	}
+
 }
 
 std::string Node::getNodeName()
@@ -76,9 +81,11 @@ void Node::deleteChildrenNode(std::string nodeName)
 	{
 		if (m_childrenSet.at(i)->getNodeName() == nodeName)
 		{
+			m_childrenSet.at(i)->~Node();
 			m_childrenSet.at(i) = NULL;
 			m_childrenSet.erase(m_childrenSet.begin() + i);
 			success = true;
+		
 		}
 	}
 
@@ -419,7 +426,7 @@ void Node::setBoundingSphere()
 	{
 		m_sphere = new BoundingSphere(getGeometry(), glm::mat4(1.0));
 		m_boundingList.push_back(m_sphere);
-		std::cout << "SUCCESS: A Bounding Sphere was created!" << std::endl;
+		//std::cout << "SUCCESS: A Bounding Sphere was created!" << std::endl;
 	}
 	else
 	{
@@ -432,7 +439,7 @@ void Node::setBoundingSphere(double radius, glm::vec3 center)
 {
 	m_sphere = new BoundingSphere(radius, center);
 	m_boundingList.push_back(m_sphere);
-	std::cout << "SUCCESS: A Bounding Sphere was created!" << std::endl;
+	//std::cout << "SUCCESS: A Bounding Sphere was created!" << std::endl;
 }
 
 

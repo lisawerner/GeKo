@@ -56,6 +56,7 @@ PlayerGUI::PlayerGUI(const int hudWidth, const int hudHeight, const int windowWi
 	m_hud->addElement(questButton);
 
 	m_questWindow = new GuiElement::NestedWindow();
+	m_questWindow->setPosition(560, 300);
 	m_questWindow->hide();
 	
 	//Generate GUI output for active an finished quests
@@ -80,7 +81,7 @@ PlayerGUI::PlayerGUI(const int hudWidth, const int hudHeight, const int windowWi
 	m_questWindow->addElement(finQuests);
 	m_questWindow->setName("Quests");
 	m_questWindow->setCollapsable(false);
-	m_questWindow->setPosition(m_WINDOW_WIDTH - m_QUEST_WIDTH, (m_WINDOW_HEIGHT / 2) - (m_QUEST_HEIGHT / 2));
+	//m_questWindow->setPosition(m_WINDOW_WIDTH - m_QUEST_WIDTH, (m_WINDOW_HEIGHT / 2) - (m_QUEST_HEIGHT / 2));
 	m_questWindow->setSize(m_QUEST_WIDTH, m_QUEST_HEIGHT);
 	m_hud->addNestedWindow(m_questWindow);
 
@@ -91,7 +92,8 @@ PlayerGUI::PlayerGUI(const int hudWidth, const int hudHeight, const int windowWi
 	m_inventoryWindow->setName("Inventory");
 	m_inventoryWindow->setCollapsable(false);
 	m_inventoryWindow->setResizable(false);
-	m_inventoryWindow->setPosition(m_WINDOW_WIDTH - m_QUEST_WIDTH, (m_WINDOW_HEIGHT / 2) - (m_QUEST_HEIGHT / 2));
+	m_inventoryWindow->setPosition(560, 0);
+	//m_inventoryWindow->setPosition(m_WINDOW_WIDTH - m_QUEST_WIDTH, (m_WINDOW_HEIGHT / 2) - (m_QUEST_HEIGHT / 2));
 	m_inventoryWindow->setSize(m_QUEST_WIDTH, m_QUEST_HEIGHT);
 	m_hud->addNestedWindow(m_inventoryWindow);
 
@@ -126,7 +128,7 @@ GUI* PlayerGUI::getHUD()
 void PlayerGUI::update()
 {
 	hp = m_player->getHealth();
-	hpMax = m_player->getHealth();
+	hpMax = m_player->getHealthMax();
 	exp = m_player->getExp();
 	expMax = m_player->getLevelThreshold();
 	level = m_player->getLvl();

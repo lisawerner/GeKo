@@ -126,7 +126,7 @@ void Player::turnRight(){
 
 void Player::update(){
 	if (m_health == 0){
-		std::cout << "Player: Died" << std::endl;
+		//std::cout << "Player: Died" << std::endl;
 		//TODO OBJECT_DIED, Weil "stopped" den Observervorgang bescheibt , wenn sich das Object nicht mehr bewegt
 		notify(*this, Object_Event::PLAYER_DIED);
 		notify(*this, Object_Event::OBJECT_STOPPED);
