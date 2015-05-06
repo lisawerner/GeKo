@@ -314,6 +314,14 @@ void AI::updateSourcesInMap()
 	}
 }
 
+void AI::stopSourcesInMap(){
+	for (std::map<SoundtypeAI, std::string>::iterator i = m_soundMap.begin(); i != m_soundMap.end(); ++i)
+	{
+		if(i->first != DEATHSOUND_AI)
+			m_sfh->stopSource(i->second);
+	}
+}
+
 bool AI::hasDied()
 {
 	return m_hasDied;
