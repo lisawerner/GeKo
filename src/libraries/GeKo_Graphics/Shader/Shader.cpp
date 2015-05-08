@@ -35,7 +35,7 @@ void checkShader(GLuint shader) {
     delete[] infoLog;
   }
   else {
-    std::cout << "SUCCESS: Shader compiled" << std::endl;
+    //std::cout << "SUCCESS: Shader compiled" << std::endl;
   }
 }
 BaseShader::BaseShader(const std::string &shaderSource, ShaderType shaderType)

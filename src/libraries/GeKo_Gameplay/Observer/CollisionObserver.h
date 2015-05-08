@@ -17,6 +17,7 @@ public:
 
 	void onNotify(Node& node, Collision_Event event)
 	 {
+		 std::vector<ParticleSystem*>* ps = m_level->getActiveScene()->getScenegraph()->getParticleSet();
 		 switch (event)
 		 {
 		 case Collision_Event::COLLISION_DETECTED:
@@ -31,13 +32,23 @@ public:
 		 case Collision_Event::NO_COLLISION_KI_PLAYER:
 			 node.getBoundingSphere()->setCollisionDetected(false);
 			 node.getAI()->viewArea(false);
+			 for (auto particle : *ps)
+			 {
+				 if (particle->m_type == ParticleType::FIGHT)
+				 {
+					 particle->stop();
+				 }
+			 }
 			 break;
 		 }
 	 }
 
 	void onNotify(Node& nodeA, Node& nodeB, Collision_Event event)
 	 {
+		 if (((int)glfwGetTime() % 3) < 1 && particleFightIsStarted) particleFightIsStarted = false;
+
 		int tp;
+		std::vector<ParticleSystem*>* ps = m_level->getActiveScene()->getScenegraph()->getParticleSet();
 		 switch (event)
 		 {
 		 case Collision_Event::COLLISION_DETECTED:
@@ -62,9 +73,10 @@ public:
 					nodeA.getAI()->getInventory()->clearInventory();
 				 }
 				 
+
 				 m_level->getActiveScene()->getScenegraph()->getRootNode()->deleteChildrenNode(nodeA.getNodeName());
 
-				 std::vector<ParticleSystem*>* ps = m_level->getActiveScene()->getScenegraph()->getParticleSet();
+				 //std::vector<ParticleSystem*>* ps = m_level->getActiveScene()->getScenegraph()->getParticleSet();
 				 for (auto particle : *ps)
 				 {
 					 if (particle->m_type == ParticleType::SWARMOFFLIES)
@@ -89,13 +101,20 @@ public:
 			 {
 				 if (nodeA.getAI()->getHealth() > 0)
 				 {
-					 std::vector<ParticleSystem*>* ps = m_level->getActiveScene()->getScenegraph()->getParticleSet();
+					 //std::vector<ParticleSystem*>* ps = m_level->getActiveScene()->getScenegraph()->getParticleSet();
 					 for (auto particle : *ps)
 					 {
+						 if (particle->m_type == ParticleType::FIGHT && !particleFightIsStarted)
+						 {
+							 particle->stop();
+							 particle->start();
+							 particleFightIsStarted = true;
+							 //particle->update(*nodeB.getCamera());
+							 //particle->render(*nodeB.getCamera());
+						 }
 						 if (particle->m_type == ParticleType::FIGHT)
 						 {
 							 particle->setPosition(glm::vec3(nodeB.getPlayer()->getPosition()));
-							 particle->start();
 							 particle->update(*nodeB.getCamera());
 							 particle->render(*nodeB.getCamera());
 						 }
@@ -125,6 +144,14 @@ public:
 		 case Collision_Event::NO_COLLISION_KI_PLAYER:
 			 nodeA.getBoundingSphere()->setCollisionDetected(false);
 			 nodeA.getAI()->viewArea(false);
+
+			 for (auto particle : *ps)
+			 {
+				 if (particle->m_type == ParticleType::FIGHT)
+				 {
+					 particle->stop();
+				 }
+			 }
 			 break;
 
 		 case Collision_Event::AI_STATIC_COLLISION:
@@ -192,4 +219,6 @@ public:
 		Counter* m_counter;
 
 		std::vector<Texture*> m_textures;
+
+		bool particleFightIsStarted = false;
 };

@@ -227,6 +227,7 @@ void Ant::setAntAfraid(){
 
 	m_lastTarget = antGraph->searchNode(GraphNodeType::HOME);
 	m_target = antGraph->searchNode(GraphNodeType::HOME);
+	m_nextTarget = antGraph->searchNode(GraphNodeType::HOME);
 
 	m_position = glm::vec4(posSpawn, 1.0);
 	m_homeNode = antGraph->searchNode(GraphNodeType::HOME);
@@ -243,13 +244,17 @@ void Ant::setAntAfraid(std::string name, DecisionTree *tree, Graph<AStarNode, AS
 	m_decisionTree = tree;
 
 	m_speed = 0.1;
+	m_strength = 5;
+	//generiert hunger zwischen 5 und 10
+	//m_hunger = (rand() % ((10 + 1) - 5)) + 5;
 
 	m_graph = antGraph;
 
 	m_lastTarget = antGraph->searchNode(GraphNodeType::HOME);
-	m_target = antGraph->searchNode(GraphNodeType::HOME);
+	m_target = m_lastTarget;
+	m_nextTarget = m_lastTarget;
 
-	m_homeNode = antGraph->searchNode(GraphNodeType::HOME);
+	m_homeNode = m_lastTarget;
 	m_foodNodes.pop_back();
 	addFoodNodes();
 }
@@ -263,7 +268,7 @@ void Ant::setAntAggressiv(){
 	m_decisionTree = tree;
 
 	m_speed = 0.1;
-	m_strength = 1.2;
+	m_strength = 10;
 
 	glm::vec3 posFood(10.0, 0.0, -5.0);
 	glm::vec3 posSpawn(3.0, 0.0, 3.0);
@@ -278,10 +283,12 @@ void Ant::setAntAggressiv(){
 	}
 
 	m_lastTarget = antGraph->searchNode(GraphNodeType::FOOD);
-	m_target = antGraph->searchNode(GraphNodeType::FOOD);
+	m_target = m_lastTarget;
+	m_nextTarget = m_lastTarget;
+	m_lastTargetOnGraph = m_lastTarget;
 
 	m_position = glm::vec4(posSpawn, 1.0);
-	m_homeNode = antGraph->searchNode(GraphNodeType::FOOD);
+	m_homeNode = m_lastTarget;
 	m_foodNodes.pop_back(); //Delete DefaultNode
 	m_foodNodes.push_back(antGraph->searchNode(GraphNodeType::FOOD));
 }
@@ -295,11 +302,11 @@ void Ant::setAntAggressiv(std::string name, DecisionTree *tree, Graph<AStarNode,
 	m_decisionTree = tree;
 
 	m_speed = 0.1;
-	m_strength = 1.2;
+	m_strength = 10;
 
-	glm::vec3 posFood(10.0, 0.0, -5.0);
-	glm::vec3 posSpawn(3.0, 0.0, 3.0);
-	glm::vec3 posDefaultPlayer(0.0, 0.0, 0.0);
+	//glm::vec3 posFood(10.0, 0.0, -5.0);
+	//glm::vec3 posSpawn(3.0, 0.0, 3.0);
+	//glm::vec3 posDefaultPlayer(0.0, 0.0, 0.0);
 	/*Graph<AStarNode, AStarAlgorithm>* antGraph = new Graph<AStarNode, AStarAlgorithm>();
 	antGraph->setExampleAntAggressiv(posSpawn, posSpawn, posDefaultPlayer);*/
 	m_graph = antGraph;
@@ -310,10 +317,12 @@ void Ant::setAntAggressiv(std::string name, DecisionTree *tree, Graph<AStarNode,
 	}
 
 	m_lastTarget = antGraph->searchNode(GraphNodeType::FOOD);
-	m_target = antGraph->searchNode(GraphNodeType::FOOD);
+	m_target = m_lastTarget;
+	m_nextTarget = m_lastTarget;
+	m_lastTargetOnGraph = m_lastTarget;
 
 	//m_position = glm::vec4(posSpawn, 1.0);
-	m_homeNode = antGraph->searchNode(GraphNodeType::FOOD);
+	m_homeNode = m_lastTarget;
 	m_foodNodes.clear(); //Delete DefaultNode
-	m_foodNodes.push_back(antGraph->searchNode(GraphNodeType::FOOD));
+	m_foodNodes.push_back(m_lastTarget);
 }

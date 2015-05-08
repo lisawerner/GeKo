@@ -65,6 +65,7 @@ public:
 	void setSourceName(SoundtypeAI type, std::string sourceName, const char* filepath);
 	///Updates the positions of the sources in the map to the most current position of the AI. The Method is called primarily by the event OBJECT_MOVED.
 	void updateSourcesInMap();
+	void stopSourcesInMap();
 
 	bool hasDied();
 
