@@ -27,6 +27,7 @@ public:
 
 	void setHealth(float newHealth);
 	float getHealth();
+	float getHealthMax();
 
 	void setNodeName(std::string nodeName);
 	std::string getNodeName();

@@ -215,7 +215,8 @@ void SoundFileHandler::setPitch(std::string name, float f){
 
 	}
 	catch (const std::out_of_range& oor) {
-		std::cerr << "Out of Range error: " << oor.what() << "  Check spelling of Source " << '\n';
+		std::cerr << "Out of Range error: " << name << " not found.  error msg : " << oor.what() << ".   Check spelling of Source." << '\n';
+
 		return;
 	}
 }
@@ -231,7 +232,8 @@ void SoundFileHandler::setGain(std::string name, float f){
 
 	}
 	catch (const std::out_of_range& oor) {
-		std::cerr << "Out of Range error: " << oor.what() <<"  Check spelling of Source "<<  '\n';
+		std::cerr << "Out of Range error: " << name << " not found.  error msg : " << oor.what() << ".   Check spelling of Source." << '\n';
+
 		return;
 	}
 }
@@ -299,7 +301,8 @@ void SoundFileHandler::updateSourcePosition(std::string name, ALfloat position[3
 		SoundFileHandler::updateSourcePosition(i, position);
 	}
 	catch (const std::out_of_range& oor) {
-		std::cerr << "Out of Range error: " << oor.what() << "  Check spelling of Source." << '\n';
+		std::cerr << "Out of Range error: " << name << " not found.  error msg : " << oor.what() << ".   Check spelling of Source." << '\n';
+
 		return;
 	}
 }
@@ -318,7 +321,8 @@ void SoundFileHandler::updateSourcePosition(std::string name, glm::vec3 position
 		SoundFileHandler::updateSourcePosition(i, position);
 	}
 	catch (const std::out_of_range& oor) {
-		std::cerr << "Out of Range error: " << oor.what() << "  Check spelling of Source." << '\n';
+		std::cerr << "Out of Range error: " << name << " not found.  error msg : " << oor.what() << ".   Check spelling of Source." << '\n';
+
 		return;
 	}
 }
@@ -354,7 +358,8 @@ void SoundFileHandler::updateSourceVelocity(std::string name, ALfloat velocity[3
 		alSourcefv(m_sources[i], AL_VELOCITY, velocity);
 	}
 	catch (const std::out_of_range& oor) {
-		std::cerr << "Out of Range error: " << oor.what() << "  Check spelling of Source." << '\n';
+		std::cerr << "Out of Range error: " << name << " not found.  error msg : " << oor.what() << ".   Check spelling of Source." << '\n';
+
 		return;
 	}
 }
@@ -365,7 +370,8 @@ void SoundFileHandler::updateSourceVelocity(std::string name, glm::vec3 velocity
 		SoundFileHandler::updateSourceVelocity(i, velocity);
 	}
 	catch (const std::out_of_range& oor) {
-		std::cerr << "Out of Range error: " << oor.what() << "  Check spelling of Source." << '\n';
+		std::cerr << "Out of Range error: " << name << " not found.  error msg : " << oor.what() << ".   Check spelling of Source." << '\n';
+
 		return;
 	}
 }
@@ -388,7 +394,8 @@ void SoundFileHandler::enableLooping(std::string name){
 		SoundFileHandler::enableLooping(i);
 	}
 	catch (const std::out_of_range& oor) {
-		std::cerr << "Out of Range error: " << oor.what() << "  Check spelling of Source." << '\n';
+		std::cerr << "Out of Range error: " << name << " not found.  error msg : " << oor.what() << ".   Check spelling of Source." << '\n';
+
 		return;
 	}
 }
@@ -403,7 +410,7 @@ void SoundFileHandler::disableLooping(std::string name){
 		SoundFileHandler::disableLooping(i);
 	}
 	catch (const std::out_of_range& oor) {
-		std::cerr << "Out of Range error: " << oor.what() << "  Check spelling of Source." << '\n';
+		std::cerr << "Out of Range error: " << name << " not found.  error msg : "  << oor.what() << ".   Check spelling of Source." << '\n';
 		return;
 	}
 }
@@ -418,7 +425,7 @@ void SoundFileHandler::playSource(std::string name){
 		SoundFileHandler::playSource(i);
 	}
 	catch (const std::out_of_range& oor) {
-		std::cerr << "Out of Range error: " << oor.what() << "  Check spelling of Source." << '\n';
+		std::cerr << "Out of Range error: " << name << " not found.  error msg : " << oor.what() << ".   Check spelling of Source." << '\n';
 		return;
 	}
 }
@@ -433,7 +440,8 @@ void SoundFileHandler::pauseSource(std::string name){
 		SoundFileHandler::pauseSource(i);
 	}
 	catch (const std::out_of_range& oor) {
-		std::cerr << "Out of Range error: " << oor.what() << "  Check spelling of Source." << '\n';
+		std::cerr << "Out of Range error: " << name << " not found.  error msg : " << oor.what() << ".   Check spelling of Source." << '\n';
+
 		return;
 	}
 }
@@ -448,7 +456,8 @@ void SoundFileHandler::stopSource(std::string name){
 		SoundFileHandler::stopSource(i);
 	}
 	catch (const std::out_of_range& oor) {
-		std::cerr << "Out of Range error: " << oor.what() << "  Check spelling of Source." << '\n';
+		std::cerr << "Out of Range error: " << name << " not found.  error msg : " << oor.what() << ".   Check spelling of Source." << '\n';
+
 		return;
 	}
 }
@@ -576,7 +585,8 @@ bool SoundFileHandler::sourceIsPlaying(std::string name)
 		return (state == AL_PLAYING);
 	}
 	catch (const std::out_of_range& oor) {
-		std::cerr << "Out of Range error: " << oor.what() << "  Check spelling of Source." << '\n';
+		std::cerr << "Out of Range error: " << name << " not found.  error msg : " << oor.what() << ".   Check spelling of Source." << '\n';
+
 		return false;
 	}
 }

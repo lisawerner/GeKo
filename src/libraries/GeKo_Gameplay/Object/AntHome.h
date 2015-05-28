@@ -33,6 +33,7 @@ public:
 	void printPosWorkers();
 
 protected:
+	int m_numberOfAnts;
 	std::vector<Node*> m_guards;
 	std::vector<Node*> m_workers;
 	glm::vec3 m_position;

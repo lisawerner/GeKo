@@ -62,6 +62,7 @@ public:
 			{
 				if (!(node.getSoundHandler()->sourceIsPlaying(soundName)))
 				{
+
 					node.getSoundHandler()->playSource(soundName);
 				}
 			}
@@ -129,6 +130,7 @@ public:
 	void onNotify(Node& nodeA, Node& nodeB, Collision_Event event)
 	{
 		std::string tmp;
+		std::string soundName;
 		switch (event)
 		{
 		case Collision_Event::COLLISION_AI_FIGHT_PLAYER:
@@ -163,7 +165,7 @@ public:
 			break;
 
 		case Collision_Event::COLLISION_KI_PLAYER:
-			if (!nodeA.getAI()->getStates(States::HEALTH) && nodeA.getAI()->getInventory()->countItem(ItemType::COOKIE) > 0)
+			if (!nodeA.getAI()->getStates(States::HEALTH))
 			{
 				std::string soundName = nodeB.getPlayer()->getSourceName(EATSOUND);
 				if (soundName != "oor")
@@ -173,7 +175,10 @@ public:
 						nodeB.getPlayer()->getSoundHandler()->playSource(soundName);
 					}
 				}
+				soundName = nodeA.getAI()->getSourceName(DEATHSOUND_FLIES_AI);
+				nodeA.getAI()->getSoundHandler()->stopSource(soundName);
 			}
+
 		}
 	}
 
@@ -181,6 +186,31 @@ public:
 	{
 		switch (event){
 		case Quest_Event::QUEST_FINISHED:
+			std::vector<Node*>* tmp = m_level->getActiveScene()->getScenegraph()->getRootNode()->getChildrenSet();
+			Node* tmp2;
+			for (int i = 0; i < tmp->size(); i++)
+			{
+				if (tmp->at(i)->getType() == ClassType::PLAYER)
+				{
+					tmp2 = tmp->at(i);
+				}
+			}
+
+			std::string soundName = tmp2->getPlayer()->getSourceName(QUESTSOUND);
+
+			if (soundName != "oor")
+			{
+				tmp2->getPlayer()->getSoundHandler()->playSource(soundName);
+			}
+		}
+
+	}
+
+	void onNotify(Goal& goal, Quest_Event event)
+	{
+		switch (event)
+		{
+		case Quest_Event::GOAL_FINISHED:
 			std::vector<Node*>* tmp = m_level->getActiveScene()->getScenegraph()->getRootNode()->getChildrenSet();
 			Node* tmp2;
 			for (int i = 0; i < tmp->size(); i++)
