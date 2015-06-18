@@ -1,11 +1,11 @@
 <Effect>
     <Emitter>
-        <OutputType>1</OutputType>
+        <OutputType>0</OutputType>
         <Position x="0" y="0.5" z="1"/>
         <EmitterLifetime>0</EmitterLifetime>
-        <EmitFrequency>0.5</EmitFrequency>
+        <EmitFrequency>1.5</EmitFrequency>
         <ParticlesPerEmit>1</ParticlesPerEmit>
-        <ParticleLiftime>3</ParticleLiftime>
+        <ParticleLiftime>10</ParticleLiftime>
         <ParticleMortal>1</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Velocity>4</Velocity>
@@ -33,7 +33,7 @@
                     <Item>1</Item>
                 </ScalingMoment>
                 <BirthTime>0.40000001</BirthTime>
-                <DeathTime>1</DeathTime>
+                <DeathTime>4</DeathTime>
 				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
                 <RotationSpeed>0.30000001</RotationSpeed>
@@ -41,12 +41,12 @@
         </Texture>
     </Emitter>
     <Emitter>
-        <OutputType>1</OutputType>
+        <OutputType>0</OutputType>
         <Position x="0" y="0.5" z="1"/>
         <EmitterLifetime>0</EmitterLifetime>
-        <EmitFrequency>0.5</EmitFrequency>
+        <EmitFrequency>2.0999999046325684</EmitFrequency>
         <ParticlesPerEmit>1</ParticlesPerEmit>
-        <ParticleLiftime>3</ParticleLiftime>
+        <ParticleLiftime>10</ParticleLiftime>
         <ParticleMortal>1</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Velocity>4</Velocity>
@@ -74,7 +74,7 @@
                     <Item>1</Item>
                 </ScalingMoment>
                 <BirthTime>0.40000001</BirthTime>
-                <DeathTime>1</DeathTime>
+                <DeathTime>4</DeathTime>
 				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
                 <RotationSpeed>0.30000001</RotationSpeed>
@@ -85,10 +85,10 @@
         <OutputType>1</OutputType>
         <Position x="-1" y="1" z="1"/>
         <EmitterLifetime>0</EmitterLifetime>
-        <EmitFrequency>0.5</EmitFrequency>
+        <EmitFrequency>0</EmitFrequency>
         <ParticlesPerEmit>1</ParticlesPerEmit>
-        <ParticleLiftime>3</ParticleLiftime>
-        <ParticleMortal>1</ParticleMortal>
+        <ParticleLiftime>0</ParticleLiftime>
+        <ParticleMortal>0</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Velocity>0</Velocity>
         <Physic>
@@ -103,7 +103,7 @@
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.80000001</ParticleSize>
-                <BirthTime>1</BirthTime>
+                <BirthTime>2</BirthTime>
                 <DeathTime>0</DeathTime>
 				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
@@ -115,10 +115,10 @@
         <OutputType>1</OutputType>
         <Position x="2.8000002" y="2" z="1"/>
         <EmitterLifetime>0</EmitterLifetime>
-        <EmitFrequency>0.5</EmitFrequency>
+        <EmitFrequency>0</EmitFrequency>
         <ParticlesPerEmit>1</ParticlesPerEmit>
-        <ParticleLiftime>3</ParticleLiftime>
-        <ParticleMortal>1</ParticleMortal>
+        <ParticleLiftime>0</ParticleLiftime>
+        <ParticleMortal>0</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Velocity>0</Velocity>
         <Physic>
@@ -133,7 +133,7 @@
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.30000001</ParticleSize>
-                <BirthTime>1</BirthTime>
+                <BirthTime>2</BirthTime>
                 <DeathTime>0</DeathTime>
 				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
@@ -145,10 +145,10 @@
         <OutputType>1</OutputType>
         <Position x="-1" y="-1" z="1"/>
         <EmitterLifetime>0</EmitterLifetime>
-        <EmitFrequency>0.5</EmitFrequency>
+        <EmitFrequency>0</EmitFrequency>
         <ParticlesPerEmit>1</ParticlesPerEmit>
-        <ParticleLiftime>3</ParticleLiftime>
-        <ParticleMortal>1</ParticleMortal>
+        <ParticleLiftime>0</ParticleLiftime>
+        <ParticleMortal>0</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Velocity>0</Velocity>
         <Physic>
@@ -163,7 +163,7 @@
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.5</ParticleSize>
-                <BirthTime>1</BirthTime>
+                <BirthTime>2</BirthTime>
                 <DeathTime>0</DeathTime>
 				<BlendingTime>0</BlendingTime>
                 <RotateLeft>1</RotateLeft>
@@ -175,10 +175,10 @@
         <OutputType>1</OutputType>
         <Position x="2.3000002" y="0.2" z="1"/>
         <EmitterLifetime>0</EmitterLifetime>
-        <EmitFrequency>0.5</EmitFrequency>
+        <EmitFrequency>0</EmitFrequency>
         <ParticlesPerEmit>1</ParticlesPerEmit>
-        <ParticleLiftime>3</ParticleLiftime>
-        <ParticleMortal>1</ParticleMortal>
+        <ParticleLiftime>0</ParticleLiftime>
+        <ParticleMortal>0</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Velocity>0</Velocity>
         <Physic>
@@ -193,7 +193,7 @@
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.30000001</ParticleSize>
-                <BirthTime>1</BirthTime>
+                <BirthTime>2</BirthTime>
                 <DeathTime>0</DeathTime>
 				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
@@ -205,10 +205,10 @@
         <OutputType>1</OutputType>
         <Position x="-2" y="0.69999999" z="1"/>
         <EmitterLifetime>0</EmitterLifetime>
-        <EmitFrequency>0.5</EmitFrequency>
+        <EmitFrequency>0</EmitFrequency>
         <ParticlesPerEmit>1</ParticlesPerEmit>
-        <ParticleLiftime>3</ParticleLiftime>
-        <ParticleMortal>1</ParticleMortal>
+        <ParticleLiftime>0</ParticleLiftime>
+        <ParticleMortal>0</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Velocity>0</Velocity>
         <Physic>
@@ -223,7 +223,7 @@
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.30000001</ParticleSize>
-                <BirthTime>1</BirthTime>
+                <BirthTime>2</BirthTime>
                 <DeathTime>0</DeathTime>
 				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
@@ -235,10 +235,10 @@
         <OutputType>1</OutputType>
         <Position x="-1.9000001" y="2.0999999" z="1"/>
         <EmitterLifetime>0</EmitterLifetime>
-        <EmitFrequency>0.5</EmitFrequency>
+        <EmitFrequency>0</EmitFrequency>
         <ParticlesPerEmit>1</ParticlesPerEmit>
-        <ParticleLiftime>3</ParticleLiftime>
-        <ParticleMortal>1</ParticleMortal>
+        <ParticleLiftime>0</ParticleLiftime>
+        <ParticleMortal>0</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Velocity>0</Velocity>
         <Physic>
@@ -253,7 +253,7 @@
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.60000002</ParticleSize>
-                <BirthTime>1</BirthTime>
+                <BirthTime>2</BirthTime>
                 <DeathTime>0</DeathTime>
 				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
@@ -265,10 +265,10 @@
         <OutputType>1</OutputType>
         <Position x="2" y="1.4" z="1"/>
         <EmitterLifetime>0</EmitterLifetime>
-        <EmitFrequency>0.5</EmitFrequency>
+        <EmitFrequency>0</EmitFrequency>
         <ParticlesPerEmit>1</ParticlesPerEmit>
-        <ParticleLiftime>3</ParticleLiftime>
-        <ParticleMortal>1</ParticleMortal>
+        <ParticleLiftime>0</ParticleLiftime>
+        <ParticleMortal>0</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Velocity>0</Velocity>
         <Physic>
@@ -283,7 +283,7 @@
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.5</ParticleSize>
-                <BirthTime>1</BirthTime>
+                <BirthTime>2</BirthTime>
                 <DeathTime>0</DeathTime>
 				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
@@ -295,10 +295,10 @@
         <OutputType>1</OutputType>
         <Position x="2.7" y="0.80000001" z="1"/>
         <EmitterLifetime>0</EmitterLifetime>
-        <EmitFrequency>0.5</EmitFrequency>
+        <EmitFrequency>0</EmitFrequency>
         <ParticlesPerEmit>1</ParticlesPerEmit>
-        <ParticleLiftime>3</ParticleLiftime>
-        <ParticleMortal>1</ParticleMortal>
+        <ParticleLiftime>0</ParticleLiftime>
+        <ParticleMortal>0</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Velocity>0</Velocity>
         <Physic>
@@ -313,7 +313,7 @@
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.30000001</ParticleSize>
-                <BirthTime>1</BirthTime>
+                <BirthTime>2</BirthTime>
                 <DeathTime>0</DeathTime>
 				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
@@ -325,10 +325,10 @@
         <OutputType>1</OutputType>
         <Position x="-0.5" y="2.4000001" z="1"/>
         <EmitterLifetime>0</EmitterLifetime>
-        <EmitFrequency>0.5</EmitFrequency>
+        <EmitFrequency>0</EmitFrequency>
         <ParticlesPerEmit>1</ParticlesPerEmit>
-        <ParticleLiftime>3</ParticleLiftime>
-        <ParticleMortal>1</ParticleMortal>
+        <ParticleLiftime>0</ParticleLiftime>
+        <ParticleMortal>0</ParticleMortal>
         <UseGeometryShader>1</UseGeometryShader>
         <Velocity>0</Velocity>
         <Physic>
@@ -343,7 +343,7 @@
             <Size>
                 <UseTexture>1</UseTexture>
                 <ParticleSize>0.5</ParticleSize>
-                <BirthTime>1</BirthTime>
+                <BirthTime>2</BirthTime>
                 <DeathTime>0</DeathTime>
 				<BlendingTime>0</BlendingTime>
                 <RotateLeft>0</RotateLeft>
