@@ -37,6 +37,9 @@ Player::Player(std::string playerName, glm::vec3 spawnPoint)
 
 	m_speed = 0.007;
 	m_speedTurn = 0.03;
+	
+	m_level = 0;
+	m_levelThreshold = 100;
 }
 
 Player::Player(){
@@ -212,6 +215,62 @@ bool Player::checkActiveMoveKeys(){
 	//True für ABBRECHEN vom Sound
 	return true;
 }
+
+
+float Player::getExp()
+{
+	return m_exp;
+}
+
+void Player::addExp(float exp)
+{
+	m_exp += exp;
+	while (m_exp >= m_levelThreshold)
+	{
+		levelUp();
+	}
+}
+
+void Player::setExp(float exp)
+{
+	m_exp = exp;
+	while (m_exp >= m_levelThreshold)
+	{
+		levelUp();
+	}
+}
+
+int Player::getLvl()
+{
+	return m_level;
+}
+
+void Player::levelUp()
+{
+	if (m_exp >= m_levelThreshold)
+	{
+		m_level++;
+		notify(*this, Object_Event::PLAYER_LVLUP);
+		m_exp = m_exp - m_levelThreshold;
+		m_levelThreshold *= m_level;
+	}
+}
+
+void Player::setLevel(int level)
+{
+	m_level = level;
+}
+
+float Player::getLevelThreshold()
+{
+	return m_levelThreshold;
+}
+
+void Player::setLevelThreshold(float threshold)
+{
+	m_levelThreshold = threshold;
+}
+
 
 // Implemented in the specific AI
 void Player::setFire(){}

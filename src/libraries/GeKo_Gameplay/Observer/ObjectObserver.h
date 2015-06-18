@@ -82,6 +82,8 @@ public:
 
 			break;
 
+		
+
 		case Object_Event::PLAYER_SET_ON_FIRE:
 			
 			for (auto particle : *ps)
