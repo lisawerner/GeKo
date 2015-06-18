@@ -575,7 +575,7 @@ int main()
 		//renderer.renderScene(testScene, testWindow);
 		playerGUI.update();
 		renderer.renderScene(testScene, testWindow);
-		renderer.renderGUI(*playerGUI.getHUD(), testWindow);
+		//renderer.renderGUI(*playerGUI.getHUD(), testWindow);
 
 	
 		testScene.getScenegraph()->searchNode("Player")->getPlayer()->setPosition(testScene.getScenegraph()->searchNode("Player")->getPlayer()->getPosition() - glm::vec4(normalFromTerrain * 0.2f, 1.0));
