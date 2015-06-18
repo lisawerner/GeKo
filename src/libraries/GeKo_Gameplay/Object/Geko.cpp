@@ -43,9 +43,8 @@ Geko::~Geko(){
 }
 
 void Geko::setFire(){
-	//TODO Attention: The input calls this method two times, so that the fire uses two branches!
 	if (getStates(States::HEALTH)){
-		if (m_inventory->countItem(ItemType::BRANCH) > 0){
+		if (m_inventory->countItem(ItemType::BRANCH)){
 			m_inventory->reduceItem(ItemType::BRANCH, 1);
 			notify(*this, Object_Event::PLAYER_SET_ON_FIRE);
 		}
