@@ -32,6 +32,8 @@ public:
 	//void putObserver();
 	void printPosGuards();
 	void printPosWorkers();
+	void setAntScale(float f);
+	float getAntScale();
 
 protected:
 	int m_numberOfAnts;
@@ -51,4 +53,5 @@ protected:
 	SoundFileHandler *m_sfh;
 	ObjectObserver *m_objectObserver;
 	SoundObserver *m_soundObserver;
+	float m_antScale;
 };

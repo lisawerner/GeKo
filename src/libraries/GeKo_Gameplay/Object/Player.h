@@ -8,7 +8,7 @@ The Player class is a Basic class to provide a playable character. It is just an
 It provides a spawnpoint location, a  name, a current, a speed and can be visualized by a Geometry. The Geometry has to be bound to a Node (see Scenegraph for details!).
 */
 enum Soundtype{
-	MOVESOUND, BACKGROUNDMUSIC, FIGHTSOUND, EATSOUND, QUESTSOUND, ITEMSOUND, FIRESOUND
+	MOVESOUND, BACKGROUNDMUSIC, FIGHTSOUND, EATSOUND, QUESTSOUND, ITEMSOUND, FIRESOUND, LEVELUP
 };
 
 class Player : public Object, public Subject<Player, Object_Event>
@@ -85,7 +85,22 @@ public:
 	//Implemented in the specific AI
 	virtual void setFire();
 
+	float getExp();
+	void addExp(float exp);
+	void setExp(float exp);
+
+	int getLvl();
+	void levelUp();
+	void setLevel(int level);
+
+	float getLevelThreshold();
+	void setLevelThreshold(float threshold);
+
 protected:
+
+	int m_level;
+	float m_levelThreshold;
+
 	glm::vec3 m_spawnPoint;
 
 	float m_deltaTime;
@@ -102,4 +117,6 @@ protected:
 	std::vector<int> m_activeKey;
 
 	int m_i;
+
+
 };

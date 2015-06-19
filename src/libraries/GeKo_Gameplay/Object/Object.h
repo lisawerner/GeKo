@@ -57,16 +57,11 @@ public:
 
 	virtual void heal();
 
-	float getExp();
-	void addExp(float exp);
-	void setExp(float exp);
+	
 
-	int getLvl();
-	void levelUp();
-	void setLevel(int level);
+	
 
-	float getLevelThreshold();
-	void setLevelThreshold(float threshold);
+	
 
 	///Returns the m_sfh
 	/**This Handler manages all the sounds of an object like the movement of a Player etc.*/
@@ -91,8 +86,7 @@ protected:
 	float m_speed;
 	float m_strength;
 	float m_exp;
-	int m_level;
-	float m_levelThreshold;
+	
 
 	Inventory* m_inventory;
 	SoundFileHandler* m_sfh;

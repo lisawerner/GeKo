@@ -13,8 +13,7 @@ Object::Object()
 		m_healthMax = 10;
 		m_strength = 0.5;
 		m_exp = 0.0;
-		m_level = 0;
-		m_levelThreshold = 100;
+		
 	
 		m_speed = 0.01;
 	
@@ -167,58 +166,7 @@ void Object::heal()
 {
 }
 
-float Object::getExp()
-{
-	return m_exp;
-}
 
-void Object::addExp(float exp)
-{
-	m_exp += exp;
-	while (m_exp >= m_levelThreshold)
-	{
-		levelUp();
-	}
-}
-
-void Object::setExp(float exp)
-{
-	m_exp = exp;
-	while (m_exp >= m_levelThreshold)
-	{
-		levelUp();
-	}
-}
-
-int Object::getLvl()
-{
-	return m_level;
-}
-
-void Object::levelUp()
-{
-	if (m_exp >= m_levelThreshold)
-	{
-		m_level++;
-		m_exp = m_exp - m_levelThreshold;
-		m_levelThreshold *= m_level;
-	}
-}
-
-void Object::setLevel(int level)
-{
-	m_level = level;
-}
-
-float Object::getLevelThreshold()
-{
-	return m_levelThreshold;
-}
-
-void Object::setLevelThreshold(float threshold)
-{
-	m_levelThreshold = threshold;
-}
 
 SoundFileHandler* Object::getSoundHandler()
 {

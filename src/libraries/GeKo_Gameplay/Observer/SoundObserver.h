@@ -35,6 +35,8 @@ public:
 			}
 			break;
 
+		
+
 		case Object_Event::OBJECT_STOPPED:
 			soundName = node.getSourceName(MOVESOUND_AI);
 			if (soundName != "oor")
@@ -97,6 +99,18 @@ public:
 
 		 case Object_Event::OBJECT_ROTATED:
 			 node.getSoundHandler()->updateListenerOrientation(glm::vec3(node.getViewDirection()), glm::vec3(0.0, 1.0, 0.0));
+			 break;
+
+		 case Object_Event::PLAYER_LVLUP:
+			 soundName = node.getSourceName(LEVELUP);
+				 if (soundName != "oor")
+				 {
+					if (!(node.getSoundHandler()->sourceIsPlaying(soundName)))
+					{
+						 node.getSoundHandler()->playSource(soundName);
+					 }
+				 }
+			 break;
 
 		 case Object_Event::OBJECT_STOPPED:
 			 soundName = node.getSourceName(MOVESOUND);
