@@ -249,10 +249,14 @@ void Player::levelUp()
 {
 	if (m_exp >= m_levelThreshold)
 	{
-		m_level++;
 		notify(*this, Object_Event::PLAYER_LVLUP);
+		m_level++;
 		m_exp = m_exp - m_levelThreshold;
 		m_levelThreshold *= m_level;
+		m_strength += 1; //Startwert 10
+		m_speed += 0.0005; //Startwert 0.007
+		m_healthMax += 100 ;//Startwert 1000
+		m_health = m_healthMax; //Bei Levelup erhält man volles Leben
 	}
 }
 

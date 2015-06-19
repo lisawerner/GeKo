@@ -21,6 +21,7 @@ AntHome::AntHome(glm::vec3 position, SoundFileHandler *sfh, Geometry antMesh, So
 	m_soundObserver = soundObserver;
 	m_gravity = new Gravity();
 	m_sfh = sfh;
+	m_antScale = 1.0;
 }
 
 AntHome::~AntHome(){
@@ -39,6 +40,7 @@ void AntHome::generateGuards(int i, Node *root){
 		name << "Guard" << m_numberOfGuards++ + 1;
 		//m_numberOfGuards++;
 		Node *aiGuardNode = new Node(name.str());
+		aiGuardNode->addScale(m_antScale, m_antScale, m_antScale);
 		aiGuardNode->addGeometry(&m_antMesh);
 		aiGuardNode->addTexture(m_guardTexture);
 		aiGuardNode->addGravity(m_gravity);
@@ -74,6 +76,7 @@ void AntHome::generateWorkers(int i, Node* root){
 	while (i > 0){
 		name << "Worker" << m_numberOfWorkers++ + 1;
 		Node *aiWorkerNode = new Node(name.str());
+		aiWorkerNode->addScale(m_antScale, m_antScale, m_antScale);
 		aiWorkerNode->addGeometry(&m_antMesh);
 		aiWorkerNode->addTexture(m_workerTexture);
 		aiWorkerNode->addGravity(m_gravity);
@@ -156,6 +159,14 @@ void AntHome::printPosWorkers(){
 	for (int i = 0; i < m_workers.size(); i++){
 		std::cout << "Worker " << i << " Pos : x :" << m_workers[i]->getAI()->getPosition().x << " ; z: " << m_workers[i]->getAI()->getPosition().z << std::endl;
 	}
+}
+
+void AntHome::setAntScale(float scale){
+	m_antScale = scale;
+}
+
+float AntHome::getAntScale(){
+	return m_antScale;
 }
 
 

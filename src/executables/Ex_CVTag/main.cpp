@@ -385,6 +385,7 @@ int main()
 	auto antGeometry = antHandler.get().toGeometry();
 	sfh.generateSource("tst", glm::vec3(geko.getPosition()), RESOURCES_PATH "/Sound/jingle2.wav");
 	AntHome antHome(posSpawn, &sfh, antGeometry, &soundPlayerObserver, &playerObserver, &texAnt2, &texAnt, aggressivedecisionTree, antAggressiveGraph, afraidDecisionTree, antAfraidGraph);
+	antHome.setAntScale(0.5);
 	antHome.generateWorkers(5, testScene.getScenegraph()->getRootNode());
 	antHome.generateGuards(1, testScene.getScenegraph()->getRootNode());
 
