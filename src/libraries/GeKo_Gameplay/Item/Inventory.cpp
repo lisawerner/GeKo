@@ -87,7 +87,8 @@ void Inventory::reduceItem(int position, int count){
 		m_content.at(position).first--;
 	}
 	if (m_content.at(position).first <= 0){
-		deleteItem(position);
+		m_content.at(position).first = 0;
+		//deleteItem(position);
 	}
 }
 
