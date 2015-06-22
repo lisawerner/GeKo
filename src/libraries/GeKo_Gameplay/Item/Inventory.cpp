@@ -69,6 +69,9 @@ ItemType Inventory::getItemTypeIdAt(int position){
 }
 
 void Inventory::deleteItem(int position){
+	//TODO: Fix
+	//This method deletes the content of the position, but don´t delete the position... Or so...
+	//So that there comes an error, if you delete the item and after that add the same item again!
 	m_content.erase(m_content.begin() + position);
 }
 
