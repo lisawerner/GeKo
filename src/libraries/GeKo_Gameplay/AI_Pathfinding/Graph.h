@@ -285,7 +285,7 @@ public:
 
 	 ///An Example-Graph for a AI which will react aggresive while the player is nearby
 	 /***/
-	 void setExampleAntAggressiv(glm::vec3 posFood)
+	 void setExampleAntAggressiv(glm::vec3 posSpawn, int distance)
 	 {
 		//This example just contains the FoodNode on the position of the anthome and four nodes, which let the ant patrol around the anthome
 		 AStarNode* defaultNode = new AStarNode();
@@ -296,11 +296,11 @@ public:
 		 AStarNode* nodeRU = new AStarNode("RU", defaultNode);
 		 AStarNode* nodeFood = new AStarNode("Food", defaultNode);
 
-		 nodeLO->setPosition(glm::vec3(1.0, 0.0, 5.0));
-		 nodeLU->setPosition(glm::vec3(1.0, 0.0, 1.0));
-		 nodeRO->setPosition(glm::vec3(5.0, 0.0, 5.0));
-		 nodeRU->setPosition(glm::vec3(5.0, 0.0, 1.0));
-		 nodeFood->setPosition(posFood);
+		 nodeLO->setPosition(glm::vec3(posSpawn.x - distance, 0.0, posSpawn.z + distance));
+		 nodeLU->setPosition(glm::vec3(posSpawn.x - distance, 0.0, posSpawn.z - distance));
+		 nodeRO->setPosition(glm::vec3(posSpawn.x + distance, 0.0, posSpawn.z + distance));
+		 nodeRU->setPosition(glm::vec3(posSpawn.x + distance, 0.0, posSpawn.z - distance));
+		 nodeFood->setPosition(posSpawn);
 
 		 nodeFood->setNodeType(GraphNodeType::FOOD);
 		 nodeLU->setNodeType(GraphNodeType::OTHER);

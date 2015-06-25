@@ -4,13 +4,16 @@ AntHome::AntHome(){
 
 }
 
-AntHome::AntHome(glm::vec3 position, SoundFileHandler *sfh, Geometry antMesh, SoundObserver *soundObserver, ObjectObserver *objectObserver, Texture *guardTex, Texture *workerTex, DecisionTree *aggressiveDecisionTree, Graph<AStarNode, AStarAlgorithm> *aggressiveGraph, DecisionTree *afraidDecisionTree, Graph<AStarNode, AStarAlgorithm> *afraidGraph){
+AntHome::AntHome(glm::vec3 position, SoundFileHandler *sfh, Geometry antMesh, SoundObserver *soundObserver, ObjectObserver *objectObserver, Texture *guardTex, Texture *workerTex, DecisionTree *aggressiveDecisionTree, DecisionTree *afraidDecisionTree, Graph<AStarNode, AStarAlgorithm> *afraidGraph){
 	m_position = position;
 	m_antMesh = antMesh;
 	//Texture texCV((char*)RESOURCES_PATH "/cv_logo.bmp");
 	m_guardTexture = guardTex;
 	m_workerTexture = workerTex;
-	m_aggressiveGraph = aggressiveGraph;
+
+	m_guardsDistanceToHome = 6;
+	setGraphGuards();
+
 	m_aggressiveDecisionTree = aggressiveDecisionTree;
 	m_afraidGraph = afraidGraph;
 	m_afraidDecisionTree = afraidDecisionTree;
@@ -58,7 +61,7 @@ void AntHome::generateGuards(int i, Node *root){
 		position.w = 0.0;
 		//Ant (AI)
 		Ant_Guardian *antAI = new Ant_Guardian();
-		antAI->setAntAggressiv(name.str(), m_aggressiveDecisionTree, m_aggressiveGraph);
+		antAI->setAntAggressiv(name.str(), m_aggressiveDecisionTree, m_guardGraph);
 		aiGuardNode->setObject(antAI);
 		antAI->addObserver(m_objectObserver);
 		antAI->setSoundHandler(m_sfh);
@@ -177,4 +180,17 @@ float AntHome::getAntScale(){
 	return m_antScale;
 }
 
+void AntHome::setGraphGuards(){
+	//TODO: Anpassen der Höhenwerte (mGuardGraph.y) an die Höhenwerte vom Terrain anpassen! Sonst erkennt die Ant nicht, dass sie am Ziel angekommen ist
+	Graph<AStarNode, AStarAlgorithm>* antAggressiveGraph = new Graph<AStarNode, AStarAlgorithm>();
+	antAggressiveGraph->setExampleAntAggressiv(m_position, m_guardsDistanceToHome);
+	m_guardGraph = antAggressiveGraph;
+}
 
+void AntHome::setGrapHighOnTerrain(Terrain* t){
+	for (int i = 0; i < m_guardGraph->getGraph()->size(); i++){
+		AStarNode* node = m_guardGraph->getGraph()->at(i);
+		glm::vec3 pos = node->getPosition();
+		node->setPosition(glm::vec3(pos.x, t->getHeight(glm::vec2(pos.x, pos.z))+1, pos.z));
+	}
+}
