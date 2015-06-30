@@ -31,6 +31,9 @@ public:
 	AI(glm::vec4 position);
 	~AI();
 
+	void setPosition(glm::vec4);
+	void setPosition(glm::vec3);
+
 	AStarNode* getPosHome();
 	void setPosHome(AStarNode* pos);
 
@@ -69,6 +72,7 @@ public:
 	void updateSourcesInMap();
 	void stopSourcesInMap();
 
+	void setHasDied(bool b);
 	bool hasDied();
 
 	AntType getAntType();

@@ -18,6 +18,7 @@ AI::AI(){
 
 	m_decisionTree = new DecisionTree();
 
+	m_states.clear();
 	std::pair<States, bool> s(States::HUNGER, false);
 	m_states.push_back(s);
 	s.first = States::VIEW;
@@ -104,6 +105,16 @@ AI::AI(glm::vec4 position){
 }
 
 AI::~AI(){}
+
+void AI::setPosition(glm::vec4 pos){
+	m_position = pos;
+	notify(*this, Object_Event::OBJECT_MOVED);
+}
+
+void AI::setPosition(glm::vec3 pos){
+	m_position = glm::vec4(pos, 1.0);
+	notify(*this, Object_Event::OBJECT_MOVED);
+}
 
 AStarNode* AI::getPosHome(){
 	return m_homeNode;
@@ -321,6 +332,10 @@ void AI::stopSourcesInMap(){
 		if(i->first != DEATHSOUND_AI)
 			m_sfh->stopSource(i->second);
 	}
+}
+
+void AI::setHasDied(bool b){
+	m_hasDied = b;
 }
 
 bool AI::hasDied()
