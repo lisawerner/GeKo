@@ -36,6 +36,13 @@ public:
 			tmp = m_level->getActiveScene()->getScenegraph()->searchNode(name);
 			tmp->addTranslation(glm::vec3(ai.getPosition()));
 			break;
+		case Object_Event::OBJECT_ROTATED:
+			name = ai.getNodeName();
+			tmp = m_level->getActiveScene()->getScenegraph()->searchNode(name);
+			tmp->addRotation(ai.getPhi(), glm::vec3(0, 1, 0));
+			break;
+
+
 
 		case Object_Event::OBJECT_DIED:
 			std::vector<ParticleSystem*>* ps = m_level->getActiveScene()->getScenegraph()->getParticleSet();

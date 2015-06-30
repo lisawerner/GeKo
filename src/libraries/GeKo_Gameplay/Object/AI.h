@@ -75,6 +75,9 @@ public:
 	void setHasDied(bool b);
 	bool hasDied();
 
+	//Angle between viewDirection and next target
+	float getPhi();
+
 	AntType getAntType();
 
 protected:
@@ -101,6 +104,8 @@ protected:
 
 	std::map<SoundtypeAI, std::string> m_soundMap;
 	bool m_hasDied;
+
+	float m_phi;
 
 	AntType m_antType;
 };
